@@ -7,6 +7,10 @@ test:
 
 # yarn test 
 
+build:
+
+# yarn build
+
 run:
 
 # yarn serve
