@@ -102,8 +102,8 @@ describe('GlobalTrackValues Tests', () => {
         await nextTick()
 
         text = wrapper.text()
-        expect(text).toContain(updatedBpm)
-        expect(text).toContain(updatedKey)
+        expect(text).toContain('---')
+        expect(text).toContain('---')
     })
 
 

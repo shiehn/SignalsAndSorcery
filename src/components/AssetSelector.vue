@@ -37,13 +37,17 @@
 
 import {computed, inject, onBeforeUpdate, reactive, ref} from 'vue'
 import {StemsAPI} from "../dal/StemsAPI";
-import Asset from "./Asset";
+import Asset from "./Asset.vue";
+import {watch} from "vue";
+import useEventsBus from "../events/eventBus";
+
 
 export default {
   name: "AssetSelector",
   components: {Asset},
-  async setup() {
+  setup() {
     const store = inject('store')
+    const {bus} = useEventsBus()
 
     const filterBpm = ref(0)
     const filterBpmOptions = ref([])
@@ -76,25 +80,7 @@ export default {
       arr: [],
     });
 
-    const stemsApi = new StemsAPI()
-    let stems = await stemsApi.getStemsAndOptions()
-    stems.stems.forEach((stem) => {
-      stem['waveform'] = stem['source'].replace('.wav', '.png')
-      stem['showPreviewIcon'] = false
-      stem['previewIconPath'] = store.state.staticUrl + 'icons/play-button.png'
-      stem['previewPlayIconPath'] = store.state.staticUrl + 'icons/play-button.png'
-      stem['previewStopIconPath'] = store.state.staticUrl + 'icons/stop-button.png'
-      stemSelections.arr.push(stem)
-    })
 
-    filterBpmOptions.value = stems.options.bpms
-    filterBpmOptions.value.push(0)
-    filterKeyOptions.value = stems.options.keys
-    filterKeyOptions.value.push('all')
-    filterTypeOptions.value = stems.options.types
-    filterTypeOptions.value.push('all')
-    filterChordOptions.value = stems.options.chords
-    filterChordOptions.value.push('all')
 
     const getFilteredStems = computed(() => {
       if (filterBpm.value != prevFilterBpm || filterType.value != prevFilterType) {
@@ -122,7 +108,30 @@ export default {
       totalResults = filteredByType.length
 
       const pagedResults = filteredByType.slice(pageIndex.value, pageIndex.value + numOfResults)
+
       return pagedResults
+    })
+
+    watch(() => bus.value.get('updateAssetSelection'), (assetFilter) => {
+      if (!assetFilter[0]) {
+        return
+      }
+
+      if (assetFilter[0].clipType) {
+        filterType.value = assetFilter[0].clipType
+      }
+
+      if (assetFilter[0].clipType) {
+        filterType.value = assetFilter[0].clipType
+      }
+
+
+      /*
+      filterBpm
+filterType
+filterKey
+filterChord
+       */
     })
 
     return {
@@ -137,8 +146,32 @@ export default {
       getFilteredStems,
       pageNext,
       pagePrev,
+      stemSelections,
+      store,
     }
   },
+  async mounted() {
+    const stemsApi = new StemsAPI()
+    let stems = await stemsApi.getStemsAndOptions()
+    stems.stems.forEach((stem) => {
+      stem['waveform'] = stem['source'].replace('.wav', '.png')
+      stem['showPreviewIcon'] = false
+      stem['previewIconPath'] = this.store.state.staticUrl + 'icons/play-button.png'
+      stem['previewPlayIconPath'] = this.store.state.staticUrl + 'icons/play-button.png'
+      stem['previewStopIconPath'] = this.store.state.staticUrl + 'icons/stop-button.png'
+      this.stemSelections.arr.push(stem)
+    })
+
+    console.log(stems.options.bpms, stems.options.bpms)
+    this.filterBpmOptions = stems.options.bpms
+    this.filterBpmOptions.push(0)
+    this.filterKeyOptions = stems.options.keys
+    this.filterKeyOptions.push('all')
+    this.filterTypeOptions = stems.options.types
+    this.filterTypeOptions.push('all')
+    this.filterChordOptions = stems.options.chords
+    this.filterChordOptions.push('all')
+  }
 }
 </script>
 

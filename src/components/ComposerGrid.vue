@@ -151,7 +151,10 @@ export default {
        - filter accordingly
        */
 
-      alert('CLICK IS WORKING')
+      let updateParam = {clipType: 'drum'}
+
+      emit('updateAssetSelection', updateParam)
+      console.log('IT EMITTED MUTHA CUTTER')
     }
 
     const evalCompatibility = (stem) => {

@@ -1,9 +1,7 @@
 <!-- frontend/src/App.vue -->
 
 <template>
-  <suspense>
-    <asset-selector></asset-selector>
-  </suspense>
+  <asset-selector></asset-selector>
   <composer-grid></composer-grid>
   <composer-controls></composer-controls>
   <global-track-values></global-track-values>

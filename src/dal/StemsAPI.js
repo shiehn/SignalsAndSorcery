@@ -17,10 +17,16 @@ export class StemsAPI {
         }
 
         try {
-            //let res = await axios.get('https://signalsandsorcery.org/api/mrtaps');
-            let res = await axios.get('http://localhost:8000/api/mrtaps');
+            const url = 'http://localhost:8000/api/mrtaps'
+            // const url = 'https://signalsandsorcery.org/api/mrtaps'
+
+            let res = await axios.get(url);
+
+            console.log('what the fuck')
 
             if (res['data']) {
+                console.log('here')
+
                 const mrtapWrappers = res['data']['mrtaps'].map((d) => {
                     return new MrTapObjWrapper(d)
                 })
@@ -65,5 +71,7 @@ export class StemsAPI {
             console.log('Error', "Unable to load mrtap src from /api/mrtaps: " + e)
             return [undefined, undefined]
         }
+
+
     }
 }

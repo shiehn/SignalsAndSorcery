@@ -19,7 +19,7 @@
 import {inject, ref} from "vue";
 import {watch} from "vue";
 import useEventsBus from "../events/eventBus";
-import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
+import ComposerControlsScrollBar from "./ComposerControlsScrollBar.vue";
 
 export default {
   name: "ComposerControls",

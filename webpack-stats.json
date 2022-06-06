@@ -6,34 +6,114 @@
       "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.js",
       "publicPath": "/static/dist/main.js"
     },
-    "main.9261aebbf1cef7845867.hot-update.js": {
-      "name": "main.9261aebbf1cef7845867.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.9261aebbf1cef7845867.hot-update.js",
-      "publicPath": "/static/dist/main.9261aebbf1cef7845867.hot-update.js"
+    "main.d5fb8cd3e02978e3ec5f.hot-update.js": {
+      "name": "main.d5fb8cd3e02978e3ec5f.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.d5fb8cd3e02978e3ec5f.hot-update.js",
+      "publicPath": "/static/dist/main.d5fb8cd3e02978e3ec5f.hot-update.js"
     },
-    "main.9261aebbf1cef7845867.hot-update.json": {
-      "name": "main.9261aebbf1cef7845867.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.9261aebbf1cef7845867.hot-update.json",
-      "publicPath": "/static/dist/main.9261aebbf1cef7845867.hot-update.json"
+    "main.d5fb8cd3e02978e3ec5f.hot-update.json": {
+      "name": "main.d5fb8cd3e02978e3ec5f.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.d5fb8cd3e02978e3ec5f.hot-update.json",
+      "publicPath": "/static/dist/main.d5fb8cd3e02978e3ec5f.hot-update.json"
     },
-    "main.e641bf1a479b1a445e2b.hot-update.js": {
-      "name": "main.e641bf1a479b1a445e2b.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.e641bf1a479b1a445e2b.hot-update.js",
-      "publicPath": "/static/dist/main.e641bf1a479b1a445e2b.hot-update.js"
+    "main.7dde2a099a5575844406.hot-update.js": {
+      "name": "main.7dde2a099a5575844406.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.7dde2a099a5575844406.hot-update.js",
+      "publicPath": "/static/dist/main.7dde2a099a5575844406.hot-update.js"
     },
-    "main.e641bf1a479b1a445e2b.hot-update.json": {
-      "name": "main.e641bf1a479b1a445e2b.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.e641bf1a479b1a445e2b.hot-update.json",
-      "publicPath": "/static/dist/main.e641bf1a479b1a445e2b.hot-update.json"
+    "main.7dde2a099a5575844406.hot-update.json": {
+      "name": "main.7dde2a099a5575844406.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.7dde2a099a5575844406.hot-update.json",
+      "publicPath": "/static/dist/main.7dde2a099a5575844406.hot-update.json"
+    },
+    "main.34d1a081ade927097e66.hot-update.js": {
+      "name": "main.34d1a081ade927097e66.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.34d1a081ade927097e66.hot-update.js",
+      "publicPath": "/static/dist/main.34d1a081ade927097e66.hot-update.js"
+    },
+    "main.34d1a081ade927097e66.hot-update.json": {
+      "name": "main.34d1a081ade927097e66.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.34d1a081ade927097e66.hot-update.json",
+      "publicPath": "/static/dist/main.34d1a081ade927097e66.hot-update.json"
+    },
+    "main.077ad8e96c3625b8edca.hot-update.js": {
+      "name": "main.077ad8e96c3625b8edca.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.077ad8e96c3625b8edca.hot-update.js",
+      "publicPath": "/static/dist/main.077ad8e96c3625b8edca.hot-update.js"
+    },
+    "main.077ad8e96c3625b8edca.hot-update.json": {
+      "name": "main.077ad8e96c3625b8edca.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.077ad8e96c3625b8edca.hot-update.json",
+      "publicPath": "/static/dist/main.077ad8e96c3625b8edca.hot-update.json"
+    },
+    "main.1af1651290b47e2636dc.hot-update.js": {
+      "name": "main.1af1651290b47e2636dc.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.1af1651290b47e2636dc.hot-update.js",
+      "publicPath": "/static/dist/main.1af1651290b47e2636dc.hot-update.js"
+    },
+    "main.1af1651290b47e2636dc.hot-update.json": {
+      "name": "main.1af1651290b47e2636dc.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.1af1651290b47e2636dc.hot-update.json",
+      "publicPath": "/static/dist/main.1af1651290b47e2636dc.hot-update.json"
+    },
+    "main.2fb2ea7951510804d5d1.hot-update.js": {
+      "name": "main.2fb2ea7951510804d5d1.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.2fb2ea7951510804d5d1.hot-update.js",
+      "publicPath": "/static/dist/main.2fb2ea7951510804d5d1.hot-update.js"
+    },
+    "main.2fb2ea7951510804d5d1.hot-update.json": {
+      "name": "main.2fb2ea7951510804d5d1.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.2fb2ea7951510804d5d1.hot-update.json",
+      "publicPath": "/static/dist/main.2fb2ea7951510804d5d1.hot-update.json"
+    },
+    "main.997161c24c672345f967.hot-update.js": {
+      "name": "main.997161c24c672345f967.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.997161c24c672345f967.hot-update.js",
+      "publicPath": "/static/dist/main.997161c24c672345f967.hot-update.js"
+    },
+    "main.997161c24c672345f967.hot-update.json": {
+      "name": "main.997161c24c672345f967.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.997161c24c672345f967.hot-update.json",
+      "publicPath": "/static/dist/main.997161c24c672345f967.hot-update.json"
+    },
+    "main.962106bcbcf733b4d729.hot-update.js": {
+      "name": "main.962106bcbcf733b4d729.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.962106bcbcf733b4d729.hot-update.js",
+      "publicPath": "/static/dist/main.962106bcbcf733b4d729.hot-update.js"
+    },
+    "main.962106bcbcf733b4d729.hot-update.json": {
+      "name": "main.962106bcbcf733b4d729.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.962106bcbcf733b4d729.hot-update.json",
+      "publicPath": "/static/dist/main.962106bcbcf733b4d729.hot-update.json"
+    },
+    "main.df559eabdd31c3696df0.hot-update.js": {
+      "name": "main.df559eabdd31c3696df0.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.df559eabdd31c3696df0.hot-update.js",
+      "publicPath": "/static/dist/main.df559eabdd31c3696df0.hot-update.js"
+    },
+    "main.df559eabdd31c3696df0.hot-update.json": {
+      "name": "main.df559eabdd31c3696df0.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.df559eabdd31c3696df0.hot-update.json",
+      "publicPath": "/static/dist/main.df559eabdd31c3696df0.hot-update.json"
+    },
+    "main.ef3f71ebd6518ec40e52.hot-update.js": {
+      "name": "main.ef3f71ebd6518ec40e52.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.ef3f71ebd6518ec40e52.hot-update.js",
+      "publicPath": "/static/dist/main.ef3f71ebd6518ec40e52.hot-update.js"
+    },
+    "main.ef3f71ebd6518ec40e52.hot-update.json": {
+      "name": "main.ef3f71ebd6518ec40e52.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.ef3f71ebd6518ec40e52.hot-update.json",
+      "publicPath": "/static/dist/main.ef3f71ebd6518ec40e52.hot-update.json"
     }
   },
   "chunks": {
     "main": [
       "main.js",
-      "main.e641bf1a479b1a445e2b.hot-update.js"
+      "main.ef3f71ebd6518ec40e52.hot-update.js"
     ]
   },
   "publicPath": "/static/dist/",
-  "error": "ModuleError",
-  "message": "Module Error (from ./node_modules/vue-loader/dist/index.js):\n\nVueCompilerError: Element is missing end tag.\nat /Users/stevehiehn/SignalsAndSorceryWeb/frontend/src/components/GlobalTrackValues.vue:7:5\n5  |        <span v-if=\"!store.state.globalBpm\">---</span>\n6  |      </h4>\n7  |      <h4>KEY:\n   |      ^\n8  |        <span v-if=\"store.state.globalKey\">{{ store.state.globalKey }}</span>\n9  |        <span v-if=\"!store.state.globalKey\">---</span>\n"
+  "error": "ModuleParseError",
+  "message": "Module parse failed: Cannot use keyword 'await' outside an async function (118:16)\nFile was processed with these loaders:\n * ./node_modules/vue-loader/dist/index.js\nYou may need an additional loader to handle the result of these loaders.\n|   mounted() {\n|     const stemsApi = new StemsAPI()\n>     let stems = await stemsApi.getStemsAndOptions()\n|     stems.stems.forEach((stem) => {\n|       stem['waveform'] = stem['source'].replace('.wav', '.png')"
 }
