@@ -1,0 +1,33 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "@vitejs/plugin-vue": "^3.0.0-alpha.1",
+    "@vue/test-utils": "^2.0.0-rc.18",
+    "axios": "^0.20.0-0",
+    "css-loader": "^6.7.1",
+    "happy-dom": "^5.0.0",
+    "uuid": "^8.3.2",
+    "vitest": "^0.14.0",
+    "vue": "^3.2.33",
+    "vue-style-loader": "^4.1.3",
+    "webpack-bundle-tracker": "^1.5.0"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.2.35",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.6.4",
+    "vue-loader": "^17.0.0",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.0",
+    "yarn": "^1.22.18"
+  },
+  "scripts": {
+    "build": "webpack",
+    "serve": "webpack-dev-server",
+    "test": "vitest"
+  },
+  "license": "MIT"
+}

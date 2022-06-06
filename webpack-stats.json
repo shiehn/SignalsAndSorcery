@@ -1,0 +1,39 @@
+{
+  "status": "done",
+  "assets": {
+    "main.js": {
+      "name": "main.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.js",
+      "publicPath": "/static/dist/main.js"
+    },
+    "main.9261aebbf1cef7845867.hot-update.js": {
+      "name": "main.9261aebbf1cef7845867.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.9261aebbf1cef7845867.hot-update.js",
+      "publicPath": "/static/dist/main.9261aebbf1cef7845867.hot-update.js"
+    },
+    "main.9261aebbf1cef7845867.hot-update.json": {
+      "name": "main.9261aebbf1cef7845867.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.9261aebbf1cef7845867.hot-update.json",
+      "publicPath": "/static/dist/main.9261aebbf1cef7845867.hot-update.json"
+    },
+    "main.e641bf1a479b1a445e2b.hot-update.js": {
+      "name": "main.e641bf1a479b1a445e2b.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.e641bf1a479b1a445e2b.hot-update.js",
+      "publicPath": "/static/dist/main.e641bf1a479b1a445e2b.hot-update.js"
+    },
+    "main.e641bf1a479b1a445e2b.hot-update.json": {
+      "name": "main.e641bf1a479b1a445e2b.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.e641bf1a479b1a445e2b.hot-update.json",
+      "publicPath": "/static/dist/main.e641bf1a479b1a445e2b.hot-update.json"
+    }
+  },
+  "chunks": {
+    "main": [
+      "main.js",
+      "main.e641bf1a479b1a445e2b.hot-update.js"
+    ]
+  },
+  "publicPath": "/static/dist/",
+  "error": "ModuleError",
+  "message": "Module Error (from ./node_modules/vue-loader/dist/index.js):\n\nVueCompilerError: Element is missing end tag.\nat /Users/stevehiehn/SignalsAndSorceryWeb/frontend/src/components/GlobalTrackValues.vue:7:5\n5  |        <span v-if=\"!store.state.globalBpm\">---</span>\n6  |      </h4>\n7  |      <h4>KEY:\n   |      ^\n8  |        <span v-if=\"store.state.globalKey\">{{ store.state.globalKey }}</span>\n9  |        <span v-if=\"!store.state.globalKey\">---</span>\n"
+}

@@ -1,0 +1,139 @@
+import Attr from '../../attribute/Attr';
+import CSSStyleSheet from '../../css/CSSStyleSheet';
+import HTMLElement from '../html-element/HTMLElement';
+import IHTMLLinkElement from './IHTMLLinkElement';
+import Event from '../../event/Event';
+import ErrorEvent from '../../event/events/ErrorEvent';
+import INode from '../../nodes/node/INode';
+import IDOMTokenList from '../../dom-token-list/IDOMTokenList';
+/**
+ * HTML Link Element.
+ *
+ * Reference:
+ * https://developer.mozilla.org/en-US/docs/Web/API/HTMLLinkElement.
+ */
+export default class HTMLLinkElement extends HTMLElement implements IHTMLLinkElement {
+    onerror: (event: ErrorEvent) => void;
+    onload: (event: Event) => void;
+    readonly sheet: CSSStyleSheet;
+    _evaluateCSS: boolean;
+    private _relList;
+    /**
+     * Returns rel list.
+     *
+     * @returns Rel list.
+     */
+    get relList(): IDOMTokenList;
+    /**
+     * Returns as.
+     *
+     * @returns As.
+     */
+    get as(): string;
+    /**
+     * Sets crossOrigin.
+     *
+     * @param crossOrigin CrossOrigin.
+     */
+    set as(as: string);
+    /**
+     * Returns crossOrigin.
+     *
+     * @returns CrossOrigin.
+     */
+    get crossOrigin(): string;
+    /**
+     * Sets crossOrigin.
+     *
+     * @param crossOrigin CrossOrigin.
+     */
+    set crossOrigin(crossOrigin: string);
+    /**
+     * Returns href.
+     *
+     * @returns Href.
+     */
+    get href(): string;
+    /**
+     * Sets href.
+     *
+     * @param href Href.
+     */
+    set href(href: string);
+    /**
+     * Returns hreflang.
+     *
+     * @returns Hreflang.
+     */
+    get hreflang(): string;
+    /**
+     * Sets hreflang.
+     *
+     * @param hreflang Hreflang.
+     */
+    set hreflang(hreflang: string);
+    /**
+     * Returns media.
+     *
+     * @returns Media.
+     */
+    get media(): string;
+    /**
+     * Sets media.
+     *
+     * @param media Media.
+     */
+    set media(media: string);
+    /**
+     * Returns referrerPolicy.
+     *
+     * @returns ReferrerPolicy.
+     */
+    get referrerPolicy(): string;
+    /**
+     * Sets referrerPolicy.
+     *
+     * @param referrerPolicy ReferrerPolicy.
+     */
+    set referrerPolicy(referrerPolicy: string);
+    /**
+     * Returns rel.
+     *
+     * @returns Rel.
+     */
+    get rel(): string;
+    /**
+     * Sets rel.
+     *
+     * @param rel Rel.
+     */
+    set rel(rel: string);
+    /**
+     * Returns type.
+     *
+     * @returns Type.
+     */
+    get type(): string;
+    /**
+     * Sets type.
+     *
+     * @param type Type.
+     */
+    set type(type: string);
+    /**
+     * The setAttributeNode() method adds a new Attr node to the specified element.
+     *
+     * @override
+     * @param attribute Attribute.
+     * @returns Replaced attribute.
+     */
+    setAttributeNode(attribute: Attr): Attr;
+    /**
+     * @override
+     */
+    _connectToNode(parentNode?: INode): void;
+    /**
+     * Updates DOM list indices.
+     */
+    protected _updateDomListIndices(): void;
+}
