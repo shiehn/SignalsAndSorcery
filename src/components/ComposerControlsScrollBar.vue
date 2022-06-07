@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full absolute bg-gray-500 rounded-full h-2.5" @click="scrubToPosition($event)" v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.3) ' + progressBar + '%, white ' + progressBar + '%' }">
+  <div class="w-full absolute bg-gray-500 rounded-full h-2.5" @click="scrubToPosition($event)" v-bind:style="{backgroundImage: 'linear-gradient(to right, green ' + progressBar + '%, orange ' + progressBar + '%' }">
   </div>
 </template>
 

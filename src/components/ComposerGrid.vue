@@ -185,6 +185,9 @@ export default {
     }
 
     const evalCompatibility = (stem) => {
+
+      console.log('STATE_JSON', JSON.stringify(store.state))
+
       //GO THROUGH EVERY GRID ITEM
       for (let row = 0; row < store.state.grid.length; row++) {
         for (let col = 0; col < store.state.grid[row].value.length; col++) {
