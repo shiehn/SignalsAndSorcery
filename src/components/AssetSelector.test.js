@@ -9,16 +9,11 @@ import {defineComponent, nextTick, reactive} from "vue";
 
 describe('AssetSelector Tests', () => {
     it('should filter type', async () => {
-        const TestComponent = defineComponent({
-            components: {AssetSelector},
-            template: '<suspense><asset-selector></asset-selector></suspense>'
-        })
-
         const state = reactive({
             globalKey: 'c',
         })
 
-        const wrapper = mount(TestComponent, {
+        const wrapper = mount(AssetSelector, {
             global: {
                 provide: {
                     store: {
@@ -28,6 +23,9 @@ describe('AssetSelector Tests', () => {
             }
         })
 
-
+        // nextTick()
+        //
+        // const text = wrapper.text()
+        // expect(text).toContain('dm:c:e:fm')
     })
 })

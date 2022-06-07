@@ -4,23 +4,23 @@
 
     <div class="my-4">
       <label for="bpm-filter">BPM:</label>
-      <select v-model="filterBpm" id="bpm-filter">
-        <option :value="item" v-for="item in filterBpmOptions">{{ item }}
+      <select v-if="filterBpm != undefined" v-model="filterBpm" id="bpm-filter">
+        <option :value="item" v-for="item in filterBpmOptions.arr">{{ item }}
         </option>
       </select>
       <label for="type-filter">TYPE:</label>
-      <select v-model="filterType" id="type-filter">
-        <option :value="item" v-for="item in filterTypeOptions">{{ item }}
+      <select v-if="filterType != undefined" v-model="filterType" id="type-filter">
+        <option :value="item" v-for="item in filterTypeOptions.arr">{{ item }}
         </option>
       </select>
       <label for="key-filter">KEY:</label>
-      <select v-model="filterKey" id="key-filter">
-        <option :value="item" v-for="item in filterKeyOptions">{{ item }}
+      <select v-if="filterKey != undefined" v-model="filterKey" id="key-filter">
+        <option :value="item" v-for="item in filterKeyOptions.arr">{{ item }}
         </option>
       </select>
       <label for="chord-filter">CHORD:</label>
-      <select v-model="filterChord" id="chord-filter">
-        <option :value="item" v-for="item in filterChordOptions">{{ item }}
+      <select v-if="filterChord != undefined" v-model="filterChord" id="chord-filter">
+        <option :value="item" v-for="item in filterChordOptions.arr">{{ item }}
         </option>
       </select>
     </div>
@@ -35,12 +35,11 @@
 </template>
 <script>
 
-import {computed, inject, onBeforeUpdate, reactive, ref} from 'vue'
+import {computed, inject, nextTick, onBeforeUpdate, onMounted, reactive, ref} from 'vue'
 import {StemsAPI} from "../dal/StemsAPI";
 import Asset from "./Asset.vue";
 import {watch} from "vue";
 import useEventsBus from "../events/eventBus";
-
 
 export default {
   name: "AssetSelector",
@@ -49,14 +48,14 @@ export default {
     const store = inject('store')
     const {bus} = useEventsBus()
 
-    const filterBpm = ref(0)
-    const filterBpmOptions = ref([])
-    const filterType = ref('all')
-    const filterTypeOptions = ref([])
-    const filterKey = ref('all')
-    const filterKeyOptions = ref([])
-    const filterChord = ref('all')
-    const filterChordOptions = ref([])
+    const filterBpm = ref()
+    const filterBpmOptions = reactive({arr: [0]})
+    const filterType = ref()
+    const filterTypeOptions = reactive({arr: ['all']})
+    const filterKey = ref()
+    const filterKeyOptions = reactive({arr: ['all']})
+    const filterChord = ref()
+    const filterChordOptions = reactive({arr: ['all']})
     const pageIndex = ref(0)
     const numOfResults = 16
 
@@ -81,8 +80,8 @@ export default {
     });
 
 
-
     const getFilteredStems = computed(() => {
+
       if (filterBpm.value != prevFilterBpm || filterType.value != prevFilterType) {
         prevFilterBpm = filterBpm.value;
         prevFilterType = filterType.value;
@@ -113,6 +112,18 @@ export default {
     })
 
     watch(() => bus.value.get('updateAssetSelection'), (assetFilter) => {
+      if (store.state.globalKey) {
+        filterKey.value = store.state.globalKey
+      } else {
+        filterKey.value = 'all'
+      }
+
+      if (store.state.globalBpm) {
+        filterBpm.value = store.state.globalBpm
+      } else {
+        filterBpm.value = 0
+      }
+
       if (!assetFilter[0]) {
         return
       }
@@ -134,6 +145,40 @@ filterChord
        */
     })
 
+
+    onMounted(async () => {
+      const stemsApi = new StemsAPI()
+      let stems = await stemsApi.getStemsAndOptions()
+      stems.stems.forEach((stem) => {
+        stem['waveform'] = stem['source'].replace('.wav', '.png')
+        stem['showPreviewIcon'] = false
+        stem['previewIconPath'] = store.state.staticUrl + 'icons/play-button.png'
+        stem['previewPlayIconPath'] = store.state.staticUrl + 'icons/play-button.png'
+        stem['previewStopIconPath'] = store.state.staticUrl + 'icons/stop-button.png'
+        stemSelections.arr.push(stem)
+      })
+
+      stems.options.bpms.forEach(bpm => {
+        filterBpmOptions.arr.push(bpm)
+      })
+      filterBpm.value = 0
+
+      stems.options.types.forEach(t => {
+        filterTypeOptions.arr.push(t)
+      })
+      filterType.value = 'all'
+
+      stems.options.keys.forEach(t => {
+        filterKeyOptions.arr.push(t)
+      })
+      filterKey.value = 'all'
+
+      stems.options.chords.forEach(t => {
+        filterChordOptions.arr.push(t)
+      })
+      filterChord.value = 'all'
+    })
+
     return {
       filterBpm,
       filterBpmOptions,
@@ -150,28 +195,7 @@ filterChord
       store,
     }
   },
-  async mounted() {
-    const stemsApi = new StemsAPI()
-    let stems = await stemsApi.getStemsAndOptions()
-    stems.stems.forEach((stem) => {
-      stem['waveform'] = stem['source'].replace('.wav', '.png')
-      stem['showPreviewIcon'] = false
-      stem['previewIconPath'] = this.store.state.staticUrl + 'icons/play-button.png'
-      stem['previewPlayIconPath'] = this.store.state.staticUrl + 'icons/play-button.png'
-      stem['previewStopIconPath'] = this.store.state.staticUrl + 'icons/stop-button.png'
-      this.stemSelections.arr.push(stem)
-    })
 
-    console.log(stems.options.bpms, stems.options.bpms)
-    this.filterBpmOptions = stems.options.bpms
-    this.filterBpmOptions.push(0)
-    this.filterKeyOptions = stems.options.keys
-    this.filterKeyOptions.push('all')
-    this.filterTypeOptions = stems.options.types
-    this.filterTypeOptions.push('all')
-    this.filterChordOptions = stems.options.chords
-    this.filterChordOptions.push('all')
-  }
 }
 </script>
 

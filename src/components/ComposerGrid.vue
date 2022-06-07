@@ -85,6 +85,20 @@ export default {
       console.log('BPM UPDATED: ' + bpm)
     }
 
+    const updateGlobalKey = () => {
+      let key = undefined
+      for (let row = 0; row < store.state.grid.length; row++) {
+        for (let col = 0; col < store.state.grid[row].value.length; col++) {
+          if (store.state.grid[row].value[col].key) {
+            key = store.state.grid[row].value[col].key
+          }
+        }
+      }
+
+      store.state.globalKey = key
+      console.log('KEY UPDATED: ' + key)
+    }
+
     const onDrop = (evt, row, col) => {
       if (store.state.grid[row].value[col].compatibility === 0) {
         //NOT COMPATIBLE/PREVENT DROP
@@ -95,13 +109,13 @@ export default {
       const stem = JSON.parse(stemStr)
 
       const gridItem = store.state.grid[row].value[col]
+      gridItem.sectionId = stem.sectionId
       gridItem.bpm = stem.bpm
       gridItem.key = stem.key
-      gridItem.sectionId = stem.sectionId
       gridItem.type = stem.type
       gridItem.variationId = stem.variationId
       gridItem.source = stem.source
-      gridItem.stem = stem
+      gridItem.stem = stem //TODO IF YOU HAVE THE STEM WHY THE DUPLICATION
 
       gridItem['deleteIconPath'] = store.state.staticUrl + 'icons/delete-x.png'
       gridItem['previewIconPath'] = store.state.staticUrl + 'icons/play-button.png'
@@ -109,19 +123,27 @@ export default {
       store.state.fileCount = store.state.fileCount + 1
 
       updateGlobalBpm()
+      updateGlobalKey()
 
       emit('renderMixIfNeeded')
     }
 
     const removeGridItem = (row, col) => {
       const gridItem = store.state.grid[row].value[col]
+
+      gridItem.sectionId = undefined
+      gridItem.bpm = undefined
+      gridItem.key = undefined
+      gridItem.type = undefined
+      gridItem.variationId = undefined
       gridItem.source = undefined
-      gridItem.stem = undefined
+      gridItem.stem = undefined //TODO IF YOU HAVE THE STEM WHY THE DUPLICATION
       gridItem['deleteIconPath'] = undefined
 
       store.state.fileCount = store.state.fileCount - 1
 
       updateGlobalBpm()
+      updateGlobalKey()
 
       emit('renderMixIfNeeded')
     }
@@ -140,6 +162,12 @@ export default {
     }
 
     const handleGridItemClick = (row, col) => {
+
+      const gridItem = store.state.grid[row].value[col]
+      // if(!gridItem.stem.id){
+      //   alert('id:' + gridItem.stem.id)
+      // }
+
       /*
        get the current if set:
 
@@ -151,10 +179,9 @@ export default {
        - filter accordingly
        */
 
-      let updateParam = {clipType: 'drum'}
+      let updateParam = {clipType: rowToTypeMap[row]}
 
       emit('updateAssetSelection', updateParam)
-      console.log('IT EMITTED MUTHA CUTTER')
     }
 
     const evalCompatibility = (stem) => {
