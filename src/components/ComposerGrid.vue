@@ -26,6 +26,9 @@
 import {reactive, ref, inject, watch} from 'vue'
 import useEventsBus from "../events/eventBus";
 import Asset from "./Asset";
+import GridGenerator from "../generators/grid-generator";
+import CompatibilityProcessor from "../processors/compatibility-processor";
+import {ROW_TO_TYPE_MAP} from "../constants/constants";
 
 export default {
   name: 'ComposerGrid',
@@ -34,34 +37,9 @@ export default {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
 
-    const rowToTypeMap = ['hi', 'mid', 'low', 'drum']
 
-    const initGrid = (numRows, numCols) => {
-      let rows = []
-      for (let i = 0; i < numRows; i++) {
-        let row = ref([])
-        for (let j = 0; j < numCols; j++) {
-          row.value.push({
-            row: i,
-            col: j,
-            compatibility: undefined,
-            bpm: undefined,
-            key: undefined,
-            sectionId: undefined,
-            type: undefined,
-            variationId: undefined,
-            source: undefined,
-            stem: undefined,
-            showDeleteIcon: false,
-          })
-        }
-        rows.push(row)
-      }
 
-      return reactive(rows)
-    }
-
-    store.state.grid = initGrid(4, 16)
+    store.state.grid = new GridGenerator().initGrid(4, 16)
 
     const getGridRows = () => {
       return store.state.grid
@@ -100,7 +78,7 @@ export default {
     }
 
     const onDrop = (evt, row, col) => {
-      if (store.state.grid[row].value[col].compatibility === 0) {
+      if (store.state.grid[row].value[col].compatibility === 0 || store.state.grid[row].value[col].compatibility === -1) {
         //NOT COMPATIBLE/PREVENT DROP
         return
       }
@@ -179,38 +157,42 @@ export default {
        - filter accordingly
        */
 
-      let updateParam = {clipType: rowToTypeMap[row]}
+      let updateParam = {clipType: ROW_TO_TYPE_MAP[row]}
 
       emit('updateAssetSelection', updateParam)
     }
 
     const evalCompatibility = (stem) => {
+      const compatibilityProcessor = new CompatibilityProcessor(stem, store.state)
 
-      console.log('STATE_JSON', JSON.stringify(store.state))
+      //compatibilityProcessor.processFilledGridItems()
+
+      compatibilityProcessor.eval()
 
       //GO THROUGH EVERY GRID ITEM
-      for (let row = 0; row < store.state.grid.length; row++) {
-        for (let col = 0; col < store.state.grid[row].value.length; col++) {
-          //SET EMPTY ROWS TO -1
-          if (store.state.grid[row].value[col].stem) {
-            store.state.grid[row].value[col].compatibility = -1
-          } else {
-            //get type for row
-            if (rowToTypeMap[row] != stem.type) {
-              store.state.grid[row].value[col].compatibility = 0
-            }
+      // for (let row = 0; row < store.state.grid.length; row++) {
+      //   for (let col = 0; col < store.state.grid[row].value.length; col++) {
+      //     if (!store.state.grid[row].value[col].stem) {
+      //       //get type for row
+      //       if (ROW_TO_TYPE_MAP[row] != stem.type) {
+      //         store.state.grid[row].value[col].compatibility = 0
+      //       }
+      //
+      //       if (store.state.globalBpm && store.state.globalBpm != stem.bpm) {
+      //         store.state.grid[row].value[col].compatibility = 0
+      //       }
+      //
+      //       //IF NOT SET THEN MAKE IT GREEN
+      //       if (store.state.grid[row].value[col].compatibility === undefined) {
+      //         store.state.grid[row].value[col].compatibility = 2
+      //       }
+      //     }
+      //   }
+      // }
 
-            if (store.state.globalBpm && store.state.globalBpm != stem.bpm) {
-              store.state.grid[row].value[col].compatibility = 0
-            }
 
-            //IF NOT SET THEN MAKE IT GREEN
-            if (store.state.grid[row].value[col].compatibility === undefined) {
-              store.state.grid[row].value[col].compatibility = 2
-            }
-          }
-        }
-      }
+
+
     }
 
     const resetCompatibility = () => {

@@ -47,6 +47,9 @@ export default {
 
     const startDrag = (evt, stem) => {
       evt.dataTransfer.setData('stem', JSON.stringify(stem))
+
+      console.log('A STEM',  JSON.stringify(stem))
+
       emit('assetSelected', stem)
     }
 
