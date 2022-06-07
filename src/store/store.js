@@ -25,6 +25,29 @@ const state = reactive({
         }
         return newHash
     },
+    getChordsForCol(col) {
+        let chords = undefined
+
+        if (!this.grid || this.grid.length < 1) {
+            return chords
+        }
+
+        for (let row = 0; row < this.grid.length; row++) {
+            if(!this.grid[row].value[col]){
+                continue
+            }
+
+            if (this.grid[row].value[col].stem) {
+                if (this.grid[row].value[col].stem.type != 'drum') {
+                    if (this.grid[row].value[col].stem.chords) {
+                        chords = this.grid[row].value[col].stem.chords
+                    }
+                }
+            }
+        }
+
+        return chords
+    },
     hasStateChanged: function () {
         return this.currentStateHash !== this.calculateStateHash()
     },

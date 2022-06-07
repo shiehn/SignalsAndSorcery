@@ -14,7 +14,7 @@
         <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
 
         <img v-if=gridRowItem.showDeleteIcon :src=gridRowItem.deleteIconPath
-             @click="removeGridItem(gridRowItem.row, gridRowItem.col)"
+             @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
              class="w-4 h-4 absolute top-0 left-0 bg-white rounded-md">
       </div>
     </div>
@@ -38,7 +38,6 @@ export default {
     const {bus, emit} = useEventsBus()
 
 
-
     store.state.grid = new GridGenerator().initGrid(4, 16)
 
     const getGridRows = () => {
@@ -60,7 +59,6 @@ export default {
       }
 
       store.state.globalBpm = bpm
-      console.log('BPM UPDATED: ' + bpm)
     }
 
     const updateGlobalKey = () => {
@@ -74,7 +72,6 @@ export default {
       }
 
       store.state.globalKey = key
-      console.log('KEY UPDATED: ' + key)
     }
 
     const onDrop = (evt, row, col) => {
@@ -103,6 +100,7 @@ export default {
       updateGlobalBpm()
       updateGlobalKey()
 
+      emit('updateAssetSelection', {})
       emit('renderMixIfNeeded')
     }
 
@@ -123,6 +121,7 @@ export default {
       updateGlobalBpm()
       updateGlobalKey()
 
+      emit('updateAssetSelection', {})
       emit('renderMixIfNeeded')
     }
 
@@ -157,7 +156,21 @@ export default {
        - filter accordingly
        */
 
-      let updateParam = {clipType: ROW_TO_TYPE_MAP[row]}
+      let key = undefined
+      let chords = store.state.getChordsForCol(col)
+      if(ROW_TO_TYPE_MAP[row] == 'drum'){
+        console.log("ROW IS DRUM")
+        chords = 'all'
+        key = 'all'
+      }
+
+      let updateParam = {
+        filterKey: key,
+        clipType: ROW_TO_TYPE_MAP[row],
+        chords: chords ? chords : 'all',
+      }
+
+      console.log("BEFORE FIRE", updateParam)
 
       emit('updateAssetSelection', updateParam)
     }
@@ -189,8 +202,6 @@ export default {
       //     }
       //   }
       // }
-
-
 
 
     }

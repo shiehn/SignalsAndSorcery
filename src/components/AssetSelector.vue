@@ -104,9 +104,22 @@ export default {
         return stem.type == filterType.value
       })
 
-      totalResults = filteredByType.length
+      //TODO: FILTER BY  KEY
 
-      const pagedResults = filteredByType.slice(pageIndex.value, pageIndex.value + numOfResults)
+
+      //TODO: FILTER BY CHORDS:
+      let filteredByChords = filteredByType.filter(stem => {
+        if (filterChord.value === 'all') {
+          return true
+        }
+
+        return stem.chords.toLowerCase() == filterChord.value.toLowerCase()
+      })
+
+
+      totalResults = filteredByChords.length
+
+      const pagedResults = filteredByChords.slice(pageIndex.value, pageIndex.value + numOfResults)
 
       return pagedResults
     })
@@ -124,7 +137,13 @@ export default {
         filterBpm.value = 0
       }
 
+      if(assetFilter[0].filterKey){
+        //IN THIS CASE WE EXPLICITLY OVERRIDE THE GLOBAL KEY
+        filterKey.value = assetFilter[0].filterKey
+      }
+
       if (!assetFilter[0]) {
+        filterType.value = 'all'
         return
       }
 
@@ -132,8 +151,8 @@ export default {
         filterType.value = assetFilter[0].clipType
       }
 
-      if (assetFilter[0].clipType) {
-        filterType.value = assetFilter[0].clipType
+      if (assetFilter[0].chords) {
+        filterChord.value = assetFilter[0].chords.toLowerCase()
       }
 
 

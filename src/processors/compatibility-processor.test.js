@@ -249,4 +249,53 @@ describe('CompatibilityProcessor Tests', () => {
 
         expect(rating).to.equal(RATING.RED)
     })
+
+    it('getChordsInCol should all ways be compatible if stem is drums', () => {
+        //SETUP - one clip in column and is drums
+        const colToTest = 2
+        state.grid = gridGenerator.initGrid(4, 4)
+
+        let midStem = {
+            "id": "b685705d-ebf5-4a88-a743-3f74c3787b2e",
+            "bpm": "130.0",
+            "chords": "c:c:c:c",
+            "key": "c",
+            "sectionId": "a",
+            "type": "mid",
+            "variationId": "two",
+            "source": "",
+            "waveform": "",
+            "showPreviewIcon": true,
+            "previewIconPath": "",
+            "previewStopIconPath": ""
+        }
+
+        //ADD STEMS TO GRID
+        state.grid[0].value[colToTest].stem = undefined // HI
+        state.grid[1].value[colToTest].stem = midStem // MID
+        state.grid[2].value[colToTest].stem = undefined // LOW
+        state.grid[3].value[colToTest].stem = undefined // DRUM
+
+        //EXECUTE
+        let stemToDrop = {
+            "id": "xxx",
+            "bpm": "130.0",
+            "chords": "f:c:g:f",
+            "key": "c",
+            "sectionId": "a",
+            "type": "drum",
+            "variationId": "two",
+            "source": "",
+            "waveform": "",
+            "showPreviewIcon": true,
+            "previewIconPath": "",
+            "previewStopIconPath": ""
+        }
+
+
+        const processor = new CompatibilityProcessor(stemToDrop, state)
+        const rating = processor.getChordCompatibilityForColumn(colToTest)
+
+        expect(rating).to.equal(RATING.GREEN)
+    })
 })

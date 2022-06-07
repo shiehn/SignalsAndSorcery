@@ -25,6 +25,12 @@ export default class CompatibilityProcessor {
     }
 
     getChordCompatibilityForColumn(col) {
+
+        if(this.stem.type == 'drum'){
+            console.log('ITS GREEN')
+            return RATING.GREEN
+        }
+
         let chords = undefined
 
         for (let row = 0; row < this.state.grid.length; row++) {
@@ -60,10 +66,8 @@ export default class CompatibilityProcessor {
 
                     //CHECK CHORD COMPATIBILITY
                     const chordCompatibility = this.getChordCompatibilityForColumn(col)
-                    console.log("COL COLOR: " + chordCompatibility)
                     if(chordCompatibility === RATING.RED) {
                         this.state.grid[row].value[col].compatibility = RATING.RED
-                        console.log("COL IS RED")
                         continue
                     }
 
