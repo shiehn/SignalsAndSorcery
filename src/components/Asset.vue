@@ -1,5 +1,5 @@
 <template>
-  <li class="drag-el bg-cover w-16 h-16 relative"
+  <li class="drag-el bg-cover w-20 h-20 relative rounded-lg overflow-hidden shadow-lg"
       draggable="true"
       @dragstart="startDrag($event, stem)"
       @dragend="endDrag($event)"
@@ -7,13 +7,13 @@
       v-on:mouseleave="mouseLeaveGridItem(stem)"
       @click="onPlayClip(stem)"
       v-bind:style="{ backgroundImage: 'url(' + stem.waveform + ')',  }">
-    >
 
-    <div class="w-full h-full absolute top-0 left-0"
-         v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.3) ' + progressBar + '%, rgba(255, 255, 255, 0) ' + progressBar + '%' }">
-      <div class="absolute text-xs top-0 bg-green-500 bg-opacity-25">{{ stem.chords }}</div>
-      <img :src=stem.previewIconPath class="w-4 h-4 absolute bottom-0">
-      <div class="absolute bottom-0 right-0 bg-red-500 bg-opacity-25">{{ stem.bpm }}</div>
+    <div class="w-full h-full absolute top-0 left-0 hover:shadow-lg hover:cursor-move"
+         v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.5) ' + progressBar + '%, rgba(255, 255, 255, 0) ' + progressBar + '%' }">
+      <div v-if="stem.type != 'drum'" class="absolute w-full text-xs top-0 bg-gray-500 text-white text-center">{{ stem.chords }}</div>
+      <div v-if="stem.type == 'drum'" class="absolute w-full text-xs top-0 bg-gray-500 text-white text-center">drum</div>
+      <img :src=stem.previewIconPath class="w-4 h-4 absolute bottom-0 m-0.5">
+      <div class="absolute bottom-0 right-0 p-1 text-xs bg-red-200 bg-opacity-50">{{ stem.bpm }}</div>
       <audio :ref="el => { audioTag = el }" loop>
         <source v-bind:src=stem.source type="audio/mpeg"/>
         Your browser does not support the audio element.

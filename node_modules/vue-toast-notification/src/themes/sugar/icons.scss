@@ -1,0 +1,36 @@
+.v-toast {
+  &__item {
+    opacity: 1;
+    min-height: 4em;
+
+    .v-toast__text {
+      padding: 1.5em 1em;
+    }
+
+    .v-toast__icon {
+      display: block;
+      width: 27px;
+      min-width: 27px;
+      height: 27px;
+      margin-left: 1em;
+      background: url(./icons/info.svg) no-repeat;
+
+      [dir="rtl"] & {
+        margin-left: unset;
+        margin-right: 1em;
+      }
+    }
+
+    &.v-toast__item--success .v-toast__icon {
+      background: url(./icons/success.svg) no-repeat;
+    }
+
+    &.v-toast__item--error .v-toast__icon {
+      background: url(./icons/error.svg) no-repeat;
+    }
+
+    &.v-toast__item--warning .v-toast__icon {
+      background: url(./icons/warning.svg) no-repeat;
+    }
+  }
+}

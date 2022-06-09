@@ -1,0 +1,74 @@
+{
+  "name": "vue-toast-notification",
+  "version": "3.0.4",
+  "description": "Vue.js toast notification plugin",
+  "main": "dist/index.js",
+  "types": "./types/toast.d.ts",
+  "browser": "dist/index.min.js",
+  "style": "dist/theme-default.css",
+  "files": [
+    "src",
+    "dist",
+    "types"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ankurk91/vue-toast-notification.git"
+  },
+  "keywords": [
+    "vue",
+    "toast",
+    "growl",
+    "notice",
+    "notification"
+  ],
+  "author": "ankurk91",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ankurk91/vue-toast-notification/issues"
+  },
+  "homepage": "https://github.com/ankurk91/vue-toast-notification",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "npm run test --watch --notify",
+    "start": "npm run dev",
+    "dev": "cross-env NODE_ENV=development webpack serve --hot --config=webpack.config.dev.js",
+    "docs": "cross-env NODE_ENV=production webpack --config=webpack.config.dev.js --progress --mode=production",
+    "build": "cross-env NODE_ENV=production webpack --progress --mode=production",
+    "prepublishOnly": "npm run test && npm run build"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.10",
+    "@babel/preset-env": "^7.17.10",
+    "@vue/compiler-sfc": "^3.2.33",
+    "@vue/test-utils": "^2.0.0-rc.21",
+    "@vue/vue3-jest": "^27.0.0",
+    "babel-jest": "^27.4.2",
+    "babel-loader": "^8.2.5",
+    "bootstrap": "^4.5.3",
+    "clean-webpack-plugin": "^4.0.0",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.7.1",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.3.2",
+    "jest": "^27.0.6",
+    "mini-css-extract-plugin": "^2.6.0",
+    "mitt": "^3.0.0",
+    "sass": "~1.51.0",
+    "sass-loader": "^12.6.0",
+    "style-loader": "^3.0.0",
+    "svg-url-loader": "^7.1.1",
+    "vue": "^3.2.33",
+    "vue-loader": "^17.0.0",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.8.1",
+    "webpack-remove-empty-scripts": "^0.8.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.0"
+  },
+  "engines": {
+    "node": ">=12.15.0"
+  }
+}

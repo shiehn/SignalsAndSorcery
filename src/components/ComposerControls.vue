@@ -1,16 +1,19 @@
 <template>
-  <div class="flex flex-col w-full mt-4">
+  <div class="flex flex-col mt-4">
     <composer-controls-scroll-bar></composer-controls-scroll-bar>
 
-    <div v-if="!isRendering">
-      <button v-if="isPlaying === false" class="m-4" @click="play()"><h1>PLAY</h1></button>
-      <button v-if="isPlaying === true" class="m-4" @click="pause()"><h1>PAUSE</h1></button>
-      <button class="m-4" @click="stop()"><h1>STOP</h1></button>
-      <button v-if="requiresRender === true" class="m-4 sas-green-rec-btn" @click="renderMix()">RENDER MIX</button>
-    </div>
-
-    <div v-if="isRendering">
-      RENDERING!!!
+    <div class="flex w-full justify-center">
+      <div class="w-1/3 flex items-center">
+        <global-track-values></global-track-values>
+      </div>
+      <div class="flex w-full justify-center w-1/3">
+        <button v-if="isPlaying === false" class="m-4" @click="play()"><img :src="imageAssets.playBtn" class="h-24"/>
+        </button>
+        <button v-if="isPlaying === true" class="m-4" @click="pause()"><img :src="imageAssets.pauseBtn" class="h-24"/>
+        </button>
+        <button class="m-4" @click="stop()"><img :src="imageAssets.stopBtn" class="h-16"/></button>
+      </div>
+      <div class="w-1/3">right</div>
     </div>
   </div>
 </template>
@@ -20,14 +23,17 @@ import {inject, ref} from "vue";
 import {watch} from "vue";
 import useEventsBus from "../events/eventBus";
 import ComposerControlsScrollBar from "./ComposerControlsScrollBar.vue";
+import GlobalTrackValues from "./GlobalTrackValues";
 
 export default {
   name: "ComposerControls",
-  components: {ComposerControlsScrollBar},
+  components: {ComposerControlsScrollBar, GlobalTrackValues},
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
     const requiresRender = ref(false)
+    const toast = inject('toast');
+
 
     let BUFFER_CACHE = {}
     let BUFFER_ROW_CACHE = []
@@ -39,6 +45,12 @@ export default {
     let pausedAt = 0
     const isPlaying = ref(false)
     const isRendering = ref(false)
+
+    const imageAssets = {
+      playBtn: store.state.staticUrl + 'icons/play-button.png',
+      pauseBtn: store.state.staticUrl + 'icons/pause-button.png',
+      stopBtn: store.state.staticUrl + 'icons/stop-button.png',
+    }
 
     const getTrackListByRow = (row) => {
       const tracks = store.state.grid[row].value.map((t) => {
@@ -64,29 +76,29 @@ export default {
           // if (BUFFER_CACHE[trackSourceUrls[x]]) {
           //   buffer_list[x] = BUFFER_CACHE[trackSourceUrls[x]]
           // } else {
-            await new Promise(function (resolve) {
-              axios.get(trackSourceUrls[x], {
-                responseType: 'arraybuffer'
-              }).then(function (response) {
-                let audioData = response.data;
-                if (audioData) {
-                  actx.decodeAudioData(audioData, function (buffer) {
-                        buffer_list[x] = buffer;
-                        resolve()
-                      },
-                      function (e) {
-                        console.log(e.err);
-                      });
-                } else {
-                  console.error("problem!!");
-                }
-              })
-                  .catch(function (error) {
-                    console.error("problem!! downloading " + error);
-                  })
+          await new Promise(function (resolve) {
+            axios.get(trackSourceUrls[x], {
+              responseType: 'arraybuffer'
+            }).then(function (response) {
+              let audioData = response.data;
+              if (audioData) {
+                actx.decodeAudioData(audioData, function (buffer) {
+                      buffer_list[x] = buffer;
+                      resolve()
+                    },
+                    function (e) {
+                      console.log(e.err);
+                    });
+              } else {
+                console.error("problem!!");
+              }
             })
+                .catch(function (error) {
+                  console.error("problem!! downloading " + error);
+                })
+          })
 
-            // BUFFER_CACHE[trackSourceUrls[x]] = buffer
+          // BUFFER_CACHE[trackSourceUrls[x]] = buffer
           // }
         } else {
           buffer_list[x] = emptyBuffer;
@@ -137,12 +149,10 @@ export default {
     }
 
 
-
     const renderMix = async () => {
-      console.time('FULL_RENDER')
       await stop()
 
-      if (store.state.fileCount < 1) {
+      if (store.state.clipCount() < 1) {
         return
       }
 
@@ -269,7 +279,8 @@ export default {
     }
 
     const playMix = async (offsetStartPercentage) => {
-      if (store.state.fileCount < 1) {
+      if (store.state.clipCount() < 1) {
+        toast.warning('Add clips to the arranger!');
         return
       }
 
@@ -290,7 +301,6 @@ export default {
         pausedAt = 0;
         isPlaying.value = true;
       } else {
-        console.log('NO BUFFER - RENDER FIRST??')
         await renderMix()
         await playMix()
       }
@@ -308,7 +318,6 @@ export default {
     }
 
     const pause = async () => {
-      console.log('PAUSE CALLED')
       let elapsed = context.currentTime - startedAt;
       stop();
       pausedAt = elapsed;
@@ -369,9 +378,6 @@ export default {
     })
 
     watch(() => bus.value.get('renderMixIfNeeded'), async (callerId) => {
-      console.log('HAS STATE CHANGED', store.state.hasStateChanged())
-      console.log('isRendering.value', isRendering.value)
-
       if (store.state.hasStateChanged()) {
         requiresRender.value = true
 
@@ -385,13 +391,24 @@ export default {
     })
 
     watch(() => bus.value.get('scrubTo'), async (scrubToPercent) => {
+      if (store.state.clipCount() < 1) {
+        toast.warning('Add clips to the arranger!');
+        return
+      }
+
       if (isPlaying.value && buffer && scrubToPercent && scrubToPercent > 0 && scrubToPercent <= 100) {
+        await pause()
+        await playMix(scrubToPercent)
+      } else {
+        // it is currently not playing, so start now
+        await playMix()
         await pause()
         await playMix(scrubToPercent)
       }
     })
 
     return {
+      imageAssets,
       isPlaying,
       isRendering,
       play: playMix,

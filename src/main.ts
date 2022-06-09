@@ -2,6 +2,8 @@
 
 import {createApp} from 'vue';
 import App from './App.vue';
+import VueToast from 'vue-toast-notification';
 
-const app = createApp(App)
-app.mount('#app');
+const mrTapPlayer = createApp(App)
+mrTapPlayer.use(VueToast).provide('toast', mrTapPlayer.config.globalProperties.$toast);
+mrTapPlayer.mount('#app');

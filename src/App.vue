@@ -2,9 +2,11 @@
 
 <template>
   <asset-selector></asset-selector>
-  <composer-grid></composer-grid>
-  <composer-controls></composer-controls>
-  <global-track-values></global-track-values>
+  <div>
+    <composer-grid></composer-grid>
+    <composer-controls></composer-controls>
+  </div>
+
 </template>
 
 <script lang="js">

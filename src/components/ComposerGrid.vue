@@ -1,24 +1,30 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div class="w-full"
+  <div class="flex justify-center mb-8">
+    <p class="sas-sub-sub-subtitle text-center bg-white w-1/3 rounded-md drop-shadow-md"><span
+        class="sas-sub-subtitle font-bold">Clip Arranger</span>
+      <span
+          class="sas-sub-sub-subtitle"> (drag clips from above)</span></p>
+  </div>
+
+
+  <div class="rounded-lg"
        v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.3) ' + progressBar + '%, white ' + progressBar + '%' }">
-    <div v-for="gridRow in getGridRows()" class="flex w-full h-16 justify-between  mb-2">
-      <div v-for="gridRowItem in gridRow.value" class="border-2 w-16 h-16 overflow-hidden relative hover:bg-gray-200"
-           :class="{ 'border-green-500': gridRowItem.compatibility === 2, 'border-yellow-500': gridRowItem.compatibility === 1, 'border-red-500': gridRowItem.compatibility === 0 }"
+    <div v-for="gridRow in getGridRows()" class="flex justify-between">
+      <div v-for="gridRowItem in gridRow.value"
+           class="m-1 w-20 h-20 overflow-hidden relative rounded-lg shadow-lg hover:bg-gray-400 hover:cursor-pointer"
+           :class="{ 'bg-green-100': gridRowItem.compatibility === 2, 'bg-yellow-100': gridRowItem.compatibility === 1, 'bg-red-100': gridRowItem.compatibility === 0 }"
            @drop="onDrop($event, gridRowItem.row, gridRowItem.col)"
            @dragover.prevent
            @dragenter.prevent
            v-on:mouseover="mouseOverGridItem(gridRowItem.row, gridRowItem.col)"
            v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
-           @click="handleGridItemClick(gridRowItem.row, gridRowItem.col)"
-      >
+           @click="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
         <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
-
-        <img v-if=gridRowItem.showDeleteIcon :src=gridRowItem.deleteIconPath
+        <img v-if="gridRowItem.showDeleteIcon" :src=gridRowItem.deleteIconPath
              @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
-             class="w-4 h-4 absolute top-0 left-0 bg-white rounded-md">
+             class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
       </div>
     </div>
-
   </div>
 </template>
 
@@ -38,7 +44,7 @@ export default {
     const {bus, emit} = useEventsBus()
 
 
-    store.state.grid = new GridGenerator().initGrid(4, 16)
+    store.state.grid = new GridGenerator().initGrid(4, 12)
 
     const getGridRows = () => {
       return store.state.grid
@@ -95,8 +101,6 @@ export default {
       gridItem['deleteIconPath'] = store.state.staticUrl + 'icons/delete-x.png'
       gridItem['previewIconPath'] = store.state.staticUrl + 'icons/play-button.png'
 
-      store.state.fileCount = store.state.fileCount + 1
-
       updateGlobalBpm()
       updateGlobalKey()
 
@@ -116,8 +120,6 @@ export default {
       gridItem.stem = undefined //TODO IF YOU HAVE THE STEM WHY THE DUPLICATION
       gridItem['deleteIconPath'] = undefined
 
-      store.state.fileCount = store.state.fileCount - 1
-
       updateGlobalBpm()
       updateGlobalKey()
 
@@ -127,7 +129,7 @@ export default {
 
     const mouseOverGridItem = (row, col) => {
       const gridItem = store.state.grid[row].value[col]
-      if (!gridItem.showDeleteIcon) {
+      if (!gridItem.showDeleteIcon && gridItem.stem) {
         gridItem.showDeleteIcon = true
       }
     }
@@ -158,7 +160,7 @@ export default {
 
       let key = undefined
       let chords = store.state.getChordsForCol(col)
-      if(ROW_TO_TYPE_MAP[row] == 'drum'){
+      if (ROW_TO_TYPE_MAP[row] == 'drum') {
         console.log("ROW IS DRUM")
         chords = 'all'
         key = 'all'

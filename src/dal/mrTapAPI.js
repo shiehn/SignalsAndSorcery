@@ -4,7 +4,7 @@ export default class MrTapObjWrapper {
     }
 
     getBPM() {
-        return this.mrtapJson['bpm'];
+        return this.mrtapJson['bpm'] ? Math.round(this.mrtapJson['bpm']) : this.mrtapJson['bpm']
     }
 
     getSectionIds() {

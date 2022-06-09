@@ -14,7 +14,6 @@ describe('CompatibilityProcessor Tests', () => {
         //RESET THE STATE
         state.globalBpm = undefined
         state.globalKey = undefined
-        state.fileCount = 0
         state.staticUrl = ''
         state.grid = []
         state.currentStateHash = ''

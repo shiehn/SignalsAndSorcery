@@ -1,36 +1,53 @@
 <template>
-  <div class="w-full border-2 mb-8">
-    <h1>SELECT CLIPS</h1>
+  <div class="w-full mt-8 mb-8">
+<!--    <div class="flex justify-center w-full mb-8">-->
+<!--      <p class="sas-sub-sub-subtitle text-center bg-white w-1/3 rounded-md drop-shadow-md"><span-->
+<!--          class="sas-sub-subtitle font-bold">Clip Selector</span></p>-->
+<!--    </div>-->
 
-    <div class="my-4">
-      <label for="bpm-filter">BPM:</label>
-      <select v-if="filterBpm != undefined" v-model="filterBpm" id="bpm-filter">
-        <option :value="item" v-for="item in filterBpmOptions.arr">{{ item }}
-        </option>
-      </select>
-      <label for="type-filter">TYPE:</label>
-      <select v-if="filterType != undefined" v-model="filterType" id="type-filter">
-        <option :value="item" v-for="item in filterTypeOptions.arr">{{ item }}
-        </option>
-      </select>
-      <label for="key-filter">KEY:</label>
-      <select v-if="filterKey != undefined" v-model="filterKey" id="key-filter">
-        <option :value="item" v-for="item in filterKeyOptions.arr">{{ item }}
-        </option>
-      </select>
-      <label for="chord-filter">CHORD:</label>
-      <select v-if="filterChord != undefined" v-model="filterChord" id="chord-filter">
-        <option :value="item" v-for="item in filterChordOptions.arr">{{ item }}
-        </option>
-      </select>
+    <div class="flex justify-center font-bold mb-8">
+      <label for="bpm-filter">BPM:
+        <select v-if="filterBpm != undefined" v-model="filterBpm" id="bpm-filter" class="mx-2 rounded-lg">
+          <option :value="item" v-for="item in filterBpmOptions.arr">{{ item }}
+          </option>
+        </select>
+      </label>
+      <label for="type-filter">TYPE:
+        <select v-if="filterType != undefined" v-model="filterType" id="type-filter" class="mx-2 rounded-lg">>
+          <option :value="item" v-for="item in filterTypeOptions.arr">{{ item }}
+          </option>
+        </select>
+      </label>
+      <label for="key-filter">KEY:
+        <select v-if="filterKey != undefined" v-model="filterKey" id="key-filter" class="mx-2 rounded-lg">>
+          <option :value="item" v-for="item in filterKeyOptions.arr">{{ item }}
+          </option>
+        </select>
+      </label>
+      <label for="chord-filter">CHORD:
+        <select v-if="filterChord != undefined" v-model="filterChord" id="chord-filter" class="mx-2 rounded-lg">>
+          <option :value="item" v-for="item in filterChordOptions.arr">{{ item }}
+          </option>
+        </select>
+      </label>
     </div>
 
-    <ul class="grid grid-cols-8 gap-2">
-      <asset v-for="stem in getFilteredStems" :stem=stem></asset>
-    </ul>
+    <div class="flex w-full justify-center">
+      <div
+          class="flex flex-col justify-center text-center w-10 mr-4 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
+          @click="pagePrev">
+        <img :src="staticImages.pageLeftImgSrc" class="w-8 h-8">
+      </div>
 
-    <button @click="pagePrev">PREV</button>&nbsp;&nbsp;&nbsp;&nbsp;
-    <button @click="pageNext">NEXT</button>
+      <ul class="grid grid-cols-8 gap-2">
+        <asset v-for="stem in getFilteredStems" :stem=stem></asset>
+      </ul>
+      <div
+          class="flex flex-col justify-center text-center w-10 ml-4 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
+          @click="pageNext">
+        <img :src="staticImages.pageRightImgSrc" class="w-8 h-8">
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -40,6 +57,8 @@ import {StemsAPI} from "../dal/StemsAPI";
 import Asset from "./Asset.vue";
 import {watch} from "vue";
 import useEventsBus from "../events/eventBus";
+import store from "../store/store";
+import {ROW_TO_TYPE_MAP} from "../constants/constants";
 
 export default {
   name: "AssetSelector",
@@ -62,6 +81,11 @@ export default {
     let totalResults = 0
     let prevFilterBpm = 0;
     let prevFilterType = 0;
+
+    const staticImages = {
+      pageLeftImgSrc: store.state.staticUrl + 'icons/shuffle-left.png',
+      pageRightImgSrc: store.state.staticUrl + 'icons/shuffle-right.png',
+    }
 
     const pageNext = () => {
       if (pageIndex.value <= totalResults - numOfResults) {
@@ -126,7 +150,7 @@ export default {
 
     watch(() => bus.value.get('updateAssetSelection'), (assetFilter) => {
       if (store.state.globalKey) {
-        filterKey.value = store.state.globalKey
+        filterKey.value = store.state.globalKey.toLowerCase()
       } else {
         filterKey.value = 'all'
       }
@@ -137,7 +161,7 @@ export default {
         filterBpm.value = 0
       }
 
-      if(assetFilter[0].filterKey){
+      if (assetFilter[0].filterKey) {
         //IN THIS CASE WE EXPLICITLY OVERRIDE THE GLOBAL KEY
         filterKey.value = assetFilter[0].filterKey
       }
@@ -164,7 +188,6 @@ filterChord
        */
     })
 
-
     onMounted(async () => {
       const stemsApi = new StemsAPI()
       let stems = await stemsApi.getStemsAndOptions()
@@ -178,12 +201,14 @@ filterChord
       })
 
       stems.options.bpms.forEach(bpm => {
-        filterBpmOptions.arr.push(bpm)
+        filterBpmOptions.arr.push(Math.round(bpm))
       })
       filterBpm.value = 0
 
       stems.options.types.forEach(t => {
-        filterTypeOptions.arr.push(t)
+        if(ROW_TO_TYPE_MAP.includes(t)) {
+          filterTypeOptions.arr.push(t)
+        }
       })
       filterType.value = 'all'
 
@@ -210,6 +235,7 @@ filterChord
       getFilteredStems,
       pageNext,
       pagePrev,
+      staticImages,
       stemSelections,
       store,
     }

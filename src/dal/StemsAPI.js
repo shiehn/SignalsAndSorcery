@@ -17,16 +17,12 @@ export class StemsAPI {
         }
 
         try {
-            const url = 'http://localhost:8000/api/mrtaps'
-            // const url = 'https://signalsandsorcery.org/api/mrtaps'
+            //const url = 'http://localhost:8000/api/mrtaps'
+            const url = 'https://signalsandsorcery.org/api/mrtaps'
 
             let res = await axios.get(url);
 
-            console.log('what the fuck')
-
             if (res['data']) {
-                console.log('here')
-
                 const mrtapWrappers = res['data']['mrtaps'].map((d) => {
                     return new MrTapObjWrapper(d)
                 })

@@ -3,7 +3,19 @@ import {reactive} from "vue";
 const state = reactive({
     globalBpm: undefined,
     globalKey: undefined,
-    fileCount: 0,
+    clipCount: function () {
+        let clipCount = 0
+
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                if (this.grid[row].value[col].stem) {
+                    clipCount++
+                }
+            }
+        }
+
+        return clipCount
+    },
     staticUrl: '',
     grid: [],
     currentStateHash: '',
@@ -33,7 +45,7 @@ const state = reactive({
         }
 
         for (let row = 0; row < this.grid.length; row++) {
-            if(!this.grid[row].value[col]){
+            if (!this.grid[row].value[col]) {
                 continue
             }
 
