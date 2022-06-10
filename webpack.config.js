@@ -4,13 +4,12 @@ const BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = (env = {}) => {
     return {
-
         mode: env.prod ? 'production' : 'development',
         devtool: env.prod ? 'source-map' : 'eval-cheap-module-source-map',
         entry: path.resolve(__dirname, './src/main.ts'),
         output: {
-            path: path.resolve(__dirname, './../static/dist'),
-            // path: path.resolve(__dirname, './dist'),
+            // path: path.resolve(__dirname, './../static/dist'),
+            path: path.resolve(__dirname, './dist'),
         },
         module: {
             rules: [
@@ -45,6 +44,7 @@ module.exports = (env = {}) => {
             new BundleTracker({
                 filename: './webpack-stats.json',
                 publicPath: '/static/dist/'
+
             })
         ],
         devServer: {
@@ -55,7 +55,7 @@ module.exports = (env = {}) => {
             static: __dirname,
             devMiddleware: {
                 index: true,
-                mimeTypes: { "text/html": ["phtml"] },
+                mimeTypes: {"text/html": ["phtml"]},
                 publicPath: 'http://0.0.0.0:8000/static/dist/',
                 serverSideRender: true,
                 writeToDisk: true,

@@ -10,8 +10,11 @@
 
     <div class="w-full h-full absolute top-0 left-0 hover:shadow-lg hover:cursor-move"
          v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.5) ' + progressBar + '%, rgba(255, 255, 255, 0) ' + progressBar + '%' }">
-      <div v-if="stem.type != 'drum'" class="absolute w-full text-xs top-0 bg-gray-500 text-white text-center">{{ stem.chords }}</div>
-      <div v-if="stem.type == 'drum'" class="absolute w-full text-xs top-0 bg-gray-500 text-white text-center">drum</div>
+      <div v-if="stem.type != 'drum'" class="absolute w-full text-xs top-0 bg-gray-500 text-white text-center">
+        {{ stem.chords }}
+      </div>
+      <div v-if="stem.type == 'drum'" class="absolute w-full text-xs top-0 bg-gray-500 text-white text-center">drum
+      </div>
       <img :src=stem.previewIconPath class="w-4 h-4 absolute bottom-0 m-0.5">
       <div class="absolute bottom-0 right-0 p-1 text-xs bg-red-200 bg-opacity-50">{{ stem.bpm }}</div>
       <audio :ref="el => { audioTag = el }" loop>

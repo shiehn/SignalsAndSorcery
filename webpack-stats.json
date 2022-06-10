@@ -3,13 +3,24 @@
   "assets": {
     "main.js": {
       "name": "main.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/frontend/dist/main.js",
       "publicPath": "/static/dist/main.js"
+    },
+    "main.51d448866a7898ecbfae.hot-update.js": {
+      "name": "main.51d448866a7898ecbfae.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/frontend/dist/main.51d448866a7898ecbfae.hot-update.js",
+      "publicPath": "/static/dist/main.51d448866a7898ecbfae.hot-update.js"
+    },
+    "main.51d448866a7898ecbfae.hot-update.json": {
+      "name": "main.51d448866a7898ecbfae.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/frontend/dist/main.51d448866a7898ecbfae.hot-update.json",
+      "publicPath": "/static/dist/main.51d448866a7898ecbfae.hot-update.json"
     }
   },
   "chunks": {
     "main": [
-      "main.js"
+      "main.js",
+      "main.51d448866a7898ecbfae.hot-update.js"
     ]
   },
   "publicPath": "/static/dist/"

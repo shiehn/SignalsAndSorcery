@@ -13,7 +13,11 @@
         </button>
         <button class="m-4" @click="stop()"><img :src="imageAssets.stopBtn" class="h-16"/></button>
       </div>
-      <div class="w-1/3">right</div>
+      <div class="flex w-full justify-center w-1/3">
+        <button v-if="isPlaying === false" class="h-10 w-10 m-4" @click="downloadMix()"><img
+            :src="imageAssets.downloadBtn" class="h-24"/>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -24,6 +28,7 @@ import {watch} from "vue";
 import useEventsBus from "../events/eventBus";
 import ComposerControlsScrollBar from "./ComposerControlsScrollBar.vue";
 import GlobalTrackValues from "./GlobalTrackValues";
+import axios from "axios";
 
 export default {
   name: "ComposerControls",
@@ -33,7 +38,6 @@ export default {
     const {bus, emit} = useEventsBus()
     const requiresRender = ref(false)
     const toast = inject('toast');
-
 
     let BUFFER_CACHE = {}
     let BUFFER_ROW_CACHE = []
@@ -50,6 +54,7 @@ export default {
       playBtn: store.state.staticUrl + 'icons/play-button.png',
       pauseBtn: store.state.staticUrl + 'icons/pause-button.png',
       stopBtn: store.state.staticUrl + 'icons/stop-button.png',
+      downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
     }
 
     const getTrackListByRow = (row) => {
@@ -371,6 +376,11 @@ export default {
 
     setInterval(updateDurations, 100)
 
+    let downloadMix = () => {
+      toast.error('Not yet implemented :(');
+      return
+    }
+
     watch(() => bus.value.get('stopAllAudio'), async (callerId) => {
       if (callerId != 'composer-controls') {
         await stop()
@@ -408,6 +418,7 @@ export default {
     })
 
     return {
+      downloadMix,
       imageAssets,
       isPlaying,
       isRendering,

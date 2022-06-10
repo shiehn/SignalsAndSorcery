@@ -4,6 +4,15 @@ import {v4} from "uuid"
 
 export class StemsAPI {
 
+    randomizeArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+
+        return array
+    }
+
     async getStemsAndOptions() {
 
         let stemsAndOptions = {
@@ -23,9 +32,12 @@ export class StemsAPI {
             let res = await axios.get(url);
 
             if (res['data']) {
-                const mrtapWrappers = res['data']['mrtaps'].map((d) => {
+                let mrtapWrappers = res['data']['mrtaps'].map((d) => {
                     return new MrTapObjWrapper(d)
                 })
+
+                //RANDOMIZE RESULTS TO PREVENT THE SAME CLIPS DISPLAYED FIRST
+                mrtapWrappers = this.randomizeArray(mrtapWrappers)
 
                 for (let i = 0; i < mrtapWrappers.length; i++) {
                     let stems = mrtapWrappers[i].flattenStems(v4)
