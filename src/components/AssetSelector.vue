@@ -1,9 +1,9 @@
 <template>
   <div class="w-full mt-8 mb-8">
-<!--    <div class="flex justify-center w-full mb-8">-->
-<!--      <p class="sas-sub-sub-subtitle text-center bg-white w-1/3 rounded-md drop-shadow-md"><span-->
-<!--          class="sas-sub-subtitle font-bold">Clip Selector</span></p>-->
-<!--    </div>-->
+    <!--    <div class="flex justify-center w-full mb-8">-->
+    <!--      <p class="sas-sub-sub-subtitle text-center bg-white w-1/3 rounded-md drop-shadow-md"><span-->
+    <!--          class="sas-sub-subtitle font-bold">Clip Selector</span></p>-->
+    <!--    </div>-->
 
     <div class="flex justify-center font-bold mb-8">
       <label for="bpm-filter">BPM:
@@ -128,11 +128,17 @@ export default {
         return stem.type == filterType.value
       })
 
-      //TODO: FILTER BY  KEY
+      let filteredByKey = filteredByType.filter(stem => {
+        if (filterKey.value === 'all') {
+          return true
+        }
+
+        return stem.key.toLowerCase() == filterKey.value.toLowerCase()
+      })
 
 
       //TODO: FILTER BY CHORDS:
-      let filteredByChords = filteredByType.filter(stem => {
+      let filteredByChords = filteredByKey.filter(stem => {
         if (filterChord.value === 'all') {
           return true
         }
@@ -206,7 +212,7 @@ filterChord
       filterBpm.value = 0
 
       stems.options.types.forEach(t => {
-        if(ROW_TO_TYPE_MAP.includes(t)) {
+        if (ROW_TO_TYPE_MAP.includes(t)) {
           filterTypeOptions.arr.push(t)
         }
       })

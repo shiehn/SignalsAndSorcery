@@ -14,7 +14,7 @@
         <button class="m-4" @click="stop()"><img :src="imageAssets.stopBtn" class="h-16"/></button>
       </div>
       <div class="flex w-full justify-center w-1/3">
-        <button v-if="isPlaying === false" class="h-10 w-10 m-4" @click="downloadMix()"><img
+        <button class="h-10 w-10 m-4" @click="downloadMix()"><img
             :src="imageAssets.downloadBtn" class="h-24"/>
         </button>
       </div>
@@ -29,6 +29,7 @@ import useEventsBus from "../events/eventBus";
 import ComposerControlsScrollBar from "./ComposerControlsScrollBar.vue";
 import GlobalTrackValues from "./GlobalTrackValues";
 import axios from "axios";
+import Crunker from "crunker";
 
 export default {
   name: "ComposerControls",
@@ -274,9 +275,6 @@ export default {
       store.state.updateStateHash()
 
       //emit('renderMixIfNeeded')
-
-
-      console.timeEnd('FULL_RENDER')
     }
 
     const playClip = async () => {
@@ -376,9 +374,15 @@ export default {
 
     setInterval(updateDurations, 100)
 
-    let downloadMix = () => {
-      toast.error('Not yet implemented :(');
-      return
+    let downloadMix = async () => {
+      if (!buffer || (store.state.clipCount() < 1)) {
+        toast.error('Add clips to arrange before downloading');
+        return
+      }
+
+      let crunker = new Crunker();
+      let output = crunker.export(buffer, 'audio/mp3')
+      await crunker.download(output.blob, 'signals_and_sorcery') //TODO: the name should be the project name
     }
 
     watch(() => bus.value.get('stopAllAudio'), async (callerId) => {
@@ -396,7 +400,6 @@ export default {
         }
       } else {
         requiresRender.value = false
-        // console.log('RENDER NOT NEEDED')
       }
     })
 
