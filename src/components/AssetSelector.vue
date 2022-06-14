@@ -1,52 +1,53 @@
 <template>
-  <div class="w-full mt-8 mb-8">
-    <!--    <div class="flex justify-center w-full mb-8">-->
-    <!--      <p class="sas-sub-sub-subtitle text-center bg-white w-1/3 rounded-md drop-shadow-md"><span-->
-    <!--          class="sas-sub-subtitle font-bold">Clip Selector</span></p>-->
-    <!--    </div>-->
-
-    <div class="flex justify-center font-bold mb-8">
-      <label for="bpm-filter">BPM:
-        <select v-if="filterBpm != undefined" v-model="filterBpm" id="bpm-filter" class="mx-2 rounded-lg">
-          <option :value="item" v-for="item in filterBpmOptions.arr">{{ item }}
-          </option>
-        </select>
-      </label>
-      <label for="type-filter">TYPE:
-        <select v-if="filterType != undefined" v-model="filterType" id="type-filter" class="mx-2 rounded-lg">>
-          <option :value="item" v-for="item in filterTypeOptions.arr">{{ item }}
-          </option>
-        </select>
-      </label>
-      <label for="key-filter">KEY:
-        <select v-if="filterKey != undefined" v-model="filterKey" id="key-filter" class="mx-2 rounded-lg">>
-          <option :value="item" v-for="item in filterKeyOptions.arr">{{ item }}
-          </option>
-        </select>
-      </label>
-      <label for="chord-filter">CHORD:
-        <select v-if="filterChord != undefined" v-model="filterChord" id="chord-filter" class="mx-2 rounded-lg">>
-          <option :value="item" v-for="item in filterChordOptions.arr">{{ item }}
-          </option>
-        </select>
-      </label>
+  <div class="flex flex-col w-1/6 h-48 border-2 border-black rounded-lg justify-between font-bold p-2 m-2">
+    <div class="flex w-full h-8 justify-between my-1">
+      <label for="bpm-filter" class="w-1/3 my-2 text-sm">BPM</label>
+      <select v-if="filterBpm != undefined" v-model="filterBpm" id="bpm-filter" class="w-2/3 text-xs rounded-lg">
+        <option :value="item" v-for="item in filterBpmOptions.arr">{{ item }}
+        </option>
+      </select>
     </div>
 
-    <div class="flex w-full justify-center">
-      <div
-          class="flex flex-col justify-center text-center w-10 mr-4 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
-          @click="pagePrev">
-        <img :src="staticImages.pageLeftImgSrc" class="w-8 h-8">
-      </div>
+    <div class="flex w-full h-8 justify-between my-1">
+      <label for="type-filter" class="w-1/3 my-2 text-sm">TYPE</label>
+      <select v-if="filterType != undefined" v-model="filterType" id="type-filter" class="w-2/3 text-xs rounded-lg">
+        <option :value="item" v-for="item in filterTypeOptions.arr">{{ item }}
+        </option>
+      </select>
+    </div>
 
-      <ul class="grid grid-cols-8 gap-2">
-        <asset v-for="stem in getFilteredStems" :stem=stem></asset>
-      </ul>
-      <div
-          class="flex flex-col justify-center text-center w-10 ml-4 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
-          @click="pageNext">
-        <img :src="staticImages.pageRightImgSrc" class="w-8 h-8">
-      </div>
+    <div class="flex w-full h-8 justify-between my-1">
+      <label for="key-filter" class="w-1/3 my-2 text-sm">KEY</label>
+      <select v-if="filterKey != undefined" v-model="filterKey" id="key-filter" class="w-2/3 text-xs rounded-lg">
+        <option :value="item" v-for="item in filterKeyOptions.arr">{{ item }}
+        </option>
+      </select>
+    </div>
+
+    <div class="flex w-full h-8 justify-between my-1">
+      <label for="chord-filter" class="w-1/3 my-2 text-sm">CHORD</label>
+      <select v-if="filterChord != undefined" v-model="filterChord" id="chord-filter"
+              class="w-2/3 text-xs rounded-lg">
+        <option :value="item" v-for="item in filterChordOptions.arr">{{ item }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="flex w-4/6 h-48 justify-center border-2 border-black my-2 ml-2 p-2 rounded-lg">
+    <div
+        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
+        @click="pagePrev">
+      <img :src="staticImages.pageLeftImgSrc" class="w-8 h-8">
+    </div>
+
+    <ul class="grid grid-cols-8 gap-2">
+      <asset v-for="stem in getFilteredStems" :stem=stem></asset>
+    </ul>
+    <div
+        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
+        @click="pageNext">
+      <img :src="staticImages.pageRightImgSrc" class="w-8 h-8">
     </div>
   </div>
 </template>

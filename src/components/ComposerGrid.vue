@@ -1,14 +1,6 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div class="flex justify-center mb-8">
-    <p class="sas-sub-sub-subtitle text-center bg-white w-1/3 rounded-md drop-shadow-md"><span
-        class="sas-sub-subtitle font-bold">Clip Arranger</span>
-      <span
-          class="sas-sub-sub-subtitle"> (drag clips from above)</span></p>
-  </div>
-
-
-  <div class="rounded-lg"
-       v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.3) ' + progressBar + '%, white ' + progressBar + '%' }">
+  <div class="rounded-lg w-11/12"
+       v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.3) ' + progressBar + '%,  gray ' + progressBar + '%' }">
     <div v-for="gridRow in getGridRows()" class="flex justify-between">
       <div v-for="gridRowItem in gridRow.value"
            class="m-1 w-20 h-20 overflow-hidden relative rounded-lg shadow-lg hover:bg-gray-400 hover:cursor-pointer"
@@ -25,7 +17,10 @@
              class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
       </div>
     </div>
+
+    <composer-controls-scroll-bar></composer-controls-scroll-bar>
   </div>
+
 </template>
 
 <script>
@@ -35,14 +30,14 @@ import Asset from "./Asset";
 import GridGenerator from "../generators/grid-generator";
 import CompatibilityProcessor from "../processors/compatibility-processor";
 import {ROW_TO_TYPE_MAP} from "../constants/constants";
+import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
 
 export default {
   name: 'ComposerGrid',
-  components: {Asset},
+  components: {Asset, ComposerControlsScrollBar},
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
-
 
     store.state.grid = new GridGenerator().initGrid(4, 12)
 

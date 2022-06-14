@@ -1,12 +1,8 @@
 <!-- frontend/src/App.vue -->
 
 <template>
-  <asset-selector></asset-selector>
-  <div>
-    <composer-grid></composer-grid>
-    <composer-controls></composer-controls>
-  </div>
-
+  <top-panels-wrapper></top-panels-wrapper>
+  <composer-grid-wrapper></composer-grid-wrapper>
 </template>
 
 <script lang="js">
@@ -16,6 +12,8 @@ import ComposerControls from './components/ComposerControls.vue'
 import ComposerGrid from './components/ComposerGrid.vue'
 import store from './store/store'
 import GlobalTrackValues from "./components/GlobalTrackValues.vue";
+import ComposerGridWrapper from "./components/ComposerGridWrapper";
+import TopPanelsWrapper from "./components/TopPanelsWrapper";
 
 let url;
 const root = document.querySelector('#app')
@@ -33,10 +31,9 @@ export default defineComponent({
     return {}
   },
   components: {
+    TopPanelsWrapper,
+    ComposerGridWrapper,
     GlobalTrackValues,
-    AssetSelector,
-    ComposerControls,
-    ComposerGrid,
   }
 });
 </script>

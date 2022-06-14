@@ -1,24 +1,10 @@
 <template>
-  <div class="flex flex-col mt-4">
-    <composer-controls-scroll-bar></composer-controls-scroll-bar>
-
-    <div class="flex w-full justify-center">
-      <div class="w-1/3 flex items-center">
-        <global-track-values></global-track-values>
-      </div>
-      <div class="flex w-full justify-center w-1/3">
-        <button v-if="isPlaying === false" class="m-4" @click="play()"><img :src="imageAssets.playBtn" class="h-24"/>
-        </button>
-        <button v-if="isPlaying === true" class="m-4" @click="pause()"><img :src="imageAssets.pauseBtn" class="h-24"/>
-        </button>
-        <button class="m-4" @click="stop()"><img :src="imageAssets.stopBtn" class="h-16"/></button>
-      </div>
-      <div class="flex w-full justify-center w-1/3">
-        <button class="h-10 w-10 m-4" @click="downloadMix()"><img
-            :src="imageAssets.downloadBtn" class="h-24"/>
-        </button>
-      </div>
-    </div>
+  <div class="flex mt-4 justify-center">
+    <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn" class="h-12 w-12 mr-1"/>
+    </button>
+    <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn" class="h-12 w-12 mr-1"/>
+    </button>
+    <button @click="stop()"><img :src="imageAssets.stopBtn" class="h-6 w-6 ml-1"/></button>
   </div>
 </template>
 
@@ -33,7 +19,6 @@ import Crunker from "crunker";
 
 export default {
   name: "ComposerControls",
-  components: {ComposerControlsScrollBar, GlobalTrackValues},
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
@@ -277,10 +262,6 @@ export default {
       //emit('renderMixIfNeeded')
     }
 
-    const playClip = async () => {
-      await stop()
-    }
-
     const playMix = async (offsetStartPercentage) => {
       if (store.state.clipCount() < 1) {
         toast.warning('Add clips to the arranger!');
@@ -384,6 +365,10 @@ export default {
       let output = crunker.export(buffer, 'audio/mp3')
       await crunker.download(output.blob, 'signals_and_sorcery') //TODO: the name should be the project name
     }
+
+    watch(() => bus.value.get('downloadMix'), async () => {
+      await downloadMix()
+    })
 
     watch(() => bus.value.get('stopAllAudio'), async (callerId) => {
       if (callerId != 'composer-controls') {
