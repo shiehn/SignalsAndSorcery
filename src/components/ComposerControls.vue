@@ -1,8 +1,8 @@
 <template>
   <div class="flex mt-4 justify-center">
-    <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn" class="h-12 w-12 mr-1"/>
+    <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn" class="h-10 w-10 mr-1"/>
     </button>
-    <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn" class="h-12 w-12 mr-1"/>
+    <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn" class="h-10 w-10 mr-1"/>
     </button>
     <button @click="stop()"><img :src="imageAssets.stopBtn" class="h-6 w-6 ml-1"/></button>
   </div>

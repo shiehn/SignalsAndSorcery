@@ -1,9 +1,43 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div class="rounded-lg w-11/12"
-       v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.3) ' + progressBar + '%,  gray ' + progressBar + '%' }">
-    <div v-for="gridRow in getGridRows()" class="flex justify-between">
+  <div class="rounded-lg w-11/12 overflow-x-scroll p-2">
+
+
+    <!--    SECTIONS-->
+    <div v-for="(gridRow, i) in getGridRows()">
+      <div v-if="i == 0" class="flex flex-none justify-between h-6 mb-4">
+        <div v-for="(gridRowItem, j) in gridRow.value">
+          <div v-if="i == 0 && j == 0" style="white-space: nowrap"
+               class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-black">
+            <span class="ml-2">INTRO</span>
+          </div>
+          <div v-if="i == 0 && j == 3" class=" ml-1 w-16 h-6 flex-none">
+            <span>+&nbsp;&nbsp;x</span>
+          </div>
+
+
+          <div v-if="i == 0 && j == 4" style="white-space: nowrap"
+               class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-black">
+            <span class="ml-2">VERSE</span>
+          </div>
+          <div v-if="i == 0 && j == 11" class="ml-1 w-16 h-6 flex-none border-r-2 border-black justify-end">
+            <span>+ &nbsp;&nbsp;x</span>
+          </div>
+
+
+          <div v-if="i == 0 && j != 0 && j !=3 && j !=11" class="ml-1 w-16 h-6 flex-none">
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!--    SECTIONS-->
+
+
+    <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
+         class="flex flex-none justify-between">
       <div v-for="gridRowItem in gridRow.value"
-           class="m-1 w-20 h-20 overflow-hidden relative rounded-lg shadow-lg hover:bg-gray-400 hover:cursor-pointer"
+           class="ml-1 mb-2 w-16 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg  hover:bg-gray-400 hover:cursor-pointer"
            :class="{ 'bg-green-100': gridRowItem.compatibility === 2, 'bg-yellow-100': gridRowItem.compatibility === 1, 'bg-red-100': gridRowItem.compatibility === 0 }"
            @drop="onDrop($event, gridRowItem.row, gridRowItem.col)"
            @dragover.prevent
@@ -16,6 +50,7 @@
              @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
              class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
       </div>
+
     </div>
 
     <composer-controls-scroll-bar></composer-controls-scroll-bar>
@@ -24,7 +59,7 @@
 </template>
 
 <script>
-import {reactive, ref, inject, watch} from 'vue'
+import {reactive, ref, inject, watch, onMounted} from 'vue'
 import useEventsBus from "../events/eventBus";
 import Asset from "./Asset";
 import GridGenerator from "../generators/grid-generator";
@@ -36,10 +71,16 @@ export default {
   name: 'ComposerGrid',
   components: {Asset, ComposerControlsScrollBar},
   setup() {
+
+    // v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.3) ' + progressBar + '%,  gray ' + progressBar + '%' }"
+
     const store = inject('store')
     const {bus, emit} = useEventsBus()
+    const gridContainerRows = ref([]);
 
-    store.state.grid = new GridGenerator().initGrid(4, 12)
+    let numOfGridCols = 12
+
+    store.state.grid = new GridGenerator().initGrid(4, numOfGridCols)
 
     const getGridRows = () => {
       return store.state.grid
@@ -212,6 +253,20 @@ export default {
       }
     }
 
+    onMounted(() => {
+      emit('gridDrawCompleted', {
+        'numOfGridCols': numOfGridCols,
+        'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
+      })
+
+      window.addEventListener('resize', () => {
+        emit('gridDrawCompleted', {
+          'numOfGridCols': numOfGridCols,
+          'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
+        })
+      })
+    });
+
     watch(() => bus.value.get('assetSelected'), (stem) => {
       evalCompatibility(stem[0])
     })
@@ -221,13 +276,14 @@ export default {
     })
 
     const progressBar = ref(0)
-    watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
-      progressBar.value = progressInt
-    })
+    // watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
+    //   progressBar.value = progressInt
+    // })
 
     return {
       getGridRows,
       getGridByRow,
+      gridContainerRows,
       handleGridItemClick,
       mouseOverGridItem,
       mouseLeaveGridItem,

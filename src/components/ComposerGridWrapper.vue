@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full border-2 border-black rounded-lg bg-gray-600 p-2">
+  <div class="flex w-full border-2 border-black rounded-lg p-2">
     <composer-grid-control-column></composer-grid-control-column>
     <composer-grid></composer-grid>
   </div>
