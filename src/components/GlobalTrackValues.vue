@@ -1,13 +1,20 @@
 <template>
-  <div class="ml-8">
-    <div class="font-bold text-lg">Name:
-      <span class="ml-2">default</span>
+  <div class="w-full flex flex-col overflow-hidden">
+    <div class="mt-2 mb-2 nowrap">
+      <span class="font-bold text-sm  nowrap">NAME:</span>
+      <span class="ml-2 bg-black text-white px-2 nowrap">Ultra Dope</span>
     </div>
-    <div class="font-bold text-lg">BPM:
+    <div class="mb-2">
+      <span class="font-bold text-sm">ARTIST:</span>
+      <span class="ml-2">Steve Hiehn</span>
+    </div>
+    <div class="mb-2">
+      <span class="font-bold text-sm">BPM:</span>
       <span v-if="store.state.globalBpm" class="ml-2">{{ store.state.globalBpm }}</span>
       <span v-if="!store.state.globalBpm" class="ml-2"> ---</span>
     </div>
-    <div class="font-bold text-lg">KEY:
+    <div class="mb-2">
+      <span class="font-bold text-sm">KEY:</span>
       <span v-if="store.state.globalKey" class="ml-2">{{ store.state.globalKey }}</span>
       <span v-if="!store.state.globalKey" class="ml-2"> ---</span>
     </div>

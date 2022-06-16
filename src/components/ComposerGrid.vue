@@ -1,38 +1,45 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div class="rounded-lg w-11/12 overflow-x-scroll p-2">
-
+  <div class="rounded-lg w-11/12 overflow-x-scroll border-2 border-black p-2" style="background-color: rgba(255,255,255,0.9);">
 
     <!--    SECTIONS-->
     <div v-for="(gridRow, i) in getGridRows()">
-      <div v-if="i == 0" class="flex flex-none justify-between h-6 mb-4">
+      <div v-if="i == 0" class="flex flex-none justify-between h-6 mb-4 bg-gray-100">
         <div v-for="(gridRowItem, j) in gridRow.value">
           <div v-if="i == 0 && j == 0" style="white-space: nowrap"
                class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-black">
-            <span class="ml-2">INTRO</span>
+            <span class="ml-2 hover:cursor-move">INTRO</span>
           </div>
-          <div v-if="i == 0 && j == 3" class=" ml-1 w-16 h-6 flex-none">
-            <span>+&nbsp;&nbsp;x</span>
-          </div>
+          <div v-if="i == 0 && j == 3" class=" ml-1 w-16 h-6 flex items-center">
+            <button @click="columnAdd('columnId')">
+              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-2">
+            </button>
 
+            <button @click="columnAdd('columnId')">
+              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-2">
+            </button>
+          </div>
 
           <div v-if="i == 0 && j == 4" style="white-space: nowrap"
                class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-black">
-            <span class="ml-2">VERSE</span>
+            <span class="ml-2 hover:cursor-move">VERSE</span>
           </div>
-          <div v-if="i == 0 && j == 11" class="ml-1 w-16 h-6 flex-none border-r-2 border-black justify-end">
-            <span>+ &nbsp;&nbsp;x</span>
-          </div>
+          <div v-if="i == 0 && j == 11" class="ml-1 w-16 h-6 flex border-r-2 border-black items-center">
+            <button @click="columnAdd('columnId')">
+              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-2">
+            </button>
 
+            <button @click="columnAdd('columnId')">
+              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-2">
+            </button>
+          </div>
 
           <div v-if="i == 0 && j != 0 && j !=3 && j !=11" class="ml-1 w-16 h-6 flex-none">
-
           </div>
 
         </div>
       </div>
     </div>
     <!--    SECTIONS-->
-
 
     <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
          class="flex flex-none justify-between">
@@ -50,7 +57,6 @@
              @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
              class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
       </div>
-
     </div>
 
     <composer-controls-scroll-bar></composer-controls-scroll-bar>
@@ -76,7 +82,12 @@ export default {
 
     const store = inject('store')
     const {bus, emit} = useEventsBus()
+    const toast = inject('toast');
     const gridContainerRows = ref([]);
+    const imageUrls = {
+      plusIcon: store.state.staticUrl + "icons/plus.png",
+      minusIcon: store.state.staticUrl + "icons/minus.png",
+    }
 
     let numOfGridCols = 12
 
@@ -177,23 +188,6 @@ export default {
     }
 
     const handleGridItemClick = (row, col) => {
-
-      const gridItem = store.state.grid[row].value[col]
-      // if(!gridItem.stem.id){
-      //   alert('id:' + gridItem.stem.id)
-      // }
-
-      /*
-       get the current if set:
-
-       - global key
-       - global bpm
-       - selected type
-       - current chords
-
-       - filter accordingly
-       */
-
       let key = undefined
       let chords = store.state.getChordsForCol(col)
       if (ROW_TO_TYPE_MAP[row] == 'drum') {
@@ -208,40 +202,12 @@ export default {
         chords: chords ? chords : 'all',
       }
 
-      console.log("BEFORE FIRE", updateParam)
-
       emit('updateAssetSelection', updateParam)
     }
 
     const evalCompatibility = (stem) => {
       const compatibilityProcessor = new CompatibilityProcessor(stem, store.state)
-
-      //compatibilityProcessor.processFilledGridItems()
-
       compatibilityProcessor.eval()
-
-      //GO THROUGH EVERY GRID ITEM
-      // for (let row = 0; row < store.state.grid.length; row++) {
-      //   for (let col = 0; col < store.state.grid[row].value.length; col++) {
-      //     if (!store.state.grid[row].value[col].stem) {
-      //       //get type for row
-      //       if (ROW_TO_TYPE_MAP[row] != stem.type) {
-      //         store.state.grid[row].value[col].compatibility = 0
-      //       }
-      //
-      //       if (store.state.globalBpm && store.state.globalBpm != stem.bpm) {
-      //         store.state.grid[row].value[col].compatibility = 0
-      //       }
-      //
-      //       //IF NOT SET THEN MAKE IT GREEN
-      //       if (store.state.grid[row].value[col].compatibility === undefined) {
-      //         store.state.grid[row].value[col].compatibility = 2
-      //       }
-      //     }
-      //   }
-      // }
-
-
     }
 
     const resetCompatibility = () => {
@@ -251,6 +217,14 @@ export default {
           store.state.grid[row].value[col].compatibility = undefined
         }
       }
+    }
+
+    const columnAdd = (sectionId) => {
+      toast.error('Add Column Not Implemented :(')
+    }
+
+    const columnRemove = (sectionId) => {
+      toast.error('Remove Column Not Implemented :(')
     }
 
     onMounted(() => {
@@ -281,10 +255,13 @@ export default {
     // })
 
     return {
+      columnAdd,
+      columnRemove,
       getGridRows,
       getGridByRow,
       gridContainerRows,
       handleGridItemClick,
+      imageUrls,
       mouseOverGridItem,
       mouseLeaveGridItem,
       onDrop,
