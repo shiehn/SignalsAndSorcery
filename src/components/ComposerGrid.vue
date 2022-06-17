@@ -105,8 +105,8 @@ export default {
       let bpm = undefined
       for (let row = 0; row < store.state.grid.length; row++) {
         for (let col = 0; col < store.state.grid[row].value.length; col++) {
-          if (store.state.grid[row].value[col].bpm) {
-            bpm = store.state.grid[row].value[col].bpm
+          if (store.state.grid[row].value[col].stem && store.state.grid[row].value[col].stem.bpm) {
+            bpm = store.state.grid[row].value[col].stem.bpm
           }
         }
       }
@@ -118,8 +118,8 @@ export default {
       let key = undefined
       for (let row = 0; row < store.state.grid.length; row++) {
         for (let col = 0; col < store.state.grid[row].value.length; col++) {
-          if (store.state.grid[row].value[col].key) {
-            key = store.state.grid[row].value[col].key
+          if (store.state.grid[row].value[col].stem && store.state.grid[row].value[col].stem.key) {
+            key = store.state.grid[row].value[col].stem.key
           }
         }
       }
@@ -137,14 +137,7 @@ export default {
       const stem = JSON.parse(stemStr)
 
       const gridItem = store.state.grid[row].value[col]
-      gridItem.sectionId = stem.sectionId
-      gridItem.bpm = stem.bpm
-      gridItem.key = stem.key
-      gridItem.type = stem.type
-      gridItem.variationId = stem.variationId
-      gridItem.source = stem.source
-      gridItem.stem = stem //TODO IF YOU HAVE THE STEM WHY THE DUPLICATION
-
+      gridItem.stem = stem
       gridItem['deleteIconPath'] = store.state.staticUrl + 'icons/delete-x.png'
       gridItem['previewIconPath'] = store.state.staticUrl + 'icons/play-button.png'
 
@@ -159,11 +152,11 @@ export default {
       const gridItem = store.state.grid[row].value[col]
 
       gridItem.sectionId = undefined
-      gridItem.bpm = undefined
-      gridItem.key = undefined
-      gridItem.type = undefined
-      gridItem.variationId = undefined
-      gridItem.source = undefined
+      //gridItem.bpm = undefined
+      //gridItem.key = undefined
+      //gridItem.type = undefined
+      //gridItem.variationId = undefined
+      // gridItem.source = undefined
       gridItem.stem = undefined //TODO IF YOU HAVE THE STEM WHY THE DUPLICATION
       gridItem['deleteIconPath'] = undefined
 

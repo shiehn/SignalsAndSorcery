@@ -198,6 +198,7 @@ filterChord
     onMounted(async () => {
       const stemsApi = new StemsAPI()
       let stems = await stemsApi.getStemsAndOptions()
+      console.log('getStemsAndOptions', stems)
       stems.stems.forEach((stem) => {
         stem['waveform'] = stem['source'].replace('.wav', '.png')
         stem['showPreviewIcon'] = false

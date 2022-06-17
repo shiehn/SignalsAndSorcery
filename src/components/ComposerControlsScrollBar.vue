@@ -47,10 +47,10 @@ export default {
       let gridWidthRem = gridDrawCompletedParams[0].numOfGridCols * (w16 + m1)
 
       if(convertRemToPixels(gridWidthRem) < gridDrawCompletedParams[0].gridContainerRowWidth) {
-        console.log('xxx calculated less than width')
+        //console.log('xxx calculated less than width')
         clickBar.value.style.width = gridDrawCompletedParams[0].gridContainerRowWidth + 'px'
       } else {
-        console.log('xxx calculated greater than width')
+        //console.log('xxx calculated greater than width')
         clickBar.value.style.width = gridWidthRem + 'rem'
       }
     })

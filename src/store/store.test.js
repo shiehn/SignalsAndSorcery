@@ -1,6 +1,5 @@
 import {describe, it, expect} from "vitest"
-import {mount} from '@vue/test-utils'
-import {ref, reactive} from "vue";
+import {ref} from "vue";
 import state from './store'
 
 function createGrid(rowOne, rowTwo) {

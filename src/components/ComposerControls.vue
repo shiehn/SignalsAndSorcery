@@ -45,10 +45,9 @@ export default {
 
     const getTrackListByRow = (row) => {
       const tracks = store.state.grid[row].value.map((t) => {
-        if (t.source) {
-          return t.source.replace('.wav', '.mp3')
+        if (t.stem && t.stem.source) {
+          return t.stem.source.replace('.wav', '.mp3')
         }
-        return t.source
       })
 
       return tracks
@@ -185,7 +184,6 @@ export default {
         for (let n = 0; n < numOfRows; n++) {
           //CHECK IF THE ROW IS ALREADY CACHED
           if (!store.state.hasRowStateChanged(n) && BUFFER_ROW_CACHE[n]) {
-            console.log("ROW IS IN CACHED!!")
             listOfTrimmedRowBuffers[n] = BUFFER_ROW_CACHE[n]
             continue
           }

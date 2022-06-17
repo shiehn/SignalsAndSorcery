@@ -1,6 +1,8 @@
 import {reactive} from "vue";
 
 const state = reactive({
+    projectName: '',
+    authorName: '',
     globalBpm: undefined,
     globalKey: undefined,
     clipCount: function () {

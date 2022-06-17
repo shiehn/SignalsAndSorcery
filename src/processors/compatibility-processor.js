@@ -27,7 +27,6 @@ export default class CompatibilityProcessor {
     getChordCompatibilityForColumn(col) {
 
         if(this.stem.type == 'drum'){
-            console.log('ITS GREEN')
             return RATING.GREEN
         }
 

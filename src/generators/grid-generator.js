@@ -11,12 +11,6 @@ export default class GridGenerator {
                     row: i,
                     col: j,
                     compatibility: undefined,
-                    bpm: undefined,
-                    key: undefined,
-                    sectionId: undefined,
-                    type: undefined,
-                    variationId: undefined,
-                    source: undefined,
                     stem: undefined,
                     showDeleteIcon: false,
                 })

@@ -1,5 +1,6 @@
 <template>
-  <div class="w-1/6 h-48 border-2 border-black rounded-lg p-2 my-2 nowrap overflow-hidden" style="background-color: rgba(255,255,255,0.9);">
+  <div class="w-1/6 h-48 border-2 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
+       style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
     <div class="flex justify-between">
       <button @click="openProject()" class="border-2 border-black p-1 rounded-md"><img
@@ -19,6 +20,7 @@
 import GlobalTrackValues from "./GlobalTrackValues";
 import {inject} from "vue";
 import useEventsBus from "../events/eventBus";
+import SaveAndLoadAdapter from "../persistence/save-load-adapter";
 
 export default {
   name: "AdminPanel",
@@ -38,11 +40,27 @@ export default {
     }
 
     const openProject = () => {
-      toast.error('Load project Not yet Implemented :(')
+      if (localStorage.getItem("sas-save")) {
+        const retrievedData = JSON.parse(localStorage.getItem("sas-save"))
+        const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(retrievedData)
+
+        store.state.projectName = retrievedRestoredData.projectName;
+        store.state.authorName = retrievedRestoredData.authorName;
+        store.state.globalBpm = retrievedRestoredData.globalBpm;
+        store.state.globalKey = retrievedRestoredData.globalKey;
+        store.state.grid = retrievedRestoredData.grid;
+
+      } else {
+        toast.error('No saved project found')
+      }
     }
 
     const saveProject = () => {
-      toast.error('Load project Not yet Implemented :(')
+      if (store.state.grid && store.state.grid.length > 0) {
+        let saveFormat = new SaveAndLoadAdapter().createSaveFormat(store.state)
+        localStorage.setItem("sas-save", JSON.stringify(saveFormat));
+        toast.info('Project saved in browser storage')
+      }
     }
 
     return {
