@@ -1,40 +1,41 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div class="rounded-lg w-11/12 overflow-x-scroll border-2 border-black p-2" style="background-color: rgba(255,255,255,0.9);">
+  <div class="rounded-lg w-11/12 overflow-x-scroll border-2 border-black p-2"
+       style="background-color: rgba(255,255,255,0.9);">
 
     <!--    SECTIONS-->
     <div v-for="(gridRow, i) in getGridRows()">
-      <div v-if="i == 0" class="flex flex-none justify-between h-6 mb-4 bg-gray-100">
-        <div v-for="(gridRowItem, j) in gridRow.value">
-          <div v-if="i == 0 && j == 0" style="white-space: nowrap"
+      <div v-if="i == 0" class="flex flex-none justify-between">
+        <div v-for="(gridRowItem, j) in gridRow.value" class="ml-1 mb-2 w-16 flex-none">
+          <div v-if="gridRowItem.section.position == 'start'" style="white-space: nowrap"
                class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-black">
-            <span class="ml-2 hover:cursor-move">INTRO</span>
+            <span class="ml-2 hover:cursor-move">{{ gridRowItem.section.id }}</span>
           </div>
-          <div v-if="i == 0 && j == 3" class=" ml-1 w-16 h-6 flex items-center">
-            <button @click="columnAdd('columnId')">
+
+          <div v-if="gridRowItem.section.position == 'end'" class="ml-1 w-16 h-6 flex">
+            <button @click="columnAdd(gridRowItem.section.id)">
               <img :src=imageUrls.plusIcon class="w-4 h-4 ml-2">
             </button>
 
-            <button @click="columnAdd('columnId')">
+            <button @click="columnRemove(gridRowItem.section.id)">
               <img :src=imageUrls.minusIcon class="w-4 h-4 ml-2">
             </button>
           </div>
+          <!--          <div v-if="i == 0 && j == 4" style="white-space: nowrap"-->
+          <!--               class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-black">-->
+          <!--            <span class="ml-2 hover:cursor-move">VERSE</span>-->
+          <!--          </div>-->
+          <!--          <div v-if="i == 0 && j == 11" class="ml-1 w-16 h-6 flex border-r-2 border-black items-center">-->
+          <!--            <button @click="columnAdd('columnId')">-->
+          <!--              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-2">-->
+          <!--            </button>-->
 
-          <div v-if="i == 0 && j == 4" style="white-space: nowrap"
-               class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-black">
-            <span class="ml-2 hover:cursor-move">VERSE</span>
-          </div>
-          <div v-if="i == 0 && j == 11" class="ml-1 w-16 h-6 flex border-r-2 border-black items-center">
-            <button @click="columnAdd('columnId')">
-              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-2">
-            </button>
+          <!--            <button @click="columnAdd('columnId')">-->
+          <!--              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-2">-->
+          <!--            </button>-->
+          <!--          </div>-->
 
-            <button @click="columnAdd('columnId')">
-              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-2">
-            </button>
-          </div>
-
-          <div v-if="i == 0 && j != 0 && j !=3 && j !=11" class="ml-1 w-16 h-6 flex-none">
-          </div>
+          <!--          <div v-if="i == 0 && j != 0 && j !=3 && j !=11" class="ml-1 w-16 h-6 flex-none">-->
+          <!--          </div>-->
 
         </div>
       </div>
@@ -72,6 +73,7 @@ import GridGenerator from "../generators/grid-generator";
 import CompatibilityProcessor from "../processors/compatibility-processor";
 import {ROW_TO_TYPE_MAP} from "../constants/constants";
 import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
+import GridProcessor from "../processors/grid-processor";
 
 export default {
   name: 'ComposerGrid',
@@ -92,6 +94,47 @@ export default {
     let numOfGridCols = 12
 
     store.state.grid = new GridGenerator().initGrid(4, numOfGridCols)
+
+
+    /* TEMP FORCE SECTIONS TO TEST */
+
+    // for (let row = 0; row < store.state.grid.length; row++) {
+    //   for (let col = 0; col < store.state.grid[row].value.length; col++) {
+    //     if (col > 0 && col < 3) {
+    //       store.state.grid[row].value[col].section.position = 'mid'
+    //       store.state.grid[row].value[col].section.id = 'AAA'
+    //     }
+    //
+    //     if (col == 0) {
+    //       store.state.grid[row].value[col].section.position = 'start'
+    //       store.state.grid[row].value[col].section.id = 'AAA'
+    //     }
+    //
+    //     if (col == 3) {
+    //       store.state.grid[row].value[col].section.position = 'end'
+    //       store.state.grid[row].value[col].section.id = 'AAA'
+    //     }
+    //
+    //     if (col > 4) {
+    //       store.state.grid[row].value[col].section.position = 'mid'
+    //       store.state.grid[row].value[col].section.id = 'BBB'
+    //     }
+    //
+    //     if (col == 4) {
+    //       store.state.grid[row].value[col].section.position = 'start'
+    //       store.state.grid[row].value[col].section.id = 'BBB'
+    //     }
+    //
+    //     if (col == 5) {
+    //       store.state.grid[row].value[col].section.position = 'end'
+    //       store.state.grid[row].value[col].section.id = 'BBB'
+    //     }
+    //   }
+    // }
+
+
+    /* TEMP FORCE SECTIONS TO TEST */
+
 
     const getGridRows = () => {
       return store.state.grid
@@ -213,11 +256,11 @@ export default {
     }
 
     const columnAdd = (sectionId) => {
-      toast.error('Add Column Not Implemented :(')
+      new GridProcessor(store.state.grid).addColumn(sectionId)
     }
 
     const columnRemove = (sectionId) => {
-      toast.error('Remove Column Not Implemented :(')
+      new GridProcessor(store.state.grid).removeColumn(sectionId)
     }
 
     onMounted(() => {
