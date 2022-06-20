@@ -23,6 +23,9 @@
 <script>
 import {inject} from "vue";
 import ComposerControls from "./ComposerControls";
+import GridProcessor from "../processors/grid-processor";
+import {v4} from "uuid";
+import useEventsBus from "../events/eventBus";
 
 export default {
   name: "ComposerGridControlColumn",
@@ -31,6 +34,7 @@ export default {
   },
   setup() {
     const store = inject('store')
+    const {emit} = useEventsBus()
     const toast = inject('toast');
     const imageUrls = {
       hiIcon: store.state.staticUrl + "icons/eq-hi.png",
@@ -41,7 +45,8 @@ export default {
     }
 
     const addSection = () => {
-      toast.error('Add section not yet implemented :(')
+      new GridProcessor(store.state.grid).addSection(v4())
+      emit('renderMixIfNeeded')
     }
 
     return {

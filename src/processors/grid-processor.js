@@ -1,4 +1,5 @@
 import GridGenerator, {SectionPositions} from "../generators/grid-generator";
+import {v4} from "uuid";
 
 export default class GridProcessor {
 
@@ -57,6 +58,8 @@ export default class GridProcessor {
             //update the original item
             this.grid[row].value[originalIndex].section.position = SectionPositions.MID
         }
+
+        this.reIndexRowsAndCols()
     }
 
     removeColumn = (sectionId) => {
@@ -83,20 +86,44 @@ export default class GridProcessor {
         for (let row = 0; row < this.grid.length; row++) {
             this.grid[row].value[newEndIndex].section.position = SectionPositions.END
             this.grid[row].value.splice(origEndIndex, 1) //REMOVE THE COLUMN
-
         }
 
-        // 2 - shift the position end back one
+        this.reIndexRowsAndCols()
+    }
 
-        // 3 - delete the last col
+    addSection = (sectionName) => {
+        const newItemIndex = this.grid[0].value.length;
 
-        // for (let row = 0; row < state.grid.length; row++) {
-        // for (let col = 0; col < state.grid[row].value.length; col++) {
-        //     if (state.grid[row].value[col].stem) {
-        //         if (state.grid[row].value[col].compatibility === RATING.GRAY) {
-        //             actualNumOfGrayRatings++
-        //         }
-        //     }
-        // }
+        const numOfCols = 2
+        const newId = v4()
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < numOfCols; col++) {
+                //insert new item
+                this.grid[row].value.splice(newItemIndex + col, 0, new GridGenerator().createGridItemEmpty(row, newItemIndex))
+
+                //update new Item
+                this.grid[row].value[newItemIndex + col].section.id = newId
+                this.grid[row].value[newItemIndex + col].section.name = sectionName
+
+                if (col == 0) {
+                    this.grid[row].value[newItemIndex + col].section.position = SectionPositions.START
+                } else if (col == numOfCols - 1) {
+                    this.grid[row].value[newItemIndex + col].section.position = SectionPositions.END
+                } else {
+                    this.grid[row].value[newItemIndex + col].section.position = SectionPositions.MID
+                }
+            }
+        }
+
+        this.reIndexRowsAndCols()
+    }
+
+    reIndexRowsAndCols = () => {
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                this.grid[row].value[col].row = row
+                this.grid[row].value[col].col = col
+            }
+        }
     }
 }

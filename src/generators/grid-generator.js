@@ -1,4 +1,5 @@
 import {reactive, ref} from "vue";
+import {v4} from "uuid";
 
 export const SectionPositions = {
     START: 'start',
@@ -11,12 +12,10 @@ export default class GridGenerator {
     initGrid(numRows, numCols) {
 
         const defaultSectionName = 'section_a'
-        const defaultId = 'xyz123'
+        const defaultId = v4()
 
         let rows = []
         for (let i = 0; i < numRows; i++) {
-
-
             let row = ref([])
             for (let j = 0; j < numCols; j++) {
 

@@ -257,23 +257,23 @@ export default {
 
     const columnAdd = (sectionId) => {
       new GridProcessor(store.state.grid).addColumn(sectionId)
+      emit('renderMixIfNeeded')
     }
 
     const columnRemove = (sectionId) => {
       new GridProcessor(store.state.grid).removeColumn(sectionId)
+      emit('renderMixIfNeeded')
     }
 
     onMounted(() => {
       nextTick(() => {
         emit('gridDrawCompleted', {
-          'numOfGridCols': numOfGridCols,
           'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
         })
       })
 
       window.addEventListener('resize', () => {
         emit('gridDrawCompleted', {
-          'numOfGridCols': numOfGridCols,
           'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
         })
       })

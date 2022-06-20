@@ -8,10 +8,12 @@
 <script>
 import {nextTick, onMounted, ref, watch} from "vue";
 import useEventsBus from "../events/eventBus";
+import {inject} from "vue";
 
 export default {
   name: "ComposerControlsScrollBar",
   setup() {
+    const store = inject('store')
     const {bus, emit} = useEventsBus()
     const progressBar = ref(0)
     const clickBar = ref(null)
@@ -44,7 +46,7 @@ export default {
     watch(() => bus.value.get('gridDrawCompleted'), (gridDrawCompletedParams) => {
       const w16 = 4 /* assuming each grid item is tailwind w-16 ==  4rem */
       const m1 = 0.25 /* assuming each grid item has tailwind mr-1 ==  0.25rem */
-      let calculatedGridWidthRem = gridDrawCompletedParams[0].numOfGridCols * (w16 + m1)
+      let calculatedGridWidthRem = store.state.grid[0].value.length * (w16 + m1)
 
       if(convertRemToPixels(calculatedGridWidthRem) < gridDrawCompletedParams[0].gridContainerRowWidth) {
         clickBar.value.style.width = gridDrawCompletedParams[0].gridContainerRowWidth + 'px'
