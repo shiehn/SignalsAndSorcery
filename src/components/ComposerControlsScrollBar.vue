@@ -44,14 +44,12 @@ export default {
     watch(() => bus.value.get('gridDrawCompleted'), (gridDrawCompletedParams) => {
       const w16 = 4 /* assuming each grid item is tailwind w-16 ==  4rem */
       const m1 = 0.25 /* assuming each grid item has tailwind mr-1 ==  0.25rem */
-      let gridWidthRem = gridDrawCompletedParams[0].numOfGridCols * (w16 + m1)
+      let calculatedGridWidthRem = gridDrawCompletedParams[0].numOfGridCols * (w16 + m1)
 
-      if(convertRemToPixels(gridWidthRem) < gridDrawCompletedParams[0].gridContainerRowWidth) {
-        //console.log('xxx calculated less than width')
+      if(convertRemToPixels(calculatedGridWidthRem) < gridDrawCompletedParams[0].gridContainerRowWidth) {
         clickBar.value.style.width = gridDrawCompletedParams[0].gridContainerRowWidth + 'px'
       } else {
-        //console.log('xxx calculated greater than width')
-        clickBar.value.style.width = gridWidthRem + 'rem'
+        clickBar.value.style.width = calculatedGridWidthRem + 'rem'
       }
     })
 

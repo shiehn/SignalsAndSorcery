@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import {reactive, ref, inject, watch, onMounted} from 'vue'
+import {reactive, ref, inject, watch, onMounted, nextTick} from 'vue'
 import useEventsBus from "../events/eventBus";
 import Asset from "./Asset";
 import GridGenerator from "../generators/grid-generator";
@@ -221,9 +221,11 @@ export default {
     }
 
     onMounted(() => {
-      emit('gridDrawCompleted', {
-        'numOfGridCols': numOfGridCols,
-        'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
+      nextTick(() => {
+        emit('gridDrawCompleted', {
+          'numOfGridCols': numOfGridCols,
+          'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
+        })
       })
 
       window.addEventListener('resize', () => {
