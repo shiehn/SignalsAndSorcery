@@ -22,7 +22,7 @@ describe('CompatibilityProcessor Tests', () => {
 
     it('should handle filled grid items', async () => {
         //SETUP
-        state.grid = gridGenerator.initGrid(4, 4)
+        state.grid = gridGenerator.initGrid(5, 4)
 
         let stemToDrop = {}
 
@@ -51,7 +51,7 @@ describe('CompatibilityProcessor Tests', () => {
             }
         }
 
-        const expectedNumOfGrayRatings = 16
+        const expectedNumOfGrayRatings = 20
 
         expect(actualNumOfGrayRatings).to.equals(expectedNumOfGrayRatings)
     })
@@ -81,6 +81,53 @@ describe('CompatibilityProcessor Tests', () => {
         state.grid[1].value[colToTest].stem = undefined // MI
         state.grid[2].value[colToTest].stem = undefined // LOW
         state.grid[3].value[colToTest].stem = drumStem // DRUM
+
+        //EXECUTE
+        let stemToDrop = {
+            "id": "xxx",
+            "bpm": "130.0",
+            "chords": "dm:dm:em:f",
+            "key": "c",
+            "sectionId": "a",
+            "type": "hi",
+            "variationId": "two",
+            "source": "",
+            "waveform": "",
+            "showPreviewIcon": true,
+            "previewIconPath": "",
+            "previewStopIconPath": ""
+        }
+
+        const processor = new CompatibilityProcessor(stemToDrop, state)
+        const rating = processor.getChordCompatibilityForColumn(colToTest)
+
+        expect(rating).to.equal(RATING.GREEN)
+    })
+
+    it('getChordsInCol should ignore fills', () => {
+        //SETUP - one clip in column and is drums
+        const colToTest = 2
+        state.grid = gridGenerator.initGrid(5, 4)
+
+        let fillStem = {
+            "id": "b685705d-ebf5-4a88-a743-3f74c3787b2e",
+            "bpm": "130.0",
+            "chords": "all",
+            "key": "all",
+            "type": "fill",
+            "source": "",
+            "waveform": "",
+            "showPreviewIcon": true,
+            "previewIconPath": "",
+            "previewStopIconPath": ""
+        }
+
+        //ADD STEMS TO GRID
+        state.grid[0].value[colToTest].stem = undefined // HI
+        state.grid[1].value[colToTest].stem = undefined // MI
+        state.grid[2].value[colToTest].stem = undefined // LOW
+        state.grid[3].value[colToTest].stem = undefined // DRUM
+        state.grid[4].value[colToTest].stem = fillStem // FILL
 
         //EXECUTE
         let stemToDrop = {

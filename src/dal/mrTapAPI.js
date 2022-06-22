@@ -133,6 +133,9 @@ export default class MrTapObjWrapper {
             }
         }
 
+        //MANUALLY APPEND FILLS/HITS etc
+        types.push('fill')
+
         return {
             'bpms': bpms,
             'chords': chords,

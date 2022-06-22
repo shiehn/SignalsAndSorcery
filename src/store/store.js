@@ -37,6 +37,7 @@ const state = reactive({
                 newHash = newHash + rowIndex + col + 'undef'
             }
         }
+
         return newHash
     },
     getChordsForCol(col) {
@@ -52,7 +53,7 @@ const state = reactive({
             }
 
             if (this.grid[row].value[col].stem) {
-                if (this.grid[row].value[col].stem.type != 'drum') {
+                if (this.grid[row].value[col].stem.type != 'drum' && this.grid[row].value[col].stem.type != 'fill') {
                     if (this.grid[row].value[col].stem.chords) {
                         chords = this.grid[row].value[col].stem.chords
                     }

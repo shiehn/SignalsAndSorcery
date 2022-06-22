@@ -93,48 +93,7 @@ export default {
 
     let numOfGridCols = 12
 
-    store.state.grid = new GridGenerator().initGrid(4, numOfGridCols)
-
-
-    /* TEMP FORCE SECTIONS TO TEST */
-
-    // for (let row = 0; row < store.state.grid.length; row++) {
-    //   for (let col = 0; col < store.state.grid[row].value.length; col++) {
-    //     if (col > 0 && col < 3) {
-    //       store.state.grid[row].value[col].section.position = 'mid'
-    //       store.state.grid[row].value[col].section.id = 'AAA'
-    //     }
-    //
-    //     if (col == 0) {
-    //       store.state.grid[row].value[col].section.position = 'start'
-    //       store.state.grid[row].value[col].section.id = 'AAA'
-    //     }
-    //
-    //     if (col == 3) {
-    //       store.state.grid[row].value[col].section.position = 'end'
-    //       store.state.grid[row].value[col].section.id = 'AAA'
-    //     }
-    //
-    //     if (col > 4) {
-    //       store.state.grid[row].value[col].section.position = 'mid'
-    //       store.state.grid[row].value[col].section.id = 'BBB'
-    //     }
-    //
-    //     if (col == 4) {
-    //       store.state.grid[row].value[col].section.position = 'start'
-    //       store.state.grid[row].value[col].section.id = 'BBB'
-    //     }
-    //
-    //     if (col == 5) {
-    //       store.state.grid[row].value[col].section.position = 'end'
-    //       store.state.grid[row].value[col].section.id = 'BBB'
-    //     }
-    //   }
-    // }
-
-
-    /* TEMP FORCE SECTIONS TO TEST */
-
+    store.state.grid = new GridGenerator().initGrid(5, numOfGridCols)
 
     const getGridRows = () => {
       return store.state.grid
@@ -179,6 +138,8 @@ export default {
       const stemStr = evt.dataTransfer.getData('stem')
       const stem = JSON.parse(stemStr)
 
+      console.log('DROPPED STEM', stem)
+
       const gridItem = store.state.grid[row].value[col]
       gridItem.stem = stem
       gridItem['deleteIconPath'] = store.state.staticUrl + 'icons/delete-x.png'
@@ -195,11 +156,6 @@ export default {
       const gridItem = store.state.grid[row].value[col]
 
       gridItem.sectionId = undefined
-      //gridItem.bpm = undefined
-      //gridItem.key = undefined
-      //gridItem.type = undefined
-      //gridItem.variationId = undefined
-      // gridItem.source = undefined
       gridItem.stem = undefined //TODO IF YOU HAVE THE STEM WHY THE DUPLICATION
       gridItem['deleteIconPath'] = undefined
 
@@ -227,7 +183,11 @@ export default {
       let key = undefined
       let chords = store.state.getChordsForCol(col)
       if (ROW_TO_TYPE_MAP[row] == 'drum') {
-        console.log("ROW IS DRUM")
+        chords = 'all'
+        key = 'all'
+      }
+
+      if (ROW_TO_TYPE_MAP[row] == 'fill') {
         chords = 'all'
         key = 'all'
       }

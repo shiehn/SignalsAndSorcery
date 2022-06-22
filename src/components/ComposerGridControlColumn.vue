@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col min-w-fit bg-gray-200 w-1/12 border-2 border-black rounded-lg mr-2 pt-2  px-2">
-    <button @click="addSection" class="flex mb-4 w-full justify-center">
+    <button @click="addSection" class="flex mb-2 w-full justify-center">
       <img :src=imageUrls.plusIcon class="w-6 h-6">
     </button>
     <div class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2">
@@ -12,8 +12,11 @@
     <div class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2">
       <img :src=imageUrls.lowIcon class="w-10 h-10">
     </div>
-    <div class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg">
+    <div class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2">
       <img :src=imageUrls.drumIcon class="w-10 h-10">
+    </div>
+    <div class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg">
+      <img :src=imageUrls.fillIcon class="w-10 h-10">
     </div>
 
     <composer-controls></composer-controls>
@@ -37,10 +40,11 @@ export default {
     const {emit} = useEventsBus()
     const toast = inject('toast');
     const imageUrls = {
-      hiIcon: store.state.staticUrl + "icons/eq-hi.png",
-      midIcon: store.state.staticUrl + "icons/eq-mid.png",
-      lowIcon: store.state.staticUrl + "icons/eq-low.png",
       drumIcon: store.state.staticUrl + "icons/eq-drum.png",
+      fillIcon: store.state.staticUrl + "icons/eq-fill.png",
+      hiIcon: store.state.staticUrl + "icons/eq-hi.png",
+      lowIcon: store.state.staticUrl + "icons/eq-low.png",
+      midIcon: store.state.staticUrl + "icons/eq-mid.png",
       plusIcon: store.state.staticUrl + "icons/plus.png",
     }
 

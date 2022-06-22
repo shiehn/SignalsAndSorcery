@@ -1,5 +1,7 @@
 <template>
-  <div class="flex flex-col w-1/6 h-48 border-2 border-black rounded-lg justify-between font-bold p-2 m-2 nowrap overflow-hidden" style="background-color: rgba(255,255,255,0.9);">
+  <div
+      class="flex flex-col w-1/6 h-48 border-2 border-black rounded-lg justify-between font-bold p-2 m-2 nowrap overflow-hidden"
+      style="background-color: rgba(255,255,255,0.9);">
     <div class="flex w-full h-8 justify-between my-1">
       <label for="bpm-filter" class="w-1/3 my-2 text-sm">BPM</label>
       <select v-if="filterBpm != undefined" v-model="filterBpm" id="bpm-filter" class="w-2/3 text-xs rounded-lg">
@@ -34,7 +36,8 @@
     </div>
   </div>
 
-  <div class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg" style="background-color: rgba(255,255,255,0.9);">
+  <div class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"
+       style="background-color: rgba(255,255,255,0.9);">
     <div
         class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
         @click="pagePrev">
@@ -147,7 +150,6 @@ export default {
         return stem.chords.toLowerCase() == filterChord.value.toLowerCase()
       })
 
-
       totalResults = filteredByChords.length
 
       const pagedResults = filteredByChords.slice(pageIndex.value, pageIndex.value + numOfResults)
@@ -198,9 +200,9 @@ filterChord
     onMounted(async () => {
       const stemsApi = new StemsAPI()
       let stems = await stemsApi.getStemsAndOptions()
-      console.log('getStemsAndOptions', stems)
+
       stems.stems.forEach((stem) => {
-        stem['waveform'] = stem['source'].replace('.wav', '.png')
+        stem['waveform'] = (stem.type != 'fill') ? stem['source'].replace('.wav', '.png') : stem['waveform']
         stem['showPreviewIcon'] = false
         stem['previewIconPath'] = store.state.staticUrl + 'icons/play-button.png'
         stem['previewPlayIconPath'] = store.state.staticUrl + 'icons/play-button.png'

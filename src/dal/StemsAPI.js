@@ -70,6 +70,39 @@ export class StemsAPI {
                     })
                 }
 
+
+                //CREATE STEMS FROM FILLS
+                //CREATE STEMS FROM FILLS
+                //CREATE STEMS FROM FILLS
+                let fills = []
+                for (let stemIndex = 0; stemIndex < res['data']['fills'].length; stemIndex++) {
+                    let fill = res['data']['fills'][stemIndex]
+                    const bpm = fill['bpm']
+                    for (let i = 0; i < fill['sources'].length; i++) {
+                        let fillStem = {
+                            id: v4(),
+                            bpm: bpm,
+                            chords: "fill",
+                            key: "all",
+                            source: fill['sources'][i]['mp3'],
+                            type: "fill",
+                            waveform: "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_three-mid-1-880d70fe-2714-4fcf-b284-aa4410916454.png"
+                        }
+
+                        fills.push(fillStem)
+                    }
+                }
+
+                const randFills = this.randomizeArray(fills)
+                randFills.forEach((fill) => {
+                    stemsAndOptions['stems'].push(fill)
+                })
+
+
+
+                //CREATE STEMS FROM FILLS
+                //CREATE STEMS FROM FILLS
+
                 return stemsAndOptions
             } else {
                 console.log('Error', "Unable to load mrtap src from /api/mrtaps: " + res['error'])

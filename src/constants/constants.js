@@ -1,1 +1,1 @@
-export const ROW_TO_TYPE_MAP = ['hi', 'mid', 'low', 'drum']
+export const ROW_TO_TYPE_MAP = ['hi', 'mid', 'low', 'drum', 'fill']

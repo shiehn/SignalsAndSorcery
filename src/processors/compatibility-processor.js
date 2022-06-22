@@ -26,7 +26,7 @@ export default class CompatibilityProcessor {
 
     getChordCompatibilityForColumn(col) {
 
-        if(this.stem.type == 'drum'){
+        if(this.stem.type == 'drum' || this.stem.type == 'fill'){
             return RATING.GREEN
         }
 
@@ -34,7 +34,7 @@ export default class CompatibilityProcessor {
 
         for (let row = 0; row < this.state.grid.length; row++) {
             if (this.state.grid[row].value[col].stem) {
-                if (this.state.grid[row].value[col].stem.type != 'drum') {
+                if (this.state.grid[row].value[col].stem.type != 'drum' && this.state.grid[row].value[col].stem.type != 'fill') {
                     if (!chords) {
                         chords = this.state.grid[row].value[col].stem.chords
                     }
