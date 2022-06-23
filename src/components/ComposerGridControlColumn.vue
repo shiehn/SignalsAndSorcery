@@ -1,21 +1,26 @@
 <template>
   <div class="flex flex-col min-w-fit bg-gray-200 w-1/12 border-2 border-black rounded-lg mr-2 pt-2  px-2">
-    <button @click="addSection" class="flex mb-2 w-full justify-center">
+    <button @click="addSection" class="flex mb-2 w-full justify-center hover:cursor-pointer">
       <img :src=imageUrls.plusIcon class="w-6 h-6">
     </button>
-    <div class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2">
+    <div @click="handleClick('hi')"
+         class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
       <img :src=imageUrls.hiIcon class="w-10 h-10">
     </div>
-    <div class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2">
+    <div @click="handleClick('mid')"
+         class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
       <img :src=imageUrls.midIcon class="w-10 h-10">
     </div>
-    <div class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2">
+    <div @click="handleClick('low')"
+         class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
       <img :src=imageUrls.lowIcon class="w-10 h-10">
     </div>
-    <div class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2">
+    <div @click="handleClick('drum')"
+         class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
       <img :src=imageUrls.drumIcon class="w-10 h-10">
     </div>
-    <div class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg">
+    <div @click="handleClick('fill')"
+         class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg hover:cursor-pointer">
       <img :src=imageUrls.fillIcon class="w-10 h-10">
     </div>
 
@@ -53,8 +58,18 @@ export default {
       emit('renderMixIfNeeded')
     }
 
+    const handleClick = (type) => {
+      let updateParam = {
+        clipType: type,
+        chords: 'all',
+      }
+
+      emit('updateAssetSelection', updateParam)
+    }
+
     return {
       addSection,
+      handleClick,
       imageUrls
     }
   },

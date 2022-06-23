@@ -86,7 +86,7 @@ export class StemsAPI {
                             key: "all",
                             source: fill['sources'][i]['mp3'],
                             type: "fill",
-                            waveform: "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_three-mid-1-880d70fe-2714-4fcf-b284-aa4410916454.png"
+                            waveform: "https://sas-fills.s3.us-west-2.amazonaws.com/global-fill-icon.png"
                         }
 
                         fills.push(fillStem)

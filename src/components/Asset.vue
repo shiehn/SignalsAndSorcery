@@ -1,5 +1,5 @@
 <template>
-  <li class="drag-el bg-cover w-16 h-16 relative rounded-lg overflow-hidden shadow-lg"
+  <li class="drag-el list-none bg-cover w-16 h-16 relative rounded-lg overflow-hidden shadow-lg"
       draggable="true"
       @dragstart="startDrag($event, stem)"
       @dragend="endDrag($event)"

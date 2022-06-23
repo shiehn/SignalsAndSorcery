@@ -166,7 +166,7 @@ export default class MrTapObjWrapper {
                         'sectionId': sectionIds[i],
                         'type': layerTypes[j],
                         'variationId': layerVariationIds[k],
-                        'source': variationSource,
+                        'source': variationSource.replace('.wav','.mp3'),
                     })
                 }
             }

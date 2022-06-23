@@ -46,7 +46,7 @@ export default {
     const getTrackListByRow = (row) => {
       const tracks = store.state.grid[row].value.map((t) => {
         if (t.stem && t.stem.source) {
-          return t.stem.source.replace('.wav', '.mp3')
+          return t.stem.source
         }
       })
 
@@ -379,6 +379,7 @@ export default {
     })
 
     watch(() => bus.value.get('renderMixIfNeeded'), async (callerId) => {
+      console.log('renderMixIfNeeded')
       if (store.state.hasStateChanged()) {
         requiresRender.value = true
 

@@ -64,6 +64,7 @@ const state = reactive({
         return chords
     },
     hasStateChanged: function () {
+        console.log('STATE CHANGE!')
         return this.currentStateHash !== this.calculateStateHash()
     },
     updateStateHash: function () {
