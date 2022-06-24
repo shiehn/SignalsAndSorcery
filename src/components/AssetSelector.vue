@@ -202,7 +202,7 @@ filterChord
       let stems = await stemsApi.getStemsAndOptions()
 
       stems.stems.forEach((stem) => {
-        stem['waveform'] = (stem.type != 'fill') ? stem['source'].replace('.mp3', '.png') : stem['waveform']
+        stem['waveform'] = stem['waveform'] ? stem['waveform'] : stem['source'].replace('.mp3', '.png')
         stem['showPreviewIcon'] = false
         stem['previewIconPath'] = store.state.staticUrl + 'icons/play-button.png'
         stem['previewPlayIconPath'] = store.state.staticUrl + 'icons/play-button.png'

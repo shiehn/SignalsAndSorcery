@@ -26,7 +26,7 @@ export class StemsAPI {
         }
 
         try {
-            //const url = 'http://localhost:8000/api/mrtaps'
+            // const url = 'http://localhost:8000/api/mrtaps'
             const url = 'https://signalsandsorcery.org/api/mrtaps'
 
             let res = await axios.get(url);
@@ -35,9 +35,6 @@ export class StemsAPI {
                 let mrtapWrappers = res['data']['mrtaps'].map((d) => {
                     return new MrTapObjWrapper(d)
                 })
-
-                //RANDOMIZE RESULTS TO PREVENT THE SAME CLIPS DISPLAYED FIRST
-                mrtapWrappers = this.randomizeArray(mrtapWrappers)
 
                 for (let i = 0; i < mrtapWrappers.length; i++) {
                     let stems = mrtapWrappers[i].flattenStems(v4)
@@ -70,6 +67,10 @@ export class StemsAPI {
                     })
                 }
 
+                //GET PERMUTATION STEMS
+                let permutationStems = res['data']['permutations']
+                stemsAndOptions.stems = [].concat(stemsAndOptions.stems, permutationStems)
+
 
                 //CREATE STEMS FROM FILLS
                 //CREATE STEMS FROM FILLS
@@ -93,15 +94,12 @@ export class StemsAPI {
                     }
                 }
 
-                const randFills = this.randomizeArray(fills)
-                randFills.forEach((fill) => {
+                fills.forEach((fill) => {
                     stemsAndOptions['stems'].push(fill)
                 })
 
-
-
-                //CREATE STEMS FROM FILLS
-                //CREATE STEMS FROM FILLS
+                //RANDOMIZE RESULTS TO PREVENT THE SAME CLIPS DISPLAYED FIRST
+                stemsAndOptions.stems = this.randomizeArray(stemsAndOptions.stems)
 
                 return stemsAndOptions
             } else {
