@@ -2,9 +2,10 @@
 
 export default class ModalResponsePayload {
 
-        constructor(instanceId, response) {
+        constructor(instanceId, response, relayData) {
             this.instanceId = instanceId
             this.response = response
+            this.relayData = relayData
         }
 
         getInstanceId() {
@@ -13,5 +14,9 @@ export default class ModalResponsePayload {
 
         getResponse() {
             return this.response
+        }
+
+        getRelayData() {
+            return this.relayData
         }
 }

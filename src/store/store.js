@@ -1,5 +1,7 @@
 import {reactive, ref} from "vue";
 
+const debugMode = true
+
 const state = reactive({
     projectName: 'Untitled Project',
     authorName: '',

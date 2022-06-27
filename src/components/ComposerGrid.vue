@@ -222,7 +222,8 @@ export default {
           undefined,
           'Rename',
           'Cancel',
-          true
+          true,
+          sectionId
       )
 
       emit('launchModal', modalOpenPayload)
@@ -231,7 +232,9 @@ export default {
     watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
       if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === renameSectionModalId) {
         if (modalResponsePayload[0].getResponse()) {
-          alert(modalResponsePayload[0].getResponse())
+          if(modalResponsePayload[0].getRelayData()){
+            new GridProcessor(store.state.grid).renameSection(modalResponsePayload[0].getRelayData(), modalResponsePayload[0].getResponse())
+          }
         }
       }
     })

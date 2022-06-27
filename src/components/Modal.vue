@@ -35,6 +35,7 @@ export default {
     const cancelBtnText = ref(undefined)
     const open = ref(false)
     const textInput = ref(undefined)
+    let relayData = undefined
 
     const closeModal = () => {
       id.value = undefined
@@ -45,6 +46,7 @@ export default {
       cancelBtnText.value = undefined
       open.value = false
       textInput.value = undefined
+      relayData = undefined
     }
 
     const cancelClick = () => {
@@ -59,7 +61,7 @@ export default {
         response = textInput.value
       }
 
-      const modalResponsePayload = new ModalResponsePayload(id.value, response)
+      const modalResponsePayload = new ModalResponsePayload(id.value, response, relayData)
       emit('modalResponse', modalResponsePayload)
       closeModal()
     }
@@ -77,6 +79,7 @@ export default {
         confirmBtnText.value = modalPayload[0].getConfirmText()
         cancelBtnText.value = modalPayload[0].getCancelText()
         open.value = true
+        relayData = modalPayload[0].getRelayData()
       }
     })
 

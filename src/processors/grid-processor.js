@@ -126,4 +126,14 @@ export default class GridProcessor {
             }
         }
     }
+
+    renameSection = (sectionId, newName) => {
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                if (this.grid[row].value[col].section.id == sectionId) {
+                    this.grid[row].value[col].section.name = newName
+                }
+            }
+        }
+    }
 }

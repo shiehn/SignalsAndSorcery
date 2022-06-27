@@ -93,8 +93,8 @@ describe('Grid Processor Tests', () => {
 
         gridProcessor.removeColumn('id_a')
 
-        for(let row = 0; row < store.state.grid.length; row++){
-            for(let col = 0; col < store.state.grid[row].value.length; col++){
+        for (let row = 0; row < store.state.grid.length; row++) {
+            for (let col = 0; col < store.state.grid[row].value.length; col++) {
                 expect(store.state.grid[row].value[col].row).to.equals(row)
                 expect(store.state.grid[row].value[col].col).to.equals(col)
             }
@@ -167,8 +167,8 @@ describe('Grid Processor Tests', () => {
 
         gridProcessor.addColumn('id_b')
 
-        for(let row = 0; row < store.state.grid.length; row++){
-            for(let col = 0; col < store.state.grid[row].value.length; col++){
+        for (let row = 0; row < store.state.grid.length; row++) {
+            for (let col = 0; col < store.state.grid[row].value.length; col++) {
                 expect(store.state.grid[row].value[col].row).to.equals(row)
                 expect(store.state.grid[row].value[col].col).to.equals(col)
             }
@@ -194,11 +194,33 @@ describe('Grid Processor Tests', () => {
 
         gridProcessor.addSection('new_section_id')
 
-        for(let row = 0; row < store.state.grid.length; row++){
-            for(let col = 0; col < store.state.grid[row].value.length; col++){
+        for (let row = 0; row < store.state.grid.length; row++) {
+            for (let col = 0; col < store.state.grid[row].value.length; col++) {
                 expect(store.state.grid[row].value[col].row).to.equals(row)
                 expect(store.state.grid[row].value[col].col).to.equals(col)
             }
         }
+    })
+
+    it('should rename section name', async () => {
+        const gridProcessor = new GridProcessor(store.state.grid)
+
+        const newName = 'new_test_name'
+
+        expect(store.state.grid[0].value[0].section.name).not.to.equals(newName)
+        expect(store.state.grid[1].value[4].section.name).not.to.equals(newName)
+
+        let sectionId = store.state.grid[0].value[0].section.id
+        gridProcessor.renameSection(sectionId, newName)
+
+        expect(store.state.grid[0].value[0].section.name).to.equals(newName)
+        expect(store.state.grid[0].value[2].section.name).to.equals(newName)
+        expect(store.state.grid[2].value[1].section.name).to.equals(newName)
+        expect(store.state.grid[2].value[2].section.name).to.equals(newName)
+        expect(store.state.grid[3].value[0].section.name).to.equals(newName)
+        expect(store.state.grid[3].value[2].section.name).to.equals(newName)
+
+        //CHECK THAT THE OTHER SECTIONS HAVE NOT CHANGED
+        expect(store.state.grid[2].value[4].section.name).not.to.equals(newName)
     })
 })

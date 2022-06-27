@@ -164,7 +164,7 @@ export default class MrTapObjWrapper {
                         'chords': this.getChordsForSection(sectionIds[i]),
                         'key': this.getKeyForSection(sectionIds[i]),
                         'sectionId': sectionIds[i],
-                        'type': layerTypes[j],
+                        'type': layerTypes[j].includes('drum') ? 'drum' : layerTypes[j],
                         'variationId': layerVariationIds[k],
                         'source': variationSource.replace('.wav','.mp3'),
                     })

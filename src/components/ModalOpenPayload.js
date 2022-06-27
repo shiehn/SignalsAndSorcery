@@ -1,12 +1,13 @@
 export default class ModalOpenPayload {
 
-    constructor(instanceId, title, body, confirmBtnText, cancelBtnText, isTextInput = false) {
+    constructor(instanceId, title, body, confirmBtnText, cancelBtnText, isTextInput = false, relayData = undefined) {
         this.instanceId = instanceId
         this.title = title
         this.body = body
         this.isTextInput = isTextInput
         this.confirmText = confirmBtnText
         this.cancelText = cancelBtnText
+        this.relayData = relayData
     }
 
     getInstanceId() {
@@ -31,5 +32,9 @@ export default class ModalOpenPayload {
 
     getCancelText() {
         return this.cancelText
+    }
+
+    getRelayData() {
+        return this.relayData
     }
 }
