@@ -14,6 +14,8 @@ import ComposerGridWrapper from "./components/ComposerGridWrapper";
 import TopPanelsWrapper from "./components/TopPanelsWrapper";
 import Modal from "./components/Modal";
 import useEventsBus from "./events/eventBus";
+import {onMounted} from "vue";
+import SASApi from "./dal/sas-api";
 
 let url;
 const root = document.querySelector('#app')
@@ -28,10 +30,12 @@ export default defineComponent({
       store.state.staticUrl = url.trim()
     }
 
+    onMounted(async () => {
+      const token = document.getElementById('token').value
+      store.state.authorName = await new SASApi().getLoggedInUser(token)
+    })
 
-
-    return {
-    }
+    return {}
   },
   components: {
     Modal,

@@ -62,6 +62,7 @@ import {ROW_TO_TYPE_MAP} from "../constants/constants";
 import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
 import GridProcessor from "../processors/grid-processor";
 import ModalOpenPayload from "./ModalOpenPayload";
+import {v4} from "uuid";
 
 export default {
   name: 'ComposerGrid',
@@ -80,9 +81,14 @@ export default {
       minusIcon: store.state.staticUrl + "icons/minus.png",
     }
 
-    let numOfGridCols = 12
+    const numOfGridRows = 5
+    const numOfGridCols = 6
+    const numOfSections = 2
 
-    store.state.grid = new GridGenerator().initGrid(5, numOfGridCols)
+    store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
+
+    //add a 2nd section by default
+    new GridProcessor(store.state.grid).addSection('part_2', 6)
 
     const getGridRows = () => {
       return store.state.grid
@@ -232,7 +238,7 @@ export default {
     watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
       if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === renameSectionModalId) {
         if (modalResponsePayload[0].getResponse()) {
-          if(modalResponsePayload[0].getRelayData()){
+          if (modalResponsePayload[0].getRelayData()) {
             new GridProcessor(store.state.grid).renameSection(modalResponsePayload[0].getRelayData(), modalResponsePayload[0].getResponse())
           }
         }

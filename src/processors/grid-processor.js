@@ -91,10 +91,13 @@ export default class GridProcessor {
         this.reIndexRowsAndCols()
     }
 
-    addSection = (sectionName) => {
+    addSection = (sectionName, numOfCols) => {
         const newItemIndex = this.grid[0].value.length;
 
-        const numOfCols = 2
+        if (!numOfCols || numOfCols < 2) {
+            numOfCols = 2
+        }
+
         const newId = v4()
         for (let row = 0; row < this.grid.length; row++) {
             for (let col = 0; col < numOfCols; col++) {
