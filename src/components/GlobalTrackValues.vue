@@ -2,7 +2,8 @@
   <div class="w-full flex flex-col overflow-hidden">
     <div class="mt-2 mb-2 nowrap">
       <span class="font-bold text-sm  nowrap">NAME:</span>
-      <span class="ml-2 bg-black text-white px-2 nowrap">Ultra Dope</span>
+<!--      <span class="ml-2 bg-black text-white px-2 nowrap">Ultra Dope</span>-->
+      <input v-model="store.state.projectName" placeholder="Default Name" class="ml-2 bg-black text-white px-2 nowrap" />
     </div>
     <div class="mb-2">
       <span class="font-bold text-sm">ARTIST:</span>

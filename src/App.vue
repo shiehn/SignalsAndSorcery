@@ -3,17 +3,17 @@
 <template>
   <top-panels-wrapper></top-panels-wrapper>
   <composer-grid-wrapper></composer-grid-wrapper>
+  <modal></modal>
 </template>
 
 <script lang="js">
-import {defineComponent, provide} from "vue";
-import AssetSelector from './components/AssetSelector.vue'
-import ComposerControls from './components/ComposerControls.vue'
-import ComposerGrid from './components/ComposerGrid.vue'
+import {defineComponent, ref, provide, watch} from "vue";
 import store from './store/store'
 import GlobalTrackValues from "./components/GlobalTrackValues.vue";
 import ComposerGridWrapper from "./components/ComposerGridWrapper";
 import TopPanelsWrapper from "./components/TopPanelsWrapper";
+import Modal from "./components/Modal";
+import useEventsBus from "./events/eventBus";
 
 let url;
 const root = document.querySelector('#app')
@@ -28,9 +28,13 @@ export default defineComponent({
       store.state.staticUrl = url.trim()
     }
 
-    return {}
+
+
+    return {
+    }
   },
   components: {
+    Modal,
     TopPanelsWrapper,
     ComposerGridWrapper,
     GlobalTrackValues,

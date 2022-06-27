@@ -3,7 +3,7 @@
        style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
     <div class="flex justify-between">
-      <button @click="openProject()" class="border-2 border-black p-1 rounded-md"><img
+      <button @click="openProjectDialog()" class="border-2 border-black p-1 rounded-md"><img
           :src="imageAssets.loadBtn" class="h-6 "/>
       </button>
       <button @click="saveProject()" class="border-2 border-black p-1 rounded-md"><img
@@ -18,15 +18,16 @@
 
 <script>
 import GlobalTrackValues from "./GlobalTrackValues";
-import {inject} from "vue";
+import {inject, watch} from "vue";
 import useEventsBus from "../events/eventBus";
 import SaveAndLoadAdapter from "../persistence/save-load-adapter";
+import ModalOpenPayload from "./ModalOpenPayload";
 
 export default {
   name: "AdminPanel",
   components: {GlobalTrackValues},
   setup() {
-    const {emit} = useEventsBus()
+    const {bus, emit} = useEventsBus()
     const store = inject('store')
     const toast = inject('toast');
     const imageAssets = {
@@ -38,6 +39,24 @@ export default {
     const downloadMix = () => {
       emit('downloadMix')
     }
+
+    const openProjectDialog = () => {
+      const modalPayload = new ModalOpenPayload(
+          'open-project-warning',
+          'Warning',
+          'You are about to open a project. This will erase all current data. Are you sure?',
+          'Continue',
+          'Cancel')
+
+      emit('launchModal', modalPayload)
+    }
+
+
+    watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
+      if (modalResponsePayload[0]) {
+        alert('GOT A MODAL RESPONSE')
+      }
+    })
 
     const openProject = () => {
       if (localStorage.getItem("sas-save")) {
@@ -65,7 +84,7 @@ export default {
 
     return {
       downloadMix,
-      openProject,
+      openProjectDialog,
       saveProject,
       imageAssets,
     }

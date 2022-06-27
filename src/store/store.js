@@ -1,7 +1,7 @@
-import {reactive} from "vue";
+import {reactive, ref} from "vue";
 
 const state = reactive({
-    projectName: '',
+    projectName: 'Untitled Project',
     authorName: '',
     globalBpm: undefined,
     globalKey: undefined,

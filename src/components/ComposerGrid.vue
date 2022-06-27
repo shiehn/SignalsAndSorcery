@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import {reactive, ref, inject, watch, onMounted, nextTick} from 'vue'
+import {ref, inject, watch, onMounted, nextTick} from 'vue'
 import useEventsBus from "../events/eventBus";
 import Asset from "./Asset";
 import GridGenerator from "../generators/grid-generator";
