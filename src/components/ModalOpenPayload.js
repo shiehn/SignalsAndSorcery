@@ -1,9 +1,10 @@
 export default class ModalOpenPayload {
 
-    constructor(instanceId, title, body, confirmBtnText, cancelBtnText) {
+    constructor(instanceId, title, body, confirmBtnText, cancelBtnText, isTextInput = false) {
         this.instanceId = instanceId
         this.title = title
         this.body = body
+        this.isTextInput = isTextInput
         this.confirmText = confirmBtnText
         this.cancelText = cancelBtnText
     }
@@ -18,6 +19,10 @@ export default class ModalOpenPayload {
 
     getBody() {
         return this.body
+    }
+
+    getIsTextInput() {
+        return this.isTextInput
     }
 
     getConfirmText() {

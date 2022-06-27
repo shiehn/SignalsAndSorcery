@@ -40,9 +40,10 @@ export default {
       emit('downloadMix')
     }
 
+    const openProjectDialogModalId = 'openProjectWarning'
     const openProjectDialog = () => {
       const modalPayload = new ModalOpenPayload(
-          'open-project-warning',
+          openProjectDialogModalId,
           'Warning',
           'You are about to open a project. This will erase all current data. Are you sure?',
           'Continue',
@@ -51,10 +52,11 @@ export default {
       emit('launchModal', modalPayload)
     }
 
-
     watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
-      if (modalResponsePayload[0]) {
-        alert('GOT A MODAL RESPONSE')
+      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === openProjectDialogModalId) {
+        if (modalResponsePayload[0].getResponse()) {
+          openProject()
+        }
       }
     })
 

@@ -8,35 +8,22 @@
         <div v-for="(gridRowItem, j) in gridRow.value" class="ml-1 mb-2 w-16 flex-none">
           <div v-if="gridRowItem.section.position == 'start'" style="white-space: nowrap"
                class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-black">
-            <span class="ml-2 hover:cursor-move">{{ gridRowItem.section.id }}</span>
+            <span class="ml-2 hover:cursor-move">{{ gridRowItem.section.name }}</span>
           </div>
 
           <div v-if="gridRowItem.section.position == 'end'" class="ml-1 w-16 h-6 flex">
+            <button @click="editSection(gridRowItem.section.id)">
+              <img :src=imageUrls.editIcon class="w-4 h-4">
+            </button>
+
             <button @click="columnAdd(gridRowItem.section.id)">
-              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-2">
+              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-1">
             </button>
 
             <button @click="columnRemove(gridRowItem.section.id)">
-              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-2">
+              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-1">
             </button>
           </div>
-          <!--          <div v-if="i == 0 && j == 4" style="white-space: nowrap"-->
-          <!--               class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-black">-->
-          <!--            <span class="ml-2 hover:cursor-move">VERSE</span>-->
-          <!--          </div>-->
-          <!--          <div v-if="i == 0 && j == 11" class="ml-1 w-16 h-6 flex border-r-2 border-black items-center">-->
-          <!--            <button @click="columnAdd('columnId')">-->
-          <!--              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-2">-->
-          <!--            </button>-->
-
-          <!--            <button @click="columnAdd('columnId')">-->
-          <!--              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-2">-->
-          <!--            </button>-->
-          <!--          </div>-->
-
-          <!--          <div v-if="i == 0 && j != 0 && j !=3 && j !=11" class="ml-1 w-16 h-6 flex-none">-->
-          <!--          </div>-->
-
         </div>
       </div>
     </div>
@@ -74,6 +61,7 @@ import CompatibilityProcessor from "../processors/compatibility-processor";
 import {ROW_TO_TYPE_MAP} from "../constants/constants";
 import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
 import GridProcessor from "../processors/grid-processor";
+import ModalOpenPayload from "./ModalOpenPayload";
 
 export default {
   name: 'ComposerGrid',
@@ -87,6 +75,7 @@ export default {
     const toast = inject('toast');
     const gridContainerRows = ref([]);
     const imageUrls = {
+      editIcon: store.state.staticUrl + 'icons/edit.png',
       plusIcon: store.state.staticUrl + "icons/plus.png",
       minusIcon: store.state.staticUrl + "icons/minus.png",
     }
@@ -225,6 +214,28 @@ export default {
       emit('renderMixIfNeeded')
     }
 
+    const renameSectionModalId = 'renameSectionModal'
+    const editSection = (sectionId) => {
+      const modalOpenPayload = new ModalOpenPayload(
+          renameSectionModalId,
+          'Rename Section',
+          undefined,
+          'Rename',
+          'Cancel',
+          true
+      )
+
+      emit('launchModal', modalOpenPayload)
+    }
+
+    watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
+      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === renameSectionModalId) {
+        if (modalResponsePayload[0].getResponse()) {
+          alert(modalResponsePayload[0].getResponse())
+        }
+      }
+    })
+
     onMounted(() => {
       nextTick(() => {
         emit('gridDrawCompleted', {
@@ -255,6 +266,7 @@ export default {
     return {
       columnAdd,
       columnRemove,
+      editSection,
       getGridRows,
       getGridByRow,
       gridContainerRows,

@@ -1,20 +1,19 @@
 <template>
   <div class="w-full flex flex-col overflow-hidden">
-    <div class="mt-2 mb-2 nowrap">
-      <span class="font-bold text-sm  nowrap">NAME:</span>
-<!--      <span class="ml-2 bg-black text-white px-2 nowrap">Ultra Dope</span>-->
-      <input v-model="store.state.projectName" placeholder="Default Name" class="ml-2 bg-black text-white px-2 nowrap" />
+    <div class="flex w-full h-6 mt-2 mb-2 overflow-clip">
+      <span class="font-bold text-sm">NAME:</span>
+      <input v-model="store.state.projectName" placeholder="Default Name" class="ml-2 bg-black text-white text-sm px-2" />
     </div>
-    <div class="mb-2">
+    <div class="flex w-full h-6 mb-2 overflow-clip">
       <span class="font-bold text-sm">ARTIST:</span>
       <span class="ml-2">Steve Hiehn</span>
     </div>
-    <div class="mb-2">
+    <div class="flex w-full h-6 mb-2 overflow-clip">
       <span class="font-bold text-sm">BPM:</span>
       <span v-if="store.state.globalBpm" class="ml-2">{{ store.state.globalBpm }}</span>
       <span v-if="!store.state.globalBpm" class="ml-2"> ---</span>
     </div>
-    <div class="mb-2">
+    <div class="flex w-full h-6 mb-2 overflow-clip">
       <span class="font-bold text-sm">KEY:</span>
       <span v-if="store.state.globalKey" class="ml-2">{{ store.state.globalKey }}</span>
       <span v-if="!store.state.globalKey" class="ml-2"> ---</span>
