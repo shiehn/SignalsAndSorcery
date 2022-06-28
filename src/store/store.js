@@ -7,6 +7,10 @@ const state = reactive({
     authorName: '',
     globalBpm: undefined,
     globalKey: undefined,
+    playBack: {
+        loopStartPercent: 0,
+        loopEndPercent: 100,
+    },
     clipCount: function () {
         let clipCount = 0
 

@@ -19,7 +19,7 @@ export default {
     const startLoop = ref(null)
     const endLoop = ref(null)
 
-    const getXPosPercentage = (event) => {
+    const getMouseXPosPercentage = (event) => {
       let clickXPosPercentage = Math.round((event.clientX - event.target.getBoundingClientRect().x) / event.target.getBoundingClientRect().width * 100)
 
       const isInt = (value) => {
@@ -61,19 +61,21 @@ export default {
     const clickedLoopBar = (event) => {
       event.preventDefault()
 
-      console.log('middle', getPointBetweenStartAndEnd())
-
       if(moveStartOrEndMarker(event) === 'start') {
-        startLoop.value.style.marginLeft = Math.round((event.clientX - event.target.getBoundingClientRect().x)) + 'px'
+        //set the visual start loop marker
+        let marginLeft = Math.round((event.clientX - event.target.getBoundingClientRect().x))
+        startLoop.value.style.marginLeft = marginLeft + 'px'
+        //set the playback start loop point
+        store.state.playBack.loopStartPercent = getMouseXPosPercentage(event)
       } else { //move end marker
-        endLoop.value.style.marginLeft = Math.round((event.clientX - event.target.getBoundingClientRect().x)) + 'px'
+        //set the visual end loop marker
+        let marginLeft = Math.round((event.clientX - event.target.getBoundingClientRect().x))
+        endLoop.value.style.marginLeft = marginLeft + 'px'
+        //set the playback end loop point
+        store.state.playBack.loopEndPercent = getMouseXPosPercentage(event) //plus width of end marker
       }
 
-
-      //console.log('startLoop.value.style.marginLeft', Math.round((event.clientX - event.target.getBoundingClientRect().x)) + 'px')
-
-      // console.log('LOOP_BAR_WIDTH', event.target.getBoundingClientRect().width)
-      // console.log('LOOP_BAR_CLICK_POS', getXPosPercentage(event))
+      console.log('PLAYBACK', store.state.playBack)
     }
 
     const convertRemToPixels = (rem) => {
