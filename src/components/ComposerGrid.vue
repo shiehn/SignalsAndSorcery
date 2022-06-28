@@ -47,6 +47,7 @@
       </div>
     </div>
 
+    <composer-controls-loop-bar></composer-controls-loop-bar>
     <composer-controls-scroll-bar></composer-controls-scroll-bar>
   </div>
 
@@ -63,10 +64,11 @@ import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
 import GridProcessor from "../processors/grid-processor";
 import ModalOpenPayload from "./ModalOpenPayload";
 import {v4} from "uuid";
+import ComposerControlsLoopBar from "./ComposerControlsLoopBar";
 
 export default {
   name: 'ComposerGrid',
-  components: {Asset, ComposerControlsScrollBar},
+  components: {Asset, ComposerControlsLoopBar, ComposerControlsScrollBar},
   setup() {
 
     // v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.3) ' + progressBar + '%,  gray ' + progressBar + '%' }"
@@ -163,15 +165,17 @@ export default {
 
     const mouseOverGridItem = (row, col) => {
       const gridItem = store.state.grid[row].value[col]
-      if (!gridItem.showDeleteIcon && gridItem.stem) {
+      if (gridItem && !gridItem.showDeleteIcon && gridItem.stem) {
         gridItem.showDeleteIcon = true
       }
     }
 
     const mouseLeaveGridItem = (row, col) => {
       const gridItem = store.state.grid[row].value[col]
-      gridItem.showDeleteIcon = false
-      gridItem.showPreviewIcon = false
+      if(gridItem) {
+        gridItem.showDeleteIcon = false
+        gridItem.showPreviewIcon = false
+      }
     }
 
     const handleGridItemClick = (row, col) => {
@@ -253,11 +257,33 @@ export default {
       })
 
       window.addEventListener('resize', () => {
+        // if (currentGridWidth == gridContainerRows.value[0].clientWidth &&
+        //     currentColCount == gridContainerRows.value[0].length) {
+        //   return
+        // }
+        //
+        // currentGridWidth = gridContainerRows.value[0].clientWidth
+        // currentColCount = gridContainerRows.value[0].length
         emit('gridDrawCompleted', {
           'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
         })
       })
     });
+
+    watch(store.state.grid, () => {
+      // if (currentGridWidth == gridContainerRows.value[0].clientWidth &&
+      //     currentColCount == gridContainerRows.value[0].length) {
+      //   return
+      // }
+      //
+      // console.log('FIRED', gridContainerRows.value[0].length)
+      //
+      // currentGridWidth = gridContainerRows.value[0].clientWidth
+      // currentColCount = gridContainerRows.value[0].length
+      emit('gridDrawCompleted', {
+        'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
+      })
+    })
 
     watch(() => bus.value.get('assetSelected'), (stem) => {
       evalCompatibility(stem[0])

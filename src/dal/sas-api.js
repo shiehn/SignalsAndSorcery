@@ -18,7 +18,7 @@ export default class SASApi {
                 }
             })
             .catch((err) => {
-               console.log('unable to retrieve user data.')
+               console.log('unable to retrieve user data.', err)
             })
 
         return userName

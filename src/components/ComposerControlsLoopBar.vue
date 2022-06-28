@@ -1,24 +1,23 @@
 <template>
-  <div ref="clickBar" class="w-auto bg-gray-500 rounded-lg h-6 hover:cursor-pointer"
-       @click="scrubToPosition($event)"
-       v-bind:style="{backgroundImage: 'linear-gradient(to right, green ' + progressBar + '%, rgb(227, 213, 182) ' + progressBar + '%' }">
+  <div ref="loopBar" class="flex w-auto bg-green-500 h-6 hover:cursor-pointer"
+       @click="clickedLoopBar($event)">
+    <div class="w-8 h-6 bg-white">START</div>
+    <div class="w-8 h-6 bg-black text-white">END</div>
   </div>
 </template>
 
 <script>
-import {nextTick, onMounted, ref, watch} from "vue";
+import {inject, ref, watch} from "vue";
 import useEventsBus from "../events/eventBus";
-import {inject} from "vue";
 
 export default {
-  name: "ComposerControlsScrollBar",
+  name: "ComposerControlsLoopBar",
   setup() {
     const store = inject('store')
-    const {bus, emit} = useEventsBus()
-    const progressBar = ref(0)
-    const clickBar = ref(null)
+    const {bus} = useEventsBus()
+    const loopBar = ref(null)
 
-    const scrubToPosition = (event) => {
+    const clickedLoopBar = (event) => {
       event.preventDefault()
 
       let horizontalPercentage = Math.round((event.clientX - event.target.getBoundingClientRect().x) / event.target.getBoundingClientRect().width * 100)
@@ -32,12 +31,8 @@ export default {
         horizontalPercentage = 0
       }
 
-      emit('scrubTo', horizontalPercentage)
+      console.log('LOOP_BAR_CLICK_POS', horizontalPercentage)
     }
-
-    watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
-      progressBar.value = progressInt
-    })
 
     const convertRemToPixels = (rem) => {
       return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
@@ -48,14 +43,14 @@ export default {
       const m1 = 0.25 /* assuming each grid item has tailwind mr-1 ==  0.25rem */
       let calculatedGridWidthRem = store.state.grid[0].value.length * (w16 + m1)
 
-      if(convertRemToPixels(calculatedGridWidthRem) < gridDrawCompletedParams[0].gridContainerRowWidth) {
-        clickBar.value.style.width = gridDrawCompletedParams[0].gridContainerRowWidth + 'px'
+      if (convertRemToPixels(calculatedGridWidthRem) < gridDrawCompletedParams[0].gridContainerRowWidth) {
+        loopBar.value.style.width = gridDrawCompletedParams[0].gridContainerRowWidth + 'px'
       } else {
-        clickBar.value.style.width = calculatedGridWidthRem + 'rem'
+        loopBar.value.style.width = calculatedGridWidthRem + 'rem'
       }
     })
 
-    return {clickBar, progressBar, scrubToPosition}
+    return {clickedLoopBar, loopBar}
   }
 }
 </script>
