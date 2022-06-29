@@ -67,7 +67,7 @@ export default {
           //   buffer_list[x] = BUFFER_CACHE[trackSourceUrls[x]]
           // } else {
           await new Promise(function (resolve) {
-            axios.get(trackSourceUrls[x], {
+            axios.get(trackSourceUrls[x] + "?x-request=js" /*s3 hack to prevent request from 2 origins */, {
               responseType: 'arraybuffer'
             }).then(function (response) {
               let audioData = response.data;

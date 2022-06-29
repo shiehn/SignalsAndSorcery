@@ -69,7 +69,7 @@ export default {
     watch(() => bus.value.get('stopAllAudio'), (callerId) => {
       if (callerId != props.stem.id) {
         audioTag.value.pause()
-        props.stem.previewIconPath = props.stem.previewPlayIconPath
+        props.stem.previewIconPath = props.stem.previewPlayIconPath + "?x-request=html" //s3 hack to prevent request from 2 origins
       }
     })
 
