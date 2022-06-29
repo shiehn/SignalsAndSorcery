@@ -217,11 +217,13 @@ export default {
     const columnAdd = (sectionId) => {
       new GridProcessor(store.state.grid).addColumn(sectionId)
       emit('renderMixIfNeeded')
+      emit('resetPlayhead')
     }
 
     const columnRemove = (sectionId) => {
       new GridProcessor(store.state.grid).removeColumn(sectionId)
       emit('renderMixIfNeeded')
+      emit('resetPlayhead')
     }
 
     const renameSectionModalId = 'renameSectionModal'

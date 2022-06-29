@@ -1,13 +1,21 @@
 <template>
-  <div ref="loopBar" class="relative w-auto bg-green-500 h-6 hover:cursor-pointer"
+  <div ref="loopBar" class="relative w-auto h-6 hover:cursor-pointer"
        @click="clickedLoopBar($event)">
-    <div ref="startLoop" class="absolute w-8 h-6 bg-white">START</div>
-    <div ref="endLoop" class="absolute w-8 h-6 bg-black text-white">END</div>
+    <img ref="startLoop"
+         :src="imageAssets.loopStartMarker"
+         draggable="true"
+         @drag="finishStartLoopDrag($event)"
+         class="absolute w-8 h-6"/>
+    <img ref="endLoop"
+         :src="imageAssets.loopEndMarker"
+         draggable="true"
+         @drag="finishEndLoopDrag($event)"
+         class="absolute w-8 h-6"/>
   </div>
 </template>
 
 <script>
-import {inject, onMounted, ref, watch} from "vue";
+import {inject, nextTick, onMounted, ref, watch} from "vue";
 import useEventsBus from "../events/eventBus";
 
 export default {
@@ -18,6 +26,11 @@ export default {
     const loopBar = ref(null)
     const startLoop = ref(null)
     const endLoop = ref(null)
+
+    const imageAssets = {
+      loopStartMarker: store.state.staticUrl + 'icons/loop-start-marker.png',
+      loopEndMarker: store.state.staticUrl + 'icons/loop-end-marker.png',
+    }
 
     const getMouseXPosPercentage = (event) => {
       let clickXPosPercentage = Math.round((event.clientX - event.target.getBoundingClientRect().x) / event.target.getBoundingClientRect().width * 100)
@@ -35,8 +48,10 @@ export default {
     }
 
     onMounted(() => {
-      startLoop.value.style.marginLeft = 0 + 'px'
-      endLoop.value.style.marginLeft = 400 + 'px'
+      nextTick(() => {
+        startLoop.value.style.marginLeft = (store.state.playBack.loopStartPercent * 0.01 * loopBar.value.clientWidth) + 'px'
+        endLoop.value.style.marginLeft = (store.state.playBack.loopEndPercent * 0.01 * loopBar.value.clientWidth) + 'px'
+      })
     })
 
     const getPointBetweenStartAndEnd = () => {
@@ -51,7 +66,7 @@ export default {
 
       const mousePosX = event.clientX - event.target.getBoundingClientRect().x
 
-      if(mousePosX < (getPointBetweenStartAndEnd() + start)){
+      if (mousePosX < (getPointBetweenStartAndEnd() + start)) {
         return 'start'
       }
 
@@ -61,7 +76,7 @@ export default {
     const clickedLoopBar = (event) => {
       event.preventDefault()
 
-      if(moveStartOrEndMarker(event) === 'start') {
+      if (moveStartOrEndMarker(event) === 'start') {
         //set the visual start loop marker
         let marginLeft = Math.round((event.clientX - event.target.getBoundingClientRect().x))
         startLoop.value.style.marginLeft = marginLeft + 'px'
@@ -70,7 +85,7 @@ export default {
       } else { //move end marker
         //set the visual end loop marker
         let marginLeft = Math.round((event.clientX - event.target.getBoundingClientRect().x))
-        endLoop.value.style.marginLeft = marginLeft + 'px'
+        endLoop.value.style.marginLeft = marginLeft - endLoop.value.getBoundingClientRect().width + 'px'
         //set the playback end loop point
         store.state.playBack.loopEndPercent = getMouseXPosPercentage(event) //plus width of end marker
       }
@@ -94,7 +109,34 @@ export default {
       }
     })
 
-    return {clickedLoopBar, endLoop, loopBar, startLoop}
+    watch(() => bus.value.get('resetPlayhead'), (gridDrawCompletedParams) => {
+      store.state.playBack.loopStartPercent = 0
+      store.state.playBack.loopEndPercent = 100
+      startLoop.value.style.marginLeft = '0px'
+      endLoop.value.style.marginLeft = loopBar.value.getBoundingClientRect().width - endLoop.value.getBoundingClientRect().width + 'px'
+    })
+
+    const finishStartLoopDrag = ($event) => {
+      const mousePosRelativeToBar = $event.clientX - loopBar.value.getBoundingClientRect().x
+      const scrollBarWidth = loopBar.value.getBoundingClientRect().width
+      const endLoopXRelativeToBar = endLoop.value.getBoundingClientRect().x - endLoop.value.getBoundingClientRect().width - loopBar.value.getBoundingClientRect().x
+      if (mousePosRelativeToBar > 0 && mousePosRelativeToBar < scrollBarWidth && mousePosRelativeToBar < endLoopXRelativeToBar) {
+        startLoop.value.style.marginLeft = mousePosRelativeToBar + 'px'
+        store.state.playBack.loopStartPercent = mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100
+      }
+    }
+
+    const finishEndLoopDrag = ($event) => {
+      const mousePosRelativeToBar = $event.clientX - loopBar.value.getBoundingClientRect().x
+      const scrollBarWidth = loopBar.value.getBoundingClientRect().width
+      const startLoopXRelativeToBar = startLoop.value.getBoundingClientRect().x - loopBar.value.getBoundingClientRect().x
+      if (mousePosRelativeToBar > 0 && mousePosRelativeToBar < scrollBarWidth && mousePosRelativeToBar > startLoopXRelativeToBar + startLoop.value.getBoundingClientRect().width + endLoop.value.getBoundingClientRect().width) {
+        endLoop.value.style.marginLeft = mousePosRelativeToBar - endLoop.value.getBoundingClientRect().width + 'px'
+        store.state.playBack.loopEndPercent = mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100
+      }
+    }
+
+    return {clickedLoopBar, endLoop, finishEndLoopDrag, finishStartLoopDrag,imageAssets, loopBar, startLoop}
   }
 }
 </script>

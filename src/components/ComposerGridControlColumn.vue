@@ -62,6 +62,7 @@ export default {
 
       new GridProcessor(store.state.grid).addSection(sectionName)
       emit('renderMixIfNeeded')
+      emit('resetPlayhead')
     }
 
     const addSectionModalId = 'addSectionModalId'

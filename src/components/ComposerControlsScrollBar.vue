@@ -1,7 +1,7 @@
 <template>
-  <div ref="clickBar" class="w-auto bg-gray-500 rounded-lg h-6 hover:cursor-pointer"
-       @click="scrubToPosition($event)"
-       v-bind:style="{backgroundImage: 'linear-gradient(to right, green ' + progressBar + '%, rgb(227, 213, 182) ' + progressBar + '%' }">
+  <div ref="clickBar" class="w-auto horizontal-line rounded-lg h-6 hover:cursor-pointer"
+       @click="scrubToPosition($event)">
+    <div ref="playHead" class="w-2 h-full bg-black"></div>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 import {nextTick, onMounted, ref, watch} from "vue";
 import useEventsBus from "../events/eventBus";
 import {inject} from "vue";
-
+//v-bind:style="{backgroundImage: 'linear-gradient(to right, green ' + progressBar + '%, rgb(227, 213, 182) ' + progressBar + '%' }"
 export default {
   name: "ComposerControlsScrollBar",
   setup() {
@@ -17,6 +17,7 @@ export default {
     const {bus, emit} = useEventsBus()
     const progressBar = ref(0)
     const clickBar = ref(null)
+    const playHead = ref(null)
 
     const scrubToPosition = (event) => {
       event.preventDefault()
@@ -36,7 +37,13 @@ export default {
     }
 
     watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
-      progressBar.value = progressInt
+      if(progressInt == 0){
+        //move the playhead to the startloop
+        playHead.value.style.marginLeft = (store.state.playBack.loopStartPercent * 0.01 * clickBar.value.clientWidth) + 'px'
+        return
+      }
+
+      playHead.value.style.marginLeft = (progressInt * 0.01 * clickBar.value.clientWidth) + 'px'
     })
 
     const convertRemToPixels = (rem) => {
@@ -55,11 +62,17 @@ export default {
       }
     })
 
-    return {clickBar, progressBar, scrubToPosition}
+    return {clickBar, playHead, progressBar, scrubToPosition}
   }
 }
 </script>
 
 <style scoped>
-
+.horizontal-line {
+  background: linear-gradient(180deg,
+  rgba(0, 0, 0, 0) calc(50% - 1px),
+  rgba(192, 192, 192, 1) calc(50%),
+  rgba(0, 0, 0, 0) calc(50% + 1px)
+  );
+}
 </style>

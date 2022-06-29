@@ -275,14 +275,36 @@ export default {
       if (buffer) {
         let offset = pausedAt;
 
+        const loopStart = buffer.duration * (store.state.playBack.loopStartPercent * 0.01)
+        const loopEnd = buffer.duration * (store.state.playBack.loopEndPercent * 0.01)
+
+        if (offset < loopStart || offset > loopEnd) {
+          offset = buffer.duration * (store.state.playBack.loopStartPercent * 0.01)
+        }
+
         if (offsetStartPercentage && offsetStartPercentage > 0 && offsetStartPercentage <= 100) {
           offset = buffer.duration * (offsetStartPercentage * 0.01)
+
+          if(offset < loopStart || offset > loopEnd) {
+            offset = buffer.duration * (store.state.playBack.loopStartPercent * 0.01)
+          }
         }
+
+        //console.log('buffer.duration', buffer.duration)
 
         sourceNode = context.createBufferSource();
         sourceNode.buffer = buffer
         sourceNode.connect(context.destination);
+
+
+        // sourceNode.loopStart = buffer.duration * (store.state.playBack.loopStartPercent * 0.01)
+        // sourceNode.loopEnd = buffer.duration * (store.state.playBack.loopEndPercent * 0.01)
+        // sourceNode.loop = true
+
         sourceNode.start(0, offset);
+        //sourceNode.start(0, buffer.duration * (store.state.playBack.loopStartPercent * 0.01));
+
+
         startedAt = context.currentTime - offset;
         pausedAt = 0;
         isPlaying.value = true;
@@ -345,8 +367,18 @@ export default {
       let displayDuration = getDuration()
       let displayCurrentTime = getCurrentTime()
 
+      let endTime = getDuration() * (store.state.playBack.loopEndPercent * 0.01)
+
+      // console.log('displayCurrentTime', displayCurrentTime)
+      // console.log('endTime', endTime)
+      if(displayCurrentTime > endTime) {
+        await stop()
+        await playMix()
+      }
+
       let progress = Math.round(displayCurrentTime / displayDuration * 100)
       if (Number.isInteger(progress)) {
+
         emit('updateProgressBar', progress)
       }
 
@@ -355,7 +387,7 @@ export default {
       }
     }
 
-    setInterval(updateDurations, 100)
+    setInterval(updateDurations, 10)
 
     let downloadMix = async () => {
       if (!buffer || (store.state.clipCount() < 1)) {
@@ -392,6 +424,9 @@ export default {
     })
 
     watch(() => bus.value.get('scrubTo'), async (scrubToPercent) => {
+
+      console.log('PLAYSTATE', store.state.playBack)
+
       if (store.state.clipCount() < 1) {
         toast.warning('Add clips to the arranger!');
         return
