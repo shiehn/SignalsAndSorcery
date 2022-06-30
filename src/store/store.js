@@ -6,7 +6,9 @@ const state = reactive({
     arpeggiator: {
         AP: undefined,
         arpeggio: undefined,
+        bpms: [45,60,75,90,105,120,135,150],
         chords: [0, 2, 6, 3, 4, 2, 5, 1],
+        chord_deg: ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii'],
         MS: undefined,
         ms_key: 'G',
         ms_mode: 'locrian',
