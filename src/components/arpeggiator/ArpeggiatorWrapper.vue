@@ -54,6 +54,8 @@
         {{ pattern }}
       </div>
     </section>
+
+    <button @click="playerToggle()" class="h-24"></button>
   </div>
 </template>
 
@@ -190,6 +192,49 @@ export default {
     //KEY END
 
 
+    //LOAD SYTHS START
+
+
+    let channel = {}
+    let fx = {}
+    let synths = {}
+    const loadSynths = () => {
+      channel = {
+        master: new Tone.Gain(0.7),
+        treb: new Tone.Gain(0.7),
+        bass: new Tone.Gain(0.8),
+      };
+      fx = {
+        distortion: new Tone.Distortion(0.8),
+        reverb: new Tone.Freeverb(0.1, 3000),
+        delay: new Tone.PingPongDelay('16n', 0.1),
+      };
+      synths = {
+        treb: new Tone.PolySynth(Tone.SimpleAM),
+        bass: new Tone.DuoSynth()
+      };
+
+      synths.bass.vibratoAmount.value = 0.1;
+      synths.bass.harmonicity.value = 1.5;
+      synths.bass.voice0.oscillator.type = 'triangle';
+      synths.bass.voice0.envelope.attack = 0.05;
+      synths.bass.voice1.oscillator.type = 'triangle';
+      synths.bass.voice1.envelope.attack = 0.05;
+
+      // fx mixes
+      fx.distortion.wet.value = 0.2;
+      fx.reverb.wet.value = 0.2;
+      fx.delay.wet.value = 0.3;
+      // gain levels
+      channel.master.toMaster();
+      channel.treb.connect(channel.master);
+      channel.bass.connect(channel.master);
+      // fx chains
+      synths.treb.chain(fx.delay, fx.reverb, channel.treb);
+      synths.bass.chain(fx.distortion, channel.bass);
+    };
+    //LOAD SYTHS END
+
     // TRANSPORT START
     const playerUpdateBPM = (bpm) => {
       console.log('BPM', bpm)
@@ -199,6 +244,65 @@ export default {
       Tone.Transport.bpm.value = arpState.player.bpm
       //this._utilClassToggle(e.target, 'bpm-current');
     };
+
+    const playerToggle = () => {
+      if(arpState.player.playing) {
+        Tone.Transport.pause();
+        channel.master.gain.value = 0;
+        //this.play_toggle.classList.remove('active');
+      } else {
+        Tone.Transport.start();
+        channel.master.gain.value = 1;
+        //this.play_toggle.classList.add('active');
+      }
+      arpState.player.playing = !arpState.player.playing;
+      console.log('arpState.player.playing', arpState.player.playing)
+    };
+
+    Tone.Transport.bpm.value = arpState.player.bpm;
+    Tone.Transport.scheduleRepeat((time) => {
+      let curr_chord = arpState.player.chord_step % arpState.chord_count();
+
+      // let prev = document.querySelector('.chord > div.active');
+      // if(prev) prev.classList.remove('active');
+      // let curr = document.querySelector(`.chord > div:nth-of-type(${curr_chord + 1})`);
+      // if(curr) curr.classList.add('active');
+
+      let chord = arpState.MS.notes[arpState.chords[curr_chord]];
+
+      // finding the current note
+      let notes = chord.triad.notes;
+      for(let i = 0; i < Math.ceil(arpState.ap_steps / 3); i++) {
+        notes = notes.concat(notes.map((n) => { return { note: n.note, rel_octave: n.rel_octave + (i + 1)}}));
+      }
+      let note = notes[arpState.arpeggio[arpState.player.step % arpState.arpeggio.length]];
+
+      // setting bass notes
+      let bass_o = chord.rel_octave + 2;
+      let bass_1 = chord.note + bass_o;
+
+      // slappin da bass
+      if(arpState.player.bass_on) {
+        arpState.player.bass_on = true;
+        synths.bass.triggerAttack(bass_1, time);
+        //this._utilActiveNoteClassToggle([bass_1.replace('#', 'is')], 'active-b');
+      }
+
+      // bump the step
+      arpState.player.step++;
+
+      // changing chords
+      if(arpState.player.step % (arpState.arpeggio.length * arpState.player.arp_repeat) === 0) {
+        arpState.player.chord_step++;
+        arpState.player.bass_on = false;
+        synths.bass.triggerRelease(time);
+        arpState.player.triad_step++;
+      }
+      // arpin'
+      let note_ref = `${note.note}${note.rel_octave + arpState.player.octave_base}`;
+      //this._utilActiveNoteClassToggle([note_ref.replace('#', 'is')], 'active-t');
+      synths.treb.triggerAttackRelease(note_ref, '16n', time);
+    }, '16n');
     // TRANSPORT END
 
     /*
@@ -207,15 +311,16 @@ export default {
     setMusicalScale()
     setArpeggioPatterns()
     loadChordSelector()
+    loadSynths()
 
     return {
       apUpdateSteps,
       apUpdatePatternType,
       apUpdatePatternId,
-      chordContainer,
       msUpdateChords,
       msUpdateKey,
       msUpdateMode,
+      playerToggle,
       playerUpdateBPM,
       store,
     }
