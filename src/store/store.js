@@ -3,6 +3,30 @@ import {reactive, ref} from "vue";
 const debugMode = true
 
 const state = reactive({
+    arpeggiator: {
+        AP: undefined,
+        arpeggio: undefined,
+        chords: [0, 2, 6, 3, 4, 2, 5, 1],
+        MS: undefined,
+        ms_key: 'G',
+        ms_mode: 'locrian',
+        ap_steps: 6,
+        ap_pattern_type: 'straight', // || 'looped'
+        ap_pattern_id: 0,
+        player: {
+            chord_step: 0,
+            octave_base: 4,
+            arp_repeat: 2,
+            bass_on: false,
+            triad_step: 0,
+            step: 0,
+            playing: false,
+            bpm: 135
+        },
+        chord_count: function () {
+            return this.chords.length
+        },
+    },
     projectName: 'Untitled Project',
     authorName: '',
     globalBpm: undefined,

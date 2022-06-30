@@ -3,12 +3,14 @@
 <template>
   <top-panels-wrapper></top-panels-wrapper>
   <composer-grid-wrapper></composer-grid-wrapper>
+  <arpeggiator-wrapper></arpeggiator-wrapper>
   <modal></modal>
 </template>
 
 <script lang="js">
 import {defineComponent, ref, provide, watch} from "vue";
 import store from './store/store'
+import ArpeggiatorWrapper from "./components/arpeggiator/ArpeggiatorWrapper";
 import GlobalTrackValues from "./components/GlobalTrackValues.vue";
 import ComposerGridWrapper from "./components/ComposerGridWrapper";
 import TopPanelsWrapper from "./components/TopPanelsWrapper";
@@ -38,6 +40,7 @@ export default defineComponent({
     return {}
   },
   components: {
+    ArpeggiatorWrapper,
     Modal,
     TopPanelsWrapper,
     ComposerGridWrapper,
