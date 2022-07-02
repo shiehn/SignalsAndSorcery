@@ -1,6 +1,7 @@
-import {reactive, ref} from "vue";
+import {reactive} from "vue";
 
 const debugMode = true
+let context = undefined
 
 const state = reactive({
     arpeggiator: {

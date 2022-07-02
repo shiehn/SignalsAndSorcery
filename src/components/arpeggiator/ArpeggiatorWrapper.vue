@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import {inject, ref, watch} from "vue";
+import {inject, watch} from "vue";
 import MusicalScale from "./musical-scale";
 import ArpeggioPatterns from "./arpeggio-patterns";
 import useEventsBus from "../../events/eventBus";
@@ -70,7 +70,6 @@ export default {
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
-    const chordContainer = ref(null)
     let arpState = store.state.arpeggiator
 
     // SCALE STUFF START
@@ -340,6 +339,13 @@ export default {
     setArpeggioPatterns()
     loadChordSelector()
     loadSynths()
+
+
+    const printToneContext = () => {
+      console.log('Tone.context', Tone.getContext().currentTime)
+    }
+    //setIn(printToneContext, 2000)
+
 
     watch(() => bus.value.get('stopArpeggiator'), () => {
       stopArp()

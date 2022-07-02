@@ -32,6 +32,11 @@ export default defineComponent({
       store.state.staticUrl = url.trim()
     }
 
+    // /* SETUP AUDIO CONTEXT FIRST THING */
+    // let AudioContext = window.AudioContext || window.webkitAudioContext;
+    // store.context = new AudioContext();
+    // Tone.setContext(store.context)
+
     onMounted(async () => {
       const token = document.getElementById('token').value
       store.state.authorName = await new SASApi().getLoggedInUser(token)

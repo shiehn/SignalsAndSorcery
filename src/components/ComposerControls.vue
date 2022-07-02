@@ -30,7 +30,6 @@ export default {
     let BUFFER_CACHE = {}
     let BUFFER_ROW_CACHE = []
 
-    let context = undefined
     let sourceNode = undefined;
     let buffer = undefined;
     let startedAt = 0
@@ -156,19 +155,22 @@ export default {
       try {
         /* load audio buffers - start */
         try {
-          if (context) {
+          if (store.context) {
             try {
-              if (context.state !== 'closed') {
-                await context.close();
+              if (store.context.state !== 'closed') {
+                await store.context.close();
               }
             } catch (e) {
               console.log('Unable to close WebAudio Context');
             }
           }
           let AudioContext = window.AudioContext || window.webkitAudioContext;
-          context = new AudioContext();
+          store.context = new AudioContext();
+
+          Tone.setContext(store.context)
+          console.log('!!!!!!NEW AUDIO CONTEXT SET!!!!!')
           try {
-            await context.resume()
+            await store.context.resume()
           } catch (e) {
             console.log('Error resuming WebAudio Context');
           }
@@ -184,7 +186,7 @@ export default {
         const numOfRows = store.state.grid.length;
         let listOfTrimmedRowBuffers = new Array(numOfRows);
 
-        let emptyBuffer = generateEmptyBuffer(context, bufferSizePerLoop, 44100)
+        let emptyBuffer = generateEmptyBuffer(store.context, bufferSizePerLoop, 44100)
 
         //ALL THIS ROW STUFF COULD BE A FUNC
         for (let n = 0; n < numOfRows; n++) {
@@ -203,7 +205,7 @@ export default {
           }
 
           //GET THE BUFFERS FOR ONE ROW
-          let buffer_list_row = await getBufferInRow(context, tracksInRow, emptyBuffer);
+          let buffer_list_row = await getBufferInRow(store.context, tracksInRow, emptyBuffer);
 
           //TRIM THE BUFFERS IN EACH ROW
           //TRIM THE BUFFERS IN EACH ROW
@@ -212,7 +214,7 @@ export default {
           let trimmedBufferListRow = new Array(buffer_list_row.length)
           for (let i = 0; i < buffer_list_row.length; i++) {
             // Create an empty buffer at the target length
-            let newBuffer = context.createBuffer(2, bufferSizePerLoop, 44100);
+            let newBuffer = store.context.createBuffer(2, bufferSizePerLoop, 44100);
 
             // for (let channel = 0; channel < 2; channel++) {
             // This gives us the actual array that contains the data
@@ -234,7 +236,7 @@ export default {
           //MERGE ALL THE BUFFERS FOR A ROW
           //MERGE ALL THE BUFFERS FOR A ROW
           // MERGE ALL THE BUFFERS FOR A ROW
-          let finalRowBuffer = context.createBuffer(2, bufferSizePerLoop * trimmedBufferListRow.length, 44100);
+          let finalRowBuffer = store.context.createBuffer(2, bufferSizePerLoop * trimmedBufferListRow.length, 44100);
 
           let nowBufferingFinalRowLeft = finalRowBuffer.getChannelData(leftChannel);
           let nowBufferingFinalRowRight = finalRowBuffer.getChannelData(rightChannel);
@@ -257,7 +259,7 @@ export default {
           store.state.updateRowStateHash(n)
         }
 
-        buffer = mixDown(context, listOfTrimmedRowBuffers, listOfTrimmedRowBuffers[0].length);
+        buffer = mixDown(store.context, listOfTrimmedRowBuffers, listOfTrimmedRowBuffers[0].length);
       } catch (e) {
         console.log('ERROR', e)
       }
@@ -301,10 +303,9 @@ export default {
 
         //console.log('buffer.duration', buffer.duration)
 
-        sourceNode = context.createBufferSource();
+        sourceNode = store.context.createBufferSource();
         sourceNode.buffer = buffer
-        sourceNode.connect(context.destination);
-
+        sourceNode.connect(store.context.destination);
 
         // sourceNode.loopStart = buffer.duration * (store.state.playBack.loopStartPercent * 0.01)
         // sourceNode.loopEnd = buffer.duration * (store.state.playBack.loopEndPercent * 0.01)
@@ -313,8 +314,7 @@ export default {
         sourceNode.start(0, offset);
         //sourceNode.start(0, buffer.duration * (store.state.playBack.loopStartPercent * 0.01));
 
-
-        startedAt = context.currentTime - offset;
+        startedAt = store.context.currentTime - offset;
         pausedAt = 0;
         isPlaying.value = true;
 
@@ -343,7 +343,7 @@ export default {
     }
 
     const pause = async () => {
-      let elapsed = context.currentTime - startedAt;
+      let elapsed = store.context.currentTime - startedAt;
       stop();
       pausedAt = elapsed;
     }
@@ -353,7 +353,7 @@ export default {
         return pausedAt;
       }
       if (startedAt) {
-        return context.currentTime - startedAt;
+        return store.context.currentTime - startedAt;
       }
       return 0;
     };
@@ -366,11 +366,11 @@ export default {
     };
 
     const printPlayState = async () => {
-      console.log('STATE: actx:', context)
+      console.log('STATE: actx:', store.context)
 
-      if (context) {
-        console.log('STATE: actx.currentTime', context.currentTime)
-        console.log('STATE: actx.state', context.state)
+      if (store.context) {
+        console.log('STATE: actx.currentTime', store.context.currentTime)
+        console.log('STATE: actx.state', store.context.state)
       }
 
       if (sourceNode) {
@@ -437,15 +437,25 @@ export default {
 
     //JUNK END
 
+
     // THIS IS THE MAIN APPLICATION TICK - START
     let audioTick = async () => {
+
+      // console.log('getDuration', getDuration())
+      //console.log('getCurrentTime', getCurrentTime())
+      if(store.context) {
+        //console.log('store.context', store.context)
+        console.log('audioContext', store.context.currentTime)
+        console.log('Tone.context', Tone.getContext().currentTime)
+      }
+
       let displayDuration = getDuration()
       let displayCurrentTime = getCurrentTime()
 
 
-      if(scheduler) {
-        scheduler.dispatchEvents(displayCurrentTime)
-      }
+      // if(scheduler) {
+      //   scheduler.dispatchEvents(displayCurrentTime)
+      // }
 
       let endTime = getDuration() * (store.state.playBack.loopEndPercent * 0.01)
 
@@ -466,7 +476,8 @@ export default {
       }
     }
 
-    setInterval(audioTick, 10)
+
+    setInterval(audioTick, 50)
     // THIS IS THE MAIN APPLICATION TICK - STOP
 
     return {
