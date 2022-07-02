@@ -60,14 +60,16 @@
 </template>
 
 <script>
-import {inject, onBeforeUpdate, ref} from "vue";
+import {inject, ref, watch} from "vue";
 import MusicalScale from "./musical-scale";
 import ArpeggioPatterns from "./arpeggio-patterns";
+import useEventsBus from "../../events/eventBus";
 
 export default {
   name: "ArpeggiatorWrapper",
   setup() {
     const store = inject('store')
+    const {bus, emit} = useEventsBus()
     const chordContainer = ref(null)
     let arpState = store.state.arpeggiator
 
@@ -135,11 +137,6 @@ export default {
 
     //CHORD SELECTOR START
     const msUpdateChords = (chord, value, e) => {
-      console.log('CHORD', chord)
-      console.log('VALUE', value)
-      // let el = e.target;
-      // let chord = el.getAttribute('data-chord');
-      // let value = el.getAttribute('data-value');
       arpState.chords[parseInt(chord)] = value;
       console.log('arpState.chords', arpState.chords)
       //this._utilClassToggle(e.target, `chord-${chord}-current`);
@@ -245,6 +242,34 @@ export default {
       //this._utilClassToggle(e.target, 'bpm-current');
     };
 
+    const startArp = () => {
+      Tone.Transport.bpm.value = arpState.player.bpm;
+
+
+
+      if(arpState.player.playing) {
+        Tone.Transport.pause();
+        channel.master.gain.value = 0;
+        //this.play_toggle.classList.remove('active');
+      }
+
+      Tone.Transport.start();
+      channel.master.gain.value = 1;
+      //this.play_toggle.classList.add('active');
+
+      arpState.player.playing = true
+    }
+
+    const stopArp = () => {
+      if(arpState.player.playing) {
+        Tone.Transport.pause();
+        channel.master.gain.value = 0;
+        //this.play_toggle.classList.remove('active');
+      }
+
+      arpState.player.playing = false
+    }
+
     const playerToggle = () => {
       if(arpState.player.playing) {
         Tone.Transport.pause();
@@ -259,14 +284,14 @@ export default {
       console.log('arpState.player.playing', arpState.player.playing)
     };
 
-    Tone.Transport.bpm.value = arpState.player.bpm;
+
     Tone.Transport.scheduleRepeat((time) => {
       let curr_chord = arpState.player.chord_step % arpState.chord_count();
 
-      // let prev = document.querySelector('.chord > div.active');
-      // if(prev) prev.classList.remove('active');
-      // let curr = document.querySelector(`.chord > div:nth-of-type(${curr_chord + 1})`);
-      // if(curr) curr.classList.add('active');
+      let prev = document.querySelector('.chord > div.active');
+      if(prev) prev.classList.remove('active');
+      let curr = document.querySelector(`.chord > div:nth-of-type(${curr_chord + 1})`);
+      if(curr) curr.classList.add('active');
 
       let chord = arpState.MS.notes[arpState.chords[curr_chord]];
 
@@ -305,6 +330,9 @@ export default {
     }, '16n');
     // TRANSPORT END
 
+
+
+
     /*
     setup function order
      */
@@ -312,6 +340,25 @@ export default {
     setArpeggioPatterns()
     loadChordSelector()
     loadSynths()
+
+    watch(() => bus.value.get('stopArpeggiator'), () => {
+      stopArp()
+    })
+
+    watch(() => bus.value.get('startArpeggiator'), (startArpPayload) => {
+      if(!startArpPayload[0]) {
+        return
+      }
+
+      console.log('startArpPayload', startArpPayload[0].chord_step)
+
+      store.state.arpeggiator.player.chord_step = startArpPayload[0].chordStep
+      store.state.arpeggiator.player.step = startArpPayload[0].step
+      store.state.arpeggiator.player.bpm = startArpPayload[0].bpm
+      store.state.arpeggiator.player.key = startArpPayload[0].key
+
+      startArp()
+    })
 
     return {
       apUpdateSteps,

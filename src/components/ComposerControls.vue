@@ -16,6 +16,7 @@ import ComposerControlsScrollBar from "./ComposerControlsScrollBar.vue";
 import GlobalTrackValues from "./GlobalTrackValues";
 import axios from "axios";
 import Crunker from "crunker";
+import StartArpPayload from "./arpeggiator/start-arp-payload";
 
 export default {
   name: "ComposerControls",
@@ -192,7 +193,7 @@ export default {
           let tracksInRow = getTrackListByRow(n)
           // console.log('tracksInRow_' + n, tracksInRow)
 
-          if(n == 4) {
+          if (n == 4) {
             console.log('TRACKS IN ROW 5', tracksInRow)
           }
 
@@ -270,7 +271,8 @@ export default {
         return
       }
 
-      emit('stopAllAudio', 'composer-controls')
+      // emit('stopAllAudio', 'composer-controls')
+      emit('startArpeggiator', new StartArpPayload(0, 0, store.state.globalKey, store.state.globalBpm))
 
       if (buffer) {
         let offset = pausedAt;
@@ -285,7 +287,7 @@ export default {
         if (offsetStartPercentage && offsetStartPercentage > 0 && offsetStartPercentage <= 100) {
           offset = buffer.duration * (offsetStartPercentage * 0.01)
 
-          if(offset < loopStart || offset > loopEnd) {
+          if (offset < loopStart || offset > loopEnd) {
             offset = buffer.duration * (store.state.playBack.loopStartPercent * 0.01)
           }
         }
@@ -315,6 +317,8 @@ export default {
     }
 
     const stop = async () => {
+      emit('stopArpeggiator', 'composer-controls')
+
       if (sourceNode) {
         sourceNode.disconnect();
         sourceNode.stop(0);
@@ -371,7 +375,7 @@ export default {
 
       // console.log('displayCurrentTime', displayCurrentTime)
       // console.log('endTime', endTime)
-      if(displayCurrentTime > endTime) {
+      if (displayCurrentTime > endTime) {
         await stop()
         await playMix()
       }
@@ -424,9 +428,6 @@ export default {
     })
 
     watch(() => bus.value.get('scrubTo'), async (scrubToPercent) => {
-
-      console.log('PLAYSTATE', store.state.playBack)
-
       if (store.state.clipCount() < 1) {
         toast.warning('Add clips to the arranger!');
         return

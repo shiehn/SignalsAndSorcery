@@ -7,14 +7,14 @@ const state = reactive({
         AP: undefined,
         arpeggio: undefined,
         bpms: [45,60,75,90,105,120,135,150],
-        chords: [0, 2, 6, 3, 4, 2, 5, 1],
+        chords: [0, 0, 0, 0],
         chord_deg: ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii'],
         steps: [3,4,5,6],
         types: ['straight', 'looped'],
         MS: undefined,
-        ms_key: 'G',
-        ms_mode: 'locrian',
-        ap_steps: 6,
+        ms_key: 'F',
+        ms_mode: 'major',
+        ap_steps: 4,
         ap_pattern_type: 'straight', // || 'looped'
         ap_pattern_id: 0,
         player: {
@@ -25,7 +25,7 @@ const state = reactive({
             triad_step: 0,
             step: 0,
             playing: false,
-            bpm: 135
+            bpm: 90
         },
         chord_count: function () {
             return this.chords.length
@@ -116,7 +116,33 @@ const state = reactive({
             }
         }
         return newHash
-    }
+    },
+    updateGlobalBpm: function () {
+        let bpm = undefined
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                if (this.grid[row].value[col].stem && this.grid[row].value[col].stem.bpm) {
+                    bpm = this.grid[row].value[col].stem.bpm
+                }
+            }
+        }
+
+        this.globalBpm = bpm
+    },
+    updateGlobalKey: function () {
+        let key = undefined
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                if (this.grid[row].value[col].stem && this.grid[row].value[col].stem.key) {
+                    if(this.grid[row].value[col].stem.type != 'fill' && this.grid[row].value[col].stem.type != 'drum') {
+                        key = this.grid[row].value[col].stem.key
+                    }
+                }
+            }
+        }
+
+        this.globalKey = key
+    },
 })
 
 export default {

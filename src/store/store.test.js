@@ -125,4 +125,74 @@ describe('Store Tests', () => {
 
         expect(state.state.hasRowStateChanged(0)).toBeTruthy()
     })
+
+    it('should update global key', async () => {
+        state.state.globalKey = 'a'
+
+        let gridItemWithStem = {
+                key: 'f',
+                type: 'hi',
+            }
+
+        state.state.grid = createGrid(
+            ['a', 'b', 'c', 'd'],
+            ['e', 'f', 'g', 'h'])
+
+        state.state.grid[1].value[3].stem = gridItemWithStem
+
+        state.state.updateGlobalKey()
+
+        expect(state.state.globalKey).to.equals('f')
+    })
+
+    it('should not update global key for fill or drum types', async () => {
+        state.state.globalKey = 'a'
+
+        let hiStem = {
+            key: 'b',
+            type: 'hi',
+        }
+
+        let fillStem = {
+            key: 'g',
+            type: 'fill',
+        }
+
+        let drumStem = {
+            key: 'g',
+            type: 'drum',
+        }
+
+        state.state.grid = createGrid(
+            ['a', 'b', 'c', 'd'],
+            ['e', 'f', 'g', 'h'])
+
+        state.state.grid[0].value[1].stem = hiStem
+        state.state.grid[1].value[0].stem = fillStem
+        state.state.grid[1].value[3].stem = drumStem
+
+        state.state.updateGlobalKey()
+
+        expect(state.state.globalKey).to.equals('b')
+    })
+
+    it('should update global bpm', async () => {
+        state.state.globalBpm = 90
+
+        let gridItemWithStem = {
+            bpm: 120,
+            key: 'f',
+            type: 'hi',
+        }
+
+        state.state.grid = createGrid(
+            ['a', 'b', 'c', 'd'],
+            ['e', 'f', 'g', 'h'])
+
+        state.state.grid[1].value[3].stem = gridItemWithStem
+
+        state.state.updateGlobalBpm()
+
+        expect(state.state.globalBpm).to.equals(120)
+    })
 })

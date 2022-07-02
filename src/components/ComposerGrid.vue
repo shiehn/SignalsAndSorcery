@@ -100,32 +100,6 @@ export default {
       return store.state.grid[row].value.filter((grid) => grid.row === row)
     }
 
-    const updateGlobalBpm = () => {
-      let bpm = undefined
-      for (let row = 0; row < store.state.grid.length; row++) {
-        for (let col = 0; col < store.state.grid[row].value.length; col++) {
-          if (store.state.grid[row].value[col].stem && store.state.grid[row].value[col].stem.bpm) {
-            bpm = store.state.grid[row].value[col].stem.bpm
-          }
-        }
-      }
-
-      store.state.globalBpm = bpm
-    }
-
-    const updateGlobalKey = () => {
-      let key = undefined
-      for (let row = 0; row < store.state.grid.length; row++) {
-        for (let col = 0; col < store.state.grid[row].value.length; col++) {
-          if (store.state.grid[row].value[col].stem && store.state.grid[row].value[col].stem.key) {
-            key = store.state.grid[row].value[col].stem.key
-          }
-        }
-      }
-
-      store.state.globalKey = key
-    }
-
     const onDrop = (evt, row, col) => {
       if (store.state.grid[row].value[col].compatibility === 0 || store.state.grid[row].value[col].compatibility === -1) {
         //NOT COMPATIBLE/PREVENT DROP
@@ -142,8 +116,8 @@ export default {
       gridItem['deleteIconPath'] = store.state.staticUrl + 'icons/delete-x.png'
       gridItem['previewIconPath'] = store.state.staticUrl + 'icons/play-button.png'
 
-      updateGlobalBpm()
-      updateGlobalKey()
+      store.state.updateGlobalBpm()
+      store.state.updateGlobalKey()
 
       emit('updateAssetSelection', {})
       emit('renderMixIfNeeded')
@@ -156,8 +130,8 @@ export default {
       gridItem.stem = undefined //TODO IF YOU HAVE THE STEM WHY THE DUPLICATION
       gridItem['deleteIconPath'] = undefined
 
-      updateGlobalBpm()
-      updateGlobalKey()
+      store.state.updateGlobalBpm()
+      store.state.updateGlobalKey()
 
       emit('updateAssetSelection', {})
       emit('renderMixIfNeeded')
