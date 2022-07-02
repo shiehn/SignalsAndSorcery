@@ -17,6 +17,7 @@ import GlobalTrackValues from "./GlobalTrackValues";
 import axios from "axios";
 import Crunker from "crunker";
 import StartArpPayload from "./arpeggiator/start-arp-payload";
+import Scheduler from "../scheduler/scheduler";
 
 export default {
   name: "ComposerControls",
@@ -140,6 +141,10 @@ export default {
     }
 
 
+
+
+
+
     const renderMix = async () => {
       await stop()
 
@@ -261,9 +266,11 @@ export default {
 
 
       store.state.updateStateHash()
-
-      //emit('renderMixIfNeeded')
     }
+
+
+    let scheduler = undefined
+
 
     const playMix = async (offsetStartPercentage) => {
       if (store.state.clipCount() < 1) {
@@ -272,7 +279,7 @@ export default {
       }
 
       // emit('stopAllAudio', 'composer-controls')
-      emit('startArpeggiator', new StartArpPayload(0, 0, store.state.globalKey, store.state.globalBpm))
+      //emit('startArpeggiator', new StartArpPayload(0, 0, store.state.globalKey, store.state.globalBpm))
 
       if (buffer) {
         let offset = pausedAt;
@@ -310,6 +317,12 @@ export default {
         startedAt = context.currentTime - offset;
         pausedAt = 0;
         isPlaying.value = true;
+
+        scheduler = new Scheduler(getDuration(), store.state.globalBpm)
+        scheduler.addEvent('tick-test', {}, 4)
+        scheduler.addEvent('tick-test', {}, 8)
+        scheduler.addEvent('tick-test', {}, 12)
+
       } else {
         await renderMix()
         await playMix()
@@ -317,7 +330,7 @@ export default {
     }
 
     const stop = async () => {
-      emit('stopArpeggiator', 'composer-controls')
+      //emit('stopArpeggiator', 'composer-controls')
 
       if (sourceNode) {
         sourceNode.disconnect();
@@ -366,32 +379,6 @@ export default {
         console.log('STATE: mix is undefined')
       }
     }
-
-    let updateDurations = async () => {
-      let displayDuration = getDuration()
-      let displayCurrentTime = getCurrentTime()
-
-      let endTime = getDuration() * (store.state.playBack.loopEndPercent * 0.01)
-
-      // console.log('displayCurrentTime', displayCurrentTime)
-      // console.log('endTime', endTime)
-      if (displayCurrentTime > endTime) {
-        await stop()
-        await playMix()
-      }
-
-      let progress = Math.round(displayCurrentTime / displayDuration * 100)
-      if (Number.isInteger(progress)) {
-
-        emit('updateProgressBar', progress)
-      }
-
-      if (displayCurrentTime > displayDuration) {
-        await stop()
-      }
-    }
-
-    setInterval(updateDurations, 10)
 
     let downloadMix = async () => {
       if (!buffer || (store.state.clipCount() < 1)) {
@@ -443,6 +430,44 @@ export default {
         await playMix(scrubToPercent)
       }
     })
+
+    watch(() => bus.value.get('tick-test'), async () => {
+      console.log('TICK-TEST')
+    })
+
+    //JUNK END
+
+    // THIS IS THE MAIN APPLICATION TICK - START
+    let audioTick = async () => {
+      let displayDuration = getDuration()
+      let displayCurrentTime = getCurrentTime()
+
+
+      if(scheduler) {
+        scheduler.dispatchEvents(displayCurrentTime)
+      }
+
+      let endTime = getDuration() * (store.state.playBack.loopEndPercent * 0.01)
+
+      // console.log('displayCurrentTime', displayCurrentTime)
+      // console.log('endTime', endTime)
+      if (displayCurrentTime > endTime) {
+        await stop()
+        await playMix()
+      }
+
+      let progress = Math.round(displayCurrentTime / displayDuration * 100)
+      if (Number.isInteger(progress)) {
+        emit('updateProgressBar', progress)
+      }
+
+      if (displayCurrentTime > displayDuration) {
+        await stop()
+      }
+    }
+
+    setInterval(audioTick, 10)
+    // THIS IS THE MAIN APPLICATION TICK - STOP
 
     return {
       downloadMix,
