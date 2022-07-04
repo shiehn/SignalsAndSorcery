@@ -161,7 +161,7 @@ export default {
           }
           let AudioContext = window.AudioContext || window.webkitAudioContext;
           store.context = new AudioContext();
-
+          console.log('!!!!!!NEW AUDIO CONTEXT SET!!!!!')
           Tone.setContext(store.context)
           console.log('!!!!!!NEW AUDIO CONTEXT SET!!!!!')
           try {
@@ -260,7 +260,6 @@ export default {
       }
 
       isRendering.value = false
-
 
       store.state.updateStateHash()
     }
@@ -412,6 +411,8 @@ export default {
 
         if (!isRendering.value) {
           await renderMix()
+          //after a mix is rendered sequence arp notes
+          emit('scheduleArpeggioNotes')
         }
       } else {
         requiresRender.value = false

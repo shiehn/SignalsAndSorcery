@@ -50,7 +50,8 @@
 
     <section class="patterns">
       <h1>Arpeggio Style</h1>
-      <div v-for="pattern in store.state.arpeggiator.AP.patterns[store.state.arpeggiator.ap_pattern_type]" @click="apUpdatePatternId(pattern)">
+      <div v-for="pattern in store.state.arpeggiator.AP.patterns[store.state.arpeggiator.ap_pattern_type]"
+           @click="apUpdatePatternId(pattern)">
         {{ pattern }}
       </div>
     </section>
@@ -64,6 +65,8 @@ import {inject, watch} from "vue";
 import MusicalScale from "./musical-scale";
 import ArpeggioPatterns from "./arpeggio-patterns";
 import useEventsBus from "../../events/eventBus";
+import ArpeggioSequencer from "./arpeggio-sequencer";
+import GridProcessor from "../../processors/grid-processor";
 
 export default {
   name: "ArpeggiatorWrapper",
@@ -245,8 +248,7 @@ export default {
       Tone.Transport.bpm.value = arpState.player.bpm;
 
 
-
-      if(arpState.player.playing) {
+      if (arpState.player.playing) {
         Tone.Transport.pause();
         channel.master.gain.value = 0;
         //this.play_toggle.classList.remove('active');
@@ -261,7 +263,7 @@ export default {
     }
 
     const stopArp = () => {
-      if(arpState.player.playing) {
+      if (arpState.player.playing) {
         Tone.Transport.pause();
         channel.master.gain.value = 0;
         //this.play_toggle.classList.remove('active');
@@ -271,7 +273,7 @@ export default {
     }
 
     const playerToggle = () => {
-      if(arpState.player.playing) {
+      if (arpState.player.playing) {
         Tone.Transport.pause();
         channel.master.gain.value = 0;
         //this.play_toggle.classList.remove('active');
@@ -291,34 +293,21 @@ export default {
 
 
     watch(() => bus.value.get('scheduleArpeggioNotes'), (downbeatAbTimes) => {
-
-      //get the positions of the arpeggio clips & chords
-
-
+      const gridProcessor = new GridProcessor(store.state.grid)
+      const arpData = gridProcessor.extractArpeggioData()
+      const sequencer = new ArpeggioSequencer(arpData, store.state.globalBpm)
+      const sequence = sequencer.getSequence()
 
       //FIRST CLEAR ALL NOTES
       Tone.Transport.cancel(0)
-
       const synth = new Tone.Synth().toDestination();
+      Tone.Transport.bpm.value = store.state.globalBpm ? store.state.globalBpm : 0;
 
-      // Tone.Transport.bpm.value = 90;
-      // Tone.Transport.start();
-      let bpm = 90
-      Tone.Transport.bpm.value = bpm
-
-      console.log('Tone.now()', Tone.now())
-      console.log('getSecPerBeat(bpm)', getSecPerBeat(bpm))
-
-      for(let i=0; i<downbeatAbTimes[0].length; i++) {
-        let time = downbeatAbTimes[0][i]
-        if(i % 2 != 0) {
-          for(let j=0; j<32; j++){
-            time = time + (getSecPerBeat(bpm)/2)
-            Tone.Transport.schedule((time) => {
-              synths.treb.triggerAttackRelease("C4", (getSecPerBeat(bpm)/2), time);
-            }, time);
-          }
-        }
+      for (let i = 0; i < sequence.length; i++) {
+        let sequenceItem = sequence[i]
+        Tone.Transport.schedule((time) => {
+          synths.treb.triggerAttackRelease(sequenceItem.note, sequenceItem.duration, time);
+        }, sequenceItem.time);
       }
 
       // Tone.Transport.scheduleRepeat((time) => {
@@ -328,52 +317,51 @@ export default {
 
     })
 
-/*
-    Tone.Transport.scheduleRepeat((time) => {
-      let curr_chord = arpState.player.chord_step % arpState.chord_count();
+    /*
+        Tone.Transport.scheduleRepeat((time) => {
+          let curr_chord = arpState.player.chord_step % arpState.chord_count();
 
-      let prev = document.querySelector('.chord > div.active');
-      if(prev) prev.classList.remove('active');
-      let curr = document.querySelector(`.chord > div:nth-of-type(${curr_chord + 1})`);
-      if(curr) curr.classList.add('active');
+          let prev = document.querySelector('.chord > div.active');
+          if(prev) prev.classList.remove('active');
+          let curr = document.querySelector(`.chord > div:nth-of-type(${curr_chord + 1})`);
+          if(curr) curr.classList.add('active');
 
-      let chord = arpState.MS.notes[arpState.chords[curr_chord]];
+          let chord = arpState.MS.notes[arpState.chords[curr_chord]];
 
-      // finding the current note
-      let notes = chord.triad.notes;
-      for(let i = 0; i < Math.ceil(arpState.ap_steps / 3); i++) {
-        notes = notes.concat(notes.map((n) => { return { note: n.note, rel_octave: n.rel_octave + (i + 1)}}));
-      }
-      let note = notes[arpState.arpeggio[arpState.player.step % arpState.arpeggio.length]];
+          // finding the current note
+          let notes = chord.triad.notes;
+          for(let i = 0; i < Math.ceil(arpState.ap_steps / 3); i++) {
+            notes = notes.concat(notes.map((n) => { return { note: n.note, rel_octave: n.rel_octave + (i + 1)}}));
+          }
+          let note = notes[arpState.arpeggio[arpState.player.step % arpState.arpeggio.length]];
 
-      // setting bass notes
-      let bass_o = chord.rel_octave + 2;
-      let bass_1 = chord.note + bass_o;
+          // setting bass notes
+          let bass_o = chord.rel_octave + 2;
+          let bass_1 = chord.note + bass_o;
 
-      // slappin da bass
-      if(arpState.player.bass_on) {
-        arpState.player.bass_on = true;
-        synths.bass.triggerAttack(bass_1, time);
-        //this._utilActiveNoteClassToggle([bass_1.replace('#', 'is')], 'active-b');
-      }
+          // slappin da bass
+          if(arpState.player.bass_on) {
+            arpState.player.bass_on = true;
+            synths.bass.triggerAttack(bass_1, time);
+            //this._utilActiveNoteClassToggle([bass_1.replace('#', 'is')], 'active-b');
+          }
 
-      // bump the step
-      arpState.player.step++;
+          // bump the step
+          arpState.player.step++;
 
-      // changing chords
-      if(arpState.player.step % (arpState.arpeggio.length * arpState.player.arp_repeat) === 0) {
-        arpState.player.chord_step++;
-        arpState.player.bass_on = false;
-        synths.bass.triggerRelease(time);
-        arpState.player.triad_step++;
-      }
-      // arpin'
-      let note_ref = `${note.note}${note.rel_octave + arpState.player.octave_base}`;
-      //this._utilActiveNoteClassToggle([note_ref.replace('#', 'is')], 'active-t');
-      synths.treb.triggerAttackRelease(note_ref, '16n', time);
-    }, '16n');
-*/
-
+          // changing chords
+          if(arpState.player.step % (arpState.arpeggio.length * arpState.player.arp_repeat) === 0) {
+            arpState.player.chord_step++;
+            arpState.player.bass_on = false;
+            synths.bass.triggerRelease(time);
+            arpState.player.triad_step++;
+          }
+          // arpin'
+          let note_ref = `${note.note}${note.rel_octave + arpState.player.octave_base}`;
+          //this._utilActiveNoteClassToggle([note_ref.replace('#', 'is')], 'active-t');
+          synths.treb.triggerAttackRelease(note_ref, '16n', time);
+        }, '16n');
+    */
 
 
     /*

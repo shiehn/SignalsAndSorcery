@@ -65,6 +65,8 @@ import GridProcessor from "../processors/grid-processor";
 import ModalOpenPayload from "./ModalOpenPayload";
 import {v4} from "uuid";
 import ComposerControlsLoopBar from "./ComposerControlsLoopBar";
+import GridItem from "../generators/grid-item";
+import GridItemArpeggio from "../generators/grid-item-arpeggio";
 
 export default {
   name: 'ComposerGrid',
@@ -88,6 +90,15 @@ export default {
     const numOfSections = 2
 
     store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
+
+
+    //TODO THIS IS ONLY HERE TO TEST ARPEGGIOS - PLEASE REMOVE
+
+    store.state.grid[4].value[0] = new GridItem(4,0,'a')
+    store.state.grid[4].value[0].arpeggio = new GridItemArpeggio('xxx', 'c:d:e:d', 4)
+
+    //TODO THIS IS ONLY HERE TO TEST ARPEGGIOS - PLEASE REMOVE
+
 
     //add a 2nd section by default
     new GridProcessor(store.state.grid).addSection('part_2', 6)

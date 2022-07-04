@@ -3,7 +3,7 @@ import TimeUtils from "../../utils/time-utils";
 
 export default class ArpeggioSequencer {
     constructor(arpTimeline, bpm) {
-        this.arpTimeline = arpTimeline
+        this.arpTimeline = arpTimeline.getTimeline()
         this.bpm = bpm
         this.timeUtils = new TimeUtils(bpm)
     }
@@ -12,17 +12,18 @@ export default class ArpeggioSequencer {
         let sequence = []
 
         for (let i = 0; i < this.arpTimeline.length; i++) {
-            let arpObj = this.arpTimeline[i]
+            let arpObj = this.arpTimeline[i].arpeggio
 
             // infer the time until the colIndex
             let timeBeforeArpStart = (this.arpTimeline[i].colIndex) * this.timeUtils.getSecondsPerLoop()
 
-            console.log('timeBeforeArpStart', timeBeforeArpStart)
             //check the speed of the arpeggio
             //hard code to quarters for now
             let noteDuration = this.timeUtils.getSecondsPerQuarter()
             let notesInLoop = this.timeUtils.numOfQuartersPerLoop()
             let notesPerChord = this.timeUtils.numOfQuartersPerBar()
+
+            console.log('timeBeforeArpStart', timeBeforeArpStart)
 
             //SWITCH BASED ON SPEED
             let chordIndex = -1
@@ -31,17 +32,19 @@ export default class ArpeggioSequencer {
                     chordIndex++
                 }
 
-                let chordRoot = arpObj.arpeggio.chords[chordIndex].charAt(0); //TODO THIS IS JUST THE ROOT .. WILL UPDATE TO BE PATTERN
+                let chordRoot = arpObj.chords[chordIndex].charAt(0); //TODO THIS IS JUST THE ROOT .. WILL UPDATE TO BE PATTERN
 
                 let sequenceItem = {
                     time: timeBeforeArpStart + (noteIndex * noteDuration),
-                    note: chordRoot,
+                    note: chordRoot + '4',  //TODO: THIS IS A PROBLEM PLEASE FIX
+                    duration: noteDuration,
                 }
 
                 sequence.push(sequenceItem)
             }
         }
 
+        console.log('SEQUENCE', sequence)
         return sequence
     }
 

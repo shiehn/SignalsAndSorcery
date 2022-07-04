@@ -161,7 +161,6 @@ export default class MrTapObjWrapper {
                         uid = v4()
                     }
 
-                    console.log('before NEW STEM')
                     const newStem = new GridItemStem(uid,
                         this.getBPM(),
                         this.getChordsForSection(sectionIds[i]),
@@ -171,7 +170,6 @@ export default class MrTapObjWrapper {
                         layerVariationIds[k],
                         variationSource.replace('.wav', '.mp3')
                     )
-                    console.log('newStem', newStem)
 
                     flattenedStems.push(
                         newStem
