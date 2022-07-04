@@ -1,5 +1,6 @@
 import GridGenerator, {SectionPositions} from "../generators/grid-generator";
 import {v4} from "uuid";
+import ArpeggioGridData from "../components/arpeggiator/arpeggio-grid-data";
 
 export default class GridProcessor {
 
@@ -141,6 +142,16 @@ export default class GridProcessor {
     }
 
     extractArpeggioData = () => {
-        return false
+        let arpeggioData = new ArpeggioGridData()
+
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                if (this.grid[row].value[col].arpeggio) {
+                    arpeggioData.addTimelineItem(col, this.grid[row].value[col].arpeggio)
+                }
+            }
+        }
+
+        return arpeggioData
     }
 }

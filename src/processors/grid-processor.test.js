@@ -6,17 +6,19 @@ import {beforeEach, describe, it, expect} from "vitest"
 import GridProcessor from "./grid-processor";
 import store from "../store/store";
 import GridGenerator, {SectionPositions} from "../generators/grid-generator";
+import GridItemArpeggio from "../generators/grid-item-arpeggio";
 
 const gridGenerator = new GridGenerator()
 
 describe('Grid Processor Tests', () => {
     let state = {}
 
-    const defaultRows = 4
+    const defaultRows = 6
     const defaultCols = 6
 
     beforeEach(() => {
         state = store.state
+        state.globalBpm = 120
 
         //RESET THE STATE
         state.grid = gridGenerator.initGrid(defaultRows, defaultCols)
@@ -64,6 +66,20 @@ describe('Grid Processor Tests', () => {
                     store.state.grid[row].value[col].stem = {
                         id: 'stem_id_b'
                     }
+                }
+
+                if (row == 5 && col == 1) {
+                    store.state.grid[row].value[col].section.id = 'id_a'
+                    store.state.grid[row].value[col].section.name = 'part_a'
+                    store.state.grid[row].value[col].stem = undefined
+                    store.state.grid[row].value[col].arpeggio = new GridItemArpeggio('arp_a', 'Am7:Am7:FM7:Am7', 4)
+                }
+
+                if (row == 5 && col == 3) {
+                    store.state.grid[row].value[col].section.id = 'id_a'
+                    store.state.grid[row].value[col].section.name = 'part_a'
+                    store.state.grid[row].value[col].stem = undefined
+                    store.state.grid[row].value[col].arpeggio = new GridItemArpeggio('arp_b', 'Em7:Em7:CM7:CM7', 8)
                 }
             }
         }
@@ -226,9 +242,12 @@ describe('Grid Processor Tests', () => {
 
     it('should extract arpeggio data', () => {
         const gridProcessor = new GridProcessor(store.state.grid)
-
         let result = gridProcessor.extractArpeggioData()
 
-        expect(result).to.equals(true)
+        expect(result.getTimeline().length).to.equals(2)
+        expect(result.getTimeline()[0].arpeggio.chords[2]).to.equals('FM7')
+        expect(result.getTimeline()[0].colIndex).to.equals(1)
+        expect(result.getTimeline()[1].arpeggio.chords.length).to.equals(4)
+        expect(result.getTimeline()[1].colIndex).to.equals(3)
     })
 })

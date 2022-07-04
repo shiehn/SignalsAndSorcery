@@ -1,9 +1,9 @@
-
 export default class GridItemArpeggio {
-    constructor(id,chords) {
+    constructor(id, chords, pattern, speed) {
         this.id = id
-        this.chords = chords ? chords : []
-        this.sectionId = sectionId
+        this.chords = chords.split(':')
+        this.pattern = pattern
+        this.speed = speed
         this.type = 'arpeggio'
     }
 }
