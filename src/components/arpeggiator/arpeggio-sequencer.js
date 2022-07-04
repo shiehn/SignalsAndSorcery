@@ -15,8 +15,9 @@ export default class ArpeggioSequencer {
             let arpObj = this.arpTimeline[i]
 
             // infer the time until the colIndex
-            let timeBeforeArpStart = (this.arpTimeline.colIndex + 1) * this.timeUtils.getSecondsPerLoop()
+            let timeBeforeArpStart = (this.arpTimeline[i].colIndex) * this.timeUtils.getSecondsPerLoop()
 
+            console.log('timeBeforeArpStart', timeBeforeArpStart)
             //check the speed of the arpeggio
             //hard code to quarters for now
             let noteDuration = this.timeUtils.getSecondsPerQuarter()

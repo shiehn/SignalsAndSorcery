@@ -17,11 +17,11 @@ export default class TimeUtils {
     }
 
     getSecondsPerBar() {
-        return this.getSecondsPerBeat() * 4
+        return this.getSecondsPerQuarter() * 4
     }
 
     getSecondsPerLoop() {
-        return this.getSecondsPerBeat() * 16
+        return this.getSecondsPerQuarter() * 16
     }
 
     numOfQuartersPerLoop() {
