@@ -139,4 +139,8 @@ export default class GridProcessor {
             }
         }
     }
+
+    extractArpeggioData = () => {
+        return false
+    }
 }

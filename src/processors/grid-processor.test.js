@@ -223,4 +223,12 @@ describe('Grid Processor Tests', () => {
         //CHECK THAT THE OTHER SECTIONS HAVE NOT CHANGED
         expect(store.state.grid[2].value[4].section.name).not.to.equals(newName)
     })
+
+    it('should extract arpeggio data', () => {
+        const gridProcessor = new GridProcessor(store.state.grid)
+
+        let result = gridProcessor.extractArpeggioData()
+
+        expect(result).to.equals(true)
+    })
 })

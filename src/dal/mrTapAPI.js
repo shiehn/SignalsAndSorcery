@@ -1,3 +1,5 @@
+import GridItemStem from "../generators/grid-item-stem";
+
 export default class MrTapObjWrapper {
     constructor(mrtapJson) {
         this.mrtapJson = mrtapJson;
@@ -158,16 +160,22 @@ export default class MrTapObjWrapper {
                     if (v4) {
                         uid = v4()
                     }
-                    flattenedStems.push({
-                        'id': uid,
-                        'bpm': this.getBPM(),
-                        'chords': this.getChordsForSection(sectionIds[i]),
-                        'key': this.getKeyForSection(sectionIds[i]),
-                        'sectionId': sectionIds[i],
-                        'type': layerTypes[j].includes('drum') ? 'drum' : layerTypes[j],
-                        'variationId': layerVariationIds[k],
-                        'source': variationSource.replace('.wav','.mp3'),
-                    })
+
+                    console.log('before NEW STEM')
+                    const newStem = new GridItemStem(uid,
+                        this.getBPM(),
+                        this.getChordsForSection(sectionIds[i]),
+                        this.getKeyForSection(sectionIds[i]),
+                        sectionIds[i],
+                        layerTypes[j].includes('drum') ? 'drum' : layerTypes[j],
+                        layerVariationIds[k],
+                        variationSource.replace('.wav', '.mp3')
+                    )
+                    console.log('newStem', newStem)
+
+                    flattenedStems.push(
+                        newStem
+                    )
                 }
             }
         }

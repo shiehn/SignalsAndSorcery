@@ -253,6 +253,7 @@ export default {
       }
 
       Tone.Transport.start();
+      console.log('STARTING ARP')
       channel.master.gain.value = 1;
       //this.play_toggle.classList.add('active');
 
@@ -284,6 +285,50 @@ export default {
     };
 
 
+    const getSecPerBeat = (bpm) => {
+      return 60 / bpm;
+    }
+
+
+    watch(() => bus.value.get('scheduleArpeggioNotes'), (downbeatAbTimes) => {
+
+      //get the positions of the arpeggio clips & chords
+
+
+
+      //FIRST CLEAR ALL NOTES
+      Tone.Transport.cancel(0)
+
+      const synth = new Tone.Synth().toDestination();
+
+      // Tone.Transport.bpm.value = 90;
+      // Tone.Transport.start();
+      let bpm = 90
+      Tone.Transport.bpm.value = bpm
+
+      console.log('Tone.now()', Tone.now())
+      console.log('getSecPerBeat(bpm)', getSecPerBeat(bpm))
+
+      for(let i=0; i<downbeatAbTimes[0].length; i++) {
+        let time = downbeatAbTimes[0][i]
+        if(i % 2 != 0) {
+          for(let j=0; j<32; j++){
+            time = time + (getSecPerBeat(bpm)/2)
+            Tone.Transport.schedule((time) => {
+              synths.treb.triggerAttackRelease("C4", (getSecPerBeat(bpm)/2), time);
+            }, time);
+          }
+        }
+      }
+
+      // Tone.Transport.scheduleRepeat((time) => {
+      //   synths.treb.triggerAttackRelease("C3", "4n", time);
+      // }, "4n");
+
+
+    })
+
+/*
     Tone.Transport.scheduleRepeat((time) => {
       let curr_chord = arpState.player.chord_step % arpState.chord_count();
 
@@ -327,8 +372,7 @@ export default {
       //this._utilActiveNoteClassToggle([note_ref.replace('#', 'is')], 'active-t');
       synths.treb.triggerAttackRelease(note_ref, '16n', time);
     }, '16n');
-    // TRANSPORT END
-
+*/
 
 
 
@@ -341,30 +385,31 @@ export default {
     loadSynths()
 
 
-    const printToneContext = () => {
-      console.log('Tone.context', Tone.getContext().currentTime)
-    }
+    // const printToneContext = () => {
+    //   console.log('Tone.context', Tone.getContext().currentTime)
+    // }
     //setIn(printToneContext, 2000)
 
 
-    watch(() => bus.value.get('stopArpeggiator'), () => {
-      stopArp()
-    })
+    // watch(() => bus.value.get('stopArpeggiator'), () => {
+    //   stopArp()
+    // })
 
-    watch(() => bus.value.get('startArpeggiator'), (startArpPayload) => {
-      if(!startArpPayload[0]) {
-        return
-      }
-
-      console.log('startArpPayload', startArpPayload[0].chord_step)
-
-      store.state.arpeggiator.player.chord_step = startArpPayload[0].chordStep
-      store.state.arpeggiator.player.step = startArpPayload[0].step
-      store.state.arpeggiator.player.bpm = startArpPayload[0].bpm
-      store.state.arpeggiator.player.key = startArpPayload[0].key
-
-      startArp()
-    })
+    // watch(() => bus.value.get('startArpeggiator'), (startArpPayload) => {
+    //   console.log('startArpeggiator')
+    //   // if(!startArpPayload[0]) {
+    //   //   return
+    //   // }
+    //   //
+    //   // console.log('startArpPayload', startArpPayload[0].chord_step)
+    //   //
+    //   // store.state.arpeggiator.player.chord_step = startArpPayload[0].chordStep
+    //   // store.state.arpeggiator.player.step = startArpPayload[0].step
+    //   // store.state.arpeggiator.player.bpm = startArpPayload[0].bpm
+    //   // store.state.arpeggiator.player.key = startArpPayload[0].key
+    //
+    //   startArp()
+    // })
 
     return {
       apUpdateSteps,

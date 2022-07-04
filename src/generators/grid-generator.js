@@ -1,6 +1,8 @@
 import {reactive, ref} from "vue";
 import {v4} from "uuid";
 import GridProcessor from "../processors/grid-processor";
+import GridItem from "./grid-item";
+import GridItemSection from "./grid-item-section";
 
 export const SectionPositions = {
     START: 'start',
@@ -29,11 +31,7 @@ export default class GridGenerator {
                     position = SectionPositions.MID
                 }
 
-                row.value.push(this.createGridItemWithSection(i, j, {
-                    id: defaultId,
-                    name: defaultSectionName,
-                    position: position,
-                }))
+                row.value.push(this.createGridItemWithSection(i, j, new GridItemSection(defaultId, defaultSectionName, position)))
             }
             rows.push(row)
         }
@@ -42,32 +40,10 @@ export default class GridGenerator {
     }
 
     createGridItemEmpty(row, col) {
-        let gridItem = {
-            row: row,
-            col: col,
-            section: {
-                id: undefined,
-                name: undefined,
-                position: undefined,
-            },
-            compatibility: undefined,
-            stem: undefined,
-            showDeleteIcon: false,
-        }
-
-        return gridItem
+        return new GridItem(row, col)
     }
 
     createGridItemWithSection(row, col, section) {
-        let gridItem = {
-            row: row,
-            col: col,
-            section: section,
-            compatibility: undefined,
-            stem: undefined,
-            showDeleteIcon: false,
-        }
-
-        return gridItem
+        return new GridItem(row, col, section)
     }
 }

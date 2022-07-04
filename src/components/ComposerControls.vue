@@ -17,7 +17,6 @@ import GlobalTrackValues from "./GlobalTrackValues";
 import axios from "axios";
 import Crunker from "crunker";
 import StartArpPayload from "./arpeggiator/start-arp-payload";
-import Scheduler from "../scheduler/scheduler";
 
 export default {
   name: "ComposerControls",
@@ -138,10 +137,6 @@ export default {
       }
       return emptyBuffer;
     }
-
-
-
-
 
 
     const renderMix = async () => {
@@ -275,6 +270,11 @@ export default {
 
 
     const playMix = async (offsetStartPercentage) => {
+
+      //emit('startArpeggiator')
+
+      console.log('TONE STARTED FROM PLAY MIX')
+
       if (store.state.clipCount() < 1) {
         toast.warning('Add clips to the arranger!');
         return
@@ -311,17 +311,16 @@ export default {
         // sourceNode.loopEnd = buffer.duration * (store.state.playBack.loopEndPercent * 0.01)
         // sourceNode.loop = true
 
+        console.log('OFFSET', offset)
+        Tone.Transport.start();
         sourceNode.start(0, offset);
+        Tone.Transport.seconds = offset;
+
         //sourceNode.start(0, buffer.duration * (store.state.playBack.loopStartPercent * 0.01));
 
         startedAt = store.context.currentTime - offset;
         pausedAt = 0;
         isPlaying.value = true;
-
-        scheduler = new Scheduler(getDuration(), store.state.globalBpm)
-        scheduler.addEvent('tick-test', {}, 4)
-        scheduler.addEvent('tick-test', {}, 8)
-        scheduler.addEvent('tick-test', {}, 12)
 
       } else {
         await renderMix()
@@ -330,6 +329,7 @@ export default {
     }
 
     const stop = async () => {
+      Tone.Transport.pause();
       //emit('stopArpeggiator', 'composer-controls')
 
       if (sourceNode) {
@@ -348,7 +348,7 @@ export default {
       pausedAt = elapsed;
     }
 
-    let getCurrentTime = () => {
+    let getCurrentRelativeTime = () => {
       if (pausedAt) {
         return pausedAt;
       }
@@ -357,6 +357,10 @@ export default {
       }
       return 0;
     };
+
+    let convertToAbsoluteTime = (relativeTime) => {
+      return relativeTime + startedAt;
+    }
 
     let getDuration = () => {
       if (buffer) {
@@ -437,20 +441,41 @@ export default {
 
     //JUNK END
 
+    let notFired = true
 
     // THIS IS THE MAIN APPLICATION TICK - START
-    let audioTick = async () => {
+    let progressUITick = async () => {
 
-      // console.log('getDuration', getDuration())
-      //console.log('getCurrentTime', getCurrentTime())
-      if(store.context) {
-        //console.log('store.context', store.context)
-        console.log('audioContext', store.context.currentTime)
-        console.log('Tone.context', Tone.getContext().currentTime)
-      }
+      /* calculate the time of each downbeat */
+      // getDuration()
+
+      // console.log('getDuration', getDuration()) //buffer length in sec
+      // console.log('getCurrentRelativeTime', getCurrentRelativeTime()) //currenttime - start
+      // console.log('Tone.TransportTime', Tone.Transport.seconds) //currenttime - start
+      // console.log('convertToAbsoluteTime', convertToAbsoluteTime(getCurrentRelativeTime()))
+
+      //console.log('Tone.context', Tone.getContext().currentTime)
+
+
+      // if (notFired && getDuration() > 0) {
+      //   const downbeatInterval = getDuration() / 12
+      //   let downbeatAbTimes = []
+      //   for (let i = 0; i < 12; i++) {
+      //     downbeatAbTimes.push(convertToAbsoluteTime(downbeatInterval * i))
+      //   }
+      //
+      //   emit('scheduleNotesTest', downbeatAbTimes)
+      //   notFired = false
+      // }
+
+      // if (store.context) {
+      //   console.log('store.context', store.context)
+      //   console.log('audioContext', store.context.currentTime)
+      //   console.log('Tone.context', Tone.getContext().currentTime)
+      // }
 
       let displayDuration = getDuration()
-      let displayCurrentTime = getCurrentTime()
+      let displayCurrentTime = getCurrentRelativeTime()
 
 
       // if(scheduler) {
@@ -476,8 +501,7 @@ export default {
       }
     }
 
-
-    setInterval(audioTick, 50)
+    setInterval(progressUITick, 25)
     // THIS IS THE MAIN APPLICATION TICK - STOP
 
     return {
