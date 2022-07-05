@@ -53,8 +53,8 @@ export default {
     const arpCtrlPattern = ref('pattern_1')
     const arpCtrlPatternOptions = ['pattern_1']
 
-    const arpCtrlSpeed = ref('quarter')
-    const arpCtrlSpeedOptions = ['whole', 'half', 'quarter', 'eighth', 'sixteenth']
+    const arpCtrlRate = ref('quarter')
+    const arpCtrlRateOptions = ['whole', 'half', 'quarter', 'eighth', 'sixteenth']
 
     const arpCtrlSynth = ref('synth_1')
     const arpCtrlSynthOptions = ['synth_1']
@@ -83,7 +83,7 @@ export default {
       arpId.value = arpeggio.id
       arpCtrlChords.value = chords.length > 0 ? chords : arpeggio.chords
       arpCtrlPattern.value = arpeggio.pattern
-      arpCtrlSpeed.value = arpeggio.speed
+      arpCtrlRate.value = arpeggio.rate
     })
 
     return {
@@ -91,8 +91,8 @@ export default {
       arpId,
       arpCtrlPattern,
       arpCtrlPatternOptions,
-      arpCtrlSpeed,
-      arpCtrlSpeedOptions,
+      arpCtrlSpeed: arpCtrlRate,
+      arpCtrlSpeedOptions: arpCtrlRateOptions,
       arpCtrlSynth,
       arpCtrlSynthOptions
     }

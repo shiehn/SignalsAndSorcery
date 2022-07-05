@@ -1,5 +1,5 @@
 export default class GridItemArpeggio {
-    constructor(id, chords, pattern, speed) {
+    constructor(id, chords, pattern, rate) {
 
         this.chords = ['c', 'c', 'c', 'c']
         if (chords && chords.length > 0) {
@@ -8,7 +8,7 @@ export default class GridItemArpeggio {
 
         this.id = id
         this.pattern = pattern
-        this.speed = speed
+        this.rate = rate
         this.type = 'arpeggio'
     }
 }

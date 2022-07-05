@@ -24,6 +24,14 @@ export default class TimeUtils {
         return this.getSecondsPerQuarter() * 16
     }
 
+    numOfWholesPerLoop() {
+        return 4
+    }
+
+    numOfHalvesPerLoop() {
+        return 8
+    }
+
     numOfQuartersPerLoop() {
         return 16
     }
@@ -34,6 +42,14 @@ export default class TimeUtils {
 
     numOfSixteenthsPerLoop() {
         return 64
+    }
+
+    numOfWholesPerBar() {
+        return 1
+    }
+
+    numOfHalvesPerBar() {
+        return 2
     }
 
     numOfQuartersPerBar() {

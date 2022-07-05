@@ -8,6 +8,57 @@ export default class ArpeggioSequencer {
         this.timeUtils = new TimeUtils(bpm)
     }
 
+    getDuration(rate) {
+        switch(rate) {
+            case 'whole':
+                return this.timeUtils.getSecondsPerBar()
+            case'half':
+                return this.timeUtils.getSecondsPerQuarter() * 2
+            case 'quarter':
+                return this.timeUtils.getSecondsPerQuarter()
+            case 'eighth':
+                return this.timeUtils.getSecondsPerEighth()
+            case 'sixteenth':
+                return this.timeUtils.getSecondsPerSixteenth()
+            default:
+                console.log('ERROR: RATE NOT FOUND: ', rate)
+        }
+    }
+
+    getNumOfNotesInLoop(rate) {
+        switch(rate) {
+            case 'whole':
+                return this.timeUtils.numOfWholesPerLoop()
+            case'half':
+                return this.timeUtils.numOfHalvesPerLoop()
+            case 'quarter':
+                return this.timeUtils.numOfQuartersPerLoop()
+            case 'eighth':
+                return this.timeUtils.numOfEighthsPerLoop()
+            case 'sixteenth':
+                return this.timeUtils.numOfSixteenthsPerLoop()
+            default:
+                console.log('ERROR: RATE NOT FOUND: ', rate)
+        }
+    }
+
+    getNumOfNotesInBar(rate) {
+        switch(rate) {
+            case 'whole':
+                return this.timeUtils.numOfWholesPerBar()
+            case'half':
+                return this.timeUtils.numOfHalvesPerBar()
+            case 'quarter':
+                return this.timeUtils.numOfQuartersPerBar()
+            case 'eighth':
+                return this.timeUtils.numOfEighthsPerBar()
+            case 'sixteenth':
+                return this.timeUtils.numOfSixteenthsPerBar()
+            default:
+                console.log('ERROR: RATE NOT FOUND: ', rate)
+        }
+    }
+
     getSequence() {
         let sequence = []
 
@@ -19,9 +70,9 @@ export default class ArpeggioSequencer {
 
             //check the speed of the arpeggio
             //hard code to quarters for now
-            let noteDuration = this.timeUtils.getSecondsPerQuarter()
-            let notesInLoop = this.timeUtils.numOfQuartersPerLoop()
-            let notesPerChord = this.timeUtils.numOfQuartersPerBar()
+            let noteDuration = this.getDuration(arpObj.rate)
+            let notesInLoop = this.getNumOfNotesInLoop(arpObj.rate)
+            let notesPerChord = this.getNumOfNotesInBar(arpObj.rate)
 
             //SWITCH BASED ON SPEED
             let chordIndex = -1
