@@ -95,15 +95,6 @@ export default {
 
     store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
 
-
-    //TODO THIS IS ONLY HERE TO TEST ARPEGGIOS - PLEASE REMOVE
-
-    store.state.grid[0].value[1] = new GridItem(4,0,'a')
-    store.state.grid[0].value[1].arpeggio = new GridItemArpeggio('xxx', 'c:d:e:d', 4)
-
-    //TODO THIS IS ONLY HERE TO TEST ARPEGGIOS - PLEASE REMOVE
-
-
     //add a 2nd section by default
     new GridProcessor(store.state.grid).addSection('part_2', 6)
 
@@ -134,7 +125,11 @@ export default {
       store.state.updateGlobalBpm()
       store.state.updateGlobalKey()
 
-      emit('updateAssetSelection', {})
+
+      emit('updateAssetSelection', {
+        row: row,
+        col: col,
+      })
       emit('renderMixIfNeeded')
     }
 
@@ -148,7 +143,10 @@ export default {
       store.state.updateGlobalBpm()
       store.state.updateGlobalKey()
 
-      emit('updateAssetSelection', {})
+      emit('updateAssetSelection', {
+        row: row,
+        col: col,
+      })
       emit('renderMixIfNeeded')
     }
 
@@ -184,8 +182,10 @@ export default {
         filterKey: key,
         clipType: ROW_TO_TYPE_MAP[row],
         chords: chords ? chords : 'all',
+        row: row,
+        col: col,
       }
-
+      console.log('FIRED A R&C MF GUY')
       emit('updateAssetSelection', updateParam)
     }
 
@@ -233,8 +233,7 @@ export default {
     const toggleArpeggio = (row, col, onOff) => {
       const gridItem = store.state.grid[row].value[col]
       if (onOff) {
-        console.log('just added on  bruh')
-        gridItem.arpeggio = new GridItemArpeggio('xxx', 'c:d:e:d', 4)
+        gridItem.arpeggio = new GridItemArpeggio(v4(), '', 'pattern_1', 'quarter')
       } else {
         gridItem.arpeggio = undefined
       }

@@ -36,7 +36,12 @@
     </div>
   </div>
 
-  <div class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"
+  <div v-if="showArpeggiatorControls" class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"
+       style="background-color: rgba(255,255,255,0.9);">
+    <arpeggiator-controls></arpeggiator-controls>
+  </div>
+
+  <div v-if="!showArpeggiatorControls" class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"
        style="background-color: rgba(255,255,255,0.9);">
     <div
         class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
@@ -53,6 +58,8 @@
       <img :src="staticImages.pageRightImgSrc" class="w-8 h-8">
     </div>
   </div>
+
+
 </template>
 <script>
 
@@ -63,10 +70,11 @@ import {watch} from "vue";
 import useEventsBus from "../events/eventBus";
 import store from "../store/store";
 import {ROW_TO_TYPE_MAP} from "../constants/constants";
+import ArpeggiatorControls from "./arpeggiator/ArpeggiatorControls";
 
 export default {
   name: "AssetSelector",
-  components: {Asset},
+  components: {ArpeggiatorControls, Asset},
   setup() {
     const store = inject('store')
     const {bus} = useEventsBus()
@@ -81,6 +89,7 @@ export default {
     const filterChordOptions = reactive({arr: ['all']})
     const pageIndex = ref(0)
     const numOfResults = 16
+    const showArpeggiatorControls = ref(false)
 
     let totalResults = 0
     let prevFilterBpm = 0;
@@ -147,7 +156,7 @@ export default {
           return true
         }
 
-        return stem.chords.toLowerCase() == filterChord.value.toLowerCase()
+        return stem.chords == filterChord.value
       })
 
       totalResults = filteredByChords.length
@@ -158,6 +167,9 @@ export default {
     })
 
     watch(() => bus.value.get('updateAssetSelection'), (assetFilter) => {
+
+      console.log('IN DA ASSET SELECTOR: ', assetFilter)
+
       if (store.state.globalKey) {
         filterKey.value = store.state.globalKey.toLowerCase()
       } else {
@@ -170,10 +182,13 @@ export default {
         filterBpm.value = 0
       }
 
+      showArpeggiatorControls.value = assetFilter[0].clipType === 'arp'
+
       if (assetFilter[0].filterKey) {
         //IN THIS CASE WE EXPLICITLY OVERRIDE THE GLOBAL KEY
         filterKey.value = assetFilter[0].filterKey
       }
+
 
       if (!assetFilter[0]) {
         filterType.value = 'all'
@@ -185,16 +200,8 @@ export default {
       }
 
       if (assetFilter[0].chords) {
-        filterChord.value = assetFilter[0].chords.toLowerCase()
+        filterChord.value = assetFilter[0].chords //TODO DO NOT LOWERCASE
       }
-
-
-      /*
-      filterBpm
-filterType
-filterKey
-filterChord
-       */
     })
 
     onMounted(async () => {
@@ -247,6 +254,7 @@ filterChord
       getFilteredStems,
       pageNext,
       pagePrev,
+      showArpeggiatorControls,
       staticImages,
       stemSelections,
       store,

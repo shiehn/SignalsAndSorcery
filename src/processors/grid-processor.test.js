@@ -72,7 +72,7 @@ describe('Grid Processor Tests', () => {
                     store.state.grid[row].value[col].section.id = 'id_a'
                     store.state.grid[row].value[col].section.name = 'part_a'
                     store.state.grid[row].value[col].stem = undefined
-                    store.state.grid[row].value[col].arpeggio = new GridItemArpeggio('arp_a', 'Am7:Am7:FM7:Am7', 4)
+                    store.state.grid[row].value[col].arpeggio = new GridItemArpeggio('arp_a', 'Am7:Am7:FM7:Am7', 'pattern_1')
                 }
 
                 if (row == 5 && col == 3) {

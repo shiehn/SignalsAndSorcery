@@ -95,6 +95,7 @@ export default {
       let updateParam = {
         clipType: type,
         chords: 'all',
+        //TODO: is this a problem not passing row/col for arpeggiator?
       }
 
       emit('updateAssetSelection', updateParam)
