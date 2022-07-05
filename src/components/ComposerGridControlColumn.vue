@@ -3,6 +3,10 @@
     <button @click="addSectionPrompt" class="flex mb-2 w-full justify-center hover:cursor-pointer">
       <img :src=imageUrls.plusIcon class="w-6 h-6">
     </button>
+    <div @click="handleClick('arp')"
+         class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
+      <img :src=imageUrls.hiIcon class="w-10 h-10">
+    </div>
     <div @click="handleClick('hi')"
          class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
       <img :src=imageUrls.hiIcon class="w-10 h-10">

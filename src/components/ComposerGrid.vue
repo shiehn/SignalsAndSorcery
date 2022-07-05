@@ -40,6 +40,10 @@
            v-on:mouseover="mouseOverGridItem(gridRowItem.row, gridRowItem.col)"
            v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
            @click="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
+        <div v-if="i===0" class="absolute top-0 left-0">
+          <button v-if="!gridRowItem.arpeggio" @click="toggleArpeggio(gridRowItem.row, gridRowItem.col, true)">ON</button>
+          <button v-if="gridRowItem.arpeggio" @click="toggleArpeggio(gridRowItem.row, gridRowItem.col, false)">OFF</button>
+        </div>
         <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
         <img v-if="gridRowItem.showDeleteIcon" :src=gridRowItem.deleteIconPath
              @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
@@ -85,7 +89,7 @@ export default {
       minusIcon: store.state.staticUrl + "icons/minus.png",
     }
 
-    const numOfGridRows = 5
+    const numOfGridRows = 6
     const numOfGridCols = 6
     const numOfSections = 2
 
@@ -94,8 +98,8 @@ export default {
 
     //TODO THIS IS ONLY HERE TO TEST ARPEGGIOS - PLEASE REMOVE
 
-    store.state.grid[4].value[0] = new GridItem(4,0,'a')
-    store.state.grid[4].value[0].arpeggio = new GridItemArpeggio('xxx', 'c:d:e:d', 4)
+    store.state.grid[0].value[1] = new GridItem(4,0,'a')
+    store.state.grid[0].value[1].arpeggio = new GridItemArpeggio('xxx', 'c:d:e:d', 4)
 
     //TODO THIS IS ONLY HERE TO TEST ARPEGGIOS - PLEASE REMOVE
 
@@ -226,6 +230,18 @@ export default {
       emit('launchModal', modalOpenPayload)
     }
 
+    const toggleArpeggio = (row, col, onOff) => {
+      const gridItem = store.state.grid[row].value[col]
+      if (onOff) {
+        console.log('just added on  bruh')
+        gridItem.arpeggio = new GridItemArpeggio('xxx', 'c:d:e:d', 4)
+      } else {
+        gridItem.arpeggio = undefined
+      }
+
+      emit('scheduleArpeggioNotes')
+    }
+
     watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
       if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === renameSectionModalId) {
         if (modalResponsePayload[0].getResponse()) {
@@ -298,7 +314,8 @@ export default {
       mouseLeaveGridItem,
       onDrop,
       progressBar,
-      removeGridItem
+      removeGridItem,
+      toggleArpeggio
     }
   },
 }

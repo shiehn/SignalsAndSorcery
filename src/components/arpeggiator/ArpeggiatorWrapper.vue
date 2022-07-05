@@ -291,7 +291,6 @@ export default {
       return 60 / bpm;
     }
 
-
     watch(() => bus.value.get('scheduleArpeggioNotes'), (downbeatAbTimes) => {
       const gridProcessor = new GridProcessor(store.state.grid)
       const arpData = gridProcessor.extractArpeggioData()
