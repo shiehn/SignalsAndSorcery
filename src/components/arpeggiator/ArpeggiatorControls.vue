@@ -37,7 +37,7 @@
 
 <script>
 import store from "../../store/store";
-import {inject, ref, watch} from "vue";
+import {inject, nextTick, ref, watch} from "vue";
 import useEventsBus from "../../events/eventBus";
 
 export default {
@@ -60,10 +60,6 @@ export default {
     const arpCtrlSynthOptions = ['synth_1']
 
     watch(() => bus.value.get('updateAssetSelection'), (assetFilter) => {
-      console.log('IN THE updateAssetSelection')
-      //assetFilter[0].clipType
-      //alert('ROW:'+ assetFilter[0].row + ' COL:' + assetFilter[0].col)
-      console.log('assetFilter', assetFilter)
       if(assetFilter[0].row == undefined || assetFilter[0].col == undefined) {
         console.log('error: updateAssetSelection requires a ro w and col')
         return
@@ -78,13 +74,14 @@ export default {
       //get the chords from the column
       let chords = []
       for(let row= 0; row < store.state.grid.length; row++) {
-        if(store.state.grid[row].value[assetFilter[0].col].chords) {
-          chords = store.state.grid[row].value[assetFilter[0].col].chords
+        let stem = store.state.grid[row].value[assetFilter[0].col].stem
+        if(stem) {
+          chords = stem.chords.split(':')
         }
       }
 
       arpId.value = arpeggio.id
-      arpCtrlChords.value = arpeggio.chords
+      arpCtrlChords.value = chords.length > 0 ? chords : arpeggio.chords
       arpCtrlPattern.value = arpeggio.pattern
       arpCtrlSpeed.value = arpeggio.speed
     })

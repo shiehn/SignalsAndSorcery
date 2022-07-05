@@ -1,6 +1,8 @@
 import GridGenerator, {SectionPositions} from "../generators/grid-generator";
 import {v4} from "uuid";
 import ArpeggioGridData from "../components/arpeggiator/arpeggio-grid-data";
+import GridItemSection from "../generators/grid-item-section";
+import GridItemArpeggio from "../generators/grid-item-arpeggio";
 
 export default class GridProcessor {
 
@@ -116,6 +118,11 @@ export default class GridProcessor {
                 } else {
                     this.grid[row].value[newItemIndex + col].section.position = SectionPositions.MID
                 }
+
+                //add arpeggios to row 0
+                if(row == 0) {
+                    this.grid[row].value[newItemIndex + col].arpeggio = new GridItemArpeggio(v4(), [], 'pattern_1', 'quarter')
+                }
             }
         }
 
@@ -146,7 +153,7 @@ export default class GridProcessor {
 
         for (let row = 0; row < this.grid.length; row++) {
             for (let col = 0; col < this.grid[row].value.length; col++) {
-                if (this.grid[row].value[col].arpeggio) {
+                if (this.grid[row].value[col].arpeggio && this.grid[row].value[col].arpeggio.on) {
                     arpeggioData.addTimelineItem(col, this.grid[row].value[col].arpeggio)
                 }
             }

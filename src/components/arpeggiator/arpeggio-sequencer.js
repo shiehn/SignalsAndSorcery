@@ -23,8 +23,6 @@ export default class ArpeggioSequencer {
             let notesInLoop = this.timeUtils.numOfQuartersPerLoop()
             let notesPerChord = this.timeUtils.numOfQuartersPerBar()
 
-            console.log('timeBeforeArpStart', timeBeforeArpStart)
-
             //SWITCH BASED ON SPEED
             let chordIndex = -1
             for (let noteIndex = 0; noteIndex < notesInLoop; noteIndex++) {

@@ -3,6 +3,7 @@ import {v4} from "uuid";
 import GridProcessor from "../processors/grid-processor";
 import GridItem from "./grid-item";
 import GridItemSection from "./grid-item-section";
+import GridItemArpeggio from "./grid-item-arpeggio";
 
 export const SectionPositions = {
     START: 'start',
@@ -31,7 +32,12 @@ export default class GridGenerator {
                     position = SectionPositions.MID
                 }
 
-                row.value.push(this.createGridItemWithSection(i, j, new GridItemSection(defaultId, defaultSectionName, position)))
+                let gridItem = this.createGridItemWithSection(i, j, new GridItemSection(defaultId, defaultSectionName, position))
+                if(i == 0) {
+                    gridItem.arpeggio = new GridItemArpeggio(v4(), [], 'pattern_1', 'quarter')
+                }
+
+                row.value.push(gridItem)
             }
             rows.push(row)
         }

@@ -3,5 +3,6 @@ export default class GridItemSection {
         this.id = id
         this.name = name
         this.position = position
+        this.on = false
     }
 }

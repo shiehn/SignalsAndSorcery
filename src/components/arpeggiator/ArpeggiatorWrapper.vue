@@ -286,7 +286,6 @@ export default {
       console.log('arpState.player.playing', arpState.player.playing)
     };
 
-
     const getSecPerBeat = (bpm) => {
       return 60 / bpm;
     }

@@ -41,8 +41,8 @@
            v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
            @click="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
         <div v-if="i===0" class="absolute top-0 left-0">
-          <button v-if="!gridRowItem.arpeggio" @click="toggleArpeggio(gridRowItem.row, gridRowItem.col, true)">ON</button>
-          <button v-if="gridRowItem.arpeggio" @click="toggleArpeggio(gridRowItem.row, gridRowItem.col, false)">OFF</button>
+          <button v-if="!gridRowItem.arpeggio.on" @click="toggleArpeggio(gridRowItem.row, gridRowItem.col, true)">ON</button>
+          <button v-if="gridRowItem.arpeggio.on" @click="toggleArpeggio(gridRowItem.row, gridRowItem.col, false)">OFF</button>
         </div>
         <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
         <img v-if="gridRowItem.showDeleteIcon" :src=gridRowItem.deleteIconPath
@@ -185,8 +185,16 @@ export default {
         row: row,
         col: col,
       }
-      console.log('FIRED A R&C MF GUY')
+
       emit('updateAssetSelection', updateParam)
+
+      //TODO: THIS IS A HACK TO GET THE MODAL TO OPEN by firing twice
+      //TODO: FIX THIS
+      if(row === 0){
+        setTimeout(() => {
+          emit('updateAssetSelection', updateParam)
+        }, 200)
+      }
     }
 
     const evalCompatibility = (stem) => {
@@ -230,12 +238,12 @@ export default {
       emit('launchModal', modalOpenPayload)
     }
 
-    const toggleArpeggio = (row, col, onOff) => {
+    const toggleArpeggio = (row, col) => {
       const gridItem = store.state.grid[row].value[col]
-      if (onOff) {
-        gridItem.arpeggio = new GridItemArpeggio(v4(), '', 'pattern_1', 'quarter')
+      if(gridItem.arpeggio) {
+        gridItem.arpeggio.on = !gridItem.arpeggio.on
       } else {
-        gridItem.arpeggio = undefined
+        console.log('NO GRID ITEM')
       }
 
       emit('scheduleArpeggioNotes')
