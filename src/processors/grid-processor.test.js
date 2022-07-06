@@ -68,18 +68,20 @@ describe('Grid Processor Tests', () => {
                     }
                 }
 
-                if (row == 5 && col == 1) {
+                if (row == 0 && col == 1) {
                     store.state.grid[row].value[col].section.id = 'id_a'
                     store.state.grid[row].value[col].section.name = 'part_a'
                     store.state.grid[row].value[col].stem = undefined
                     store.state.grid[row].value[col].arpeggio = new GridItemArpeggio('arp_a', 'Am7:Am7:FM7:Am7', 'pattern_1')
+                    store.state.grid[row].value[col].arpeggio.on = true
                 }
 
-                if (row == 5 && col == 3) {
+                if (row == 0 && col == 3) {
                     store.state.grid[row].value[col].section.id = 'id_a'
                     store.state.grid[row].value[col].section.name = 'part_a'
                     store.state.grid[row].value[col].stem = undefined
                     store.state.grid[row].value[col].arpeggio = new GridItemArpeggio('arp_b', 'Em7:Em7:CM7:CM7', 8)
+                    store.state.grid[row].value[col].arpeggio.on = true
                 }
             }
         }
@@ -243,6 +245,9 @@ describe('Grid Processor Tests', () => {
     it('should extract arpeggio data', () => {
         const gridProcessor = new GridProcessor(store.state.grid)
         let result = gridProcessor.extractArpeggioData()
+
+        console.log('what')
+        console.log(result)
 
         expect(result.getTimeline().length).to.equals(2)
         expect(result.getTimeline()[0].arpeggio.chords[2]).to.equals('FM7')

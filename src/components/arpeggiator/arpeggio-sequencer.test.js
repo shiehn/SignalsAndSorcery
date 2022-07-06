@@ -1,15 +1,15 @@
 import ArpeggioSequencer from "./arpeggio-sequencer";
 import {describe, it, expect} from "vitest"
+import ArpeggioGridData from "./arpeggio-grid-data";
+import GridItemArpeggio from "../../generators/grid-item-arpeggio";
 
 describe('ArpeggioSequencer Tests', () => {
     it('should correctly sequence timeline starting from zero', async () => {
         const bpm = 60
-        const arpTimeline = [{
-            colIndex: 0,
-            arpeggio: {
-                chords: ['cm7', 'em', 'g', 'f'],
-            }
-        }]
+        const colIndex = 0
+        const gridItemArpeggio = new GridItemArpeggio('arp_id', 'cm7:em:g:f', 'pattern_id', 'quarter')
+        const arpTimeline = new ArpeggioGridData()
+        arpTimeline.addTimelineItem(colIndex, gridItemArpeggio)
 
         const arpSequencer = new ArpeggioSequencer(arpTimeline, bpm)
 
@@ -38,12 +38,11 @@ describe('ArpeggioSequencer Tests', () => {
 
     it('should correctly sequence timeline start form second loop', async () => {
         const bpm = 60
-        const arpTimeline = [{
-            colIndex: 2,
-            arpeggio: {
-                chords: ['cm7', 'em', 'g', 'f'],
-            }
-        }]
+        const colIndex = 2
+
+        const gridItemArpeggio = new GridItemArpeggio('arp_id', 'cm7:em:g:f', 'pattern_id', 'quarter')
+        const arpTimeline = new ArpeggioGridData()
+        arpTimeline.addTimelineItem(colIndex, gridItemArpeggio)
 
         const arpSequencer = new ArpeggioSequencer(arpTimeline, bpm)
 

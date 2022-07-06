@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
+    "@tonaljs/tonal": "^4.6.5",
     "@vitejs/plugin-vue": "^3.0.0-alpha.1",
     "@vue/test-utils": "^2.0.0-rc.18",
     "axios": "^0.27.2",
