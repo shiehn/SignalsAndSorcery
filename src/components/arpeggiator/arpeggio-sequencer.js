@@ -1,4 +1,5 @@
 import TimeUtils from "../../utils/time-utils";
+import MusicTheoryUtils from "../../utils/music-theory-utils";
 
 export default class ArpeggioSequencer {
     constructor(arpTimeline, bpm) {
@@ -60,7 +61,7 @@ export default class ArpeggioSequencer {
 
     getSequence() {
         let sequence = []
-
+        const musicTheoryUtils = new MusicTheoryUtils()
         for (let i = 0; i < this.arpTimeline.length; i++) {
             let arpObj = this.arpTimeline[i].arpeggio
 
@@ -74,17 +75,26 @@ export default class ArpeggioSequencer {
             let notesPerChord = this.getNumOfNotesInBar(arpObj.rate)
 
             //SWITCH BASED ON SPEED
+            let chordNoteIndex = -1
             let chordIndex = -1
+            let chordNotes = []
             for (let noteIndex = 0; noteIndex < notesInLoop; noteIndex++) {
                 if (noteIndex % notesPerChord === 0) {
                     chordIndex++
+                    chordNoteIndex = 0
+                    chordNotes = musicTheoryUtils.getChordNotes(arpObj.chords[chordIndex])
                 }
 
-                let chordRoot = arpObj.chords[chordIndex].charAt(0); //TODO THIS IS JUST THE ROOT .. WILL UPDATE TO BE PATTERN
+                //TODO MAKE A FUNC OR SOMETHING
+                if(chordIndex > chordNotes.length - 2) {
+                    chordIndex = 0
+                } else {
+                    chordIndex++
+                }
 
                 let sequenceItem = {
                     time: timeBeforeArpStart + (noteIndex * noteDuration),
-                    note: chordRoot + '4',  //TODO: THIS IS A PROBLEM PLEASE FIX
+                    note: chordNotes[chordIndex] + '4',  //TODO: THIS IS A PROBLEM PLEASE FIX
                     duration: noteDuration,
                 }
 

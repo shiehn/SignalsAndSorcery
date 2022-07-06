@@ -370,33 +370,6 @@ export default {
     loadChordSelector()
     loadSynths()
 
-
-    // const printToneContext = () => {
-    //   console.log('Tone.context', Tone.getContext().currentTime)
-    // }
-    //setIn(printToneContext, 2000)
-
-
-    // watch(() => bus.value.get('stopArpeggiator'), () => {
-    //   stopArp()
-    // })
-
-    // watch(() => bus.value.get('startArpeggiator'), (startArpPayload) => {
-    //   console.log('startArpeggiator')
-    //   // if(!startArpPayload[0]) {
-    //   //   return
-    //   // }
-    //   //
-    //   // console.log('startArpPayload', startArpPayload[0].chord_step)
-    //   //
-    //   // store.state.arpeggiator.player.chord_step = startArpPayload[0].chordStep
-    //   // store.state.arpeggiator.player.step = startArpPayload[0].step
-    //   // store.state.arpeggiator.player.bpm = startArpPayload[0].bpm
-    //   // store.state.arpeggiator.player.key = startArpPayload[0].key
-    //
-    //   startArp()
-    // })
-
     return {
       apUpdateSteps,
       apUpdatePatternType,
