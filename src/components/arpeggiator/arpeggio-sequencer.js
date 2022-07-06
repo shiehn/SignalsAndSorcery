@@ -1,6 +1,5 @@
 import TimeUtils from "../../utils/time-utils";
 
-
 export default class ArpeggioSequencer {
     constructor(arpTimeline, bpm) {
         this.arpTimeline = arpTimeline.getTimeline()

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col min-w-fit bg-gray-200 w-1/12 border-2 border-black rounded-lg mr-2 pt-2  px-2">
+  <div class="flex flex-col min-w-fit w-1/12 border-2 border-black rounded-lg mr-2 pt-2  px-2" style="background-color: rgba(255,255,255,0.9);">
     <button @click="addSectionPrompt" class="flex mb-2 w-full justify-center hover:cursor-pointer">
       <img :src=imageUrls.plusIcon class="w-6 h-6">
     </button>

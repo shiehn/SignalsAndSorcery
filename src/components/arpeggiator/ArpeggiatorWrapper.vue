@@ -1,63 +1,63 @@
 <template>
-  <div class="border-2 border-black">
-    <h1>ARP</h1>
-    <p>Arp body text .. junk</p>
+<!--  <div class="border-2 border-black">-->
+<!--    <h1>ARP</h1>-->
+<!--    <p>Arp body text .. junk</p>-->
 
-    <section ref="chordContainer" class="chord">
-      <h1>Chord Progression</h1>
-      <div v-for="c in store.state.arpeggiator.chord_count()">
-        <div v-for="(note, i) in store.state.arpeggiator.MS.notes">
-          <div @click="msUpdateChords(c, i, $event)">
-            {{ store.state.arpeggiator.chord_deg[i] }}
-          </div>
-        </div>
-      </div>
-    </section>
+<!--    <section ref="chordContainer" class="chord">-->
+<!--      <h1>Chord Progression</h1>-->
+<!--      <div v-for="c in store.state.arpeggiator.chord_count()">-->
+<!--        <div v-for="(note, i) in store.state.arpeggiator.MS.notes">-->
+<!--          <div @click="msUpdateChords(c, i, $event)">-->
+<!--            {{ store.state.arpeggiator.chord_deg[i] }}-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </section>-->
 
-    <section class="bpm">
-      <h1>Beats Per Minute</h1>
-      <div v-for="bpm in store.state.arpeggiator.bpms" @click="playerUpdateBPM(bpm)">
-        {{ bpm }}
-      </div>
-    </section>
+<!--    <section class="bpm">-->
+<!--      <h1>Beats Per Minute</h1>-->
+<!--      <div v-for="bpm in store.state.arpeggiator.bpms" @click="playerUpdateBPM(bpm)">-->
+<!--        {{ bpm }}-->
+<!--      </div>-->
+<!--    </section>-->
 
-    <section class="keys">
-      <h1>Tonic / Root</h1>
-      <div v-for="key in store.state.arpeggiator.MS.dict.keys" @click="msUpdateKey(key)">
-        {{ key }}
-      </div>
-    </section>
+<!--    <section class="keys">-->
+<!--      <h1>Tonic / Root</h1>-->
+<!--      <div v-for="key in store.state.arpeggiator.MS.dict.keys" @click="msUpdateKey(key)">-->
+<!--        {{ key }}-->
+<!--      </div>-->
+<!--    </section>-->
 
-    <section class="modes">
-      <div v-for="mode in store.state.arpeggiator.MS.dict.modes" @click="msUpdateMode(mode)">
-        {{ mode }}
-      </div>
-    </section>
+<!--    <section class="modes">-->
+<!--      <div v-for="mode in store.state.arpeggiator.MS.dict.modes" @click="msUpdateMode(mode)">-->
+<!--        {{ mode }}-->
+<!--      </div>-->
+<!--    </section>-->
 
-    <section class="steps">
-      <h1>Steps</h1>
-      <div v-for="step in store.state.arpeggiator.steps" @click="apUpdateSteps(step)">
-        {{ step }}
-      </div>
-    </section>
+<!--    <section class="steps">-->
+<!--      <h1>Steps</h1>-->
+<!--      <div v-for="step in store.state.arpeggiator.steps" @click="apUpdateSteps(step)">-->
+<!--        {{ step }}-->
+<!--      </div>-->
+<!--    </section>-->
 
-    <section class="type">
-      <h1>Arpeggio Type</h1>
-      <div v-for="type in store.state.arpeggiator.types" @click="apUpdatePatternType(type)">
-        {{ type }}
-      </div>
-    </section>
+<!--    <section class="type">-->
+<!--      <h1>Arpeggio Type</h1>-->
+<!--      <div v-for="type in store.state.arpeggiator.types" @click="apUpdatePatternType(type)">-->
+<!--        {{ type }}-->
+<!--      </div>-->
+<!--    </section>-->
 
-    <section class="patterns">
-      <h1>Arpeggio Style</h1>
-      <div v-for="pattern in store.state.arpeggiator.AP.patterns[store.state.arpeggiator.ap_pattern_type]"
-           @click="apUpdatePatternId(pattern)">
-        {{ pattern }}
-      </div>
-    </section>
+<!--    <section class="patterns">-->
+<!--      <h1>Arpeggio Style</h1>-->
+<!--      <div v-for="pattern in store.state.arpeggiator.AP.patterns[store.state.arpeggiator.ap_pattern_type]"-->
+<!--           @click="apUpdatePatternId(pattern)">-->
+<!--        {{ pattern }}-->
+<!--      </div>-->
+<!--    </section>-->
 
-    <button @click="playerToggle()" class="h-24"></button>
-  </div>
+<!--    <button @click="playerToggle()" class="h-24"></button>-->
+<!--  </div>-->
 </template>
 
 <script>
@@ -290,7 +290,7 @@ export default {
       return 60 / bpm;
     }
 
-    watch(() => bus.value.get('scheduleArpeggioNotes'), (downbeatAbTimes) => {
+    watch(() => bus.value.get('scheduleArpeggioNotes'), () => {
       const gridProcessor = new GridProcessor(store.state.grid)
       const arpData = gridProcessor.extractArpeggioData()
       const sequencer = new ArpeggioSequencer(arpData, store.state.globalBpm)

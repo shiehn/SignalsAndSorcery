@@ -5,11 +5,11 @@ export default class TimeUtils {
     }
 
     getSecondsPerSixteenth(beat) {
-        return getSecondsPerBeat()/4
+        return this.getSecondsPerQuarter()/4
     }
 
     getSecondsPerEighth() {
-        return getSecondsPerBeat()/2
+        return this.getSecondsPerQuarter()/2
     }
 
     getSecondsPerQuarter() {
