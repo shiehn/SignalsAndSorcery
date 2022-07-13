@@ -244,24 +244,6 @@ export default {
       //this._utilClassToggle(e.target, 'bpm-current');
     };
 
-    const startArp = () => {
-      Tone.Transport.bpm.value = arpState.player.bpm;
-
-
-      if (arpState.player.playing) {
-        Tone.Transport.pause();
-        channel.master.gain.value = 0;
-        //this.play_toggle.classList.remove('active');
-      }
-
-      Tone.Transport.start();
-      console.log('STARTING ARP')
-      channel.master.gain.value = 1;
-      //this.play_toggle.classList.add('active');
-
-      arpState.player.playing = true
-    }
-
     const stopArp = () => {
       if (arpState.player.playing) {
         Tone.Transport.pause();
@@ -272,25 +254,13 @@ export default {
       arpState.player.playing = false
     }
 
-    const playerToggle = () => {
-      if (arpState.player.playing) {
-        Tone.Transport.pause();
-        channel.master.gain.value = 0;
-        //this.play_toggle.classList.remove('active');
-      } else {
-        Tone.Transport.start();
-        channel.master.gain.value = 1;
-        //this.play_toggle.classList.add('active');
-      }
-      arpState.player.playing = !arpState.player.playing;
-      console.log('arpState.player.playing', arpState.player.playing)
-    };
-
     const getSecPerBeat = (bpm) => {
       return 60 / bpm;
     }
 
     watch(() => bus.value.get('scheduleArpeggioNotes'), () => {
+      console.log('scheduleArpeggioNotesSTARTED', performance.now())
+
       const gridProcessor = new GridProcessor(store.state.grid)
       const arpData = gridProcessor.extractArpeggioData()
       const sequencer = new ArpeggioSequencer(arpData, store.state.globalBpm)
@@ -298,7 +268,7 @@ export default {
 
       //FIRST CLEAR ALL NOTES
       Tone.Transport.cancel(0)
-      const synth = new Tone.Synth().toDestination();
+      //const synth = new Tone.Synth().toDestination();
       Tone.Transport.bpm.value = store.state.globalBpm ? store.state.globalBpm : 0;
 
       for (let i = 0; i < sequence.length; i++) {
@@ -307,6 +277,9 @@ export default {
           synths.treb.triggerAttackRelease(sequenceItem.note, sequenceItem.duration, time);
         }, sequenceItem.time);
       }
+
+
+      console.log('scheduleArpeggioNotesDONE', performance.now())
 
       // Tone.Transport.scheduleRepeat((time) => {
       //   synths.treb.triggerAttackRelease("C3", "4n", time);
@@ -377,7 +350,6 @@ export default {
       msUpdateChords,
       msUpdateKey,
       msUpdateMode,
-      playerToggle,
       playerUpdateBPM,
       store,
     }

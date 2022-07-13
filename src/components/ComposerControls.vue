@@ -161,9 +161,11 @@ export default {
           }
           let AudioContext = window.AudioContext || window.webkitAudioContext;
           store.context = new AudioContext();
-          console.log('!!!!!!NEW AUDIO CONTEXT SET!!!!!')
+
           Tone.setContext(store.context)
-          console.log('!!!!!!NEW AUDIO CONTEXT SET!!!!!')
+          Tone.getContext().lookAhead = 10;
+          Tone.getContext().updateInterval = 0.3;
+
           try {
             await store.context.resume()
           } catch (e) {
@@ -412,6 +414,7 @@ export default {
         if (!isRendering.value) {
           await renderMix()
           //after a mix is rendered sequence arp notes
+          console.log('scheduleArpeggioNotesEMITTING', performance.now())
           emit('scheduleArpeggioNotes')
         }
       } else {

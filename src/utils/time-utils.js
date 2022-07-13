@@ -4,7 +4,7 @@ export default class TimeUtils {
         this.bpm = bpm
     }
 
-    getSecondsPerSixteenth(beat) {
+    getSecondsPerSixteenth() {
         return this.getSecondsPerQuarter()/4
     }
 
