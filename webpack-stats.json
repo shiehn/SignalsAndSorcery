@@ -5,55 +5,12 @@
       "name": "main.js",
       "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.js",
       "publicPath": "/static/dist/main.js"
-    },
-    "main.931606bd272714660213.hot-update.js": {
-      "name": "main.931606bd272714660213.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.931606bd272714660213.hot-update.js",
-      "publicPath": "/static/dist/main.931606bd272714660213.hot-update.js"
-    },
-    "main.931606bd272714660213.hot-update.json": {
-      "name": "main.931606bd272714660213.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.931606bd272714660213.hot-update.json",
-      "publicPath": "/static/dist/main.931606bd272714660213.hot-update.json"
-    },
-    "main.413ffd5b0ebb38c21ef6.hot-update.js": {
-      "name": "main.413ffd5b0ebb38c21ef6.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.413ffd5b0ebb38c21ef6.hot-update.js",
-      "publicPath": "/static/dist/main.413ffd5b0ebb38c21ef6.hot-update.js"
-    },
-    "main.413ffd5b0ebb38c21ef6.hot-update.json": {
-      "name": "main.413ffd5b0ebb38c21ef6.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.413ffd5b0ebb38c21ef6.hot-update.json",
-      "publicPath": "/static/dist/main.413ffd5b0ebb38c21ef6.hot-update.json"
-    },
-    "main.f419b11a8ed9422c3e97.hot-update.js": {
-      "name": "main.f419b11a8ed9422c3e97.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.f419b11a8ed9422c3e97.hot-update.js",
-      "publicPath": "/static/dist/main.f419b11a8ed9422c3e97.hot-update.js"
-    },
-    "main.f419b11a8ed9422c3e97.hot-update.json": {
-      "name": "main.f419b11a8ed9422c3e97.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.f419b11a8ed9422c3e97.hot-update.json",
-      "publicPath": "/static/dist/main.f419b11a8ed9422c3e97.hot-update.json"
-    },
-    "main.daff97a4eae1f49311a5.hot-update.js": {
-      "name": "main.daff97a4eae1f49311a5.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.daff97a4eae1f49311a5.hot-update.js",
-      "publicPath": "/static/dist/main.daff97a4eae1f49311a5.hot-update.js"
-    },
-    "main.daff97a4eae1f49311a5.hot-update.json": {
-      "name": "main.daff97a4eae1f49311a5.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.daff97a4eae1f49311a5.hot-update.json",
-      "publicPath": "/static/dist/main.daff97a4eae1f49311a5.hot-update.json"
     }
   },
   "chunks": {
     "main": [
-      "main.js",
-      "main.daff97a4eae1f49311a5.hot-update.js"
+      "main.js"
     ]
   },
-  "publicPath": "/static/dist/",
-  "error": "ModuleNotFoundError",
-  "message": "Module not found: Error: Can't resolve 'path' in '/Users/stevehiehn/SignalsAndSorceryWeb/frontend/node_modules/yarn/lib'\n\nBREAKING CHANGE: webpack < 5 used to include polyfills for node.js core modules by default.\nThis is no longer the case. Verify if you need this module and configure a polyfill for it.\n\nIf you want to include a polyfill, you need to:\n\t- add a fallback 'resolve.fallback: { \"path\": require.resolve(\"path-browserify\") }'\n\t- install 'path-browserify'\nIf you don't want to include a polyfill, you can use an empty module like this:\n\tresolve.fallback: { \"path\": false }"
+  "publicPath": "/static/dist/"
 }

@@ -100,11 +100,14 @@ export default {
 
       //get the chords from the column
       let chords = []
-      for (let row = 0; row < store.state.grid.length; row++) {
-        let stem = store.state.grid[row].value[assetFilter[0].col].stem
-        if (stem) {
-          chords = stem.chords.split(':')
-        }
+      let chordsStr = store.state.getChordsForCol(assetFilter[0].col)
+      if (chordsStr) {
+        chords = chordsStr.split(':')
+      }
+
+      const globalKey = store.state.globalKey
+      if (chords.length < 1 && globalKey) {
+        chords = [globalKey, globalKey, globalKey, globalKey]
       }
 
       arpId.value = arpeggio.id

@@ -7,10 +7,10 @@ const state = reactive({
     arpeggiator: {
         AP: undefined,
         arpeggio: undefined,
-        bpms: [45,60,75,90,105,120,135,150],
+        bpms: [45, 60, 75, 90, 105, 120, 135, 150],
         chords: [0, 0, 0, 0],
         chord_deg: ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii'],
-        steps: [3,4,5,6],
+        steps: [3, 4, 5, 6],
         types: ['straight', 'looped'],
         MS: undefined,
         ms_key: 'F',
@@ -135,7 +135,7 @@ const state = reactive({
         for (let row = 0; row < this.grid.length; row++) {
             for (let col = 0; col < this.grid[row].value.length; col++) {
                 if (this.grid[row].value[col].stem && this.grid[row].value[col].stem.key) {
-                    if(this.grid[row].value[col].stem.type != 'fill' && this.grid[row].value[col].stem.type != 'drum') {
+                    if (this.grid[row].value[col].stem.type != 'fill' && this.grid[row].value[col].stem.type != 'drum') {
                         key = this.grid[row].value[col].stem.key
                     }
                 }
