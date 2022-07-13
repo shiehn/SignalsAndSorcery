@@ -142,6 +142,8 @@ export default {
     const renderMix = async () => {
       await stop()
 
+      console.log("A")
+
       if (store.state.clipCount() < 1) {
         return
       }
@@ -302,22 +304,26 @@ export default {
           }
         }
 
-        //console.log('buffer.duration', buffer.duration)
+        console.log('B')
 
-        sourceNode = store.context.createBufferSource();
-        sourceNode.buffer = buffer
-        sourceNode.connect(store.context.destination);
+        // sourceNode = store.context.createBufferSource();
+        // sourceNode.buffer = buffer
+        // sourceNode.connect(store.context.destination);
 
-        // sourceNode.loopStart = buffer.duration * (store.state.playBack.loopStartPercent * 0.01)
-        // sourceNode.loopEnd = buffer.duration * (store.state.playBack.loopEndPercent * 0.01)
-        // sourceNode.loop = true
+
+        console.log('C')
+
+        sourceNode = new Tone.BufferSource(buffer, () => {
+          console.log('CALLBACK')
+        })
+
+        const player = new Tone.Player(sourceNode).toDestination();
+        player.sync()
 
         console.log('OFFSET', offset)
-        Tone.Transport.start();
-        sourceNode.start(0, offset);
         Tone.Transport.seconds = offset;
-
-        //sourceNode.start(0, buffer.duration * (store.state.playBack.loopStartPercent * 0.01));
+        Tone.Transport.start();
+        //sourceNode.start(0, offset).toDestination();
 
         startedAt = store.context.currentTime - offset;
         pausedAt = 0;
@@ -331,7 +337,6 @@ export default {
 
     const stop = async () => {
       Tone.Transport.pause();
-      //emit('stopArpeggiator', 'composer-controls')
 
       if (sourceNode) {
         sourceNode.disconnect();
