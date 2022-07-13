@@ -313,17 +313,12 @@ export default {
 
         console.log('C')
 
-        sourceNode = new Tone.BufferSource(buffer, () => {
-          console.log('CALLBACK')
-        })
-
-        const player = new Tone.Player(sourceNode).toDestination();
-        player.sync()
+        sourceNode = new Tone.BufferSource(buffer)
 
         console.log('OFFSET', offset)
         Tone.Transport.seconds = offset;
-        Tone.Transport.start();
-        //sourceNode.start(0, offset).toDestination();
+        Tone.Transport.start()
+        sourceNode.start(0, offset).toDestination()
 
         startedAt = store.context.currentTime - offset;
         pausedAt = 0;
@@ -337,6 +332,7 @@ export default {
 
     const stop = async () => {
       Tone.Transport.pause();
+      //emit('stopArpeggiator', 'composer-controls')
 
       if (sourceNode) {
         sourceNode.disconnect();

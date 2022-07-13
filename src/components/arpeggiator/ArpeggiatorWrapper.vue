@@ -259,7 +259,8 @@ export default {
     }
 
     watch(() => bus.value.get('scheduleArpeggioNotes'), () => {
-      console.log('scheduleArpeggioNotesSTARTED', performance.now())
+
+      const latencyOffset = -0.07; //tone seems to be a bit behind the beat
 
       const gridProcessor = new GridProcessor(store.state.grid)
       const arpData = gridProcessor.extractArpeggioData()
@@ -268,22 +269,26 @@ export default {
 
       //FIRST CLEAR ALL NOTES
       Tone.Transport.cancel(0)
-      //const synth = new Tone.Synth().toDestination();
       Tone.Transport.bpm.value = store.state.globalBpm ? store.state.globalBpm : 0;
 
       for (let i = 0; i < sequence.length; i++) {
         let sequenceItem = sequence[i]
         Tone.Transport.schedule((time) => {
           synths.treb.triggerAttackRelease(sequenceItem.note, sequenceItem.duration, time);
-        }, sequenceItem.time);
+        }, sequenceItem.time + latencyOffset);
       }
 
 
-      console.log('scheduleArpeggioNotesDONE', performance.now())
 
-      // Tone.Transport.scheduleRepeat((time) => {
-      //   synths.treb.triggerAttackRelease("C3", "4n", time);
-      // }, "4n");
+      // Tone.Offline(function(Transport){
+      //   var osc = new Tone.Oscillator().toMaster()
+      //   Transport.schedule(function(time){
+      //     osc.start(time).stop(time + 0.1)
+      //   }, 1)
+      //   Transport.start(0.2)
+      // }, 4).then(function(buffer){
+      //   //do something with the output buffer
+      // })
 
 
     })
