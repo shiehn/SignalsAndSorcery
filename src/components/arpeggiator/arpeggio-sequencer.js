@@ -68,13 +68,13 @@ export default class ArpeggioSequencer {
             // infer the time until the colIndex
             let timeBeforeArpStart = (this.arpTimeline[i].colIndex) * this.timeUtils.getSecondsPerLoop()
 
-            //check the speed of the arpeggio
+            //check the Rate of the arpeggio
             //hard code to quarters for now
             let noteDuration = this.getDuration(arpObj.rate)
             let notesInLoop = this.getNumOfNotesInLoop(arpObj.rate)
             let notesPerChord = this.getNumOfNotesInBar(arpObj.rate)
 
-            //SWITCH BASED ON SPEED
+            //SWITCH BASED ON Rate
             let chordNoteIndex = -1
             let chordIndex = -1
             let chordNotes = []

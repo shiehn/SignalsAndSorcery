@@ -23,7 +23,6 @@ export default {
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
-    const requiresRender = ref(false)
     const toast = inject('toast');
 
     let BUFFER_CACHE = {}
@@ -105,6 +104,7 @@ export default {
 
       //first loop for row buffer list
       for (let i = 0; i < rowBufferList.length; i++) {
+        console.log('RENDERING ROW', i)
         // second loop for each channel ie left and right
         //here we get a reference to the final mix buffer data
         const leftChannel = 0
@@ -112,8 +112,6 @@ export default {
 
         let finalMixBufferLeft = finalMix.getChannelData(leftChannel);
         let finalMixBufferRight = finalMix.getChannelData(rightChannel);
-
-        //last is loop for updating/summing the track buffer with the final mix buffer
 
         let rowBufferChannelLeft = rowBufferList[i].getChannelData(leftChannel)
         let rowBufferChannelRight = rowBufferList[i].getChannelData(rightChannel)
@@ -138,11 +136,8 @@ export default {
       return emptyBuffer;
     }
 
-
     const renderMix = async () => {
       await stop()
-
-      console.log("A")
 
       if (store.state.clipCount() < 1) {
         return
@@ -164,9 +159,9 @@ export default {
           let AudioContext = window.AudioContext || window.webkitAudioContext;
           store.context = new AudioContext();
 
-          Tone.setContext(store.context)
-          Tone.getContext().lookAhead = 10;
-          Tone.getContext().updateInterval = 0.3;
+          // Tone.setContext(store.context)
+          // Tone.getContext().lookAhead = 10;
+          // Tone.getContext().updateInterval = 0.3;
 
           try {
             await store.context.resume()
@@ -177,7 +172,7 @@ export default {
           console.log('WebAudio api is not supported!!');
         }
 
-        let secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.globalBpm);
+        let secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
         const bufferSizePerLoop = secondsInLoop * 44100;
 
         const leftChannel = 0
@@ -258,35 +253,29 @@ export default {
           store.state.updateRowStateHash(n)
         }
 
+        if (store.arpeggioBuffer) {
+          listOfTrimmedRowBuffers.push(store.arpeggioBuffer)
+        }
+
         buffer = mixDown(store.context, listOfTrimmedRowBuffers, listOfTrimmedRowBuffers[0].length);
       } catch (e) {
         console.log('ERROR', e)
+        return
       }
 
       isRendering.value = false
 
-      store.state.updateStateHash()
+      store.state.updateClipStateHash()
     }
 
-
-    let scheduler = undefined
-
-
     const playMix = async (offsetStartPercentage) => {
-
-      //emit('startArpeggiator')
-
-      console.log('TONE STARTED FROM PLAY MIX')
-
       if (store.state.clipCount() < 1) {
         toast.warning('Add clips to the arranger!');
         return
       }
 
-      // emit('stopAllAudio', 'composer-controls')
-      //emit('startArpeggiator', new StartArpPayload(0, 0, store.state.globalKey, store.state.globalBpm))
-
       if (buffer) {
+        console.log('PLAYING CURRENT RENDER')
         let offset = pausedAt;
 
         const loopStart = buffer.duration * (store.state.playBack.loopStartPercent * 0.01)
@@ -304,36 +293,22 @@ export default {
           }
         }
 
-        console.log('B')
-
-        // sourceNode = store.context.createBufferSource();
-        // sourceNode.buffer = buffer
-        // sourceNode.connect(store.context.destination);
-
-
-        console.log('C')
-
-        sourceNode = new Tone.BufferSource(buffer)
-
-        console.log('OFFSET', offset)
-        Tone.Transport.seconds = offset;
-        Tone.Transport.start()
-        sourceNode.start(0, offset).toDestination()
+        sourceNode = store.context.createBufferSource();
+        sourceNode.buffer = buffer
+        sourceNode.connect(store.context.destination);
+        sourceNode.start(0, offset)
 
         startedAt = store.context.currentTime - offset;
         pausedAt = 0;
         isPlaying.value = true;
-
       } else {
+        console.log('RENDERING NOW')
         await renderMix()
         await playMix()
       }
     }
 
     const stop = async () => {
-      Tone.Transport.pause();
-      //emit('stopArpeggiator', 'composer-controls')
-
       if (sourceNode) {
         sourceNode.disconnect();
         sourceNode.stop(0);
@@ -371,21 +346,6 @@ export default {
       return 0;
     };
 
-    const printPlayState = async () => {
-      console.log('STATE: actx:', store.context)
-
-      if (store.context) {
-        console.log('STATE: actx.currentTime', store.context.currentTime)
-        console.log('STATE: actx.state', store.context.state)
-      }
-
-      if (sourceNode) {
-        console.log('STATE: mix', sourceNode)
-      } else {
-        console.log('STATE: mix is undefined')
-      }
-    }
-
     let downloadMix = async () => {
       if (!buffer || (store.state.clipCount() < 1)) {
         toast.error('Add clips to arrange before downloading');
@@ -407,19 +367,24 @@ export default {
       }
     })
 
-    watch(() => bus.value.get('renderMixIfNeeded'), async (callerId) => {
-      console.log('renderMixIfNeeded')
-      if (store.state.hasStateChanged()) {
-        requiresRender.value = true
+    watch(() => bus.value.get('renderMix'), async () => {
+      if (!isRendering.value) {
+        await renderMix()
+      }
+    })
+
+    watch(() => bus.value.get('renderMixIfNeeded'), async () => {
+      if (store.state.hasArpeggioStateChanged()) {
+        console.log('ARPEGGIO STATE CHANGED! RENDER NOW()!!!')
+        emit('scheduleArpeggioNotes')
+      }
+
+      if (store.state.hasClipStateChanged()) {
+        console.log('CLIP STATE CHANGED RENDER! NOW()!!!')
 
         if (!isRendering.value) {
           await renderMix()
-          //after a mix is rendered sequence arp notes
-          console.log('scheduleArpeggioNotesEMITTING', performance.now())
-          emit('scheduleArpeggioNotes')
         }
-      } else {
-        requiresRender.value = false
       }
     })
 
@@ -450,47 +415,10 @@ export default {
 
     // THIS IS THE MAIN APPLICATION TICK - START
     let progressUITick = async () => {
-
-      /* calculate the time of each downbeat */
-      // getDuration()
-
-      // console.log('getDuration', getDuration()) //buffer length in sec
-      // console.log('getCurrentRelativeTime', getCurrentRelativeTime()) //currenttime - start
-      // console.log('Tone.TransportTime', Tone.Transport.seconds) //currenttime - start
-      // console.log('convertToAbsoluteTime', convertToAbsoluteTime(getCurrentRelativeTime()))
-
-      //console.log('Tone.context', Tone.getContext().currentTime)
-
-
-      // if (notFired && getDuration() > 0) {
-      //   const downbeatInterval = getDuration() / 12
-      //   let downbeatAbTimes = []
-      //   for (let i = 0; i < 12; i++) {
-      //     downbeatAbTimes.push(convertToAbsoluteTime(downbeatInterval * i))
-      //   }
-      //
-      //   emit('scheduleNotesTest', downbeatAbTimes)
-      //   notFired = false
-      // }
-
-      // if (store.context) {
-      //   console.log('store.context', store.context)
-      //   console.log('audioContext', store.context.currentTime)
-      //   console.log('Tone.context', Tone.getContext().currentTime)
-      // }
-
       let displayDuration = getDuration()
       let displayCurrentTime = getCurrentRelativeTime()
-
-
-      // if(scheduler) {
-      //   scheduler.dispatchEvents(displayCurrentTime)
-      // }
-
       let endTime = getDuration() * (store.state.playBack.loopEndPercent * 0.01)
 
-      // console.log('displayCurrentTime', displayCurrentTime)
-      // console.log('endTime', endTime)
       if (displayCurrentTime > endTime) {
         await stop()
         await playMix()
@@ -517,9 +445,7 @@ export default {
       play: playMix,
       pause,
       stop,
-      printPlayState,
       renderMix,
-      requiresRender
     }
   }
 }

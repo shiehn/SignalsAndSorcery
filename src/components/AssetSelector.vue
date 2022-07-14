@@ -167,9 +167,6 @@ export default {
     })
 
     watch(() => bus.value.get('updateAssetSelection'), (assetFilter) => {
-
-      console.log('IN DA ASSET SELECTOR: ', assetFilter)
-
       if (store.state.globalKey) {
         filterKey.value = store.state.globalKey.toLowerCase()
       } else {
@@ -189,7 +186,6 @@ export default {
         filterKey.value = assetFilter[0].filterKey
       }
 
-
       if (!assetFilter[0]) {
         filterType.value = 'all'
         return
@@ -207,8 +203,6 @@ export default {
     onMounted(async () => {
       const stemsApi = new StemsAPI()
       let stems = await stemsApi.getStemsAndOptions()
-
-      console.log('NEW STEMS', stems)
 
       stems.stems.forEach((stem) => {
         stem['waveform'] = stem['waveform'] ? stem['waveform'] : stem['source'].replace('.mp3', '.png')

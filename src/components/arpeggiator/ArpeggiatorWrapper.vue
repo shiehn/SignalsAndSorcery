@@ -1,63 +1,63 @@
 <template>
-<!--  <div class="border-2 border-black">-->
-<!--    <h1>ARP</h1>-->
-<!--    <p>Arp body text .. junk</p>-->
+  <!--  <div class="border-2 border-black">-->
+  <!--    <h1>ARP</h1>-->
+  <!--    <p>Arp body text .. junk</p>-->
 
-<!--    <section ref="chordContainer" class="chord">-->
-<!--      <h1>Chord Progression</h1>-->
-<!--      <div v-for="c in store.state.arpeggiator.chord_count()">-->
-<!--        <div v-for="(note, i) in store.state.arpeggiator.MS.notes">-->
-<!--          <div @click="msUpdateChords(c, i, $event)">-->
-<!--            {{ store.state.arpeggiator.chord_deg[i] }}-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </section>-->
+  <!--    <section ref="chordContainer" class="chord">-->
+  <!--      <h1>Chord Progression</h1>-->
+  <!--      <div v-for="c in store.state.arpeggiator.chord_count()">-->
+  <!--        <div v-for="(note, i) in store.state.arpeggiator.MS.notes">-->
+  <!--          <div @click="msUpdateChords(c, i, $event)">-->
+  <!--            {{ store.state.arpeggiator.chord_deg[i] }}-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </section>-->
 
-<!--    <section class="bpm">-->
-<!--      <h1>Beats Per Minute</h1>-->
-<!--      <div v-for="bpm in store.state.arpeggiator.bpms" @click="playerUpdateBPM(bpm)">-->
-<!--        {{ bpm }}-->
-<!--      </div>-->
-<!--    </section>-->
+  <!--    <section class="bpm">-->
+  <!--      <h1>Beats Per Minute</h1>-->
+  <!--      <div v-for="bpm in store.state.arpeggiator.bpms" @click="playerUpdateBPM(bpm)">-->
+  <!--        {{ bpm }}-->
+  <!--      </div>-->
+  <!--    </section>-->
 
-<!--    <section class="keys">-->
-<!--      <h1>Tonic / Root</h1>-->
-<!--      <div v-for="key in store.state.arpeggiator.MS.dict.keys" @click="msUpdateKey(key)">-->
-<!--        {{ key }}-->
-<!--      </div>-->
-<!--    </section>-->
+  <!--    <section class="keys">-->
+  <!--      <h1>Tonic / Root</h1>-->
+  <!--      <div v-for="key in store.state.arpeggiator.MS.dict.keys" @click="msUpdateKey(key)">-->
+  <!--        {{ key }}-->
+  <!--      </div>-->
+  <!--    </section>-->
 
-<!--    <section class="modes">-->
-<!--      <div v-for="mode in store.state.arpeggiator.MS.dict.modes" @click="msUpdateMode(mode)">-->
-<!--        {{ mode }}-->
-<!--      </div>-->
-<!--    </section>-->
+  <!--    <section class="modes">-->
+  <!--      <div v-for="mode in store.state.arpeggiator.MS.dict.modes" @click="msUpdateMode(mode)">-->
+  <!--        {{ mode }}-->
+  <!--      </div>-->
+  <!--    </section>-->
 
-<!--    <section class="steps">-->
-<!--      <h1>Steps</h1>-->
-<!--      <div v-for="step in store.state.arpeggiator.steps" @click="apUpdateSteps(step)">-->
-<!--        {{ step }}-->
-<!--      </div>-->
-<!--    </section>-->
+  <!--    <section class="steps">-->
+  <!--      <h1>Steps</h1>-->
+  <!--      <div v-for="step in store.state.arpeggiator.steps" @click="apUpdateSteps(step)">-->
+  <!--        {{ step }}-->
+  <!--      </div>-->
+  <!--    </section>-->
 
-<!--    <section class="type">-->
-<!--      <h1>Arpeggio Type</h1>-->
-<!--      <div v-for="type in store.state.arpeggiator.types" @click="apUpdatePatternType(type)">-->
-<!--        {{ type }}-->
-<!--      </div>-->
-<!--    </section>-->
+  <!--    <section class="type">-->
+  <!--      <h1>Arpeggio Type</h1>-->
+  <!--      <div v-for="type in store.state.arpeggiator.types" @click="apUpdatePatternType(type)">-->
+  <!--        {{ type }}-->
+  <!--      </div>-->
+  <!--    </section>-->
 
-<!--    <section class="patterns">-->
-<!--      <h1>Arpeggio Style</h1>-->
-<!--      <div v-for="pattern in store.state.arpeggiator.AP.patterns[store.state.arpeggiator.ap_pattern_type]"-->
-<!--           @click="apUpdatePatternId(pattern)">-->
-<!--        {{ pattern }}-->
-<!--      </div>-->
-<!--    </section>-->
+  <!--    <section class="patterns">-->
+  <!--      <h1>Arpeggio Style</h1>-->
+  <!--      <div v-for="pattern in store.state.arpeggiator.AP.patterns[store.state.arpeggiator.ap_pattern_type]"-->
+  <!--           @click="apUpdatePatternId(pattern)">-->
+  <!--        {{ pattern }}-->
+  <!--      </div>-->
+  <!--    </section>-->
 
-<!--    <button @click="playerToggle()" class="h-24"></button>-->
-<!--  </div>-->
+  <!--    <button @click="playerToggle()" class="h-24"></button>-->
+  <!--  </div>-->
 </template>
 
 <script>
@@ -225,7 +225,7 @@ export default {
       fx.reverb.wet.value = 0.2;
       fx.delay.wet.value = 0.3;
       // gain levels
-      channel.master.toMaster();
+      channel.master.toDestination();
       channel.treb.connect(channel.master);
       channel.bass.connect(channel.master);
       // fx chains
@@ -240,13 +240,13 @@ export default {
       // let el = e.target;
       // let bpm = el.getAttribute('data-value');
       arpState.player.bpm = parseInt(bpm);
-      Tone.Transport.bpm.value = arpState.player.bpm
+      //Tone.Transport.bpm.value = arpState.player.bpm
       //this._utilClassToggle(e.target, 'bpm-current');
     };
 
     const stopArp = () => {
       if (arpState.player.playing) {
-        Tone.Transport.pause();
+        //Tone.Transport.pause();
         channel.master.gain.value = 0;
         //this.play_toggle.classList.remove('active');
       }
@@ -260,38 +260,42 @@ export default {
 
     watch(() => bus.value.get('scheduleArpeggioNotes'), () => {
 
-      const latencyOffset = -0.07; //tone seems to be a bit behind the beat
-
       const gridProcessor = new GridProcessor(store.state.grid)
       const arpData = gridProcessor.extractArpeggioData()
-      const sequencer = new ArpeggioSequencer(arpData, store.state.globalBpm)
+      const sequencer = new ArpeggioSequencer(arpData, store.state.getGlobalBpm())
       const sequence = sequencer.getSequence()
 
-      //FIRST CLEAR ALL NOTES
-      Tone.Transport.cancel(0)
-      Tone.Transport.bpm.value = store.state.globalBpm ? store.state.globalBpm : 0;
+      const bpm = store.state.globalBpm ? store.state.globalBpm : 120;
+      const secondsToRecord = (bpm / 60) * 4 * 4 * 12
+      const channels = 2
+      const sampleRate = 44100
 
-      for (let i = 0; i < sequence.length; i++) {
-        let sequenceItem = sequence[i]
-        Tone.Transport.schedule((time) => {
-          synths.treb.triggerAttackRelease(sequenceItem.note, sequenceItem.duration, time);
-        }, sequenceItem.time + latencyOffset);
-      }
+      Tone.getContext().isOffline = true
 
+      Tone.Offline(function ({transport}) {
+        transport.clear()
+        //const osc = new Tone.Oscillator().toDestination();
+        const bogus = new Tone.PolySynth(Tone.SimpleAM).toDestination();
 
+        for (let i = 0; i < sequence.length; i++) {
+          console.log('ADDING NOTE')
+          let sequenceItem = sequence[i]
+          transport.schedule((time) => {
+            //bogus.start(time).stop(time + sequenceItem.duration);
+            bogus.triggerAttackRelease(sequenceItem.note, sequenceItem.duration, time);
+          }, sequenceItem.time);
+        }
+        transport.start()
 
-      // Tone.Offline(function(Transport){
-      //   var osc = new Tone.Oscillator().toMaster()
-      //   Transport.schedule(function(time){
-      //     osc.start(time).stop(time + 0.1)
-      //   }, 1)
-      //   Transport.start(0.2)
-      // }, 4).then(function(buffer){
-      //   //do something with the output buffer
-      // })
+      }, secondsToRecord, channels, sampleRate).then(function (buffer) {
+        store.arpeggioBuffer = buffer
+        console.log('ARP BUFFER CREATED', buffer)
+        //do something with the output buffer
 
-
+        //emit('renderMix')
+      })
     })
+
 
     /*
         Tone.Transport.scheduleRepeat((time) => {

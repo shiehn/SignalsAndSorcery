@@ -26,11 +26,11 @@
     </div>
 
     <div class="flex h-8 justify-between my-1">
-      <label for="arpCtrlSpeed" class="w-1/3 my-2 text-sm">RATE</label>
-      <select v-if="arpCtrlSpeed != undefined" v-model="arpCtrlSpeed" @change="saveArpSettings($event)"
-              id="arpCtrlSpeed"
+      <label for="arpCtrlRate" class="w-1/3 my-2 text-sm">RATE</label>
+      <select v-if="arpCtrlRate != undefined" v-model="arpCtrlRate" @change="saveArpSettings($event)"
+              id="arpCtrlRate"
               class="w-2/3 text-xs rounded-lg">
-        <option :value="item" v-for="item in arpCtrlSpeedOptions">{{ item }}
+        <option :value="item" v-for="item in arpCtrlRateOptions">{{ item }}
         </option>
       </select>
     </div>
@@ -66,20 +66,16 @@ export default {
 
     const saveArpSettings = () => {
       if (currentRow != undefined && currentCol != undefined) {
-        console.log('save dat shit')
         const arpeggio = store.state.grid[currentRow].value[currentCol].arpeggio
         if (!arpeggio) {
           console.log('error: arpeggio not found at row:' + currentRow + ' col:' + currentCol)
           return
         }
 
-        console.log('save rate', arpCtrlRate.value)
         arpeggio.pattern = arpCtrlPattern.value
         arpeggio.rate = arpCtrlRate.value
         arpeggio.chords = arpCtrlChords.value
         arpeggio.synth = arpCtrlSynth.value
-
-        emit('scheduleArpeggioNotes')
       }
     }
 
@@ -94,7 +90,6 @@ export default {
 
       const arpeggio = store.state.grid[assetFilter[0].row].value[assetFilter[0].col].arpeggio
       if (!arpeggio) {
-        console.log('error: arpeggio not found at row:' + assetFilter[0].row + ' col:' + assetFilter[0].col)
         return
       }
 
@@ -116,13 +111,18 @@ export default {
       arpCtrlRate.value = arpeggio.rate
     })
 
+
+    watch([arpId, arpCtrlChords, arpCtrlPattern, arpCtrlRate, arpCtrlSynth, ], () => {
+      emit('renderMixIfNeeded')
+    })
+
     return {
       arpCtrlChords,
       arpId,
       arpCtrlPattern,
       arpCtrlPatternOptions,
-      arpCtrlSpeed: arpCtrlRate,
-      arpCtrlSpeedOptions: arpCtrlRateOptions,
+      arpCtrlRate,
+      arpCtrlRateOptions,
       arpCtrlSynth,
       arpCtrlSynthOptions,
       saveArpSettings

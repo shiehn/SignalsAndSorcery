@@ -39,17 +39,12 @@
            @dragenter.prevent
            v-on:mouseover="mouseOverGridItem(gridRowItem.row, gridRowItem.col)"
            v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
-           @click="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
+           @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
         <div v-if="i===0" class="w-full h-full flex justify-center content-center items-center">
-          <!--          <button v-if="!gridRowItem.arpeggio.on" @click="toggleArpeggio(gridRowItem.row, gridRowItem.col, true)">ON</button>-->
-          <!--          <button v-if="gridRowItem.arpeggio.on" @click="toggleArpeggio(gridRowItem.row, gridRowItem.col, false)">OFF</button>-->
-
             <label class="inline-flex relative items-center cursor-pointer">
               <input v-model="gridRowItem.arpeggio.on" :id="item" type="checkbox" value="" class="sr-only peer">
               <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-800"></div>
             </label>
-
-
         </div>
         <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
         <img v-if="gridRowItem.showDeleteIcon" :src=gridRowItem.deleteIconPath
@@ -193,15 +188,15 @@ export default {
         col: col,
       }
 
-      emit('updateAssetSelection', updateParam)
+      //emit('updateAssetSelection', updateParam)
 
       //TODO: THIS IS A HACK TO GET THE MODAL TO OPEN by firing twice
       //TODO: FIX THIS
-      if (row === 0) {
+      //if (row === 0) {
         setTimeout(() => {
           emit('updateAssetSelection', updateParam)
         }, 200)
-      }
+      //}
     }
 
     const evalCompatibility = (stem) => {
@@ -243,17 +238,6 @@ export default {
       )
 
       emit('launchModal', modalOpenPayload)
-    }
-
-    const toggleArpeggio = (row, col) => {
-      const gridItem = store.state.grid[row].value[col]
-      if (gridItem.arpeggio) {
-        gridItem.arpeggio.on = !gridItem.arpeggio.on
-      } else {
-        console.log('NO GRID ITEM')
-      }
-
-      emit('scheduleArpeggioNotes')
     }
 
     watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
@@ -329,7 +313,6 @@ export default {
       onDrop,
       progressBar,
       removeGridItem,
-      toggleArpeggio
     }
   },
 }

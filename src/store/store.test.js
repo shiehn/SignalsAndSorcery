@@ -43,22 +43,94 @@ function createGrid(rowOne, rowTwo) {
     return grid
 }
 
+function createArpeggioGrid() {
+
+    const arps = [{
+        id: 'aaaa',
+        rate: 1,
+        pattern: 1
+    }, {
+        id: 'bbbb',
+        rate: 1,
+        pattern: 1
+    }, undefined, {
+        id: 'dddd',
+        rate: 1,
+        pattern: 1
+    }]
+
+    let grid = [
+        ref([{
+            arpeggio: arps[0],
+        }, {
+            arpeggio: arps[1],
+        }, {
+            arpeggio: arps[2],
+        }, {
+            arpeggio: arps[3],
+        }]),
+    ]
+
+    return grid
+}
+
 describe('Store Tests', () => {
-    it('should calculateStateHash', async () => {
+    /*APP HASH TESTS*/
+
+    it('should calculateArpeggioStateHash', async () => {
+        state.state.grid = createArpeggioGrid()
+
+        const hash = state.state.calculateArpeggioStateHash()
+        expect(hash).to.equals('00aaaaundefined1101bbbbundefined1102undef03ddddundefined11')
+    })
+
+    it('should updateArpeggioStateHash', async () => {
+        state.state.grid = createArpeggioGrid()
+
+        const hash = state.state.calculateArpeggioStateHash()
+
+        expect(state.state.currentArpeggioStateHash).not.to.equals(hash)
+
+        state.state.updateArpeggioStateHash()
+
+        expect(state.state.currentArpeggioStateHash).to.equals(hash)
+    })
+
+    it('should detect no arpeggio state changed', async () => {
+        state.state.grid = createArpeggioGrid()
+
+        state.state.updateArpeggioStateHash()
+
+        expect(state.state.hasArpeggioStateChanged()).toBeFalsy()
+    })
+
+    it('should detect arpeggio state changed', async () => {
+        state.state.grid = createArpeggioGrid()
+
+        state.state.updateArpeggioStateHash()
+
+        state.state.grid[0].value[1].arpeggio.rate = 3
+
+        expect(state.state.hasArpeggioStateChanged()).toBeTruthy()
+    })
+    /*END APP HASH TESTS*/
+
+
+    it('should calculateClipStateHash', async () => {
         state.state.grid = createGrid(['a', 'b', 'c', 'd'], ['a', 'b', 'c', 'd'])
 
-        const hash = state.state.calculateStateHash()
+        const hash = state.state.calculateClipStateHash()
         expect(hash).to.equals('00a01b02c03d10a11b12c13d')
     })
 
     it('should updateStateHash', async () => {
         state.state.grid = createGrid(['a', 'b', 'c', 'd'], ['a', 'b', 'c', 'd'])
 
-        const hash = state.state.calculateStateHash()
+        const hash = state.state.calculateClipStateHash()
 
         expect(state.state.currentStateHash).not.to.equals(hash)
 
-        state.state.updateStateHash()
+        state.state.updateClipStateHash()
 
         expect(state.state.currentStateHash).to.equals(hash)
     })
@@ -66,19 +138,19 @@ describe('Store Tests', () => {
     it('should detect no state changed', async () => {
         state.state.grid = createGrid(['a', 'b', 'c', 'd'], ['a', 'b', 'c', 'd'])
 
-        state.state.updateStateHash()
+        state.state.updateClipStateHash()
 
-        expect(state.state.hasStateChanged()).toBeFalsy()
+        expect(state.state.hasClipStateChanged()).toBeFalsy()
     })
 
     it('should detect state changed', async () => {
         state.state.grid = createGrid(['a', 'b', 'c', 'd'], ['a', 'b', 'c', 'd'])
 
-        state.state.updateStateHash()
+        state.state.updateClipStateHash()
 
         state.state.grid = createGrid(['a', 'b', 'c', 'd'], ['a', 'b', 'z', 'd'])
 
-        expect(state.state.hasStateChanged()).toBeTruthy()
+        expect(state.state.hasClipStateChanged()).toBeTruthy()
     })
 
     it('should calculate row state hash', async () => {
@@ -130,9 +202,9 @@ describe('Store Tests', () => {
         state.state.globalKey = 'a'
 
         let gridItemWithStem = {
-                key: 'f',
-                type: 'hi',
-            }
+            key: 'f',
+            type: 'hi',
+        }
 
         state.state.grid = createGrid(
             ['a', 'b', 'c', 'd'],

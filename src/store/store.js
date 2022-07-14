@@ -3,6 +3,8 @@ import {reactive} from "vue";
 const debugMode = true
 let context = undefined
 
+const arpeggioBuffer = undefined
+
 const state = reactive({
     arpeggiator: {
         AP: undefined,
@@ -35,7 +37,21 @@ const state = reactive({
     projectName: 'Untitled Project',
     authorName: '',
     globalBpm: undefined,
+    getGlobalBpm: function () {
+        if(this.globalBpm){
+            return this.globalBpm
+        }
+
+        return 120
+    },
     globalKey: undefined,
+    getGlobalKey: function () {
+        if(this.globalKey){
+            return this.globalKey
+        }
+
+        return 'C'
+    },
     playBack: {
         loopStartPercent: 0,
         loopEndPercent: 100,
@@ -48,6 +64,10 @@ const state = reactive({
                 if (this.grid[row].value[col].stem) {
                     clipCount++
                 }
+
+                // if (this.grid[row].value[col].arpeggio && this.grid[row].value[col].arpeggio.on) {
+                //     clipCount++
+                // }
             }
         }
 
@@ -56,6 +76,7 @@ const state = reactive({
     staticUrl: '',
     grid: [],
     currentStateHash: '',
+    currentArpeggioStateHash: '',
     currentRowHash: ['', '', '', ''],
     hasRowStateChanged: function (rowIndex) {
         return this.currentRowHash[rowIndex] !== this.calculateRowHash(rowIndex)
@@ -98,14 +119,21 @@ const state = reactive({
 
         return chords
     },
-    hasStateChanged: function () {
-        console.log('STATE CHANGE!')
-        return this.currentStateHash !== this.calculateStateHash()
+    hasClipStateChanged: function () {
+        console.log('CLIP STATE CHANGE!')
+        return this.currentStateHash !== this.calculateClipStateHash()
     },
-    updateStateHash: function () {
-        this.currentStateHash = this.calculateStateHash()
+    hasArpeggioStateChanged: function () {
+        console.log('ARPEGGIO STATE CHANGE!')
+        return this.currentArpeggioStateHash !== this.calculateArpeggioStateHash()
     },
-    calculateStateHash: function () {
+    updateClipStateHash: function () {
+        this.currentStateHash = this.calculateClipStateHash()
+    },
+    updateArpeggioStateHash: function () {
+        this.currentArpeggioStateHash = this.calculateArpeggioStateHash()
+    },
+    calculateClipStateHash: function () {
         let newHash = ''
         for (let row = 0; row < this.grid.length; row++) {
             for (let col = 0; col < this.grid[row].value.length; col++) {
@@ -116,6 +144,21 @@ const state = reactive({
                 }
             }
         }
+        return newHash
+    },
+    calculateArpeggioStateHash: function () {
+        let newHash = ''
+        for (let rowIndex = 0; rowIndex < this.grid.length; rowIndex++) {
+            for (let col = 0; col < this.grid[rowIndex].value.length; col++) {
+                const arpeggio = this.grid[rowIndex].value[col].arpeggio
+                if (arpeggio) {
+                    newHash = newHash + rowIndex + col + arpeggio.id.substring(0, 4) + arpeggio.on + arpeggio.rate + arpeggio.pattern
+                } else {
+                    newHash = newHash + rowIndex + col + 'undef'
+                }
+            }
+        }
+
         return newHash
     },
     updateGlobalBpm: function () {
