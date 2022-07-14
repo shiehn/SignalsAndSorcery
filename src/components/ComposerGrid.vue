@@ -33,7 +33,13 @@
          class="flex flex-none justify-between">
       <div v-for="gridRowItem in gridRow.value"
            class="ml-1 mb-2 w-16 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg  hover:bg-gray-400 hover:cursor-pointer"
-           :class="{ 'animate-pulse bg-gray-500': i===0 && gridRowItem.arpeggio.on, 'bg-green-100': gridRowItem.compatibility === 2, 'bg-yellow-100': gridRowItem.compatibility === 1, 'bg-red-100': gridRowItem.compatibility === 0 }"
+           :class="{
+            'bg-gray-500': i===0 && gridRowItem.arpeggio.on && gridRowItem.arpeggio.rendered,
+            'animate-pulse bg-red-500': i===0 && gridRowItem.arpeggio.on && !gridRowItem.arpeggio.rendered,
+            'bg-green-100': gridRowItem.compatibility === 2,
+            'bg-yellow-100': gridRowItem.compatibility === 1,
+            'bg-red-100': gridRowItem.compatibility === 0
+        }"
            @drop="onDrop($event, gridRowItem.row, gridRowItem.col)"
            @dragover.prevent
            @dragenter.prevent
@@ -42,7 +48,7 @@
            @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
         <div v-if="i===0" class="w-full h-full flex justify-center content-center items-center">
             <label class="inline-flex relative items-center cursor-pointer">
-              <input v-model="gridRowItem.arpeggio.on" :id="item" type="checkbox" value="" class="sr-only peer">
+              <input v-model="gridRowItem.arpeggio.on" type="checkbox" value="" class="sr-only peer">
               <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-800"></div>
             </label>
         </div>
@@ -168,6 +174,7 @@ export default {
     }
 
     const handleGridItemClick = (row, col) => {
+
       let key = undefined
       let chords = store.state.getChordsForCol(col)
       if (ROW_TO_TYPE_MAP[row] == 'drum') {

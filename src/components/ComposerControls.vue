@@ -17,6 +17,7 @@ import GlobalTrackValues from "./GlobalTrackValues";
 import axios from "axios";
 import Crunker from "crunker";
 import StartArpPayload from "./arpeggiator/start-arp-payload";
+import GridProcessor from "../processors/grid-processor";
 
 export default {
   name: "ComposerControls",
@@ -266,6 +267,12 @@ export default {
       isRendering.value = false
 
       store.state.updateClipStateHash()
+
+      updateRenderedArpeggios()
+    }
+
+    const updateRenderedArpeggios = () => {
+      new GridProcessor(store.state.grid).updateRenderedArpeggios()
     }
 
     const playMix = async (offsetStartPercentage) => {
@@ -375,7 +382,7 @@ export default {
 
     watch(() => bus.value.get('renderMixIfNeeded'), async () => {
       if (store.state.hasArpeggioStateChanged()) {
-        console.log('ARPEGGIO STATE CHANGED! RENDER NOW()!!!')
+        console.log('ARPEGGIO STATE CHANGED! SCHEDULE NOTES NOW()!!!')
         emit('scheduleArpeggioNotes')
       }
 

@@ -7,6 +7,8 @@ export default class GridItemArpeggio {
         }
 
         this.id = id
+        this.rendered = false
+        this.on = false
         this.pattern = pattern
         this.rate = rate
         this.type = 'arpeggio'

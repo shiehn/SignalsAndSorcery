@@ -3,6 +3,7 @@
     <h1>ARPEGGIATOR</h1>
     <div>ARP ID: {{ arpId }}</div>
     <div>{{ arpCtrlChords }}</div>
+    <button v-if="!arpIsRendered" class="bg-red-600" @click="renderArpeggios()">Render Changes</button>
   </div>
   <div>
     <div class="flex h-8 justify-between my-1">
@@ -41,6 +42,7 @@
 import store from "../../store/store";
 import {inject, nextTick, ref, watch} from "vue";
 import useEventsBus from "../../events/eventBus";
+import GridProcessor from "../../processors/grid-processor";
 
 export default {
   name: "ArpeggiatorControls",
@@ -49,6 +51,8 @@ export default {
     const {bus, emit} = useEventsBus()
 
     const arpId = ref('arp_id')
+
+    const arpIsRendered = ref(false)
 
     const arpCtrlChords = ref('chords')
 
@@ -106,14 +110,29 @@ export default {
       }
 
       arpId.value = arpeggio.id
+      arpIsRendered.value = arpeggio.rendered
       arpCtrlChords.value = chords.length > 0 ? chords : arpeggio.chords
       arpCtrlPattern.value = arpeggio.pattern
       arpCtrlRate.value = arpeggio.rate
     })
 
+    const renderArpeggios = () => {
+      //alert('ARP_ID = ' + arpId.value)
+    }
 
-    watch([arpId, arpCtrlChords, arpCtrlPattern, arpCtrlRate, arpCtrlSynth, ], () => {
-      emit('renderMixIfNeeded')
+    watch([arpId, arpCtrlChords, arpCtrlPattern, arpCtrlRate, arpCtrlSynth,], () => {
+      alert('change detected: ' + arpId.value)
+      let arpeggio = new GridProcessor(store.state.grid).getArpeggioById(arpId.value)
+      if (!arpeggio) {
+        return
+      }
+
+      arpeggio.rendered = false //FLAG THE ARPEGGIO AS UN-RENDERED
+      alert('UPDATED ARPEGGIO RENDER')
+
+      if (arpeggio.on) {
+        emit('renderMixIfNeeded')
+      }
     })
 
     return {
@@ -125,10 +144,11 @@ export default {
       arpCtrlRateOptions,
       arpCtrlSynth,
       arpCtrlSynthOptions,
+      arpIsRendered,
+      renderArpeggios,
       saveArpSettings
     }
   }
-  ,
 }
 </script>
 

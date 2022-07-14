@@ -120,7 +120,7 @@ export default class GridProcessor {
                 }
 
                 //add arpeggios to row 0
-                if(row == 0) {
+                if (row == 0) {
                     this.grid[row].value[newItemIndex + col].arpeggio = new GridItemArpeggio(v4(), [], 'pattern_1', 'quarter')
                 }
             }
@@ -160,5 +160,31 @@ export default class GridProcessor {
         }
 
         return arpeggioData
+    }
+
+    getArpeggioById = (id) => {
+        let arpeggio = undefined
+
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                let arp = this.grid[row].value[col].arpeggio
+                if (arp && arp.id === id) {
+                    return arp
+                }
+            }
+        }
+
+        return arpeggio
+    }
+
+    updateRenderedArpeggios = () => {
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                let arp = this.grid[row].value[col].arpeggio
+                if (arp && arp.on) {
+                    arp.rendered = true
+                }
+            }
+        }
     }
 }
