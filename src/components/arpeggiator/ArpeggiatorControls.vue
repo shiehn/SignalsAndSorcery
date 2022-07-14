@@ -3,7 +3,7 @@
     <h1>ARPEGGIATOR</h1>
     <div>ARP ID: {{ arpId }}</div>
     <div>{{ arpCtrlChords }}</div>
-    <button v-if="!arpIsRendered" class="bg-red-600" @click="renderArpeggios()">Render Changes</button>
+    <button v-if="displayRenderBtn" class="bg-red-600" @click="renderArpeggios()">Render Changes</button>
   </div>
   <div>
     <div class="flex h-8 justify-between my-1">
@@ -49,21 +49,15 @@ export default {
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
-
     const arpId = ref('arp_id')
-
-    const arpIsRendered = ref(false)
-
     const arpCtrlChords = ref('chords')
-
     const arpCtrlPattern = ref('pattern_1')
     const arpCtrlPatternOptions = ['pattern_1']
-
     const arpCtrlRate = ref('quarter')
     const arpCtrlRateOptions = ['whole', 'half', 'quarter', 'eighth', 'sixteenth']
-
     const arpCtrlSynth = ref('synth_1')
     const arpCtrlSynthOptions = ['synth_1']
+    const displayRenderBtn = ref(false)
 
     let currentRow = undefined
     let currentCol = undefined
@@ -80,12 +74,19 @@ export default {
         arpeggio.rate = arpCtrlRate.value
         arpeggio.chords = arpCtrlChords.value
         arpeggio.synth = arpCtrlSynth.value
+        arpeggio.rendered = false //FLAG THE ARPEGGIO AS UN-RENDERED
+
+        displayRenderBtn.value = !arpeggio.rendered && arpeggio.on
+
+        if (arpeggio.on) {
+          emit('renderMixIfNeeded')
+        }
       }
     }
 
-    watch(() => bus.value.get('updateAssetSelection'), (assetFilter) => {
+    watch(() => bus.value.get('updateArpeggioControls'), (assetFilter) => {
+
       if (assetFilter[0].row == undefined || assetFilter[0].col == undefined) {
-        console.log('error: updateAssetSelection requires a ro w and col')
         return
       }
 
@@ -110,30 +111,16 @@ export default {
       }
 
       arpId.value = arpeggio.id
-      arpIsRendered.value = arpeggio.rendered
+      displayRenderBtn.value = !arpeggio.rendered && arpeggio.on
       arpCtrlChords.value = chords.length > 0 ? chords : arpeggio.chords
       arpCtrlPattern.value = arpeggio.pattern
       arpCtrlRate.value = arpeggio.rate
     })
 
     const renderArpeggios = () => {
-      //alert('ARP_ID = ' + arpId.value)
+      displayRenderBtn.value = false
+      emit('renderMix')
     }
-
-    watch([arpId, arpCtrlChords, arpCtrlPattern, arpCtrlRate, arpCtrlSynth,], () => {
-      alert('change detected: ' + arpId.value)
-      let arpeggio = new GridProcessor(store.state.grid).getArpeggioById(arpId.value)
-      if (!arpeggio) {
-        return
-      }
-
-      arpeggio.rendered = false //FLAG THE ARPEGGIO AS UN-RENDERED
-      alert('UPDATED ARPEGGIO RENDER')
-
-      if (arpeggio.on) {
-        emit('renderMixIfNeeded')
-      }
-    })
 
     return {
       arpCtrlChords,
@@ -144,7 +131,7 @@ export default {
       arpCtrlRateOptions,
       arpCtrlSynth,
       arpCtrlSynthOptions,
-      arpIsRendered,
+      displayRenderBtn,
       renderArpeggios,
       saveArpSettings
     }

@@ -5,7 +5,7 @@
 import {describe, it, expect} from "vitest"
 import {mount, shallowMount} from '@vue/test-utils'
 import AssetSelector from "./AssetSelector.vue";
-import {defineComponent, nextTick, reactive} from "vue";
+import {reactive} from "vue";
 
 describe('AssetSelector Tests', () => {
     it('should filter type', async () => {
@@ -22,10 +22,5 @@ describe('AssetSelector Tests', () => {
                 }
             }
         })
-
-        // nextTick()
-        //
-        // const text = wrapper.text()
-        // expect(text).toContain('dm:c:e:fm')
     })
 })

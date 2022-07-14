@@ -47,10 +47,11 @@
            v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
            @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
         <div v-if="i===0" class="w-full h-full flex justify-center content-center items-center">
-            <label class="inline-flex relative items-center cursor-pointer">
-              <input v-model="gridRowItem.arpeggio.on" type="checkbox" value="" class="sr-only peer">
-              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-800"></div>
-            </label>
+          <label class="inline-flex relative items-center cursor-pointer">
+            <input v-model="gridRowItem.arpeggio.on" type="checkbox" value="" class="sr-only peer">
+            <div
+                class="w-11 h-6 bg-gray-200 peer-focus:outline-none dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-800"></div>
+          </label>
         </div>
         <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
         <img v-if="gridRowItem.showDeleteIcon" :src=gridRowItem.deleteIconPath
@@ -195,15 +196,12 @@ export default {
         col: col,
       }
 
-      //emit('updateAssetSelection', updateParam)
+      emit('updateAssetSelection', updateParam)
 
-      //TODO: THIS IS A HACK TO GET THE MODAL TO OPEN by firing twice
-      //TODO: FIX THIS
-      //if (row === 0) {
-        setTimeout(() => {
-          emit('updateAssetSelection', updateParam)
-        }, 200)
-      //}
+      setTimeout(() => {
+        //This delay is a hack to buy time for the 'updateAssetSelection' event to display the ArpeggioControls
+        emit('updateArpeggioControls', updateParam)
+      }, 100)
     }
 
     const evalCompatibility = (stem) => {

@@ -70,7 +70,7 @@ import {watch} from "vue";
 import useEventsBus from "../events/eventBus";
 import store from "../store/store";
 import {ROW_TO_TYPE_MAP} from "../constants/constants";
-import ArpeggiatorControls from "./arpeggiator/ArpeggiatorControls";
+import ArpeggiatorControls from "./arpeggiator/ArpeggiatorControls.vue";
 
 export default {
   name: "AssetSelector",

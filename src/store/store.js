@@ -65,9 +65,9 @@ const state = reactive({
                     clipCount++
                 }
 
-                // if (this.grid[row].value[col].arpeggio && this.grid[row].value[col].arpeggio.on) {
-                //     clipCount++
-                // }
+                if (this.grid[row].value[col].arpeggio && this.grid[row].value[col].arpeggio.on) {
+                    clipCount++
+                }
             }
         }
 

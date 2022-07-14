@@ -375,6 +375,7 @@ export default {
     })
 
     watch(() => bus.value.get('renderMix'), async () => {
+      console.log('I HEARD YO')
       if (!isRendering.value) {
         await renderMix()
       }
