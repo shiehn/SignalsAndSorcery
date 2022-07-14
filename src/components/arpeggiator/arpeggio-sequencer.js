@@ -105,8 +105,4 @@ export default class ArpeggioSequencer {
         console.log('SEQUENCE', sequence)
         return sequence
     }
-
-    //generate the arpeggio sequence
-
-    //apply the sequence to TONE
 }

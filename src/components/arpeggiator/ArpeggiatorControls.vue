@@ -8,7 +8,7 @@
   <div>
     <div class="flex h-8 justify-between my-1">
       <label for="arpCtrlPattern" class="w-1/3 my-2 text-sm">PATTERN</label>
-      <select v-if="arpCtrlPattern != undefined" v-model="arpCtrlPattern" @change="saveArpSettings($event)"
+      <select v-if="arpCtrlPattern != undefined" v-model="arpCtrlPattern" @change="handleArpChanges($event)"
               id="arpCtrlPattern"
               class="w-2/3 text-xs rounded-lg">
         <option :value="item" v-for="item in arpCtrlPatternOptions">{{ item }}
@@ -18,7 +18,7 @@
 
     <div class="flex h-8 justify-between my-1">
       <label for="arpCtrlSynth" class="w-1/3 my-2 text-sm">SYNTH</label>
-      <select v-if="arpCtrlSynth != undefined" v-model="arpCtrlSynth" @change="saveArpSettings($event)"
+      <select v-if="arpCtrlSynth != undefined" v-model="arpCtrlSynth" @change="handleArpChanges($event)"
               id="arpCtrlSynth"
               class="w-2/3 text-xs rounded-lg">
         <option :value="item" v-for="item in arpCtrlSynthOptions">{{ item }}
@@ -28,7 +28,7 @@
 
     <div class="flex h-8 justify-between my-1">
       <label for="arpCtrlRate" class="w-1/3 my-2 text-sm">RATE</label>
-      <select v-if="arpCtrlRate != undefined" v-model="arpCtrlRate" @change="saveArpSettings($event)"
+      <select v-if="arpCtrlRate != undefined" v-model="arpCtrlRate" @change="handleArpChanges($event)"
               id="arpCtrlRate"
               class="w-2/3 text-xs rounded-lg">
         <option :value="item" v-for="item in arpCtrlRateOptions">{{ item }}
@@ -43,6 +43,7 @@ import store from "../../store/store";
 import {inject, nextTick, ref, watch} from "vue";
 import useEventsBus from "../../events/eventBus";
 import GridProcessor from "../../processors/grid-processor";
+import ArpeggioRenderer from "./arpeggio-renderer";
 
 export default {
   name: "ArpeggiatorControls",
@@ -62,7 +63,13 @@ export default {
     let currentRow = undefined
     let currentCol = undefined
 
-    const saveArpSettings = () => {
+    const renderCompleteCallback = function(){
+      console.log('CALLBACK COMPLETE')
+      displayRenderBtn.value = true
+      new GridProcessor(store.state.grid).updateArpeggioBuffersRendered()
+    }
+
+    const handleArpChanges = () => {
       if (currentRow != undefined && currentCol != undefined) {
         const arpeggio = store.state.grid[currentRow].value[currentCol].arpeggio
         if (!arpeggio) {
@@ -74,13 +81,11 @@ export default {
         arpeggio.rate = arpCtrlRate.value
         arpeggio.chords = arpCtrlChords.value
         arpeggio.synth = arpCtrlSynth.value
-        arpeggio.rendered = false //FLAG THE ARPEGGIO AS UN-RENDERED
+        //arpeggio.rendered = false //FLAG THE ARPEGGIO AS UN-RENDERED
 
-        displayRenderBtn.value = !arpeggio.rendered && arpeggio.on
+        displayRenderBtn.value = arpeggio.on && arpeggio.bufferRendered && !arpeggio.renderedInMix
 
-        if (arpeggio.on) {
-          emit('renderMixIfNeeded')
-        }
+        new ArpeggioRenderer(store).renderBuffer(renderCompleteCallback)
       }
     }
 
@@ -111,10 +116,14 @@ export default {
       }
 
       arpId.value = arpeggio.id
-      displayRenderBtn.value = !arpeggio.rendered && arpeggio.on
+      displayRenderBtn.value = arpeggio.on && arpeggio.bufferRendered && !arpeggio.renderedInMix
       arpCtrlChords.value = chords.length > 0 ? chords : arpeggio.chords
       arpCtrlPattern.value = arpeggio.pattern
       arpCtrlRate.value = arpeggio.rate
+
+      if(arpeggio.on) {
+        new ArpeggioRenderer(store).renderBuffer(renderCompleteCallback)
+      }
     })
 
     const renderArpeggios = () => {
@@ -133,7 +142,7 @@ export default {
       arpCtrlSynthOptions,
       displayRenderBtn,
       renderArpeggios,
-      saveArpSettings
+      handleArpChanges: handleArpChanges
     }
   }
 }

@@ -34,8 +34,8 @@
       <div v-for="gridRowItem in gridRow.value"
            class="ml-1 mb-2 w-16 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg  hover:bg-gray-400 hover:cursor-pointer"
            :class="{
-            'bg-gray-500': i===0 && gridRowItem.arpeggio.on && gridRowItem.arpeggio.rendered,
-            'animate-pulse bg-red-500': i===0 && gridRowItem.arpeggio.on && !gridRowItem.arpeggio.rendered,
+            'bg-gray-500': i===0 && gridRowItem.arpeggio.on && gridRowItem.arpeggio.bufferRendered && gridRowItem.arpeggio.renderedInMix,
+            'animate-pulse bg-red-500': i===0 && gridRowItem.arpeggio.on && (!gridRowItem.arpeggio.bufferRendered || !gridRowItem.arpeggio.renderedInMix),
             'bg-green-100': gridRowItem.compatibility === 2,
             'bg-yellow-100': gridRowItem.compatibility === 1,
             'bg-red-100': gridRowItem.compatibility === 0

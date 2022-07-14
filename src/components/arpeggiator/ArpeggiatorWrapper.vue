@@ -67,6 +67,7 @@ import ArpeggioPatterns from "./arpeggio-patterns";
 import useEventsBus from "../../events/eventBus";
 import ArpeggioSequencer from "./arpeggio-sequencer";
 import GridProcessor from "../../processors/grid-processor";
+import ArpeggioRenderer from "./arpeggio-renderer";
 
 export default {
   name: "ArpeggiatorWrapper",
@@ -258,43 +259,9 @@ export default {
       return 60 / bpm;
     }
 
-    watch(() => bus.value.get('scheduleArpeggioNotes'), () => {
-
-      const gridProcessor = new GridProcessor(store.state.grid)
-      const arpData = gridProcessor.extractArpeggioData()
-      const sequencer = new ArpeggioSequencer(arpData, store.state.getGlobalBpm())
-      const sequence = sequencer.getSequence()
-
-      const bpm = store.state.globalBpm ? store.state.globalBpm : 120;
-      const secondsToRecord = (bpm / 60) * 4 * 4 * 12
-      const channels = 2
-      const sampleRate = 44100
-
-      Tone.getContext().isOffline = true
-
-      Tone.Offline(function ({transport}) {
-        transport.clear()
-        //const osc = new Tone.Oscillator().toDestination();
-        const bogus = new Tone.PolySynth(Tone.SimpleAM).toDestination();
-
-        for (let i = 0; i < sequence.length; i++) {
-          console.log('ADDING NOTE')
-          let sequenceItem = sequence[i]
-          transport.schedule((time) => {
-            //bogus.start(time).stop(time + sequenceItem.duration);
-            bogus.triggerAttackRelease(sequenceItem.note, sequenceItem.duration, time);
-          }, sequenceItem.time);
-        }
-        transport.start()
-
-      }, secondsToRecord, channels, sampleRate).then(function (buffer) {
-        store.arpeggioBuffer = buffer
-        console.log('ARP BUFFER CREATED', buffer)
-        //do something with the output buffer
-
-        //emit('renderMix')
-      })
-    })
+    // watch(() => bus.value.get('scheduleArpeggioNotes'), () => {
+    //   new ArpeggioRenderer(store.state).renderBuffer()
+    // })
 
 
     /*

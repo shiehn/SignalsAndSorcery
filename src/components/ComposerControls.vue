@@ -272,7 +272,7 @@ export default {
     }
 
     const updateRenderedArpeggios = () => {
-      new GridProcessor(store.state.grid).updateRenderedArpeggios()
+      new GridProcessor(store.state.grid).updateArpeggioRenderedInMix()
     }
 
     const playMix = async (offsetStartPercentage) => {
@@ -382,10 +382,10 @@ export default {
     })
 
     watch(() => bus.value.get('renderMixIfNeeded'), async () => {
-      if (store.state.hasArpeggioStateChanged()) {
-        console.log('ARPEGGIO STATE CHANGED! SCHEDULE NOTES NOW()!!!')
-        emit('scheduleArpeggioNotes')
-      }
+      // if (store.state.hasArpeggioStateChanged()) {
+      //   console.log('ARPEGGIO STATE CHANGED! SCHEDULE NOTES NOW()!!!')
+      //   emit('scheduleArpeggioNotes')
+      // }
 
       if (store.state.hasClipStateChanged()) {
         console.log('CLIP STATE CHANGED RENDER! NOW()!!!')

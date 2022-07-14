@@ -9,7 +9,7 @@ import {nextTick, reactive} from "vue";
 
 describe('GlobalTrackValues Tests', () => {
 
-    it('should render bpm', async () => {
+    it('should renderBuffer bpm', async () => {
 
         const initialBpm = 74
         const updatedBpm = 66
@@ -39,7 +39,7 @@ describe('GlobalTrackValues Tests', () => {
         expect(text).toContain(updatedBpm)
     })
 
-    it('should render key', async () => {
+    it('should renderBuffer key', async () => {
 
         const initialKey = 'c'
         const updatedKey = 'f'
