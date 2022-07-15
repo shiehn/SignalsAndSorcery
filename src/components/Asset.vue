@@ -116,7 +116,9 @@ export default {
 
     setInterval(updateDurations, 100)
 
-    return {audioTag, startDrag, endDrag, mouseOverGridItem, mouseLeaveGridItem, onPlayClip, progressBar}
+
+
+    return {audioTag, startDrag, endDrag,  mouseOverGridItem, mouseLeaveGridItem, onPlayClip, progressBar}
   }
 }
 </script>

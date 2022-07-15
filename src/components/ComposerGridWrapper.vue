@@ -3,7 +3,6 @@
     <composer-grid-control-column></composer-grid-control-column>
     <composer-grid></composer-grid>
   </div>
-
 </template>
 
 <script>

@@ -7,13 +7,19 @@ export default class ArpeggioRenderer {
         this.store = store
     }
 
-    renderBuffer(renderCompleteCallback) {
+    renderBuffer(renderCompleteCallback, id) {
         const gridProcessor = new GridProcessor(this.store.state.grid)
         const arpData = gridProcessor.extractArpeggioData()
         const sequencer = new ArpeggioSequencer(arpData, this.store.state.getGlobalBpm())
         const sequence = sequencer.getSequence()
 
-        const bpm = this.store.state.globalBpm ? this.store.state.globalBpm : 120;
+        if(!this.store.state.globalBpm){
+            // if arpeggio is added to the grid before a clip a bpm must be set
+            // defaulting to 120 for now
+            this.store.state.globalBpm = 120
+        }
+
+        const bpm = this.store.state.globalBpm
         const secondsToRecord = (bpm / 60) * 4 * 4 * 12
         const channels = 2
         const sampleRate = 44100
@@ -37,7 +43,7 @@ export default class ArpeggioRenderer {
             localCtx.store.arpeggioBuffer = buffer
             console.log('ARP BUFFER CREATED', buffer)
 
-            renderCompleteCallback()
+            renderCompleteCallback(id)
         })
     }
 }

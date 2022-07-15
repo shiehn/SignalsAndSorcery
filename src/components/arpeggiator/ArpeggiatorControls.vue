@@ -63,10 +63,10 @@ export default {
     let currentRow = undefined
     let currentCol = undefined
 
-    const renderCompleteCallback = function(){
-      console.log('CALLBACK COMPLETE')
+    const renderCompleteCallback = function(id){
+      console.log('CALLBACK COMPLETE', id)
       displayRenderBtn.value = true
-      new GridProcessor(store.state.grid).updateArpeggioBuffersRendered()
+      new GridProcessor(store.state.grid).updateArpeggioBuffersRendered(id)
     }
 
     const handleArpChanges = () => {
@@ -77,6 +77,8 @@ export default {
           return
         }
 
+        new GridProcessor(store.state.grid).updateArpeggioToUnRendered(arpId.value)
+
         arpeggio.pattern = arpCtrlPattern.value
         arpeggio.rate = arpCtrlRate.value
         arpeggio.chords = arpCtrlChords.value
@@ -85,7 +87,8 @@ export default {
 
         displayRenderBtn.value = arpeggio.on && arpeggio.bufferRendered && !arpeggio.renderedInMix
 
-        new ArpeggioRenderer(store).renderBuffer(renderCompleteCallback)
+        console.log('TRIGGER handleArpChanges')
+        new ArpeggioRenderer(store).renderBuffer(renderCompleteCallback, arpId.value)
       }
     }
 
@@ -121,12 +124,14 @@ export default {
       arpCtrlPattern.value = arpeggio.pattern
       arpCtrlRate.value = arpeggio.rate
 
-      if(arpeggio.on) {
-        new ArpeggioRenderer(store).renderBuffer(renderCompleteCallback)
-      }
+      // if(arpeggio.on) {
+      //   console.log('TRIGGER updateArpeggioControls')
+      //   new ArpeggioRenderer(store).renderBuffer(renderCompleteCallback, arpId.value)
+      // }
     })
 
     const renderArpeggios = () => {
+      console.log('renderArpeggios')
       displayRenderBtn.value = false
       emit('renderMix')
     }

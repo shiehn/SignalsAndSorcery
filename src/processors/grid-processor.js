@@ -177,13 +177,16 @@ export default class GridProcessor {
         return arpeggio
     }
 
-    updateArpeggioBuffersRendered = () => {
+    updateArpeggioBuffersRendered = (id) => {
         for (let row = 0; row < this.grid.length; row++) {
             for (let col = 0; col < this.grid[row].value.length; col++) {
                 let arp = this.grid[row].value[col].arpeggio
                 if (arp && arp.on) {
                     arp.bufferRendered = true
-                    arp.renderedInMix = false
+
+                    if(id && id === arp.id) {
+                        arp.renderedInMix = false
+                    }
                 }
             }
         }
@@ -195,6 +198,18 @@ export default class GridProcessor {
                 let arp = this.grid[row].value[col].arpeggio
                 if (arp && arp.on && arp.bufferRendered) {
                     arp.renderedInMix = true
+                }
+            }
+        }
+    }
+
+    updateArpeggioToUnRendered = (id) => {
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                let arp = this.grid[row].value[col].arpeggio
+                if (arp && arp.on && arp.id === id) {
+                    arp.renderedInMix = false
+                    arp.bufferRendered = true
                 }
             }
         }
