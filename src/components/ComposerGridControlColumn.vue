@@ -1,31 +1,98 @@
 <template>
-  <div class="flex flex-col min-w-fit w-1/12 border-2 border-black rounded-lg mr-2 pt-2  px-2" style="background-color: rgba(255,255,255,0.9);">
+  <div class="flex flex-col min-w-fit w-1/12 border-2 border-black rounded-lg mr-2 pt-2  px-2"
+       style="background-color: rgba(255,255,255,0.9);">
     <button @click="addSectionPrompt" class="flex mb-2 w-full justify-center hover:cursor-pointer">
       <img :src=imageUrls.plusIcon class="w-6 h-6">
     </button>
-    <div @click="handleClick('arp')"
-         class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
-      <img :src=imageUrls.hiIcon class="w-10 h-10">
+
+    <div class="flex">
+      <div @click="handleClick('arp')"
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
+        <div class="">
+          <img :src=imageUrls.hiIcon class="w-8 h-8">
+          <div class="w-full text-center text-white bg-black text-xs mt-1">Arp</div>
+        </div>
+      </div>
+
+      <div class="pl-2">
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer" @click="handleFX('arp')">FX</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer" @click="handleVol('arp')">Vol</div>
+      </div>
     </div>
-    <div @click="handleClick('hi')"
-         class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
-      <img :src=imageUrls.hiIcon class="w-10 h-10">
+
+    <div class="flex">
+      <div @click="handleClick('hi')"
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
+        <div class="">
+          <img :src=imageUrls.hiIcon class="w-8 h-8">
+          <div class="w-full text-center text-white bg-black text-xs mt-1">Hi</div>
+        </div>
+      </div>
+
+      <div class="pl-2">
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer" @click="handleFX('hi')">FX</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer" @click="handleVol('hi')">Vol</div>
+      </div>
     </div>
-    <div @click="handleClick('mid')"
-         class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
-      <img :src=imageUrls.midIcon class="w-10 h-10">
+
+    <div class="flex">
+      <div @click="handleClick('mid')"
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
+        <div class="">
+          <img :src=imageUrls.midIcon class="w-8 h-8">
+          <div class="w-full text-center text-white bg-black text-xs mt-1">Mid</div>
+        </div>
+      </div>
+
+      <div class="pl-2">
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer" @click="handleFX('mid')">FX</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer" @click="handleVol('mid')">Vol</div>
+      </div>
     </div>
-    <div @click="handleClick('low')"
-         class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
-      <img :src=imageUrls.lowIcon class="w-10 h-10">
+
+    <div class="flex">
+      <div @click="handleClick('low')"
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
+        <div class="">
+          <img :src=imageUrls.lowIcon class="w-8 h-8">
+          <div class="w-full text-center text-white bg-black text-xs mt-1">Bass</div>
+        </div>
+      </div>
+
+      <div class="pl-2">
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer" @click="handleFX('low')">FX</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer" @click="handleVol('low')">Vol</div>
+      </div>
     </div>
-    <div @click="handleClick('drum')"
-         class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
-      <img :src=imageUrls.drumIcon class="w-10 h-10">
+
+    <div class="flex">
+      <div @click="handleClick('drum')"
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
+        <div class="">
+          <img :src=imageUrls.drumIcon class="w-8 h-8">
+          <div class="w-full text-center text-white bg-black text-xs mt-1">Drum</div>
+        </div>
+      </div>
+
+      <div class="pl-2">
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer" @click="handleFX('drum')">FX</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer" @click="handleVol('drum')">Vol</div>
+      </div>
     </div>
-    <div @click="handleClick('fill')"
-         class="flex justify-center items-center w-16 h-16 bg-white border-2 border-black rounded-lg hover:cursor-pointer">
-      <img :src=imageUrls.fillIcon class="w-10 h-10">
+
+    <div class="flex">
+      <div @click="handleClick('fill')"
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
+        <div class="">
+          <img :src=imageUrls.fillIcon class="w-8 h-8">
+          <div class="w-full text-center text-white bg-black text-xs mt-1">Fill</div>
+        </div>
+      </div>
+
+      <div class="pl-2">
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer" @click="handleFX('fill')">FX</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer" @click="handleVol('fill')">Vol</div>
+      </div>
     </div>
 
     <composer-controls></composer-controls>
@@ -101,9 +168,19 @@ export default {
       emit('updateAssetSelection', updateParam)
     }
 
+    const handleFX = (type) => {
+      toast.warning(`FX for '${type}' has not yet been implemented.`);
+    }
+
+    const handleVol = (type) => {
+      toast.warning(`FX for '${type}' has not yet been implemented.`);
+    }
+
     return {
       addSectionPrompt,
       handleClick,
+      handleFX,
+      handleVol,
       imageUrls
     }
   }

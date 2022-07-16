@@ -1,57 +1,47 @@
 <template>
   <!--    TOP ROW-->
   <div class="w-full">
-    <div class="flex w-full h-2/3">
-      <div class="w-1/4 border-r-2 border-black pl-4 pr-2">
+    <div class="flex w-full h-2/3  justify-evenly">
+      <div class="">
         <h1 class="text-lg mb-2">ARPEGGIATOR</h1>
         <!--        <div>ARP ID: {{ arpId }}</div>-->
         <!--        <div class="w-full mb-4">-->
         <!--          <span class="text-xs">CHORDS:</span>-->
         <div class="w-full bg-black mb-4 text-white text-xs">{{ arpCtrlChords }}</div>
         <!--        </div>-->
-        <!--        v-if="displayRenderBtn"-->
         <div class="flex justify-start">
-          <button class="bg-green-600 rounded-lg p-1 text-sm mr-4">PREVIEW</button>
-          <button class="bg-red-600 rounded-lg  p-1 text-sm" @click="renderArpeggios()">RENDER</button>
+          <button class="bg-gray-400 rounded-lg p-1 text-sm text-black mr-4">PREVIEW</button>
+          <button v-if="displayRenderBtn" class="bg-green-600 rounded-lg p-1 text-sm text-black" @click="renderArpeggios()">RENDER</button>
         </div>
       </div>
 
-      <div class="flex w-3/4 h-full justify-evenly">
+      <div class="w-1 h-full bg-gray-300"></div>
 
-        <type-selector></type-selector>
-        <rate-selector></rate-selector>
-        <type-selector></type-selector>
+      <synth-selector @handleArpChanges="handleArpChanges"></synth-selector>
+      <rate-selector></rate-selector>
+      <type-selector></type-selector>
 
-        <!--    <div class="flex h-8 justify-between my-1">-->
-        <!--      <label for="arpCtrlPattern" class="w-1/3 my-2 text-sm">PATTERN</label>-->
-        <!--      <select v-if="arpCtrlPattern != undefined" v-model="arpCtrlPattern" @change="handleArpChanges($event)"-->
-        <!--              id="arpCtrlPattern"-->
-        <!--              class="w-2/3 text-xs rounded-lg">-->
-        <!--        <option :value="item" v-for="item in arpCtrlPatternOptions">{{ item }}-->
-        <!--        </option>-->
-        <!--      </select>-->
-        <!--    </div>-->
-        <!--    <div class="flex h-8 justify-between my-1">-->
-        <!--      <label for="arpCtrlSynth" class="w-1/3 my-2 text-sm">SYNTH</label>-->
-        <!--      <select v-if="arpCtrlSynth != undefined" v-model="arpCtrlSynth" @change="handleArpChanges($event)"-->
-        <!--              id="arpCtrlSynth"-->
-        <!--              class="w-2/3 text-xs rounded-lg">-->
-        <!--        <option :value="item" v-for="item in arpCtrlSynthOptions">{{ item }}-->
-        <!--        </option>-->
-        <!--      </select>-->
-        <!--    </div>-->
-        <!--    <div class="flex h-8 justify-between my-1">-->
-        <!--      <label for="arpCtrlRate" class="w-1/3 my-2 text-sm">RATE</label>-->
-        <!--      <select v-if="arpCtrlRate != undefined" v-model="arpCtrlRate" @change="handleArpChanges($event)"-->
-        <!--              id="arpCtrlRate"-->
-        <!--              class="w-2/3 text-xs rounded-lg">-->
-        <!--        <option :value="item" v-for="item in arpCtrlRateOptions">{{ item }}-->
-        <!--        </option>-->
-        <!--      </select>-->
-        <!--    </div>-->
+      <!--    <div class="flex h-8 justify-between my-1">-->
+      <!--      <label for="arpCtrlPattern" class="w-1/3 my-2 text-sm">PATTERN</label>-->
+      <!--      <select v-if="arpCtrlPattern != undefined" v-model="arpCtrlPattern" @change="handleArpChanges($event)"-->
+      <!--              id="arpCtrlPattern"-->
+      <!--              class="w-2/3 text-xs rounded-lg">-->
+      <!--        <option :value="item" v-for="item in arpCtrlPatternOptions">{{ item }}-->
+      <!--        </option>-->
+      <!--      </select>-->
+      <!--    </div>-->
+      <!--    <div class="flex h-8 justify-between my-1">-->
+      <!--      <label for="arpCtrlSynth" class="w-1/3 my-2 text-sm">SYNTH</label>-->
+      <!--      <select v-if="arpCtrlSynth != undefined" v-model="arpCtrlSynth" @change="handleArpChanges($event)"-->
+      <!--              id="arpCtrlSynth"-->
+      <!--              class="w-2/3 text-xs rounded-lg">-->
+      <!--        <option :value="item" v-for="item in arpCtrlSynthOptions">{{ item }}-->
+      <!--        </option>-->
+      <!--      </select>-->
+      <!--    </div>-->
 
 
-      </div>
+
     </div>
 
     <f-x-wrapper></f-x-wrapper>
@@ -67,10 +57,11 @@ import ArpeggioRenderer from "./arpeggio-renderer";
 import RateSelector from "./selector/RateSelector";
 import TypeSelector from "./selector/TypeSelector";
 import FXWrapper from "./fx/FXWrapper";
+import SynthSelector from "./selector/SynthSelector";
 
 export default {
   name: "ArpeggiatorControls",
-  components: {FXWrapper, TypeSelector, RateSelector},
+  components: {SynthSelector, FXWrapper, TypeSelector, RateSelector},
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
@@ -93,7 +84,8 @@ export default {
       new GridProcessor(store.state.grid).updateArpeggioBuffersRendered(id)
     }
 
-    const handleArpChanges = () => {
+    const handleArpChanges = (selection) => {
+      alert('HELLO FROM CHILD:' + selection)
       if (currentRow != undefined && currentCol != undefined) {
         const arpeggio = store.state.grid[currentRow].value[currentCol].arpeggio
         if (!arpeggio) {
@@ -117,7 +109,6 @@ export default {
     }
 
     watch(() => bus.value.get('updateArpeggioControls'), (assetFilter) => {
-
       if (assetFilter[0].row == undefined || assetFilter[0].col == undefined) {
         return
       }
@@ -171,7 +162,7 @@ export default {
       arpCtrlSynthOptions,
       displayRenderBtn,
       renderArpeggios,
-      handleArpChanges: handleArpChanges
+      handleArpChanges,
     }
   }
 }
