@@ -38,7 +38,7 @@ const state = reactive({
     authorName: '',
     globalBpm: undefined,
     getGlobalBpm: function () {
-        if(this.globalBpm){
+        if (this.globalBpm) {
             return this.globalBpm
         }
 
@@ -46,7 +46,7 @@ const state = reactive({
     },
     globalKey: undefined,
     getGlobalKey: function () {
-        if(this.globalKey){
+        if (this.globalKey) {
             return this.globalKey
         }
 
@@ -75,15 +75,115 @@ const state = reactive({
     },
     staticUrl: '',
     grid: [],
+
     currentStateHash: '',
-    currentArpeggioStateHash: '',
-    currentRowHash: ['', '', '', ''],
     hasRowStateChanged: function (rowIndex) {
         return this.currentRowHash[rowIndex] !== this.calculateRowHash(rowIndex)
     },
     updateRowStateHash: function (rowIndex) {
         this.currentRowHash[rowIndex] = this.calculateRowHash(rowIndex)
     },
+
+
+    currentArpeggioStateHash: {},
+    hasArpeggioStateChanged: function () {
+        console.log('ARPEGGIO STATE CHANGE!')
+        return this.currentArpeggioStateHash !== this.calculateArpeggioStateHash()
+    },
+    getArpeggioStateDiff: function () {
+        const arpeggioChanged = []
+        if (!this.hasArpeggioStateChanged()) {
+            return arpeggioChanged
+        } else {
+            const originalState = this.currentArpeggioStateHash.split(':')
+            const newState = this.calculateArpeggioStateHash().split(':')
+
+            if(originalState !== newState) {
+                console.log('originalState', originalState)
+                console.log('newState', newState)
+            }
+
+            //ARPEGGIO HAS CHANGED, DETERMINE WHAT HAS CHANGED
+            for(let i=0; i<newState.length; i++){
+                if(!originalState[i]){
+                    arpeggioChanged.push({
+                        col: i,
+                        id: undefined,
+                    })
+
+                    continue
+                }
+
+                console.log('originalState[i]', originalState[i])
+                console.log('newState[i]', newState[i])
+
+                if(originalState[i] !== newState[i]){
+                    arpeggioChanged.push({
+                        col: i,
+                        id: newState[i].split('_')[1],
+                    })
+                }
+
+                //IF WE NEED TO KNOW EXACTLY WHAT HAS CHANGED, WE HAVE TO SPLIT THE STRING INTO AN ARRAY
+                // const originalStateItems = originalState[i].split(',')
+                // const newStateItems = newState[i].split(',')
+            }
+        }
+
+        console.log('ACUTAL CHANGE', arpeggioChanged)
+
+        return arpeggioChanged
+    },
+    updateArpeggioStateHash: function () {
+        this.currentArpeggioStateHash = this.calculateArpeggioStateHash()
+    },
+    calculateArpeggioStateHash: function () {
+
+        /*
+        id: 'aaaa',
+                chords: ['a', 'a', 'a', 'a'],
+                bufferRendered: false,
+                renderedInMix: true,
+                on: true,
+                pattern: 1,
+                rate: 1,
+                synth: 'synth_a',
+         */
+
+        let newHash = ''
+        let rowIndex = 0
+        for (let col = 0; col < this.grid[rowIndex].value.length; col++) {
+            const arp = this.grid[rowIndex].value[col].arpeggio
+            if (arp) {
+                newHash += col + '_'
+                    + arp.id + '_'
+                    + arp.chords + '_'
+                    + arp.bufferRendered + '_'
+                    + arp.on + '_'
+                    + arp.pattern + '_'
+                    + arp.rate + '_'
+                    + arp.synth
+            } else {
+                newHash += col + '_'
+                    + 'null' + '_'
+                    + 'null' + '_'
+                    + 'null' + '_'
+                    + 'null' + '_'
+                    + 'null' + '_'
+                    + 'null' + '_'
+                    + 'null'
+            }
+
+            if(col < this.grid[rowIndex].value.length - 1){
+                newHash += ':'
+            }
+        }
+
+        return newHash
+    },
+
+
+    currentRowHash: ['', '', '', ''],
     calculateRowHash: function (rowIndex) {
         let newHash = ''
         for (let col = 0; col < this.grid[rowIndex].value.length; col++) {
@@ -123,16 +223,11 @@ const state = reactive({
         console.log('CLIP STATE CHANGE!')
         return this.currentStateHash !== this.calculateClipStateHash()
     },
-    hasArpeggioStateChanged: function () {
-        console.log('ARPEGGIO STATE CHANGE!')
-        return this.currentArpeggioStateHash !== this.calculateArpeggioStateHash()
-    },
+
     updateClipStateHash: function () {
         this.currentStateHash = this.calculateClipStateHash()
     },
-    updateArpeggioStateHash: function () {
-        this.currentArpeggioStateHash = this.calculateArpeggioStateHash()
-    },
+
     calculateClipStateHash: function () {
         let newHash = ''
         for (let row = 0; row < this.grid.length; row++) {
@@ -146,21 +241,7 @@ const state = reactive({
         }
         return newHash
     },
-    calculateArpeggioStateHash: function () {
-        let newHash = ''
-        for (let rowIndex = 0; rowIndex < this.grid.length; rowIndex++) {
-            for (let col = 0; col < this.grid[rowIndex].value.length; col++) {
-                const arpeggio = this.grid[rowIndex].value[col].arpeggio
-                if (arpeggio) {
-                    newHash = newHash + rowIndex + col + arpeggio.id.substring(0, 4) + arpeggio.on + arpeggio.rate + arpeggio.pattern
-                } else {
-                    newHash = newHash + rowIndex + col + 'undef'
-                }
-            }
-        }
 
-        return newHash
-    },
     updateGlobalBpm: function () {
         let bpm = undefined
         for (let row = 0; row < this.grid.length; row++) {

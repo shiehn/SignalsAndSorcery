@@ -4,10 +4,10 @@
     <div>
       SYNTH
       <div class="w-20 h-20 border-2 border-black rounded-lg p-2">
-        <select v-if="arpCtrlRate != undefined" v-model="arpCtrlRate" @change="handleSelection()"
+        <select v-if="arpCtrlSynth != undefined" v-model="arpCtrlSynth" @change="handleSelection()"
                 id="arpCtrlRate"
                 class="w-2/3 text-xs rounded-lg">
-          <option :value="item" v-for="item in arpCtrlRateOptions">
+          <option :value="item" v-for="item in arpCtrlSynthOptions">
             {{ item }}
           </option>
         </select>
@@ -23,16 +23,16 @@ import {ref} from "vue";
 export default {
   name: "SynthSelector",
   setup(props, {emit}) {
-    const arpCtrlRate = ref('quarter')
-    const arpCtrlRateOptions = ['whole', 'half', 'quarter', 'eighth', 'sixteenth']
+    const arpCtrlSynth = ref('synth_b')
+    const arpCtrlSynthOptions = ['synth_a', 'synth_b', 'synth_c']
 
     const handleSelection = () => {
-      emit('handleArpChanges', arpCtrlRate.value)
+      emit('handleArpChanges', 'synth', arpCtrlSynth.value)
     }
 
     return {
-      arpCtrlRate,
-      arpCtrlRateOptions,
+      arpCtrlSynth,
+      arpCtrlSynthOptions,
       handleSelection,
     }
   },

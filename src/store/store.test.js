@@ -1,6 +1,7 @@
 import {describe, it, expect} from "vitest"
 import {ref} from "vue";
 import state from './store'
+import GridItemArpeggio from "../generators/grid-item-arpeggio";
 
 function createGrid(rowOne, rowTwo) {
     let grid = [
@@ -45,29 +46,47 @@ function createGrid(rowOne, rowTwo) {
 
 function createArpeggioGrid() {
 
-    const arps = [{
-        id: 'aaaa',
-        rate: 1,
-        pattern: 1
-    }, {
-        id: 'bbbb',
-        rate: 1,
-        pattern: 1
-    }, undefined, {
-        id: 'dddd',
-        rate: 1,
-        pattern: 1
-    }]
+    const arpOne = new GridItemArpeggio()
+    arpOne.id = 'aaaa'
+    arpOne.chords = ['a', 'a', 'a', 'a']
+    arpOne.bufferRendered = false
+    arpOne.renderedInMix = true
+    arpOne.on = true
+    arpOne.pattern = 1
+    arpOne.rate = 1
+    arpOne.synth = 'synth_a'
+
+    const arpTwo = new GridItemArpeggio()
+    arpTwo.id = 'bbbb'
+    arpTwo.chords = ['b', 'b', 'b', 'b']
+    arpTwo.bufferRendered = false
+    arpTwo.renderedInMix = true
+    arpTwo.on = true
+    arpTwo.pattern = 1
+    arpTwo.rate = 1
+    arpTwo.synth = 'synth_b'
+
+    const arpThree = undefined
+
+    const arpFour = new GridItemArpeggio()
+    arpFour.id = 'dddd'
+    arpFour.chords = ['d', 'd', 'd', 'd']
+    arpFour.bufferRendered = false
+    arpFour.renderedInMix = true
+    arpFour.on = true
+    arpFour.pattern = 1
+    arpFour.rate = 1
+    arpFour.synth = 'synth_d'
 
     let grid = [
         ref([{
-            arpeggio: arps[0],
+            arpeggio: arpOne,
         }, {
-            arpeggio: arps[1],
+            arpeggio: arpTwo,
         }, {
-            arpeggio: arps[2],
+            arpeggio: arpThree,
         }, {
-            arpeggio: arps[3],
+            arpeggio: arpFour,
         }]),
     ]
 
@@ -81,7 +100,9 @@ describe('Store Tests', () => {
         state.state.grid = createArpeggioGrid()
 
         const hash = state.state.calculateArpeggioStateHash()
-        expect(hash).to.equals('00aaaaundefined1101bbbbundefined1102undef03ddddundefined11')
+        const expected = '0_aaaa_a,a,a,a_false_true_1_1_synth_a:1_bbbb_b,b,b,b_false_true_1_1_synth_b:2_null_null_null_null_null_null_null:3_dddd_d,d,d,d_false_true_1_1_synth_d'
+
+        expect(hash).to.equals(expected)
     })
 
     it('should updateArpeggioStateHash', async () => {
@@ -113,6 +134,39 @@ describe('Store Tests', () => {
 
         expect(state.state.hasArpeggioStateChanged()).toBeTruthy()
     })
+
+    it('should return no diff if state has not changed', async () => {
+        state.state.grid = createArpeggioGrid()
+
+        state.state.updateArpeggioStateHash()
+
+        //state.state.grid[0].value[1].arpeggio.rate = 3
+
+        expect(state.state.getArpeggioStateDiff().length).to.equals(0)
+    })
+
+    it('should return index and id of any altered arpeggio state', async () => {
+        state.state.grid = createArpeggioGrid()
+
+        state.state.updateArpeggioStateHash()
+
+        state.state.grid[0].value[1].arpeggio.rate = 3
+
+        expect(state.state.getArpeggioStateDiff().length).to.equals(1)
+
+        expect(state.state.getArpeggioStateDiff()[0].col).to.equals(1)
+        expect(state.state.getArpeggioStateDiff()[0].id).to.equals('bbbb')
+    })
+
+    it('should handle the addition of a column', async () => {
+
+    })
+
+    it('should handle the removal of a column', async () => {
+
+    })
+
+
     /*END APP HASH TESTS*/
 
 

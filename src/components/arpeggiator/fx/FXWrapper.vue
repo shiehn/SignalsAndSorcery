@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import FXItem from "./FXItem";
+import FXItem from "./FXItem.vue";
 export default {
   name: "FXWrapper",
   components: {FXItem}

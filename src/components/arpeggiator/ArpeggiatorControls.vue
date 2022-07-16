@@ -11,14 +11,16 @@
         <!--        </div>-->
         <div class="flex justify-start">
           <button class="bg-gray-400 rounded-lg p-1 text-sm text-black mr-4">PREVIEW</button>
-          <button v-if="displayRenderBtn" class="bg-green-600 rounded-lg p-1 text-sm text-black" @click="renderArpeggios()">RENDER</button>
+          <button v-if="displayRenderBtn" class="bg-green-600 rounded-lg p-1 text-sm text-black"
+                  @click="renderArpeggios()">RENDER
+          </button>
         </div>
       </div>
 
       <div class="w-1 h-full bg-gray-300"></div>
 
       <synth-selector @handleArpChanges="handleArpChanges"></synth-selector>
-      <rate-selector></rate-selector>
+      <rate-selector @handleArpChanges="handleArpChanges"></rate-selector>
       <type-selector></type-selector>
 
       <!--    <div class="flex h-8 justify-between my-1">-->
@@ -41,7 +43,6 @@
       <!--    </div>-->
 
 
-
     </div>
 
     <f-x-wrapper></f-x-wrapper>
@@ -54,10 +55,10 @@ import {inject, nextTick, ref, watch} from "vue";
 import useEventsBus from "../../events/eventBus";
 import GridProcessor from "../../processors/grid-processor";
 import ArpeggioRenderer from "./arpeggio-renderer";
-import RateSelector from "./selector/RateSelector";
-import TypeSelector from "./selector/TypeSelector";
-import FXWrapper from "./fx/FXWrapper";
-import SynthSelector from "./selector/SynthSelector";
+import RateSelector from "./selector/RateSelector.vue";
+import TypeSelector from "./selector/TypeSelector.vue";
+import FXWrapper from "./fx/FXWrapper.vue";
+import SynthSelector from "./selector/SynthSelector.vue";
 
 export default {
   name: "ArpeggiatorControls",
@@ -69,8 +70,6 @@ export default {
     const arpCtrlChords = ref('chords')
     const arpCtrlPattern = ref('pattern_1')
     const arpCtrlPatternOptions = ['pattern_1']
-    const arpCtrlRate = ref('quarter')
-    const arpCtrlRateOptions = ['whole', 'half', 'quarter', 'eighth', 'sixteenth']
     const arpCtrlSynth = ref('synth_1')
     const arpCtrlSynthOptions = ['synth_1']
     const displayRenderBtn = ref(false)
@@ -79,13 +78,21 @@ export default {
     let currentCol = undefined
 
     const renderCompleteCallback = function (id) {
-      console.log('CALLBACK COMPLETE', id)
-      displayRenderBtn.value = true
+      console.log('CALLBACK COMPLETE FROM PARAM CHANGE', id)
       new GridProcessor(store.state.grid).updateArpeggioBuffersRendered(id)
+      console.log('DISPLAY RENDER', id)
+      //const arpeggio = new GridProcessor(store.state.grid).getArpeggioById(id)
+      //displayRenderBtn.value = arpeggio.bufferRendered && !arpeggio.renderedInMix
+      console.log('arpeggio.on', arpeggio.on)
+      console.log('arpeggio.bufferRendered', arpeggio.bufferRendered)
+      console.log('arpeggio.renderedInMix', arpeggio.renderedInMix)
+      console.log('displayRenderBtn', displayRenderBtn.value)
     }
 
-    const handleArpChanges = (selection) => {
-      alert('HELLO FROM CHILD:' + selection)
+    const handleArpChanges = (type, selection) => {
+
+      console.log('handleArpChanges')
+
       if (currentRow != undefined && currentCol != undefined) {
         const arpeggio = store.state.grid[currentRow].value[currentCol].arpeggio
         if (!arpeggio) {
@@ -95,13 +102,16 @@ export default {
 
         new GridProcessor(store.state.grid).updateArpeggioToUnRendered(arpId.value)
 
-        arpeggio.pattern = arpCtrlPattern.value
-        arpeggio.rate = arpCtrlRate.value
-        arpeggio.chords = arpCtrlChords.value
-        arpeggio.synth = arpCtrlSynth.value
+        if(type === 'rate'){
+          arpeggio.rate = selection
+        }
+        // arpeggio.pattern = arpCtrlPattern.value
+
+        // arpeggio.chords = arpCtrlChords.value
+        // arpeggio.synth = arpCtrlSynth.value
         //arpeggio.rendered = false //FLAG THE ARPEGGIO AS UN-RENDERED
 
-        displayRenderBtn.value = arpeggio.on && arpeggio.bufferRendered && !arpeggio.renderedInMix
+        //displayRenderBtn.value = arpeggio.on && arpeggio.bufferRendered && !arpeggio.renderedInMix
 
         console.log('TRIGGER handleArpChanges')
         new ArpeggioRenderer(store).renderBuffer(renderCompleteCallback, arpId.value)
@@ -134,7 +144,7 @@ export default {
       }
 
       arpId.value = arpeggio.id
-      displayRenderBtn.value = arpeggio.on && arpeggio.bufferRendered && !arpeggio.renderedInMix
+      //displayRenderBtn.value = arpeggio.on && arpeggio.bufferRendered && !arpeggio.renderedInMix
       arpCtrlChords.value = chords.length > 0 ? chords : arpeggio.chords
       arpCtrlPattern.value = arpeggio.pattern
       arpCtrlRate.value = arpeggio.rate
@@ -156,8 +166,6 @@ export default {
       arpId,
       arpCtrlPattern,
       arpCtrlPatternOptions,
-      arpCtrlRate,
-      arpCtrlRateOptions,
       arpCtrlSynth,
       arpCtrlSynthOptions,
       displayRenderBtn,
