@@ -196,7 +196,7 @@ export default class GridProcessor {
         for (let row = 0; row < this.grid.length; row++) {
             for (let col = 0; col < this.grid[row].value.length; col++) {
                 let arp = this.grid[row].value[col].arpeggio
-                if (arp && arp.on && arp.bufferRendered) {
+                if (arp) {
                     arp.renderedInMix = true
                 }
             }

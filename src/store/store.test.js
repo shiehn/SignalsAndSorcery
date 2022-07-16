@@ -159,14 +159,48 @@ describe('Store Tests', () => {
     })
 
     it('should handle the addition of a column', async () => {
+        state.state.grid = createArpeggioGrid()
+        state.state.updateArpeggioStateHash()
 
+        const newArp = new GridItemArpeggio()
+        newArp.id = 'eeee'
+        newArp.chords = ['e', 'e', 'e', 'e']
+        newArp.bufferRendered = false
+        newArp.renderedInMix = true
+        newArp.on = true
+        newArp.pattern = 1
+        newArp.rate = 1
+        newArp.synth = 'synth_e'
+
+        //ADD A NEW COLUMN
+        state.state.grid[0].value.push(newArp)
+
+        expect(state.state.hasArpeggioStateChanged()).toBeTruthy()
+
+        expect(state.state.getArpeggioStateDiff()[0].col).to.equals(4)
     })
 
     it('should handle the removal of a column', async () => {
+        state.state.grid = createArpeggioGrid()
+        state.state.updateArpeggioStateHash()
 
+        const newArp = new GridItemArpeggio()
+        newArp.id = 'eeee'
+        newArp.chords = ['e', 'e', 'e', 'e']
+        newArp.bufferRendered = false
+        newArp.renderedInMix = true
+        newArp.on = true
+        newArp.pattern = 1
+        newArp.rate = 1
+        newArp.synth = 'synth_e'
+
+        //ADD A NEW COLUMN
+        state.state.grid[0].value.unshift(newArp)
+
+        expect(state.state.hasArpeggioStateChanged()).toBeTruthy()
+
+        expect(state.state.getArpeggioStateDiff()[0].col).to.equals(0)
     })
-
-
     /*END APP HASH TESTS*/
 
 

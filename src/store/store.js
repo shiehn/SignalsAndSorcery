@@ -2,7 +2,6 @@ import {reactive} from "vue";
 
 const debugMode = true
 let context = undefined
-
 const arpeggioBuffer = undefined
 
 const state = reactive({
@@ -85,9 +84,8 @@ const state = reactive({
     },
 
 
-    currentArpeggioStateHash: {},
+    currentArpeggioStateHash: '',
     hasArpeggioStateChanged: function () {
-        console.log('ARPEGGIO STATE CHANGE!')
         return this.currentArpeggioStateHash !== this.calculateArpeggioStateHash()
     },
     getArpeggioStateDiff: function () {
@@ -97,11 +95,6 @@ const state = reactive({
         } else {
             const originalState = this.currentArpeggioStateHash.split(':')
             const newState = this.calculateArpeggioStateHash().split(':')
-
-            if(originalState !== newState) {
-                console.log('originalState', originalState)
-                console.log('newState', newState)
-            }
 
             //ARPEGGIO HAS CHANGED, DETERMINE WHAT HAS CHANGED
             for(let i=0; i<newState.length; i++){
@@ -113,9 +106,6 @@ const state = reactive({
 
                     continue
                 }
-
-                console.log('originalState[i]', originalState[i])
-                console.log('newState[i]', newState[i])
 
                 if(originalState[i] !== newState[i]){
                     arpeggioChanged.push({
@@ -129,8 +119,6 @@ const state = reactive({
                 // const newStateItems = newState[i].split(',')
             }
         }
-
-        console.log('ACUTAL CHANGE', arpeggioChanged)
 
         return arpeggioChanged
     },

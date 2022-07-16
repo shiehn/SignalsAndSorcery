@@ -80,19 +80,11 @@ export default {
     const renderCompleteCallback = function (id) {
       console.log('CALLBACK COMPLETE FROM PARAM CHANGE', id)
       new GridProcessor(store.state.grid).updateArpeggioBuffersRendered(id)
-      console.log('DISPLAY RENDER', id)
-      //const arpeggio = new GridProcessor(store.state.grid).getArpeggioById(id)
-      //displayRenderBtn.value = arpeggio.bufferRendered && !arpeggio.renderedInMix
-      console.log('arpeggio.on', arpeggio.on)
-      console.log('arpeggio.bufferRendered', arpeggio.bufferRendered)
-      console.log('arpeggio.renderedInMix', arpeggio.renderedInMix)
-      console.log('displayRenderBtn', displayRenderBtn.value)
+      //store.state.updateArpeggioStateHash()
+      console.log('hasArpeggioStateChanged', store.state.hasArpeggioStateChanged())
     }
 
     const handleArpChanges = (type, selection) => {
-
-      console.log('handleArpChanges')
-
       if (currentRow != undefined && currentCol != undefined) {
         const arpeggio = store.state.grid[currentRow].value[currentCol].arpeggio
         if (!arpeggio) {
@@ -102,18 +94,10 @@ export default {
 
         new GridProcessor(store.state.grid).updateArpeggioToUnRendered(arpId.value)
 
-        if(type === 'rate'){
+        if (type === 'rate') {
           arpeggio.rate = selection
         }
-        // arpeggio.pattern = arpCtrlPattern.value
 
-        // arpeggio.chords = arpCtrlChords.value
-        // arpeggio.synth = arpCtrlSynth.value
-        //arpeggio.rendered = false //FLAG THE ARPEGGIO AS UN-RENDERED
-
-        //displayRenderBtn.value = arpeggio.on && arpeggio.bufferRendered && !arpeggio.renderedInMix
-
-        console.log('TRIGGER handleArpChanges')
         new ArpeggioRenderer(store).renderBuffer(renderCompleteCallback, arpId.value)
       }
     }
@@ -144,20 +128,49 @@ export default {
       }
 
       arpId.value = arpeggio.id
-      //displayRenderBtn.value = arpeggio.on && arpeggio.bufferRendered && !arpeggio.renderedInMix
+
       arpCtrlChords.value = chords.length > 0 ? chords : arpeggio.chords
       arpCtrlPattern.value = arpeggio.pattern
       arpCtrlRate.value = arpeggio.rate
-
-      // if(arpeggio.on) {
-      //   console.log('TRIGGER updateArpeggioControls')
-      //   new ArpeggioRenderer(store).renderBuffer(renderCompleteCallback, arpId.value)
-      // }
     })
 
+    const showRenderBtnIfNeeded = () => {
+      if (currentRow == undefined || currentCol == undefined) {
+        return
+      }
+
+      // console.log('ROW', store.state.grid[currentRow].value)
+      const arpeggio = store.state.grid[currentRow].value[currentCol].arpeggio
+
+      if (!arpeggio) {
+        return
+      }
+
+
+      //IS THERE ANY STATE CHANGE IN ARPEGGIOS
+      //IF SO DETERMINE IF ITS THIS COLUMN
+
+      let isMatch = false
+      if (store.state.hasArpeggioStateChanged()) {
+        const stateDiff = store.state.getArpeggioStateDiff()
+        console.log('ARP DIFF', stateDiff)
+        for (let i = 0; i < stateDiff.length; i++) {
+          if(stateDiff[i].col === currentCol){
+            isMatch = true
+          }
+        }
+      }
+      displayRenderBtn.value = isMatch
+      //displayRenderBtn.value = arpeggio.bufferRendered && !arpeggio.renderedInMix
+    }
+
+    setInterval(() => {
+      showRenderBtnIfNeeded()
+    }, 1000)
+
     const renderArpeggios = () => {
-      console.log('renderArpeggios')
-      displayRenderBtn.value = false
+      //console.log('renderArpeggios')
+      //displayRenderBtn.value = false
       emit('renderMix')
     }
 

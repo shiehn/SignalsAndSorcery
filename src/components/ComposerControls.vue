@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import {inject, ref} from "vue";
+import {inject, onMounted, ref} from "vue";
 import {watch} from "vue";
 import useEventsBus from "../events/eventBus";
 import ComposerControlsScrollBar from "./ComposerControlsScrollBar.vue";
@@ -42,6 +42,10 @@ export default {
       stopBtn: store.state.staticUrl + 'icons/stop-button.png',
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
     }
+
+    onMounted(() => {
+      store.state.updateArpeggioStateHash()
+    })
 
     const getTrackListByRow = (row) => {
       const tracks = store.state.grid[row].value.map((t) => {
@@ -140,9 +144,9 @@ export default {
     const renderMix = async () => {
       await stop()
 
-      if (store.state.clipCount() < 1) {
-        return
-      }
+      // if (store.state.clipCount() < 1) {
+      //   return
+      // }
 
       isRendering.value = true
       try {
@@ -267,8 +271,8 @@ export default {
       isRendering.value = false
 
       store.state.updateClipStateHash()
-
       updateRenderedArpeggios()
+      store.state.updateArpeggioStateHash()
     }
 
     const updateRenderedArpeggios = () => {
@@ -375,7 +379,6 @@ export default {
     })
 
     watch(() => bus.value.get('renderMix'), async () => {
-      console.log('I HEARD YO')
       if (!isRendering.value) {
         await renderMix()
       }
