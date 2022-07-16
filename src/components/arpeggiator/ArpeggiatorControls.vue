@@ -11,7 +11,7 @@
         <!--        </div>-->
         <div class="flex justify-start">
           <button class="bg-gray-400 rounded-lg p-1 text-sm text-black mr-4">PREVIEW</button>
-          <button v-if="displayRenderBtn" class="bg-green-600 rounded-lg p-1 text-sm text-black"
+          <button class="bg-red-800 rounded-lg p-1 text-sm text-black" :class="{'animate-pulse bg-red-500': displayRenderBtn}"
                   @click="renderArpeggios()">RENDER
           </button>
         </div>
@@ -78,10 +78,7 @@ export default {
     let currentCol = undefined
 
     const renderCompleteCallback = function (id) {
-      console.log('CALLBACK COMPLETE FROM PARAM CHANGE', id)
       new GridProcessor(store.state.grid).updateArpeggioBuffersRendered(id)
-      //store.state.updateArpeggioStateHash()
-      console.log('hasArpeggioStateChanged', store.state.hasArpeggioStateChanged())
     }
 
     const handleArpChanges = (type, selection) => {
@@ -149,19 +146,27 @@ export default {
 
       //IS THERE ANY STATE CHANGE IN ARPEGGIOS
       //IF SO DETERMINE IF ITS THIS COLUMN
-
-      let isMatch = false
+      let displayRenderButton = false
       if (store.state.hasArpeggioStateChanged()) {
+        //IF THERE IS ANY DIFF SHOW THE RENDER BUTTON
+        displayRenderButton = true
+
+
+
+
         const stateDiff = store.state.getArpeggioStateDiff()
-        console.log('ARP DIFF', stateDiff)
         for (let i = 0; i < stateDiff.length; i++) {
-          if(stateDiff[i].col === currentCol){
-            isMatch = true
+          // if (stateDiff[i].col === currentCol) {
+          //   displayRenderButton = true
+          // }
+
+          const arp = store.state.grid[0].value[stateDiff[i].col].arpeggio
+          if (arp && arp.renderedInMix) {
+            arp.renderedInMix = false
           }
         }
       }
-      displayRenderBtn.value = isMatch
-      //displayRenderBtn.value = arpeggio.bufferRendered && !arpeggio.renderedInMix
+      displayRenderBtn.value = displayRenderButton
     }
 
     setInterval(() => {
@@ -169,8 +174,6 @@ export default {
     }, 1000)
 
     const renderArpeggios = () => {
-      //console.log('renderArpeggios')
-      //displayRenderBtn.value = false
       emit('renderMix')
     }
 

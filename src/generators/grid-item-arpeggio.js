@@ -8,7 +8,7 @@ export default class GridItemArpeggio {
 
         this.id = id
         this.bufferRendered = false
-        this.renderedInMix = false
+        this.renderedInMix = true
         this.on = false
         this.pattern = pattern
         this.rate = rate

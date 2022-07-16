@@ -282,11 +282,9 @@ export default {
     const playMix = async (offsetStartPercentage) => {
       if (store.state.clipCount() < 1) {
         toast.warning('Add clips to the arranger!');
-        return
       }
 
       if (buffer) {
-        console.log('PLAYING CURRENT RENDER')
         let offset = pausedAt;
 
         const loopStart = buffer.duration * (store.state.playBack.loopStartPercent * 0.01)
