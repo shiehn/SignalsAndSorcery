@@ -1,10 +1,45 @@
 import GridProcessor from "../../processors/grid-processor";
 import ArpeggioSequencer from "./arpeggio-sequencer";
+import Synths from "./synths";
 
 
 export default class ArpeggioRenderer {
     constructor(store) {
         this.store = store
+    }
+
+    stopPreview(){
+        Tone.Transport.stop()
+    }
+
+    preview(chords, rate, synth) {
+        if (!chords || !rate || !synth) {
+            return
+        }
+
+        const sequencer = new ArpeggioSequencer(undefined, this.store.state.getGlobalBpm())
+        const sequence = sequencer.getPreviewSequence(chords, rate, synth)
+
+        if (!this.store.state.globalBpm) {
+            // if arpeggio is added to the grid before a clip a bpm must be set
+            // defaulting to 120 for now
+            this.store.state.globalBpm = 120
+        }
+        
+        Tone.Transport.stop()
+        Tone.Transport.seconds = 0
+        Tone.Transport.cancel(0)
+        console.log('PREVIEW', Tone.Transport.seconds)
+
+        const synths = new Synths()
+
+        for (let i = 0; i < sequence.length; i++) {
+            let sequenceItem = sequence[i]
+            Tone.Transport.schedule((time) => {
+                synths.getSynth(sequenceItem.synth).triggerAttackRelease(sequenceItem.note, sequenceItem.duration, time);
+            }, sequenceItem.time - Tone.Transport.seconds);
+        }
+        Tone.Transport.start()
     }
 
     renderBuffer(renderCompleteCallback, id) {
@@ -13,7 +48,7 @@ export default class ArpeggioRenderer {
         const sequencer = new ArpeggioSequencer(arpData, this.store.state.getGlobalBpm())
         const sequence = sequencer.getSequence()
 
-        if(!this.store.state.globalBpm){
+        if (!this.store.state.globalBpm) {
             // if arpeggio is added to the grid before a clip a bpm must be set
             // defaulting to 120 for now
             this.store.state.globalBpm = 120
@@ -27,33 +62,15 @@ export default class ArpeggioRenderer {
         const localCtx = this
         Tone.getContext().isOffline = true
         Tone.Offline(function ({transport}) {
-            transport.clear()
+            transport.cancel(0)
 
-            const synthA = new Tone.PolySynth(Tone.SimpleAM).toDestination();
-            const synthB = new Tone.DuoSynth().toDestination();
-            const synthC = new Tone.PluckSynth().toDestination();
-
-            const getSynth = (synthId) => {
-                if(synthId === 'synth_a'){
-                    console.log('SYNTH A')
-                    return synthA
-                } else if (synthId === 'synth_b'){
-                    console.log('SYNTH B')
-                    return synthB
-                } else {
-                    console.log('SYNTH C')
-                    return synthC
-                }
-            }
-
-
+            const synths = new Synths()
 
             console.log('ADDING NOTES TO SEQUENCE')
             for (let i = 0; i < sequence.length; i++) {
                 let sequenceItem = sequence[i]
-                console.log(sequenceItem.synth)
                 transport.schedule((time) => {
-                    getSynth(sequenceItem.synth).triggerAttackRelease(sequenceItem.note, sequenceItem.duration, time);
+                    synths.getSynth(sequenceItem.synth).triggerAttackRelease(sequenceItem.note, sequenceItem.duration, time);
                 }, sequenceItem.time);
             }
             transport.start()

@@ -3,13 +3,15 @@ import MusicTheoryUtils from "../../utils/music-theory-utils";
 
 export default class ArpeggioSequencer {
     constructor(arpTimeline, bpm) {
-        this.arpTimeline = arpTimeline.getTimeline()
+        if (arpTimeline) {
+            this.arpTimeline = arpTimeline.getTimeline()
+        }
         this.bpm = bpm
         this.timeUtils = new TimeUtils(bpm)
     }
 
     getDuration(rate) {
-        switch(rate) {
+        switch (rate) {
             case 'whole':
                 return this.timeUtils.getSecondsPerBar()
             case'half':
@@ -26,7 +28,7 @@ export default class ArpeggioSequencer {
     }
 
     getNumOfNotesInLoop(rate) {
-        switch(rate) {
+        switch (rate) {
             case 'whole':
                 return this.timeUtils.numOfWholesPerLoop()
             case'half':
@@ -43,7 +45,7 @@ export default class ArpeggioSequencer {
     }
 
     getNumOfNotesInBar(rate) {
-        switch(rate) {
+        switch (rate) {
             case 'whole':
                 return this.timeUtils.numOfWholesPerBar()
             case'half':
@@ -59,6 +61,46 @@ export default class ArpeggioSequencer {
         }
     }
 
+    getPreviewSequence(chords, rate, synth) {
+        let sequence = []
+        const musicTheoryUtils = new MusicTheoryUtils()
+
+        //check the Rate of the arpeggio
+        let noteDuration = this.getDuration(rate)
+        let notesInLoop = this.getNumOfNotesInLoop(rate)
+        let notesPerChord = this.getNumOfNotesInBar(rate)
+
+        //SWITCH BASED ON Rate
+        let chordNoteIndex = -1
+        let chordIndex = -1
+        let chordNotes = []
+        for (let noteIndex = 0; noteIndex < notesInLoop; noteIndex++) {
+            if (noteIndex % notesPerChord === 0) {
+                chordIndex++
+                chordNoteIndex = 0
+                chordNotes = musicTheoryUtils.getChordNotes(chords[chordIndex])
+            }
+
+            //TODO MAKE A FUNC OR SOMETHING
+            if (chordIndex > chordNotes.length - 2) {
+                chordIndex = 0
+            } else {
+                chordIndex++
+            }
+
+            let sequenceItem = {
+                time: (noteIndex * noteDuration),
+                note: chordNotes[chordIndex] + '4',  //TODO: THIS IS A PROBLEM PLEASE FIX
+                synth: synth,
+                duration: noteDuration,
+            }
+
+            sequence.push(sequenceItem)
+        }
+
+        return sequence
+    }
+
     getSequence() {
         let sequence = []
         const musicTheoryUtils = new MusicTheoryUtils()
@@ -69,7 +111,6 @@ export default class ArpeggioSequencer {
             let timeBeforeArpStart = (this.arpTimeline[i].colIndex) * this.timeUtils.getSecondsPerLoop()
 
             //check the Rate of the arpeggio
-            //hard code to quarters for now
             let noteDuration = this.getDuration(arpObj.rate)
             let notesInLoop = this.getNumOfNotesInLoop(arpObj.rate)
             let notesPerChord = this.getNumOfNotesInBar(arpObj.rate)
@@ -86,13 +127,11 @@ export default class ArpeggioSequencer {
                 }
 
                 //TODO MAKE A FUNC OR SOMETHING
-                if(chordIndex > chordNotes.length - 2) {
+                if (chordIndex > chordNotes.length - 2) {
                     chordIndex = 0
                 } else {
                     chordIndex++
                 }
-
-                console.log('arpObj.synth', arpObj.synth)
 
                 let sequenceItem = {
                     time: timeBeforeArpStart + (noteIndex * noteDuration),

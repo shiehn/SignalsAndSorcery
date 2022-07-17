@@ -9,7 +9,7 @@
       <div @click="handleClick('arp')"
            class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
         <div class="">
-          <img :src=imageUrls.hiIcon class="w-8 h-8">
+          <img :src=imageUrls.arpIcon class="w-8 h-8">
           <div class="w-full text-center text-white bg-black text-xs mt-1">Arp</div>
         </div>
       </div>
@@ -118,6 +118,7 @@ export default {
     const {bus, emit} = useEventsBus()
     const toast = inject('toast');
     const imageUrls = {
+      arpIcon: store.state.staticUrl + "icons/eq-arp.png",
       drumIcon: store.state.staticUrl + "icons/eq-drum.png",
       fillIcon: store.state.staticUrl + "icons/eq-fill.png",
       hiIcon: store.state.staticUrl + "icons/eq-hi.png",

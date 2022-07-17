@@ -10,7 +10,8 @@
         <div class="w-full bg-black mb-4 text-white text-xs">{{ arpCtrlChords }}</div>
         <!--        </div>-->
         <div class="flex justify-start">
-          <button class="bg-gray-400 rounded-lg p-1 text-sm text-black mr-4">PREVIEW</button>
+          <button class="bg-gray-400 rounded-lg p-1 text-sm text-black mr-4" @click="previewArpeggios">PREVIEW</button>
+          <button class="bg-gray-400 rounded-lg p-1 text-sm text-black mr-4" @click="stopPreviewArpeggios">STOP</button>
         </div>
       </div>
 
@@ -48,6 +49,7 @@ export default {
     const arpCtrlPatternOptions = ['pattern_1']
     const arpCtrlSynth = ref('synth_1')
     const arpCtrlSynthOptions = ['synth_1']
+    const toast = inject('toast');
 
     let currentRow = undefined
     let currentCol = undefined
@@ -76,6 +78,20 @@ export default {
 
         new ArpeggioRenderer(store).renderBuffer(renderCompleteCallback, arpId.value)
       }
+    }
+
+    const previewArpeggios = () => {
+      const arp = new GridProcessor(store.state.grid).getArpeggioById(arpId.value)
+      if (!arp) {
+        toast.warning('Please Select Arpeggio to Preview')
+        return
+      }
+
+      new ArpeggioRenderer(store).preview(arp.chords, arp.rate, arp.synth)
+    }
+
+    const stopPreviewArpeggios = () => {
+      new ArpeggioRenderer(store).stopPreview()
     }
 
     watch(() => bus.value.get('updateArpeggioControls'), (assetFilter) => {
@@ -156,6 +172,8 @@ export default {
       arpCtrlSynth,
       arpCtrlSynthOptions,
       handleArpChanges,
+      previewArpeggios,
+      stopPreviewArpeggios,
     }
   }
 }
