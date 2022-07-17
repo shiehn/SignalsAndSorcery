@@ -30,9 +30,6 @@ export default {
     const arpCtrlRate = ref('quarter')
     const arpCtrlRateOptions = ref(['whole', 'half', 'quarter', 'eighth', 'sixteenth'])
 
-    let currentRow = undefined
-    let currentCol = undefined
-
     const handleSelection = () => {
       emit('handleArpChanges', 'rate', arpCtrlRate.value)
     }
@@ -42,13 +39,24 @@ export default {
         return
       }
 
-      currentRow = assetFilter[0].row
-      currentCol = assetFilter[0].col
-
       const arpeggio = store.state.grid[assetFilter[0].row].value[assetFilter[0].col].arpeggio
       if (!arpeggio) {
         return
       }
+
+
+      watch(() => bus.value.get('updateArpeggioControls'), (assetFilter) => {
+        if (assetFilter[0].row == undefined || assetFilter[0].col == undefined) {
+          return
+        }
+
+        const arpeggio = store.state.grid[assetFilter[0].row].value[assetFilter[0].col].arpeggio
+        if (!arpeggio) {
+          return
+        }
+
+        arpCtrlRate.value = arpeggio.rate
+      })
 
       //get the chords from the column
       // let chords = []

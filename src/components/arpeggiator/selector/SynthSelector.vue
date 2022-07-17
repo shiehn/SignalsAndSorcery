@@ -1,5 +1,4 @@
 <template>
-
   <div class="flex justify-center px-2">
     <div>
       SYNTH
@@ -14,21 +13,48 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
-import {ref} from "vue";
+import {inject, ref, watch} from "vue";
+import useEventsBus from "../../../events/eventBus";
 
 export default {
   name: "SynthSelector",
   setup(props, {emit}) {
-    const arpCtrlSynth = ref('synth_b')
+    const store = inject('store')
+    const {bus} = useEventsBus()
+    const arpCtrlSynth = ref('synth_a')
     const arpCtrlSynthOptions = ['synth_a', 'synth_b', 'synth_c']
 
     const handleSelection = () => {
       emit('handleArpChanges', 'synth', arpCtrlSynth.value)
     }
+
+    watch(() => bus.value.get('updateArpeggioControls'), (assetFilter) => {
+      if (assetFilter[0].row == undefined || assetFilter[0].col == undefined) {
+        return
+      }
+
+      const arpeggio = store.state.grid[assetFilter[0].row].value[assetFilter[0].col].arpeggio
+      if (!arpeggio) {
+        return
+      }
+
+
+      watch(() => bus.value.get('updateArpeggioControls'), (assetFilter) => {
+        if (assetFilter[0].row == undefined || assetFilter[0].col == undefined) {
+          return
+        }
+
+        const arpeggio = store.state.grid[assetFilter[0].row].value[assetFilter[0].col].arpeggio
+        if (!arpeggio) {
+          return
+        }
+
+        arpCtrlSynth.value = arpeggio.synth
+      })
+    })
 
     return {
       arpCtrlSynth,

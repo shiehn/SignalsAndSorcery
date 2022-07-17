@@ -4,16 +4,13 @@
     <div class="flex w-full h-2/3  justify-evenly">
       <div class="">
         <h1 class="text-lg mb-2">ARPEGGIATOR</h1>
-        <!--        <div>ARP ID: {{ arpId }}</div>-->
+        <!--                <div class="text-xs">ARP ID: {{ arpId }}</div>-->
         <!--        <div class="w-full mb-4">-->
         <!--          <span class="text-xs">CHORDS:</span>-->
         <div class="w-full bg-black mb-4 text-white text-xs">{{ arpCtrlChords }}</div>
         <!--        </div>-->
         <div class="flex justify-start">
           <button class="bg-gray-400 rounded-lg p-1 text-sm text-black mr-4">PREVIEW</button>
-          <button class="bg-red-800 rounded-lg p-1 text-sm text-black" :class="{'animate-pulse bg-red-500': displayRenderBtn}"
-                  @click="renderArpeggios()">RENDER
-          </button>
         </div>
       </div>
 
@@ -22,27 +19,6 @@
       <synth-selector @handleArpChanges="handleArpChanges"></synth-selector>
       <rate-selector @handleArpChanges="handleArpChanges"></rate-selector>
       <type-selector></type-selector>
-
-      <!--    <div class="flex h-8 justify-between my-1">-->
-      <!--      <label for="arpCtrlPattern" class="w-1/3 my-2 text-sm">PATTERN</label>-->
-      <!--      <select v-if="arpCtrlPattern != undefined" v-model="arpCtrlPattern" @change="handleArpChanges($event)"-->
-      <!--              id="arpCtrlPattern"-->
-      <!--              class="w-2/3 text-xs rounded-lg">-->
-      <!--        <option :value="item" v-for="item in arpCtrlPatternOptions">{{ item }}-->
-      <!--        </option>-->
-      <!--      </select>-->
-      <!--    </div>-->
-      <!--    <div class="flex h-8 justify-between my-1">-->
-      <!--      <label for="arpCtrlSynth" class="w-1/3 my-2 text-sm">SYNTH</label>-->
-      <!--      <select v-if="arpCtrlSynth != undefined" v-model="arpCtrlSynth" @change="handleArpChanges($event)"-->
-      <!--              id="arpCtrlSynth"-->
-      <!--              class="w-2/3 text-xs rounded-lg">-->
-      <!--        <option :value="item" v-for="item in arpCtrlSynthOptions">{{ item }}-->
-      <!--        </option>-->
-      <!--      </select>-->
-      <!--    </div>-->
-
-
     </div>
 
     <f-x-wrapper></f-x-wrapper>
@@ -72,13 +48,14 @@ export default {
     const arpCtrlPatternOptions = ['pattern_1']
     const arpCtrlSynth = ref('synth_1')
     const arpCtrlSynthOptions = ['synth_1']
-    const displayRenderBtn = ref(false)
 
     let currentRow = undefined
     let currentCol = undefined
 
     const renderCompleteCallback = function (id) {
+      console.log('buffer callback arp-ctrl')
       new GridProcessor(store.state.grid).updateArpeggioBuffersRendered(id)
+      emit('displayRenderBtn', true)
     }
 
     const handleArpChanges = (type, selection) => {
@@ -93,6 +70,8 @@ export default {
 
         if (type === 'rate') {
           arpeggio.rate = selection
+        } else if (type === 'synth') {
+          arpeggio.synth = selection
         }
 
         new ArpeggioRenderer(store).renderBuffer(renderCompleteCallback, arpId.value)
@@ -143,16 +122,12 @@ export default {
         return
       }
 
-
       //IS THERE ANY STATE CHANGE IN ARPEGGIOS
       //IF SO DETERMINE IF ITS THIS COLUMN
-      let displayRenderButton = false
+      //let displayRenderButton = false
       if (store.state.hasArpeggioStateChanged()) {
         //IF THERE IS ANY DIFF SHOW THE RENDER BUTTON
-        displayRenderButton = true
-
-
-
+        //displayRenderButton = true
 
         const stateDiff = store.state.getArpeggioStateDiff()
         for (let i = 0; i < stateDiff.length; i++) {
@@ -166,16 +141,12 @@ export default {
           }
         }
       }
-      displayRenderBtn.value = displayRenderButton
+      //displayRenderBtn.value = displayRenderButton
     }
 
     setInterval(() => {
       showRenderBtnIfNeeded()
     }, 1000)
-
-    const renderArpeggios = () => {
-      emit('renderMix')
-    }
 
     return {
       arpCtrlChords,
@@ -184,8 +155,6 @@ export default {
       arpCtrlPatternOptions,
       arpCtrlSynth,
       arpCtrlSynthOptions,
-      displayRenderBtn,
-      renderArpeggios,
       handleArpChanges,
     }
   }

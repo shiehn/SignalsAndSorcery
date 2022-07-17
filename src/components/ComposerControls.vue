@@ -1,5 +1,9 @@
 <template>
-  <div class="flex mt-4 justify-center">
+  <button class="bg-gray-400 rounded-lg p-1 text-sm text-black"
+          :class="{'animate-pulse bg-red-500': displayRenderBtn}"
+          @click="renderArpeggios()">RENDER
+  </button>
+  <div class="flex my-2 justify-center">
     <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn" class="h-10 w-10 mr-1"/>
     </button>
     <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn" class="h-10 w-10 mr-1"/>
@@ -28,6 +32,7 @@ export default {
 
     let BUFFER_CACHE = {}
     let BUFFER_ROW_CACHE = []
+    const displayRenderBtn = ref(false)
 
     let sourceNode = undefined;
     let buffer = undefined;
@@ -273,6 +278,7 @@ export default {
       store.state.updateClipStateHash()
       updateRenderedArpeggios()
       store.state.updateArpeggioStateHash()
+      emit('displayRenderBtn', false)
     }
 
     const updateRenderedArpeggios = () => {
@@ -366,6 +372,16 @@ export default {
       await crunker.download(output.blob, 'signals_and_sorcery') //TODO: the name should be the project name
     }
 
+    const renderArpeggios = async () => {
+      if (!isRendering.value) {
+        await renderMix()
+      }
+    }
+
+    watch(() => bus.value.get('displayRenderBtn'), (payload) => {
+      displayRenderBtn.value = payload[0]
+    })
+
     watch(() => bus.value.get('downloadMix'), async () => {
       await downloadMix()
     })
@@ -447,6 +463,7 @@ export default {
     // THIS IS THE MAIN APPLICATION TICK - STOP
 
     return {
+      displayRenderBtn,
       downloadMix,
       imageAssets,
       isPlaying,
@@ -454,6 +471,7 @@ export default {
       play: playMix,
       pause,
       stop,
+      renderArpeggios,
       renderMix,
     }
   }

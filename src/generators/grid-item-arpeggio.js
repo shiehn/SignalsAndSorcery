@@ -12,6 +12,6 @@ export default class GridItemArpeggio {
         this.on = false
         this.pattern = pattern
         this.rate = rate
-        this.synth = undefined
+        this.synth = 'synth_a'
     }
 }

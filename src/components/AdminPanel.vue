@@ -1,7 +1,7 @@
 <template>
   <div class="w-1/6 h-48 border-2 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
        style="background-color: rgba(255,255,255,0.9);">
-    <button @click="logDebug()">DEBUG</button>
+<!--    <button @click="logDebug()">DEBUG</button>-->
     <global-track-values></global-track-values>
     <div class="flex justify-between">
       <button @click="openProjectDialog()" class="border-2 border-black p-1 rounded-md"><img

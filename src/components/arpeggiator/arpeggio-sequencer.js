@@ -92,9 +92,12 @@ export default class ArpeggioSequencer {
                     chordIndex++
                 }
 
+                console.log('arpObj.synth', arpObj.synth)
+
                 let sequenceItem = {
                     time: timeBeforeArpStart + (noteIndex * noteDuration),
                     note: chordNotes[chordIndex] + '4',  //TODO: THIS IS A PROBLEM PLEASE FIX
+                    synth: arpObj.synth,
                     duration: noteDuration,
                 }
 

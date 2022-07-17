@@ -28,14 +28,32 @@ export default class ArpeggioRenderer {
         Tone.getContext().isOffline = true
         Tone.Offline(function ({transport}) {
             transport.clear()
-            //const osc = new Tone.Oscillator().toDestination();
-            const bogus = new Tone.PolySynth(Tone.SimpleAM).toDestination();
 
+            const synthA = new Tone.PolySynth(Tone.SimpleAM).toDestination();
+            const synthB = new Tone.DuoSynth().toDestination();
+            const synthC = new Tone.PluckSynth().toDestination();
+
+            const getSynth = (synthId) => {
+                if(synthId === 'synth_a'){
+                    console.log('SYNTH A')
+                    return synthA
+                } else if (synthId === 'synth_b'){
+                    console.log('SYNTH B')
+                    return synthB
+                } else {
+                    console.log('SYNTH C')
+                    return synthC
+                }
+            }
+
+
+
+            console.log('ADDING NOTES TO SEQUENCE')
             for (let i = 0; i < sequence.length; i++) {
-                console.log('ADDING NOTE')
                 let sequenceItem = sequence[i]
+                console.log(sequenceItem.synth)
                 transport.schedule((time) => {
-                    bogus.triggerAttackRelease(sequenceItem.note, sequenceItem.duration, time);
+                    getSynth(sequenceItem.synth).triggerAttackRelease(sequenceItem.note, sequenceItem.duration, time);
                 }, sequenceItem.time);
             }
             transport.start()

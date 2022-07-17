@@ -62,7 +62,6 @@
     <composer-controls-loop-bar></composer-controls-loop-bar>
     <composer-controls-scroll-bar></composer-controls-scroll-bar>
   </div>
-
 </template>
 
 <script>
@@ -90,7 +89,6 @@ export default {
 
     const store = inject('store')
     const {bus, emit} = useEventsBus()
-    const toast = inject('toast');
     const gridContainerRows = ref([]);
     const imageUrls = {
       editIcon: store.state.staticUrl + 'icons/edit.png',
@@ -123,8 +121,6 @@ export default {
 
       const stemStr = evt.dataTransfer.getData('stem')
       const stem = JSON.parse(stemStr)
-
-      console.log('DROPPED STEM', stem)
 
       const gridItem = store.state.grid[row].value[col]
       gridItem.stem = stem
@@ -255,7 +251,9 @@ export default {
         // }
 
         const renderCompleteCallback = function (id) {
+          console.log('buffer callback grid-toggle')
           new GridProcessor(store.state.grid).updateArpeggioBuffersRendered(id)
+          emit('displayRenderBtn', true)
         }
 
         new ArpeggioRenderer(store).renderBuffer(renderCompleteCallback, arpId)
