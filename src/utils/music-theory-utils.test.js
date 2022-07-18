@@ -136,4 +136,30 @@ describe('Music Theory Utils Tests', () => {
         }
     })
 
+    /* ARPEGGIO MAPPING */
+    it('should return arpeggio map for triads', () => {
+        const chordMap = musicUtils.getArpDegreeToChordNoteMap('C')
+        expect(chordMap[0]).to.equal(undefined)
+        expect(chordMap[1]).to.equal('C4')
+        expect(chordMap[2]).to.equal(undefined)
+        expect(chordMap[3]).to.equal('E4')
+        expect(chordMap[4]).to.equal(undefined)
+        expect(chordMap[5]).to.equal('G4')
+        expect(chordMap[6]).to.equal(undefined)
+        expect(chordMap[7]).to.equal('C5')
+        expect(chordMap[8]).to.equal('C5')
+    })
+
+    it('should correct arpeggio map for triads', () => {
+        const chordMap = musicUtils.getArpDegreeToChordNoteMap('CM7')
+        expect(chordMap[0]).to.equal(undefined)
+        expect(chordMap[1]).to.equal('C4')
+        expect(chordMap[2]).to.equal(undefined)
+        expect(chordMap[3]).to.equal('E4')
+        expect(chordMap[4]).to.equal(undefined)
+        expect(chordMap[5]).to.equal('G4')
+        expect(chordMap[6]).to.equal(undefined)
+        expect(chordMap[7]).to.equal('B4')
+        expect(chordMap[8]).to.equal('C5')
+    })
 })

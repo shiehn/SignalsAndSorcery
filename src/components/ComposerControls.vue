@@ -8,7 +8,7 @@
     </button>
     <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn" class="h-10 w-10 mr-1"/>
     </button>
-    <button @click="stop()"><img :src="imageAssets.stopBtn" class="h-6 w-6 ml-1"/></button>
+    <button @click="stopButton()"><img :src="imageAssets.stopBtn" class="h-6 w-6 ml-1"/></button>
   </div>
 </template>
 
@@ -290,6 +290,8 @@ export default {
         toast.warning('Add clips to the arranger!');
       }
 
+      emit('stopAllAudio', 'composer-controls')
+
       if (buffer) {
         let offset = pausedAt;
 
@@ -321,6 +323,10 @@ export default {
         await renderMix()
         await playMix()
       }
+    }
+
+    const stopButton = () => {
+      emit('stopAllAudio')
     }
 
     const stop = async () => {
@@ -470,7 +476,7 @@ export default {
       isRendering,
       play: playMix,
       pause,
-      stop,
+      stopButton,
       renderArpeggios,
       renderMix,
     }

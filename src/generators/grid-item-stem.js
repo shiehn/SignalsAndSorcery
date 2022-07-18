@@ -1,3 +1,5 @@
+import {v4} from "uuid";
+
 export default class GridItemStem {
     constructor(id, bpm, chords, key, sectionId, type, variationId, source, waveform,
                 showPreviewIcon,
@@ -6,6 +8,7 @@ export default class GridItemStem {
                 previewStopIconPath
     ) {
         this.id = id
+        this.instanceId = v4()
         this.bpm = bpm
         this.chords = chords
         this.key = key
@@ -18,5 +21,9 @@ export default class GridItemStem {
         this.previewIconPath = previewIconPath
         this.previewPlayIconPath = previewPlayIconPath
         this.previewStopIconPath = previewStopIconPath
+    }
+
+    updateInstanceId(){
+        this.instanceId = v4()
     }
 }

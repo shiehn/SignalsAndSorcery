@@ -12,24 +12,23 @@ export default class ArpeggioRenderer {
         Tone.Transport.stop()
     }
 
-    preview(chords, rate, synth) {
-        if (!chords || !rate || !synth) {
+    preview(arp) {
+        if (!arp.chords || !arp.rate || !arp.synth || !arp.pattern) {
             return
         }
 
         const sequencer = new ArpeggioSequencer(undefined, this.store.state.getGlobalBpm())
-        const sequence = sequencer.getPreviewSequence(chords, rate, synth)
+        const sequence = sequencer.getPreviewSequence(arp)
 
         if (!this.store.state.globalBpm) {
             // if arpeggio is added to the grid before a clip a bpm must be set
             // defaulting to 120 for now
             this.store.state.globalBpm = 120
         }
-        
+
         Tone.Transport.stop()
         Tone.Transport.seconds = 0
         Tone.Transport.cancel(0)
-        console.log('PREVIEW', Tone.Transport.seconds)
 
         const synths = new Synths()
 

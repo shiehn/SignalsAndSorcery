@@ -74,11 +74,9 @@ import {ROW_TO_TYPE_MAP} from "../constants/constants";
 import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
 import GridProcessor from "../processors/grid-processor";
 import ModalOpenPayload from "./ModalOpenPayload";
-import {v4} from "uuid";
 import ComposerControlsLoopBar from "./ComposerControlsLoopBar";
-import GridItem from "../generators/grid-item";
-import GridItemArpeggio from "../generators/grid-item-arpeggio";
 import ArpeggioRenderer from "./arpeggiator/arpeggio-renderer";
+import {v4} from "uuid";
 
 export default {
   name: 'ComposerGrid',
@@ -121,6 +119,7 @@ export default {
 
       const stemStr = evt.dataTransfer.getData('stem')
       const stem = JSON.parse(stemStr)
+      stem.instanceId = v4() //each stem should have a unique instanceId but possible the same stem id
 
       const gridItem = store.state.grid[row].value[col]
       gridItem.stem = stem

@@ -1,3 +1,5 @@
+import {v4} from "uuid";
+
 export default class GridItemArpeggio {
     constructor(id, chords, pattern, rate) {
 
@@ -10,7 +12,7 @@ export default class GridItemArpeggio {
         this.bufferRendered = false
         this.renderedInMix = true
         this.on = false
-        this.pattern = pattern
+        this.pattern = '1315'
         this.rate = rate
         this.synth = 'synth_a'
     }

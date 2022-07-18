@@ -19,7 +19,7 @@
 
       <synth-selector @handleArpChanges="handleArpChanges"></synth-selector>
       <rate-selector @handleArpChanges="handleArpChanges"></rate-selector>
-      <type-selector></type-selector>
+      <pattern-selector @handleArpChanges="handleArpChanges"></pattern-selector>
     </div>
 
     <f-x-wrapper></f-x-wrapper>
@@ -33,13 +33,14 @@ import useEventsBus from "../../events/eventBus";
 import GridProcessor from "../../processors/grid-processor";
 import ArpeggioRenderer from "./arpeggio-renderer";
 import RateSelector from "./selector/RateSelector.vue";
-import TypeSelector from "./selector/TypeSelector.vue";
+import TypeSelector from "./selector/PatternSelector.vue";
 import FXWrapper from "./fx/FXWrapper.vue";
 import SynthSelector from "./selector/SynthSelector.vue";
+import PatternSelector from "./selector/PatternSelector.vue";
 
 export default {
   name: "ArpeggiatorControls",
-  components: {SynthSelector, FXWrapper, TypeSelector, RateSelector},
+  components: {SynthSelector, FXWrapper, PatternSelector, RateSelector},
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
@@ -74,6 +75,8 @@ export default {
           arpeggio.rate = selection
         } else if (type === 'synth') {
           arpeggio.synth = selection
+        } else if (type === 'pattern') {
+          arpeggio.pattern = selection
         }
 
         new ArpeggioRenderer(store).renderBuffer(renderCompleteCallback, arpId.value)
@@ -87,7 +90,7 @@ export default {
         return
       }
 
-      new ArpeggioRenderer(store).preview(arp.chords, arp.rate, arp.synth)
+      new ArpeggioRenderer(store).preview(arp)
     }
 
     const stopPreviewArpeggios = () => {

@@ -61,37 +61,36 @@ export default class ArpeggioSequencer {
         }
     }
 
-    getPreviewSequence(chords, rate, synth) {
+    getPreviewSequence(arp) {
         let sequence = []
         const musicTheoryUtils = new MusicTheoryUtils()
 
         //check the Rate of the arpeggio
-        let noteDuration = this.getDuration(rate)
-        let notesInLoop = this.getNumOfNotesInLoop(rate)
-        let notesPerChord = this.getNumOfNotesInBar(rate)
+        let noteDuration = this.getDuration(arp.rate)
+        let notesInLoop = this.getNumOfNotesInLoop(arp.rate)
+        let notesPerChord = this.getNumOfNotesInBar(arp.rate)
 
-        //SWITCH BASED ON Rate
-        let chordNoteIndex = -1
         let chordIndex = -1
-        let chordNotes = []
+        let arpPatternToNoteMap = undefined
+        let patternIndex = -1
+        const arpPatternDegrees = arp.pattern.split('');
         for (let noteIndex = 0; noteIndex < notesInLoop; noteIndex++) {
             if (noteIndex % notesPerChord === 0) {
                 chordIndex++
-                chordNoteIndex = 0
-                chordNotes = musicTheoryUtils.getChordNotes(chords[chordIndex])
+                patternIndex = -1
+                arpPatternToNoteMap = musicTheoryUtils.getArpDegreeToChordNoteMap(arp.chords[chordIndex])
             }
 
-            //TODO MAKE A FUNC OR SOMETHING
-            if (chordIndex > chordNotes.length - 2) {
-                chordIndex = 0
+            if (patternIndex > arpPatternDegrees.length - 2) {
+                patternIndex = 0
             } else {
-                chordIndex++
+                patternIndex++
             }
 
             let sequenceItem = {
                 time: (noteIndex * noteDuration),
-                note: chordNotes[chordIndex] + '4',  //TODO: THIS IS A PROBLEM PLEASE FIX
-                synth: synth,
+                note: arpPatternToNoteMap[arpPatternDegrees[patternIndex]],
+                synth: arp.synth,
                 duration: noteDuration,
             }
 
@@ -105,38 +104,37 @@ export default class ArpeggioSequencer {
         let sequence = []
         const musicTheoryUtils = new MusicTheoryUtils()
         for (let i = 0; i < this.arpTimeline.length; i++) {
-            let arpObj = this.arpTimeline[i].arpeggio
+            let arp = this.arpTimeline[i].arpeggio
 
             // infer the time until the colIndex
             let timeBeforeArpStart = (this.arpTimeline[i].colIndex) * this.timeUtils.getSecondsPerLoop()
 
             //check the Rate of the arpeggio
-            let noteDuration = this.getDuration(arpObj.rate)
-            let notesInLoop = this.getNumOfNotesInLoop(arpObj.rate)
-            let notesPerChord = this.getNumOfNotesInBar(arpObj.rate)
+            let noteDuration = this.getDuration(arp.rate)
+            let notesInLoop = this.getNumOfNotesInLoop(arp.rate)
+            let notesPerChord = this.getNumOfNotesInBar(arp.rate)
 
-            //SWITCH BASED ON Rate
-            let chordNoteIndex = -1
             let chordIndex = -1
-            let chordNotes = []
+            let arpPatternToNoteMap = undefined
+            let patternIndex = -1
+            const arpPatternDegrees = arp.pattern.split('');
             for (let noteIndex = 0; noteIndex < notesInLoop; noteIndex++) {
                 if (noteIndex % notesPerChord === 0) {
                     chordIndex++
-                    chordNoteIndex = 0
-                    chordNotes = musicTheoryUtils.getChordNotes(arpObj.chords[chordIndex])
+                    patternIndex = -1
+                    arpPatternToNoteMap = musicTheoryUtils.getArpDegreeToChordNoteMap(arp.chords[chordIndex])
                 }
 
-                //TODO MAKE A FUNC OR SOMETHING
-                if (chordIndex > chordNotes.length - 2) {
-                    chordIndex = 0
+                if (patternIndex > arpPatternDegrees.length - 2) {
+                    patternIndex = 0
                 } else {
-                    chordIndex++
+                    patternIndex++
                 }
 
                 let sequenceItem = {
                     time: timeBeforeArpStart + (noteIndex * noteDuration),
-                    note: chordNotes[chordIndex] + '4',  //TODO: THIS IS A PROBLEM PLEASE FIX
-                    synth: arpObj.synth,
+                    note: arpPatternToNoteMap[arpPatternDegrees[patternIndex]],
+                    synth: arp.synth,
                     duration: noteDuration,
                 }
 
@@ -144,7 +142,6 @@ export default class ArpeggioSequencer {
             }
         }
 
-        console.log('SEQUENCE', sequence)
         return sequence
     }
 }

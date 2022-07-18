@@ -66,13 +66,6 @@ export default {
       stem.showPreviewIcon = false
     }
 
-    watch(() => bus.value.get('stopAllAudio'), (callerId) => {
-      if (callerId != props.stem.id) {
-        audioTag.value.pause()
-        props.stem.previewIconPath = props.stem.previewPlayIconPath + "?x-request=html" //s3 hack to prevent request from 2 origins
-      }
-    })
-
     const isPlaying = () => {
       return audioTag.value
           && audioTag.value.currentTime > 0
@@ -85,7 +78,7 @@ export default {
       duration = 0
       currentTime = 0
 
-      emit('stopAllAudio', stem.id)
+      emit('stopAllAudio', stem.instanceId)
 
       if (isPlaying()) {
         audioTag.value.pause()
@@ -114,9 +107,15 @@ export default {
       }
     }
 
+    watch(() => bus.value.get('stopAllAudio'), (callerId) => {
+      if (callerId != props.stem.instanceId) {
+        audioTag.value.pause()
+        props.stem.previewIconPath = props.stem.previewPlayIconPath + "?x-request=html" //s3 hack to prevent request from 2 origins
+        progressBar.value = 0
+      }
+    })
+
     setInterval(updateDurations, 100)
-
-
 
     return {audioTag, startDrag, endDrag,  mouseOverGridItem, mouseLeaveGridItem, onPlayClip, progressBar}
   }
