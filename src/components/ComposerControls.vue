@@ -434,14 +434,6 @@ export default {
       }
     })
 
-    watch(() => bus.value.get('tick-test'), async () => {
-      console.log('TICK-TEST')
-    })
-
-    //JUNK END
-
-    let notFired = true
-
     // THIS IS THE MAIN APPLICATION TICK - START
     let progressUITick = async () => {
       let displayDuration = getDuration()

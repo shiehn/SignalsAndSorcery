@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import ComposerControls from "./ComposerControls";
 import ComposerGrid from "./ComposerGrid";
 import ComposerGridControlColumn from "./ComposerGridControlColumn";
 

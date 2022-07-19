@@ -270,13 +270,6 @@ export default {
       })
 
       window.addEventListener('resize', () => {
-        // if (currentGridWidth == gridContainerRows.value[0].clientWidth &&
-        //     currentColCount == gridContainerRows.value[0].length) {
-        //   return
-        // }
-        //
-        // currentGridWidth = gridContainerRows.value[0].clientWidth
-        // currentColCount = gridContainerRows.value[0].length
         emit('gridDrawCompleted', {
           'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
         })
