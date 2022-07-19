@@ -1,6 +1,8 @@
 <template>
-  <div ref="loopBar" class="relative w-auto h-6 hover:cursor-pointer"
+  <div ref="loopBar" id="loopBar" class="relative w-auto h-6 hover:cursor-pointer"
+       v-bind:style="{backgroundSize: bgGridWidth + 'px ' + bgGridHeight + 'px' }"
        @click="clickedLoopBar($event)">
+<!--    <label v-for="item in bgGridLabels">{{item}}</label>-->
     <img ref="startLoop"
          :src="imageAssets.loopStartMarker"
          draggable="true"
@@ -26,6 +28,10 @@ export default {
     const loopBar = ref(null)
     const startLoop = ref(null)
     const endLoop = ref(null)
+
+    const bgGridWidth = ref(50)
+    const bgGridHeight = ref(20)
+    // const bgGridLabels = ref([])
 
     const imageAssets = {
       loopStartMarker: store.state.staticUrl + 'icons/loop-start-marker.png',
@@ -125,6 +131,20 @@ export default {
       return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
     }
 
+    const getRelativeWidthOfCol = () => {
+      return Math.round(loopBar.value.getBoundingClientRect().width / store.state.grid[0].value.length)
+    }
+
+    const getGridLabels = () => {
+      const gridLabels = []
+
+      for(let i=0; i<store.state.grid[0].value.length; i++) {
+        gridLabels.push(i)
+      }
+
+      return gridLabels
+    }
+
     watch(() => bus.value.get('gridDrawCompleted'), (gridDrawCompletedParams) => {
       const w16 = 4 /* assuming each grid item is tailwind w-16 ==  4rem */
       const m1 = 0.25 /* assuming each grid item has tailwind mr-1 ==  0.25rem */
@@ -139,6 +159,10 @@ export default {
       //SET START/END LOOP MARKER POSITIONS
       startLoop.value.style.marginLeft = getXPosOfCurrentColStart(loopMarketStartXPercentCache) + 'px'
       endLoop.value.style.marginLeft = getXPosOfCurrentColEnd(loopMarketEndXPercentCache) - endLoop.value.getBoundingClientRect().width + 'px'
+
+      //SET THE GRID RULER COLUMN WIDTH
+      bgGridWidth.value = getRelativeWidthOfCol()
+      // bgGridLabels.value = getGridLabels()
     })
 
     watch(() => bus.value.get('resetPlayhead'), (gridDrawCompletedParams) => {
@@ -180,11 +204,86 @@ export default {
       }
     }
 
-    return {clickedLoopBar, endLoop, finishEndLoopDrag, finishStartLoopDrag, imageAssets, loopBar, startLoop}
+    return {
+      // bgGridLabels,
+      bgGridWidth,
+      bgGridHeight,
+      clickedLoopBar,
+      endLoop,
+      finishEndLoopDrag,
+      finishStartLoopDrag,
+      imageAssets,
+      loopBar,
+      startLoop
+    }
   }
 }
 </script>
 
 <style scoped>
+#loopBar {
+  background-color: #ffffff;
+  background-image: linear-gradient(90deg,
+  rgba(73, 73, 73, 0.5) 0,
+  rgba(73, 73, 73, 0.5) 2%,
+  transparent 2%
+  ),
+  linear-gradient(180deg,
+      #ffffff 50%,
+      transparent 50%
+  ),
+  linear-gradient(90deg,
+      transparent 25%,
+      rgba(73, 73, 73, 0.5) 25%,
+      rgba(73, 73, 73, 0.5) 27%,
+      transparent 27%,
+      transparent 50%,
+      rgba(73, 73, 73, 0.5) 50%,
+      rgba(73, 73, 73, 0.5) 52%,
+      transparent 52%,
+      transparent 75%,
+      rgba(73, 73, 73, 0.5) 75%,
+      rgba(73, 73, 73, 0.5) 77%,
+      transparent 77%
+  ),
+  linear-gradient(180deg,
+      #ffffff 70%,
+      transparent 70%
+  ),
+  linear-gradient(90deg,
+      transparent 12.5%,
+      rgba(73, 73, 73, 0.4) 12.5%,
+      rgba(73, 73, 73, 0.4) 14.5%,
+      transparent 12.5%,
+      transparent 37.5%,
+      rgba(73, 73, 73, 0.4) 37.5%,
+      rgba(73, 73, 73, 0.4) 39.5%,
+      transparent 39.5%,
+      transparent 62.5%,
+      rgba(73, 73, 73, 0.4) 62.5%,
+      rgba(73, 73, 73, 0.4) 64.5%,
+      transparent 64.5%,
+      transparent 87.5%,
+      rgba(73, 73, 73, 0.4) 87.5%,
+      rgba(73, 73, 73, 0.4) 89.5%,
+      transparent 89.5%
+  );
+  /*background-size: 50px 20px;*/
+  background-repeat: repeat-x;
+  min-height: 20px;
 
+  /* only needed for labels */
+  white-space: nowrap;
+  font-size: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/*label {*/
+/*  font-size: 9px;*/
+/*  padding-top: 2px;*/
+/*  display: inline-block;*/
+/*  width: 100px;*/
+/*  text-indent: 3px;*/
+/*}*/
 </style>
