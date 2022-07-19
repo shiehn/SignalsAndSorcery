@@ -129,7 +129,6 @@ export default {
       store.state.updateGlobalBpm()
       store.state.updateGlobalKey()
 
-
       emit('updateAssetSelection', {
         row: row,
         col: col,
@@ -170,7 +169,6 @@ export default {
     }
 
     const handleGridItemClick = (row, col) => {
-
       let key = undefined
       let chords = store.state.getChordsForCol(col)
       if (ROW_TO_TYPE_MAP[row] == 'drum') {
@@ -243,11 +241,6 @@ export default {
 
     const arpeggioToggled = (arpId) => {
       if (arpId) {
-
-        // const arp = new GridProcessor(store.state.grid).getArpeggioById(arpId)
-        // if(arp) {
-        //   arp.renderedInMix = false
-        // }
 
         const renderCompleteCallback = function (id) {
           console.log('buffer callback grid-toggle')

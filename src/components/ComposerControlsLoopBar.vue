@@ -73,24 +73,38 @@ export default {
       return 'end'
     }
 
+    const getXPosOfCurrentColStart = (mousePosPer) => {
+      const numOfCol = store.state.grid[0].value.length
+      const widthOfCol = loopBar.value.getBoundingClientRect().width / numOfCol
+      const currentCol = Math.round(numOfCol * mousePosPer * 0.01)
+      const xPosOfCurrentCol = (currentCol) * widthOfCol
+      return xPosOfCurrentCol
+    }
+
+    const getXPosOfCurrentColEnd = (mousePosPer) => {
+      const numOfCol = store.state.grid[0].value.length
+      const widthOfCol = loopBar.value.getBoundingClientRect().width / numOfCol
+      const currentCol = Math.round(numOfCol * mousePosPer * 0.01)
+      const xPosOfCurrentCol = (currentCol) * widthOfCol
+      return xPosOfCurrentCol
+    }
+
     const clickedLoopBar = (event) => {
       event.preventDefault()
+      const mouseXPosPercentage = getMouseXPosPercentage(event)
 
       if (moveStartOrEndMarker(event) === 'start') {
+        const marginLeft = getXPosOfCurrentColStart(mouseXPosPercentage)
         //set the visual start loop marker
-        let marginLeft = Math.round((event.clientX - event.target.getBoundingClientRect().x))
         startLoop.value.style.marginLeft = marginLeft + 'px'
         //set the playback start loop point
-        store.state.playBack.loopStartPercent = getMouseXPosPercentage(event)
+        store.state.playBack.loopStartPercent = Math.round(marginLeft / loopBar.value.clientWidth * 100)
       } else { //move end marker
         //set the visual end loop marker
-        let marginLeft = Math.round((event.clientX - event.target.getBoundingClientRect().x))
-        endLoop.value.style.marginLeft = marginLeft - endLoop.value.getBoundingClientRect().width + 'px'
+        endLoop.value.style.marginLeft = getXPosOfCurrentColEnd(mouseXPosPercentage) - endLoop.value.getBoundingClientRect().width + 'px'
         //set the playback end loop point
-        store.state.playBack.loopEndPercent = getMouseXPosPercentage(event) //plus width of end marker
+        store.state.playBack.loopEndPercent = Math.round(getXPosOfCurrentColEnd(mouseXPosPercentage) / loopBar.value.clientWidth * 100)
       }
-
-      console.log('PLAYBACK', store.state.playBack)
     }
 
     const convertRemToPixels = (rem) => {
@@ -121,8 +135,11 @@ export default {
       const scrollBarWidth = loopBar.value.getBoundingClientRect().width
       const endLoopXRelativeToBar = endLoop.value.getBoundingClientRect().x - endLoop.value.getBoundingClientRect().width - loopBar.value.getBoundingClientRect().x
       if (mousePosRelativeToBar > 0 && mousePosRelativeToBar < scrollBarWidth && mousePosRelativeToBar < endLoopXRelativeToBar) {
-        startLoop.value.style.marginLeft = mousePosRelativeToBar + 'px'
-        store.state.playBack.loopStartPercent = mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100
+
+        const mouseXPosPercentage = Math.round(mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100)
+        const marginLeft = getXPosOfCurrentColStart(mouseXPosPercentage)
+        startLoop.value.style.marginLeft = marginLeft + 'px'
+        store.state.playBack.loopStartPercent = Math.round(marginLeft / loopBar.value.clientWidth * 100)
       }
     }
 
@@ -131,12 +148,22 @@ export default {
       const scrollBarWidth = loopBar.value.getBoundingClientRect().width
       const startLoopXRelativeToBar = startLoop.value.getBoundingClientRect().x - loopBar.value.getBoundingClientRect().x
       if (mousePosRelativeToBar > 0 && mousePosRelativeToBar < scrollBarWidth && mousePosRelativeToBar > startLoopXRelativeToBar + startLoop.value.getBoundingClientRect().width + endLoop.value.getBoundingClientRect().width) {
-        endLoop.value.style.marginLeft = mousePosRelativeToBar - endLoop.value.getBoundingClientRect().width + 'px'
-        store.state.playBack.loopEndPercent = mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100
+
+
+        const mouseXPosPercentage = Math.round(mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100)
+        endLoop.value.style.marginLeft = getXPosOfCurrentColEnd(mouseXPosPercentage) - endLoop.value.getBoundingClientRect().width + 'px'
+        store.state.playBack.loopEndPercent = Math.round(getXPosOfCurrentColEnd(mouseXPosPercentage) / loopBar.value.clientWidth * 100)
+
+
+       // dkdkdkdkdkdkdkdkdk
+
+        // endLoop.value.style.marginLeft = mousePosRelativeToBar - endLoop.value.getBoundingClientRect().width + 'px'
+        // store.state.playBack.loopEndPercent = mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100
+
       }
     }
 
-    return {clickedLoopBar, endLoop, finishEndLoopDrag, finishStartLoopDrag,imageAssets, loopBar, startLoop}
+    return {clickedLoopBar, endLoop, finishEndLoopDrag, finishStartLoopDrag, imageAssets, loopBar, startLoop}
   }
 }
 </script>

@@ -114,7 +114,7 @@ export default {
 
       //first loop for row buffer list
       for (let i = 0; i < rowBufferList.length; i++) {
-        console.log('RENDERING ROW', i)
+        // console.log('RENDERING ROW', i)
         // second loop for each channel ie left and right
         //here we get a reference to the final mix buffer data
         const leftChannel = 0
@@ -204,9 +204,9 @@ export default {
           let tracksInRow = getTrackListByRow(n)
           // console.log('tracksInRow_' + n, tracksInRow)
 
-          if (n == 4) {
-            console.log('TRACKS IN ROW 5', tracksInRow)
-          }
+          // if (n == 4) {
+          //   console.log('TRACKS IN ROW 5', tracksInRow)
+          // }
 
           //GET THE BUFFERS FOR ONE ROW
           let buffer_list_row = await getBufferInRow(store.context, tracksInRow, emptyBuffer);
@@ -411,8 +411,6 @@ export default {
       // }
 
       if (store.state.hasClipStateChanged()) {
-        console.log('CLIP STATE CHANGED RENDER! NOW()!!!')
-
         if (!isRendering.value) {
           await renderMix()
         }

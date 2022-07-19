@@ -208,7 +208,6 @@ const state = reactive({
         return chords
     },
     hasClipStateChanged: function () {
-        console.log('CLIP STATE CHANGE!')
         return this.currentStateHash !== this.calculateClipStateHash()
     },
 
