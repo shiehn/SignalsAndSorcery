@@ -12,15 +12,15 @@
 
           <div v-if="gridRowItem.section.position == 'end'" class="ml-1 w-16 h-6 flex">
             <button @click="editSection(gridRowItem.section.id)">
-              <img :src=imageUrls.editIcon class="w-4 h-4">
+              <img :src=imageUrls.editIcon class="w-4 h-4 rounded-full hover:ring-2 hover:ring-yellow-500">
             </button>
 
             <button @click="columnAdd(gridRowItem.section.id)">
-              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-1">
+              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-1 rounded-full hover:ring-2 hover:ring-green-500">
             </button>
 
             <button @click="columnRemove(gridRowItem.section.id)">
-              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-1">
+              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-1 rounded-full hover:ring-2 hover:ring-red-500">
             </button>
           </div>
         </div>

@@ -4,13 +4,13 @@
 <!--    <button @click="logDebug()">DEBUG</button>-->
     <global-track-values></global-track-values>
     <div class="flex justify-between">
-      <button @click="openProjectDialog()" class="border-2 border-black p-1 rounded-md"><img
+      <button @click="openProjectDialog()" class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
           :src="imageAssets.loadBtn" class="h-6 "/>
       </button>
-      <button @click="saveProject()" class="border-2 border-black p-1 rounded-md"><img
+      <button @click="saveProject()" class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
           :src="imageAssets.saveBtn" class="h-6"/>
       </button>
-      <button @click="downloadMix()" class="border-2 border-black p-1 rounded-md"><img
+      <button @click="downloadMix()" class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
           :src="imageAssets.downloadBtn" class="h-6"/>
       </button>
     </div>

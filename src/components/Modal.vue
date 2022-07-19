@@ -6,10 +6,10 @@
       <input v-if="isTextInput" class="w-full h-10 p-2" v-model="textInput">
     </div>
     <div class="flex justify-end">
-      <button v-if="cancelBtnText" @click="cancelClick()" class="border-2 border-black ml-2 p-1 rounded-md">
+      <button v-if="cancelBtnText" @click="cancelClick()" class="border-2 border-black ml-2 p-1 rounded-md hover:shadow-lg hover:border-red-500">
         {{ cancelBtnText }}
       </button>
-      <button v-if="confirmBtnText" @click="confirmClick()" class="border-2 border-black ml-2 p-1 rounded-md">
+      <button v-if="confirmBtnText" @click="confirmClick()" class="border-2 border-black ml-2 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
         {{ confirmBtnText }}
       </button>
     </div>

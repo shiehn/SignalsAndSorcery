@@ -1,14 +1,14 @@
 <template>
-  <button class="bg-gray-400 rounded-lg p-1 text-sm text-black"
+  <button class="bg-gray-200 border-2 border-black rounded-lg p-1 text-sm text-black hover:bg-green-500 hover:drop-shadow-lg"
           :class="{'animate-pulse bg-red-500': displayRenderBtn}"
           @click="renderArpeggios()">RENDER
   </button>
   <div class="flex my-2 justify-center">
-    <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn" class="h-10 w-10 mr-1"/>
+    <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn" class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
     </button>
-    <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn" class="h-10 w-10 mr-1"/>
+    <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn" class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
     </button>
-    <button @click="stopButton()"><img :src="imageAssets.stopBtn" class="h-6 w-6 ml-1"/></button>
+    <button @click="stopButton()"><img :src="imageAssets.stopBtn" class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
   </div>
 </template>
 

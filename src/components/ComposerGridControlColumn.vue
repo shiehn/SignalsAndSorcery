@@ -2,12 +2,13 @@
   <div class="flex flex-col min-w-fit w-1/12 border-2 border-black rounded-lg mr-2 pt-2  px-2"
        style="background-color: rgba(255,255,255,0.9);">
     <button @click="addSectionPrompt" class="flex mb-2 w-full justify-center hover:cursor-pointer">
-      <img :src=imageUrls.plusIcon class="w-6 h-6">
+      <img :src=imageUrls.plusIcon class="w-6 h-6 hover:shadow-lg rounded-full hover:ring-4 hover:ring-green-500">
     </button>
 
     <div class="flex">
       <div @click="handleClick('arp')"
-           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2
+            hover:cursor-pointer hover:shadow-lg hover:border-green-500">
         <div class="">
           <img :src=imageUrls.arpIcon class="w-8 h-8">
           <div class="w-full text-center text-white bg-black text-xs mt-1">Arp</div>
@@ -15,14 +16,14 @@
       </div>
 
       <div class="pl-2">
-        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer" @click="handleFX('arp')">FX</div>
-        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer" @click="handleVol('arp')">Vol</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleFX('arp')">FX</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleVol('arp')">Vol</div>
       </div>
     </div>
 
     <div class="flex">
       <div @click="handleClick('hi')"
-           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
         <div class="">
           <img :src=imageUrls.hiIcon class="w-8 h-8">
           <div class="w-full text-center text-white bg-black text-xs mt-1">Hi</div>
@@ -30,14 +31,14 @@
       </div>
 
       <div class="pl-2">
-        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer" @click="handleFX('hi')">FX</div>
-        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer" @click="handleVol('hi')">Vol</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleFX('hi')">FX</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleVol('hi')">Vol</div>
       </div>
     </div>
 
     <div class="flex">
       <div @click="handleClick('mid')"
-           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
         <div class="">
           <img :src=imageUrls.midIcon class="w-8 h-8">
           <div class="w-full text-center text-white bg-black text-xs mt-1">Mid</div>
@@ -45,14 +46,14 @@
       </div>
 
       <div class="pl-2">
-        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer" @click="handleFX('mid')">FX</div>
-        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer" @click="handleVol('mid')">Vol</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleFX('mid')">FX</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleVol('mid')">Vol</div>
       </div>
     </div>
 
     <div class="flex">
       <div @click="handleClick('low')"
-           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
         <div class="">
           <img :src=imageUrls.lowIcon class="w-8 h-8">
           <div class="w-full text-center text-white bg-black text-xs mt-1">Bass</div>
@@ -60,14 +61,14 @@
       </div>
 
       <div class="pl-2">
-        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer" @click="handleFX('low')">FX</div>
-        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer" @click="handleVol('low')">Vol</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleFX('low')">FX</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleVol('low')">Vol</div>
       </div>
     </div>
 
     <div class="flex">
       <div @click="handleClick('drum')"
-           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
         <div class="">
           <img :src=imageUrls.drumIcon class="w-8 h-8">
           <div class="w-full text-center text-white bg-black text-xs mt-1">Drum</div>
@@ -75,14 +76,14 @@
       </div>
 
       <div class="pl-2">
-        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer" @click="handleFX('drum')">FX</div>
-        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer" @click="handleVol('drum')">Vol</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleFX('drum')">FX</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleVol('drum')">Vol</div>
       </div>
     </div>
 
     <div class="flex">
       <div @click="handleClick('fill')"
-           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer">
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
         <div class="">
           <img :src=imageUrls.fillIcon class="w-8 h-8">
           <div class="w-full text-center text-white bg-black text-xs mt-1">Fill</div>
@@ -90,8 +91,8 @@
       </div>
 
       <div class="pl-2">
-        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer" @click="handleFX('fill')">FX</div>
-        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer" @click="handleVol('fill')">Vol</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleFX('fill')">FX</div>
+        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleVol('fill')">Vol</div>
       </div>
     </div>
 
