@@ -10,12 +10,10 @@
 <script lang="js">
 import {defineComponent, ref, provide, watch} from "vue";
 import store from './store/store'
-import ArpeggiatorWrapper from "./components/arpeggiator/ArpeggiatorWrapper";
 import GlobalTrackValues from "./components/GlobalTrackValues.vue";
 import ComposerGridWrapper from "./components/ComposerGridWrapper";
 import TopPanelsWrapper from "./components/TopPanelsWrapper";
 import Modal from "./components/Modal";
-import useEventsBus from "./events/eventBus";
 import {onMounted} from "vue";
 import SASApi from "./dal/sas-api";
 
@@ -45,7 +43,6 @@ export default defineComponent({
     return {}
   },
   components: {
-    ArpeggiatorWrapper,
     Modal,
     TopPanelsWrapper,
     ComposerGridWrapper,

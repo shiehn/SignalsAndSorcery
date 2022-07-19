@@ -5,34 +5,6 @@ let context = undefined
 const arpeggioBuffer = undefined
 
 const state = reactive({
-    arpeggiator: {
-        AP: undefined,
-        arpeggio: undefined,
-        bpms: [45, 60, 75, 90, 105, 120, 135, 150],
-        chords: [0, 0, 0, 0],
-        chord_deg: ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii'],
-        steps: [3, 4, 5, 6],
-        types: ['straight', 'looped'],
-        MS: undefined,
-        ms_key: 'F',
-        ms_mode: 'major',
-        ap_steps: 4,
-        ap_pattern_type: 'straight', // || 'looped'
-        ap_pattern_id: 0,
-        player: {
-            chord_step: 0,
-            octave_base: 4,
-            arp_repeat: 2,
-            bass_on: false,
-            triad_step: 0,
-            step: 0,
-            playing: false,
-            bpm: 90
-        },
-        chord_count: function () {
-            return this.chords.length
-        },
-    },
     projectName: 'Untitled Project',
     authorName: '',
     globalBpm: undefined,
