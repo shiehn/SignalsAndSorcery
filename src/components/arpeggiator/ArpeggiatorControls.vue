@@ -33,7 +33,6 @@ import useEventsBus from "../../events/eventBus";
 import GridProcessor from "../../processors/grid-processor";
 import ArpeggioRenderer from "./arpeggio-renderer";
 import RateSelector from "./selector/RateSelector.vue";
-import TypeSelector from "./selector/PatternSelector.vue";
 import FXWrapper from "./fx/FXWrapper.vue";
 import SynthSelector from "./selector/SynthSelector.vue";
 import PatternSelector from "./selector/PatternSelector.vue";

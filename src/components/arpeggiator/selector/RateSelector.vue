@@ -1,16 +1,19 @@
 <template>
 
   <div class="flex justify-center px-2">
-    <div>
-      RATE
-      <div class="w-20 h-20 border-2 border-black rounded-lg p-2">
+    <div class="rounded-lg">
+      <div class="flex m-auto center align-middle rounded-lg">
+        <label for="arpCtrlRate" class="text-sm">RATE</label>
         <select v-if="arpCtrlRate != undefined" v-model="arpCtrlRate" @change="handleSelection()"
                 id="arpCtrlRate"
-                class="w-full text-xs rounded-lg">
-          <option :value="item" v-for="item in arpCtrlRateOptions">
+                class="w-2 h-2 px-4 m-auto center align-middle overflow-hidden text-xs rounded-lg">
+          <option :value="item" v-for="item in arpCtrlRateOptions" class="w-2 h-2">
             {{ item }}
           </option>
         </select>
+      </div>
+      <div class="w-20 h-20 border-2 border-black rounded-lg p-2 mt-1">
+        <img :src="arpCtrlRateImg">
       </div>
     </div>
   </div>
@@ -26,11 +29,20 @@ export default {
   setup(props, {emit}) {
     const store = inject('store')
     const {bus} = useEventsBus()
+    const imageUrls = {
+      'whole': store.state.staticUrl + "icons/note-whole.png",
+      'half': store.state.staticUrl + "icons/note-half.png",
+      'quarter': store.state.staticUrl + "icons/note-quarter.png",
+      'eighth': store.state.staticUrl + "icons/note-eighth.png",
+      'sixteenth': store.state.staticUrl + "icons/note-sixteenth.png",
+    }
 
     const arpCtrlRate = ref('quarter')
     const arpCtrlRateOptions = ref(['whole', 'half', 'quarter', 'eighth', 'sixteenth'])
+    const arpCtrlRateImg = ref(imageUrls[arpCtrlRate.value])
 
     const handleSelection = () => {
+      arpCtrlRateImg.value = imageUrls[arpCtrlRate.value]
       emit('handleArpChanges', 'rate', arpCtrlRate.value)
     }
 
@@ -84,6 +96,7 @@ export default {
 
     return {
       arpCtrlRate,
+      arpCtrlRateImg,
       arpCtrlRateOptions,
       handleSelection,
     }

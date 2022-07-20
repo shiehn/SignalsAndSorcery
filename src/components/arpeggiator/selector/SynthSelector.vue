@@ -1,15 +1,19 @@
 <template>
   <div class="flex justify-center px-2">
-    <div>
-      SYNTH
-      <div class="w-20 h-20 border-2 border-black rounded-lg p-2">
+    <div class="rounded-lg">
+      <div class="flex m-auto center align-middle rounded-lg">
+        <label for="arpCtrlRate" class=" text-sm">SYNTH</label>
         <select v-if="arpCtrlSynth != undefined" v-model="arpCtrlSynth" @change="handleSelection()"
                 id="arpCtrlRate"
-                class="w-2/3 text-xs rounded-lg">
+                class="w-2 h-2 px-4 m-auto center align-middle overflow-hidden text-xs rounded-lg">
           <option :value="item" v-for="item in arpCtrlSynthOptions">
             {{ item }}
           </option>
         </select>
+      </div>
+
+      <div class="flex w-20 h-20 m-auto center border-2 border-black rounded-lg p-2 mt-1">
+        <span class="bg-black text-white m-auto center p-1">{{arpCtrlSynth}}</span>
       </div>
     </div>
   </div>
