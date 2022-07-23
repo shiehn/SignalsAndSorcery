@@ -33,9 +33,9 @@ export default class GridGenerator {
                 }
 
                 let gridItem = this.createGridItemWithSection(i, j, new GridItemSection(defaultId, defaultSectionName, position))
-                if(i == 0) {
-                    gridItem.arpeggio = new GridItemArpeggio(v4(), [], 'pattern_1', 'quarter')
-                }
+                // if(i == 0) {
+                //     gridItem.arpeggio = new GridItemArpeggio(v4(), [], 'pattern_1', 'quarter')
+                // }
 
                 row.value.push(gridItem)
             }

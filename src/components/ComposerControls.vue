@@ -1,14 +1,20 @@
 <template>
-  <button class="bg-gray-200 border-2 border-black rounded-lg p-1 text-sm text-black hover:bg-green-500 hover:drop-shadow-lg"
-          :class="{'animate-pulse bg-red-500': displayRenderBtn}"
-          @click="renderArpeggios()">RENDER
-  </button>
+  <!--  <button class="bg-gray-200 border-2 border-black rounded-lg p-1 text-sm text-black hover:bg-green-500 hover:drop-shadow-lg"-->
+  <!--          :class="{'animate-pulse bg-red-500': displayRenderBtn}"-->
+  <!--          @click="rende  <button class="bg-gray-200 border-2 border-black rounded-lg p-1 text-sm text-black hover:bg-green-500 hover:drop-shadow-lg"-->
+  <!--          :class="{'animate-pulse bg-red-500': displayRenderBtn}"-->
+  <!--          @click="renderArpeggios()">RENDER-->
+  <!--  </button>rArpeggios()">RENDER-->
+  <!--  </button>-->
   <div class="flex my-2 justify-center">
-    <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn" class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
+    <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn"
+                                                            class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
     </button>
-    <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn" class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
+    <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn"
+                                                            class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
     </button>
-    <button @click="stopButton()"><img :src="imageAssets.stopBtn" class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
+    <button @click="stopButton()"><img :src="imageAssets.stopBtn"
+                                       class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
   </div>
 </template>
 
@@ -313,6 +319,13 @@ export default {
         sourceNode = store.context.createBufferSource();
         sourceNode.buffer = buffer
         sourceNode.connect(store.context.destination);
+
+        // console.log('loopStart', loopStart)
+        // console.log('loopEnd', loopEnd)
+
+        sourceNode.loopStart = loopStart
+        sourceNode.loopEnd = loopEnd
+        sourceNode.loop = true
         sourceNode.start(0, offset)
 
         startedAt = store.context.currentTime - offset;
@@ -378,11 +391,11 @@ export default {
       await crunker.download(output.blob, 'signals_and_sorcery') //TODO: the name should be the project name
     }
 
-    const renderArpeggios = async () => {
-      if (!isRendering.value) {
-        await renderMix()
-      }
-    }
+    // const renderArpeggios = async () => {
+    //   if (!isRendering.value) {
+    //     await renderMix()
+    //   }
+    // }
 
     watch(() => bus.value.get('displayRenderBtn'), (payload) => {
       displayRenderBtn.value = payload[0]
@@ -394,6 +407,7 @@ export default {
 
     watch(() => bus.value.get('stopAllAudio'), async (callerId) => {
       if (callerId != 'composer-controls') {
+        console.log('STOP ALL')
         await stop()
       }
     })
@@ -436,16 +450,44 @@ export default {
 
     // THIS IS THE MAIN APPLICATION TICK - START
     let progressUITick = async () => {
-      let displayDuration = getDuration()
-      let displayCurrentTime = getCurrentRelativeTime()
-      let endTime = getDuration() * (store.state.playBack.loopEndPercent * 0.01)
+      const displayDuration = getDuration()
+      const displayCurrentTime = getCurrentRelativeTime()
+      const startTime = getDuration() * (store.state.playBack.loopStartPercent * 0.01)
+      const endTime = getDuration() * (store.state.playBack.loopEndPercent * 0.01)
 
-      if (displayCurrentTime > endTime) {
-        await stop()
-        await playMix()
-      }
+      const loopDuration = endTime - startTime
 
-      let progress = Math.round(displayCurrentTime / displayDuration * 100)
+      let positionInLoopSection = 0
+      let markerPositionInLoop = 0
+
+      let progress = 0
+
+      // console.log('startTime', startTime)
+      // console.log('displayCurrentTime', displayCurrentTime)
+
+      // if(startTime > displayCurrentTime) {
+      //   console.log('GREATER')
+      //console.log('displayCurrentTime', displayCurrentTime)
+
+      //console.log('loopDuration', loopDuration)
+
+      positionInLoopSection = (displayCurrentTime-startTime) % loopDuration
+
+      // console.log('startTime', startTime)
+      // console.log('positionInLoopSection', positionInLoopSection)
+
+      markerPositionInLoop = startTime + positionInLoopSection
+      progress = Math.round(markerPositionInLoop / displayDuration * 100)
+      // } else {
+      //   console.log('LESS')
+      //   progress = Math.round(displayCurrentTime / displayDuration * 100)
+      // }
+
+      // if (displayCurrentTime > endTime) {
+      //   await stop()
+      //   await playMix()
+      // }
+
       if (Number.isInteger(progress)) {
         emit('updateProgressBar', progress)
       }
@@ -455,7 +497,7 @@ export default {
       }
     }
 
-    setInterval(progressUITick, 25)
+    setInterval(progressUITick, 50)
     // THIS IS THE MAIN APPLICATION TICK - STOP
 
     return {
@@ -467,7 +509,7 @@ export default {
       play: playMix,
       pause,
       stopButton,
-      renderArpeggios,
+      // renderArpeggios,
       renderMix,
     }
   }

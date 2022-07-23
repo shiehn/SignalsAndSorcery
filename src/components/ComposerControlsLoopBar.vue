@@ -24,7 +24,7 @@ export default {
   name: "ComposerControlsLoopBar",
   setup() {
     const store = inject('store')
-    const {bus} = useEventsBus()
+    const {bus, emit} = useEventsBus()
     const loopBar = ref(null)
     const startLoop = ref(null)
     const endLoop = ref(null)
@@ -108,19 +108,22 @@ export default {
         startLoop.value.style.marginLeft = marginLeft + 'px'
         //set the playback start loop point
 
-        const loopStartPos = Math.round(marginLeft / loopBar.value.clientWidth * 100)
+        const loopStartPos = marginLeft / loopBar.value.clientWidth * 100
         store.state.playBack.loopStartPercent = loopStartPos
         //CACHE THE PERCENT FOR RESIZE PURPOSES
         loopMarketStartXPercentCache = loopStartPos
       } else { //move end marker
         //set the visual end loop marker
-        const marginLeft = getXPosOfCurrentColEnd(mouseXPosPercentage) - endLoop.value.getBoundingClientRect().width
+        const marginLeft = getXPosOfCurrentColEnd(mouseXPosPercentage) + endLoop.value.getBoundingClientRect().width
         endLoop.value.style.marginLeft = marginLeft + 'px'
         //set the playback end loop point
-        store.state.playBack.loopEndPercent = Math.round(getXPosOfCurrentColEnd(mouseXPosPercentage) / loopBar.value.clientWidth * 100)
+        store.state.playBack.loopEndPercent = getXPosOfCurrentColEnd(mouseXPosPercentage) / loopBar.value.clientWidth * 100
         //CACHE THE PERCENT FOR RESIZE PURPOSES
-        loopMarketEndXPercentCache = Math.round(marginLeft / loopBar.value.clientWidth * 100)
+        loopMarketEndXPercentCache = marginLeft / loopBar.value.clientWidth * 100
       }
+
+
+      emit('stopAllAudio', 'loopBar')
     }
 
     /*
@@ -181,12 +184,14 @@ export default {
         const marginLeft = getXPosOfCurrentColStart(mouseXPosPercentage)
         startLoop.value.style.marginLeft = marginLeft + 'px'
 
-        const loopStartPos = Math.round(marginLeft / loopBar.value.clientWidth * 100)
+        const loopStartPos = marginLeft / loopBar.value.clientWidth * 100
         store.state.playBack.loopStartPercent = loopStartPos
 
         //cache da shit
         loopMarketStartXPercentCache = loopStartPos
       }
+
+      emit('stopAllAudio', 'loopBar')
     }
 
     const finishEndLoopDrag = ($event) => {
@@ -197,11 +202,13 @@ export default {
         const mouseXPosPercentage = Math.round(mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100)
         const marginLeft = getXPosOfCurrentColEnd(mouseXPosPercentage) - endLoop.value.getBoundingClientRect().width
         endLoop.value.style.marginLeft = marginLeft + 'px'
-        store.state.playBack.loopEndPercent = Math.round(getXPosOfCurrentColEnd(mouseXPosPercentage) / loopBar.value.clientWidth * 100)
+        store.state.playBack.loopEndPercent = getXPosOfCurrentColEnd(mouseXPosPercentage) / loopBar.value.clientWidth * 100
 
         //cache da shit
         loopMarketEndXPercentCache = Math.round(marginLeft / loopBar.value.clientWidth * 100)
       }
+
+      emit('stopAllAudio', 'loopBar')
     }
 
     return {
