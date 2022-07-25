@@ -37,10 +37,6 @@ export default {
     const textInput = ref(undefined)
     let relayData = undefined
 
-
-
-
-
     const closeModal = () => {
       id.value = undefined
       title.value = undefined

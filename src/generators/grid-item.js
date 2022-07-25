@@ -14,4 +14,11 @@ export default class GridItem
         this.showDeleteIcon = false
         this.arpeggio = undefined
     }
+
+    clearStemAndArpeggio() {
+        this.compatibility = undefined
+        this.stem = undefined
+        this.showDeleteIcon = false
+        this.arpeggio = undefined
+    }
 }

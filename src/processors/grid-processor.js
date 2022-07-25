@@ -148,6 +148,14 @@ export default class GridProcessor {
         }
     }
 
+    clearRow = (rowIndex) => {
+        for (let col = 0; col < this.grid[rowIndex].value.length; col++) {
+            if (this.grid[rowIndex].value[col]) {
+                this.grid[rowIndex].value[col].clearStemAndArpeggio()
+            }
+        }
+    }
+
     extractArpeggioData = () => {
         let arpeggioData = new ArpeggioGridData()
 
@@ -184,7 +192,7 @@ export default class GridProcessor {
                 if (arp && arp.on) {
                     arp.bufferRendered = true
 
-                    if(id && id === arp.id) {
+                    if (id && id === arp.id) {
                         arp.renderedInMix = false
                     }
                 }

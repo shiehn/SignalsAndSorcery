@@ -407,7 +407,6 @@ export default {
 
     watch(() => bus.value.get('stopAllAudio'), async (callerId) => {
       if (callerId != 'composer-controls') {
-        console.log('STOP ALL')
         await stop()
       }
     })
