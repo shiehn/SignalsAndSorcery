@@ -51,8 +51,13 @@ export default {
     }
 
     watch(() => bus.value.get('gridDrawCompleted'), (gridDrawCompletedParams) => {
-      const w16 = 4 /* assuming each grid item is tailwind w-16 ==  4rem */
-      const m1 = 0.25 /* assuming each grid item has tailwind mr-1 ==  0.25rem */
+      let w16 = 4 /* assuming each grid item is tailwind w-16 ==  4rem */
+      let m1 = 0.25 /* assuming each grid item has tailwind mr-1 ==  0.25rem */
+
+      if(store.isMobile) {
+        w16 = 8 // mobile support has grid items twice the size of desktop
+      }
+
       let calculatedGridWidthRem = store.state.grid[0].value.length * (w16 + m1)
 
       if(convertRemToPixels(calculatedGridWidthRem) < gridDrawCompletedParams[0].gridContainerRowWidth) {

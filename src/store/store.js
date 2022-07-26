@@ -1,9 +1,9 @@
 import {reactive} from "vue";
 
-const debugMode = true
+let debugMode = true
 let context = undefined
-const arpeggioBuffer = undefined
-const isMobile = false
+let arpeggioBuffer = undefined
+let isMobile = false
 
 const state = reactive({
     projectName: 'Untitled Project',
@@ -231,5 +231,5 @@ const state = reactive({
 })
 
 export default {
-    state,
+    isMobile, state,
 }

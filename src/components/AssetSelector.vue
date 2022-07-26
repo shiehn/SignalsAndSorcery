@@ -36,12 +36,7 @@
     </div>
   </div>
 
-  <div v-if="showArpeggiatorControls" class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"
-       style="background-color: rgba(255,255,255,0.9);">
-    <arpeggiator-controls></arpeggiator-controls>
-  </div>
-
-  <div v-if="!showArpeggiatorControls" class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"
+  <div v-if="enableDragAndDrop" class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"
        style="background-color: rgba(255,255,255,0.9);">
     <div
         class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
@@ -59,11 +54,30 @@
     </div>
   </div>
 
+  <div v-else class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"
+       style="background-color: rgba(255,255,255,0.9);">
+    <div
+        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
+        @click="pagePrev">
+      <img :src="staticImages.pageLeftImgSrc" class="w-8 h-8">
+    </div>
+
+    <ul class="grid grid-cols-4 gap-2">
+      <asset v-for="stem in getFilteredStems" :stem=stem></asset>
+    </ul>
+
+    <div
+        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
+        @click="pageNext">
+      <img :src="staticImages.pageRightImgSrc" class="w-8 h-8">
+    </div>
+  </div>
+
 
 </template>
 <script>
 
-import {computed, inject, nextTick, onBeforeUpdate, onMounted, reactive, ref} from 'vue'
+import {computed, inject, nextTick, onMounted, reactive, ref} from 'vue'
 import {StemsAPI} from "../dal/StemsAPI";
 import Asset from "./Asset.vue";
 import {watch} from "vue";
@@ -74,11 +88,12 @@ import ArpeggiatorControls from "./arpeggiator/ArpeggiatorControls.vue";
 
 export default {
   name: "AssetSelector",
-  components: {ArpeggiatorControls, Asset},
+  components: {Asset},
   setup() {
     const store = inject('store')
     const {bus} = useEventsBus()
 
+    const enableDragAndDrop = ref(store.isMobile ? false : true)
     const filterBpm = ref()
     const filterBpmOptions = reactive({arr: [0]})
     const filterType = ref()
@@ -88,8 +103,9 @@ export default {
     const filterChord = ref()
     const filterChordOptions = reactive({arr: ['all']})
     const pageIndex = ref(0)
-    const numOfResults = 16
-    const showArpeggiatorControls = ref(false)
+    const numOfResultsMobile = 4
+    const numOfResultsDesktop = 16
+    let numOfResults = numOfResultsMobile //assume mobile then adjust for desktop
 
     let totalResults = 0
     let prevFilterBpm = 0;
@@ -115,7 +131,6 @@ export default {
     const stemSelections = reactive({
       arr: [],
     });
-
 
     const getFilteredStems = computed(() => {
 
@@ -179,8 +194,6 @@ export default {
         filterBpm.value = 0
       }
 
-      showArpeggiatorControls.value = assetFilter[0].clipType === 'arp'
-
       if (assetFilter[0].filterKey) {
         //IN THIS CASE WE EXPLICITLY OVERRIDE THE GLOBAL KEY
         filterKey.value = assetFilter[0].filterKey
@@ -234,9 +247,15 @@ export default {
         filterChordOptions.arr.push(t)
       })
       filterChord.value = 'all'
+
+      await nextTick(() => {
+        enableDragAndDrop.value = store.isMobile ? false : true
+        numOfResults = store.isMobile ? numOfResultsMobile : numOfResultsDesktop
+      })
     })
 
     return {
+      enableDragAndDrop,
       filterBpm,
       filterBpmOptions,
       filterType,
@@ -248,7 +267,6 @@ export default {
       getFilteredStems,
       pageNext,
       pagePrev,
-      showArpeggiatorControls,
       staticImages,
       stemSelections,
       store,

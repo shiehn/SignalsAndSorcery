@@ -30,17 +30,18 @@ export default defineComponent({
       store.state.staticUrl = url.trim()
     }
 
-    // /* SETUP AUDIO CONTEXT FIRST THING */
-    // let AudioContext = window.AudioContext || window.webkitAudioContext;
-    // store.context = new AudioContext();
-    // Tone.setContext(store.context)
-
     onMounted(async () => {
       const token = document.getElementById('token').value
       const isMobileEl = document.getElementById('isMobile')
       if (isMobileEl && isMobileEl.value === 'True') {
         store.isMobile = true
       }
+
+      //FORCE IT!!
+      store.isMobile = true
+
+      console.log('mobile from appvue', store.isMobile)
+
       store.state.authorName = await new SASApi().getLoggedInUser(token)
     })
 

@@ -48,7 +48,7 @@
              class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
       </div>
       <div v-else v-for="gridRowItem in gridRow.value"
-           class="ml-1 mb-2 w-16 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg  hover:bg-gray-400 hover:cursor-pointer"
+           class="ml-1 mb-2 w-32 h-32 flex-none overflow-hidden relative rounded-lg shadow-lg  hover:bg-gray-400 hover:cursor-pointer"
            :class="{
             'bg-green-100': gridRowItem.compatibility === 2,
             'bg-yellow-100': gridRowItem.compatibility === 1,
@@ -82,6 +82,7 @@ import ModalOpenPayload from "./ModalOpenPayload";
 import ComposerControlsLoopBar from "./ComposerControlsLoopBar";
 import ArpeggioRenderer from "./arpeggiator/arpeggio-renderer";
 import {v4} from "uuid";
+import store from "../store/store";
 
 export default {
   name: 'ComposerGrid',
@@ -101,13 +102,10 @@ export default {
     const enableDragAndDrop = ref(store.isMobile ? false : true)
 
     const numOfGridRows = 5
-    const numOfGridCols = 6
-    const numOfSections = 2
+    let numOfGridCols = 6
+    let numOfSections = 2
 
     store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
-
-    //add a 2nd section by default
-    new GridProcessor(store.state.grid).addSection('part_2', 6)
 
     const getGridRows = () => {
       return store.state.grid
@@ -267,6 +265,22 @@ export default {
     })
 
     onMounted(() => {
+      nextTick(() => {
+        enableDragAndDrop.value = store.isMobile ? false : true
+
+        if (store.isMobile) {
+          numOfGridCols = 4
+          numOfSections = 1
+        }
+
+        store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
+
+        //add a 2nd section by default
+        if (!store.isMobile) {
+          new GridProcessor(store.state.grid).addSection('part_2', 6)
+        }
+      })
+
       nextTick(() => {
         emit('gridDrawCompleted', {
           'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,

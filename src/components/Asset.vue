@@ -27,7 +27,7 @@
   </li>
 
   <li v-else
-      class="list-none bg-cover w-16 h-16 relative rounded-lg overflow-hidden shadow-lg"
+      class="list-none bg-cover w-32 h-32 relative rounded-lg overflow-hidden shadow-lg"
       v-on:mouseover="mouseOverGridItem(stem)"
       v-on:mouseleave="mouseLeaveGridItem(stem)"
       @click="onPlayOrTransferClip(stem)"
