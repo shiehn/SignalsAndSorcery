@@ -230,7 +230,6 @@ export default {
 
     const clearRowModalId = 'clearRowModalId'
     const handleClearRow = (type) => {
-      alert(type)
       const modalClearRowConfirmPayload = new ModalOpenPayload(
           clearRowModalId,
           'Clear Row?',

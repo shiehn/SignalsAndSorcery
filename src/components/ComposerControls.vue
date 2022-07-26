@@ -114,10 +114,11 @@ export default {
     }
 
     const mixDown = (context, rowBufferList, totalLength) => {
+      console.log('P')
       const numberOfChannels = 2
       //create a buffer using the totalLength and sampleRate of the first buffer node
       let finalMix = context.createBuffer(numberOfChannels, totalLength, rowBufferList[0].sampleRate);
-
+      console.log('Q')
       //first loop for row buffer list
       for (let i = 0; i < rowBufferList.length; i++) {
         // console.log('RENDERING ROW', i)
@@ -136,7 +137,7 @@ export default {
           finalMixBufferRight[j] += rowBufferChannelRight[j];
         }
       }
-
+      console.log('R')
       return finalMix;
     }
 
@@ -153,8 +154,9 @@ export default {
     }
 
     const renderMix = async () => {
+      console.log('A')
       await stop()
-
+      console.log('B')
       // if (store.state.clipCount() < 1) {
       //   return
       // }
@@ -164,6 +166,7 @@ export default {
         /* load audio buffers - start */
         try {
           if (store.context) {
+            console.log('C')
             try {
               if (store.context.state !== 'closed') {
                 await store.context.close();
@@ -175,29 +178,29 @@ export default {
           let AudioContext = window.AudioContext || window.webkitAudioContext;
           store.context = new AudioContext();
 
-          // Tone.setContext(store.context)
-          // Tone.getContext().lookAhead = 10;
-          // Tone.getContext().updateInterval = 0.3;
+          console.log('D')
 
           try {
-            await store.context.resume()
+            console.log('E', store.context)
+            await this.store.context.resume()
+            console.log('F')
           } catch (e) {
             console.log('Error resuming WebAudio Context');
           }
         } catch (e) {
           console.log('WebAudio api is not supported!!');
         }
-
+        console.log('G')
         let secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
         const bufferSizePerLoop = secondsInLoop * 44100;
-
+        console.log('H')
         const leftChannel = 0
         const rightChannel = 1
         const numOfRows = store.state.grid.length;
         let listOfTrimmedRowBuffers = new Array(numOfRows);
 
         let emptyBuffer = generateEmptyBuffer(store.context, bufferSizePerLoop, 44100)
-
+        console.log('I')
         //ALL THIS ROW STUFF COULD BE A FUNC
         for (let n = 0; n < numOfRows; n++) {
           //CHECK IF THE ROW IS ALREADY CACHED
@@ -242,7 +245,7 @@ export default {
 
             trimmedBufferListRow[i] = newBuffer
           }
-
+          console.log('J')
           //MERGE ALL THE BUFFERS FOR A ROW
           //MERGE ALL THE BUFFERS FOR A ROW
           // MERGE ALL THE BUFFERS FOR A ROW
@@ -250,7 +253,7 @@ export default {
 
           let nowBufferingFinalRowLeft = finalRowBuffer.getChannelData(leftChannel);
           let nowBufferingFinalRowRight = finalRowBuffer.getChannelData(rightChannel);
-
+          console.log('K')
           let finalRowBufferIdx = 0;
           for (let i = 0; i < trimmedBufferListRow.length; i++) {
             let oldBufferLeft = trimmedBufferListRow[i].getChannelData(leftChannel)
@@ -263,16 +266,18 @@ export default {
           }
 
           listOfTrimmedRowBuffers[n] = finalRowBuffer
-
+          console.log('L')
           //UPDATE THE ROW CACHE
           BUFFER_ROW_CACHE[n] = finalRowBuffer
           store.state.updateRowStateHash(n)
+          console.log('M')
         }
 
+        console.log('N')
         if (store.arpeggioBuffer) {
           listOfTrimmedRowBuffers.push(store.arpeggioBuffer)
         }
-
+        console.log('O')
         buffer = mixDown(store.context, listOfTrimmedRowBuffers, listOfTrimmedRowBuffers[0].length);
       } catch (e) {
         console.log('ERROR', e)
@@ -284,6 +289,7 @@ export default {
       store.state.updateClipStateHash()
       updateRenderedArpeggios()
       store.state.updateArpeggioStateHash()
+      console.log('S')
       emit('displayRenderBtn', false)
     }
 
@@ -334,7 +340,9 @@ export default {
       } else {
         console.log('RENDERING NOW')
         await renderMix()
+        console.log('RENDERED')
         await playMix()
+        console.log('PLAY DONE')
       }
     }
 
