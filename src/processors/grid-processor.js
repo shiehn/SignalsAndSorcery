@@ -222,4 +222,32 @@ export default class GridProcessor {
             }
         }
     }
+
+    clearAcceptMobileTransfer = () => {
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                this.grid[row].value[col].acceptMobileTransfer = false
+            }
+        }
+    }
+
+    setAcceptMobileTransfer = (row, col) => {
+        this.clearAcceptMobileTransfer()
+
+        if (this.grid[row].value[col]) {
+            this.grid[row].value[col].acceptMobileTransfer = true
+        }
+    }
+
+    getMobileTransferEnabledGridItem = () => {
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                if (this.grid[row].value[col].acceptMobileTransfer) {
+                    return [row, col]
+                }
+            }
+        }
+
+        return undefined
+    }
 }

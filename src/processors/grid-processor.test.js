@@ -246,13 +246,55 @@ describe('Grid Processor Tests', () => {
         const gridProcessor = new GridProcessor(store.state.grid)
         let result = gridProcessor.extractArpeggioData()
 
-        console.log('what')
-        console.log(result)
-
         expect(result.getTimeline().length).to.equals(2)
         expect(result.getTimeline()[0].arpeggio.chords[2]).to.equals('FM7')
         expect(result.getTimeline()[0].colIndex).to.equals(1)
         expect(result.getTimeline()[1].arpeggio.chords.length).to.equals(4)
         expect(result.getTimeline()[1].colIndex).to.equals(3)
+    })
+
+    it('should clear row', () => {
+        store.state.grid[1].value[1].stem = {
+            id: 'row_1_1'
+        }
+        store.state.grid[1].value[2].stem = {
+            id: 'row_1_2'
+        }
+        store.state.grid[2].value[1].stem = {
+            id: 'stem_2_1'
+        }
+
+        const gridProcessor = new GridProcessor(store.state.grid)
+
+        expect(store.state.grid[1].value[1].stem).to.not.equals(undefined)
+
+        gridProcessor.clearRow(1)
+
+        expect(store.state.grid[1].value[1].stem).to.equals(undefined)
+        expect(store.state.grid[1].value[1].stem).to.equals(undefined)
+        expect(store.state.grid[2].value[1].stem.id).to.equals('stem_2_1')
+    })
+
+    it('should clear all mobileTransfers and set a new one', () => {
+        store.state.grid[0].value[0].acceptMobileTransfer = true
+
+        new GridProcessor(store.state.grid).setAcceptMobileTransfer(1, 1)
+
+        expect(store.state.grid[0].value[0].acceptMobileTransfer).to.equals(false)
+        expect(store.state.grid[1].value[1].acceptMobileTransfer).to.equals(true)
+    })
+
+    it('should find no mobile transfer enabled grid items', () => {
+        const result = new GridProcessor(store.state.grid).getMobileTransferEnabledGridItem()
+        expect(result).to.equals(undefined)
+    })
+
+    it('should find ONE mobile transfer enabled grid item', () => {
+        new GridProcessor(store.state.grid).setAcceptMobileTransfer(2, 2)
+
+        const result = new GridProcessor(store.state.grid).getMobileTransferEnabledGridItem()
+
+        expect(result[0]).to.equals(2)
+        expect(result[1]).to.equals(2)
     })
 })

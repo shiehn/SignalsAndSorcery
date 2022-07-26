@@ -37,6 +37,10 @@ export default defineComponent({
 
     onMounted(async () => {
       const token = document.getElementById('token').value
+      const isMobileEl = document.getElementById('isMobile')
+      if (isMobileEl && isMobileEl.value === 'True') {
+        store.isMobile = true
+      }
       store.state.authorName = await new SASApi().getLoggedInUser(token)
     })
 

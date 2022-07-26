@@ -3,6 +3,7 @@ import {reactive} from "vue";
 const debugMode = true
 let context = undefined
 const arpeggioBuffer = undefined
+const isMobile = false
 
 const state = reactive({
     projectName: 'Untitled Project',

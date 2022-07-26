@@ -29,7 +29,7 @@
 
     <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
          class="flex flex-none justify-between">
-      <div v-for="gridRowItem in gridRow.value"
+      <div v-if="enableDragAndDrop" v-for="gridRowItem in gridRow.value"
            class="ml-1 mb-2 w-16 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg  hover:bg-gray-400 hover:cursor-pointer"
            :class="{
             'bg-green-100': gridRowItem.compatibility === 2,
@@ -42,14 +42,21 @@
            v-on:mouseover="mouseOverGridItem(gridRowItem.row, gridRowItem.col)"
            v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
            @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
-<!--        <div v-if="i===0" class="w-full h-full flex justify-center content-center items-center">-->
-<!--          <label class="inline-flex relative items-center cursor-pointer">-->
-<!--            <input v-model="gridRowItem.arpeggio.on" @change="arpeggioToggled(gridRowItem.arpeggio.id)" type="checkbox"-->
-<!--                   value="" class="sr-only peer">-->
-<!--            <div-->
-<!--                class="w-11 h-6 bg-gray-200 peer-focus:outline-none dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-800"></div>-->
-<!--          </label>-->
-<!--        </div>-->
+        <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
+        <img v-if="gridRowItem.showDeleteIcon" :src=gridRowItem.deleteIconPath
+             @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
+             class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
+      </div>
+      <div v-else v-for="gridRowItem in gridRow.value"
+           class="ml-1 mb-2 w-16 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg  hover:bg-gray-400 hover:cursor-pointer"
+           :class="{
+            'bg-green-100': gridRowItem.compatibility === 2,
+            'bg-yellow-100': gridRowItem.compatibility === 1,
+            'bg-red-100': gridRowItem.compatibility === 0
+        }"
+           v-on:mouseover="mouseOverGridItem(gridRowItem.row, gridRowItem.col)"
+           v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
+           @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
         <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
         <img v-if="gridRowItem.showDeleteIcon" :src=gridRowItem.deleteIconPath
              @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
@@ -91,6 +98,7 @@ export default {
       plusIcon: store.state.staticUrl + "icons/plus.png",
       minusIcon: store.state.staticUrl + "icons/minus.png",
     }
+    const enableDragAndDrop = ref(store.isMobile ? false : true)
 
     const numOfGridRows = 5
     const numOfGridCols = 6
@@ -187,13 +195,11 @@ export default {
         col: col,
       }
 
+      if (store.isMobile) {
+        new GridProcessor(store.state.grid).setAcceptMobileTransfer(row, col)
+      }
 
       emit('updateAssetSelection', updateParam)
-
-      setTimeout(() => {
-        //This delay is a hack to buy time for the 'updateAssetSelection' event to display the ArpeggioControls
-        emit('updateArpeggioControls', updateParam)
-      }, 100)
     }
 
     const evalCompatibility = (stem) => {
@@ -307,6 +313,7 @@ export default {
       columnAdd,
       columnRemove,
       editSection,
+      enableDragAndDrop,
       getGridRows,
       getGridByRow,
       gridContainerRows,

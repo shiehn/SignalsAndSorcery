@@ -7,8 +7,15 @@ import {mount} from '@vue/test-utils'
 import Asset from "./Asset.vue";
 
 describe('Asset Tests', () => {
-    it('should display chords', async() => {
+    it('should display chords', async () => {
         const wrapper = mount(Asset, {
+            global: {
+                provide: {
+                    store: {
+                        isMobile: false,
+                    }
+                }
+            },
             props: {
                 stem: {
                     type: 'hi',
@@ -22,8 +29,15 @@ describe('Asset Tests', () => {
         expect(text).to.contain('dm:c:e:fm')
     })
 
-    it('should not display chords for drum', async() => {
+    it('should not display chords for drum', async () => {
         const wrapper = mount(Asset, {
+            global: {
+                provide: {
+                    store: {
+                        isMobile: false,
+                    }
+                }
+            },
             props: {
                 stem: {
                     type: 'drum',
