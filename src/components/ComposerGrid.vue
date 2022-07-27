@@ -29,7 +29,7 @@
 
     <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
          class="flex flex-none justify-between">
-      <div v-if="enableDragAndDrop" v-for="gridRowItem in gridRow.value"
+      <div v-if="isMobile" v-for="gridRowItem in gridRow.value"
            class="ml-1 mb-2 w-16 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg  hover:bg-gray-400 hover:cursor-pointer"
            :class="{
             'bg-green-100': gridRowItem.compatibility === 2,
@@ -99,7 +99,7 @@ export default {
       plusIcon: store.state.staticUrl + "icons/plus.png",
       minusIcon: store.state.staticUrl + "icons/minus.png",
     }
-    const enableDragAndDrop = ref(store.isMobile ? false : true)
+    const isMobile = ref(store.isMobile ? false : true)
 
     const numOfGridRows = 5
     let numOfGridCols = 6
@@ -245,7 +245,6 @@ export default {
       if (arpId) {
 
         const renderCompleteCallback = function (id) {
-          console.log('buffer callback grid-toggle')
           new GridProcessor(store.state.grid).updateArpeggioBuffersRendered(id)
           emit('displayRenderBtn', true)
         }
@@ -266,7 +265,7 @@ export default {
 
     onMounted(() => {
       nextTick(() => {
-        enableDragAndDrop.value = store.isMobile ? false : true
+        isMobile.value = store.isMobile ? false : true
 
         if (store.isMobile) {
           numOfGridCols = 4
@@ -327,7 +326,7 @@ export default {
       columnAdd,
       columnRemove,
       editSection,
-      enableDragAndDrop,
+      isMobile,
       getGridRows,
       getGridByRow,
       gridContainerRows,

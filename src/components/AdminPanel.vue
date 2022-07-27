@@ -91,8 +91,6 @@ export default {
       for(let i=0; i<store.state.grid[0].value.length; i++){
         arpArray.push(store.state.grid[0].value[i].arpeggio)
       }
-
-      console.log('GRID', arpArray)
     }
 
     return {

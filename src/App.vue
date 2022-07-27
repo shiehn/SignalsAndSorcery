@@ -37,11 +37,6 @@ export default defineComponent({
         store.isMobile = true
       }
 
-      //FORCE IT!!
-      store.isMobile = true
-
-      console.log('mobile from appvue', store.isMobile)
-
       store.state.authorName = await new SASApi().getLoggedInUser(token)
     })
 

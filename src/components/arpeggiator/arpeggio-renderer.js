@@ -65,7 +65,6 @@ export default class ArpeggioRenderer {
 
             const synths = new Synths()
 
-            console.log('ADDING NOTES TO SEQUENCE')
             for (let i = 0; i < sequence.length; i++) {
                 let sequenceItem = sequence[i]
                 transport.schedule((time) => {
@@ -75,8 +74,6 @@ export default class ArpeggioRenderer {
             transport.start()
         }, secondsToRecord, channels, sampleRate).then(function (buffer) {
             localCtx.store.arpeggioBuffer = buffer
-            console.log('ARP BUFFER CREATED', buffer)
-
             renderCompleteCallback(id)
         })
     }

@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <div v-if="enableDragAndDrop" class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"
+  <div v-if="!isMobile" class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"
        style="background-color: rgba(255,255,255,0.9);">
     <div
         class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
@@ -91,9 +91,9 @@ export default {
   components: {Asset},
   setup() {
     const store = inject('store')
-    const {bus} = useEventsBus()
+    const {bus, emit} = useEventsBus()
 
-    const enableDragAndDrop = ref(store.isMobile ? false : true)
+    const isMobile = ref(store.isMobile ? true : false)
     const filterBpm = ref()
     const filterBpmOptions = reactive({arr: [0]})
     const filterType = ref()
@@ -214,48 +214,58 @@ export default {
     })
 
     onMounted(async () => {
-      const stemsApi = new StemsAPI()
-      let stems = await stemsApi.getStemsAndOptions()
+          const stemsApi = new StemsAPI()
+          let stems = await stemsApi.getStemsAndOptions()
 
-      stems.stems.forEach((stem) => {
-        stem['waveform'] = stem['waveform'] ? stem['waveform'] : stem['source'].replace('.mp3', '.png')
-        stem['showPreviewIcon'] = false
-        stem['previewIconPath'] = store.state.staticUrl + 'icons/play-button.png'
-        stem['previewPlayIconPath'] = store.state.staticUrl + 'icons/play-button.png'
-        stem['previewStopIconPath'] = store.state.staticUrl + 'icons/stop-button.png'
-        stemSelections.arr.push(stem)
-      })
+          stems.stems.forEach((stem) => {
+            stem['waveform'] = stem['waveform'] ? stem['waveform'] : stem['source'].replace('.mp3', '.png')
+            stem['showPreviewIcon'] = false
+            stem['previewIconPath'] = store.state.staticUrl + 'icons/play-button.png'
+            stem['previewPlayIconPath'] = store.state.staticUrl + 'icons/play-button.png'
+            stem['previewStopIconPath'] = store.state.staticUrl + 'icons/stop-button.png'
+            stemSelections.arr.push(stem)
+          })
 
-      stems.options.bpms.forEach(bpm => {
-        filterBpmOptions.arr.push(Math.round(bpm))
-      })
-      filterBpm.value = 0
+          stems.options.bpms.forEach(bpm => {
+            filterBpmOptions.arr.push(Math.round(bpm))
+          })
+          filterBpm.value = 0
 
-      stems.options.types.forEach(t => {
-        if (ROW_TO_TYPE_MAP.includes(t)) {
-          filterTypeOptions.arr.push(t)
+          stems.options.types.forEach(t => {
+            if (ROW_TO_TYPE_MAP.includes(t)) {
+              filterTypeOptions.arr.push(t)
+            }
+          })
+          filterType.value = 'all'
+
+          stems.options.keys.forEach(t => {
+            filterKeyOptions.arr.push(t)
+          })
+          filterKey.value = 'all'
+
+          stems.options.chords.forEach(t => {
+            filterChordOptions.arr.push(t)
+          })
+          filterChord.value = 'all'
+
+          await nextTick(() => {
+            isMobile.value = store.isMobile ? true : false
+            numOfResults = store.isMobile ? numOfResultsMobile : numOfResultsDesktop
+
+            let updateParam = {
+              filterKey: 'c',
+              clipType: ROW_TO_TYPE_MAP[3],
+              chords: 'all',
+              row: 3,
+              col: 0,
+            }
+            emit('updateAssetSelection', updateParam)
+          })
         }
-      })
-      filterType.value = 'all'
-
-      stems.options.keys.forEach(t => {
-        filterKeyOptions.arr.push(t)
-      })
-      filterKey.value = 'all'
-
-      stems.options.chords.forEach(t => {
-        filterChordOptions.arr.push(t)
-      })
-      filterChord.value = 'all'
-
-      await nextTick(() => {
-        enableDragAndDrop.value = store.isMobile ? false : true
-        numOfResults = store.isMobile ? numOfResultsMobile : numOfResultsDesktop
-      })
-    })
+    )
 
     return {
-      enableDragAndDrop,
+      isMobile,
       filterBpm,
       filterBpmOptions,
       filterType,

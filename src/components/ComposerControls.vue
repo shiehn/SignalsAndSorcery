@@ -1,12 +1,5 @@
 <template>
-  <!--  <button class="bg-gray-200 border-2 border-black rounded-lg p-1 text-sm text-black hover:bg-green-500 hover:drop-shadow-lg"-->
-  <!--          :class="{'animate-pulse bg-red-500': displayRenderBtn}"-->
-  <!--          @click="rende  <button class="bg-gray-200 border-2 border-black rounded-lg p-1 text-sm text-black hover:bg-green-500 hover:drop-shadow-lg"-->
-  <!--          :class="{'animate-pulse bg-red-500': displayRenderBtn}"-->
-  <!--          @click="renderArpeggios()">RENDER-->
-  <!--  </button>rArpeggios()">RENDER-->
-  <!--  </button>-->
-  <div class="flex my-2 justify-center">
+  <div v-if="!isMobile" class="flex my-2 justify-center">
     <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn"
                                                             class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
     </button>
@@ -16,17 +9,25 @@
     <button @click="stopButton()"><img :src="imageAssets.stopBtn"
                                        class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
   </div>
+
+  <div v-else class="flex my-2 justify-center">
+    <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn"
+                                                            class="h-16 w-16 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
+    </button>
+    <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn"
+                                                            class="h-16 w-16 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
+    </button>
+    <button @click="stopButton()"><img :src="imageAssets.stopBtn"
+                                       class="h-8 w-8 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
+  </div>
 </template>
 
 <script>
 import {inject, onMounted, ref} from "vue";
 import {watch} from "vue";
 import useEventsBus from "../events/eventBus";
-import ComposerControlsScrollBar from "./ComposerControlsScrollBar.vue";
-import GlobalTrackValues from "./GlobalTrackValues";
 import axios from "axios";
 import Crunker from "crunker";
-import StartArpPayload from "./arpeggiator/start-arp-payload";
 import GridProcessor from "../processors/grid-processor";
 
 export default {
@@ -35,6 +36,7 @@ export default {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
     const toast = inject('toast');
+    const isMobile = ref(store.isMobile ? true : false)
 
     let BUFFER_CACHE = {}
     let BUFFER_ROW_CACHE = []
@@ -56,6 +58,7 @@ export default {
 
     onMounted(() => {
       store.state.updateArpeggioStateHash()
+      isMobile.value = store.isMobile ? true : false
     })
 
     const getTrackListByRow = (row) => {
@@ -114,11 +117,9 @@ export default {
     }
 
     const mixDown = (context, rowBufferList, totalLength) => {
-      console.log('P')
       const numberOfChannels = 2
       //create a buffer using the totalLength and sampleRate of the first buffer node
       let finalMix = context.createBuffer(numberOfChannels, totalLength, rowBufferList[0].sampleRate);
-      console.log('Q')
       //first loop for row buffer list
       for (let i = 0; i < rowBufferList.length; i++) {
         // console.log('RENDERING ROW', i)
@@ -137,7 +138,6 @@ export default {
           finalMixBufferRight[j] += rowBufferChannelRight[j];
         }
       }
-      console.log('R')
       return finalMix;
     }
 
@@ -154,19 +154,13 @@ export default {
     }
 
     const renderMix = async () => {
-      console.log('A')
       await stop()
-      console.log('B')
-      // if (store.state.clipCount() < 1) {
-      //   return
-      // }
 
       isRendering.value = true
       try {
         /* load audio buffers - start */
         try {
           if (store.context) {
-            console.log('C')
             try {
               if (store.context.state !== 'closed') {
                 await store.context.close();
@@ -178,29 +172,22 @@ export default {
           let AudioContext = window.AudioContext || window.webkitAudioContext;
           store.context = new AudioContext();
 
-          console.log('D')
-
           try {
-            console.log('E', store.context)
             await this.store.context.resume()
-            console.log('F')
           } catch (e) {
             console.log('Error resuming WebAudio Context');
           }
         } catch (e) {
           console.log('WebAudio api is not supported!!');
         }
-        console.log('G')
         let secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
         const bufferSizePerLoop = secondsInLoop * 44100;
-        console.log('H')
         const leftChannel = 0
         const rightChannel = 1
         const numOfRows = store.state.grid.length;
         let listOfTrimmedRowBuffers = new Array(numOfRows);
 
         let emptyBuffer = generateEmptyBuffer(store.context, bufferSizePerLoop, 44100)
-        console.log('I')
         //ALL THIS ROW STUFF COULD BE A FUNC
         for (let n = 0; n < numOfRows; n++) {
           //CHECK IF THE ROW IS ALREADY CACHED
@@ -245,7 +232,6 @@ export default {
 
             trimmedBufferListRow[i] = newBuffer
           }
-          console.log('J')
           //MERGE ALL THE BUFFERS FOR A ROW
           //MERGE ALL THE BUFFERS FOR A ROW
           // MERGE ALL THE BUFFERS FOR A ROW
@@ -253,7 +239,6 @@ export default {
 
           let nowBufferingFinalRowLeft = finalRowBuffer.getChannelData(leftChannel);
           let nowBufferingFinalRowRight = finalRowBuffer.getChannelData(rightChannel);
-          console.log('K')
           let finalRowBufferIdx = 0;
           for (let i = 0; i < trimmedBufferListRow.length; i++) {
             let oldBufferLeft = trimmedBufferListRow[i].getChannelData(leftChannel)
@@ -266,18 +251,14 @@ export default {
           }
 
           listOfTrimmedRowBuffers[n] = finalRowBuffer
-          console.log('L')
           //UPDATE THE ROW CACHE
           BUFFER_ROW_CACHE[n] = finalRowBuffer
           store.state.updateRowStateHash(n)
-          console.log('M')
         }
 
-        console.log('N')
         if (store.arpeggioBuffer) {
           listOfTrimmedRowBuffers.push(store.arpeggioBuffer)
         }
-        console.log('O')
         buffer = mixDown(store.context, listOfTrimmedRowBuffers, listOfTrimmedRowBuffers[0].length);
       } catch (e) {
         console.log('ERROR', e)
@@ -289,7 +270,6 @@ export default {
       store.state.updateClipStateHash()
       updateRenderedArpeggios()
       store.state.updateArpeggioStateHash()
-      console.log('S')
       emit('displayRenderBtn', false)
     }
 
@@ -326,9 +306,6 @@ export default {
         sourceNode.buffer = buffer
         sourceNode.connect(store.context.destination);
 
-        // console.log('loopStart', loopStart)
-        // console.log('loopEnd', loopEnd)
-
         sourceNode.loopStart = loopStart
         sourceNode.loopEnd = loopEnd
         sourceNode.loop = true
@@ -338,11 +315,8 @@ export default {
         pausedAt = 0;
         isPlaying.value = true;
       } else {
-        console.log('RENDERING NOW')
         await renderMix()
-        console.log('RENDERED')
         await playMix()
-        console.log('PLAY DONE')
       }
     }
 
@@ -377,10 +351,6 @@ export default {
       return 0;
     };
 
-    let convertToAbsoluteTime = (relativeTime) => {
-      return relativeTime + startedAt;
-    }
-
     let getDuration = () => {
       if (buffer) {
         return buffer.duration;
@@ -398,12 +368,6 @@ export default {
       let output = crunker.export(buffer, 'audio/mp3')
       await crunker.download(output.blob, 'signals_and_sorcery') //TODO: the name should be the project name
     }
-
-    // const renderArpeggios = async () => {
-    //   if (!isRendering.value) {
-    //     await renderMix()
-    //   }
-    // }
 
     watch(() => bus.value.get('displayRenderBtn'), (payload) => {
       displayRenderBtn.value = payload[0]
@@ -426,11 +390,6 @@ export default {
     })
 
     watch(() => bus.value.get('renderMixIfNeeded'), async () => {
-      // if (store.state.hasArpeggioStateChanged()) {
-      //   console.log('ARPEGGIO STATE CHANGED! SCHEDULE NOTES NOW()!!!')
-      //   emit('scheduleArpeggioNotes')
-      // }
-
       if (store.state.hasClipStateChanged()) {
         if (!isRendering.value) {
           await renderMix()
@@ -469,31 +428,10 @@ export default {
 
       let progress = 0
 
-      // console.log('startTime', startTime)
-      // console.log('displayCurrentTime', displayCurrentTime)
-
-      // if(startTime > displayCurrentTime) {
-      //   console.log('GREATER')
-      //console.log('displayCurrentTime', displayCurrentTime)
-
-      //console.log('loopDuration', loopDuration)
-
       positionInLoopSection = (displayCurrentTime-startTime) % loopDuration
-
-      // console.log('startTime', startTime)
-      // console.log('positionInLoopSection', positionInLoopSection)
 
       markerPositionInLoop = startTime + positionInLoopSection
       progress = Math.round(markerPositionInLoop / displayDuration * 100)
-      // } else {
-      //   console.log('LESS')
-      //   progress = Math.round(displayCurrentTime / displayDuration * 100)
-      // }
-
-      // if (displayCurrentTime > endTime) {
-      //   await stop()
-      //   await playMix()
-      // }
 
       if (Number.isInteger(progress)) {
         emit('updateProgressBar', progress)
@@ -511,6 +449,7 @@ export default {
       displayRenderBtn,
       downloadMix,
       imageAssets,
+      isMobile,
       isPlaying,
       isRendering,
       play: playMix,

@@ -1,6 +1,6 @@
 <template>
 
-  <li v-if="enableDragAndDrop"
+  <li v-if="isMobile"
       class="drag-el list-none bg-cover w-16 h-16 relative rounded-lg overflow-hidden shadow-lg"
       draggable="true"
       @dragstart="startDrag($event, stem)"
@@ -62,7 +62,7 @@ export default {
   setup(props) {
     let ignoreSelf = false
     const store = inject('store')
-    const enableDragAndDrop = ref(store.isMobile ? false : true)
+    const isMobile = ref(store.isMobile ? false : true)
     const {bus, emit} = useEventsBus()
 
     const audioTag = ref({})
@@ -183,7 +183,7 @@ export default {
     return {
       audioTag,
       endDrag,
-      enableDragAndDrop,
+      isMobile,
       mouseOverGridItem,
       mouseLeaveGridItem,
       onPlayClip,

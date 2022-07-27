@@ -10,13 +10,10 @@ export default class Synths {
     getSynth = (synthId) => {
 
         if(synthId === 'synth_a'){
-            console.log('SYNTH A')
             return this.synthA
         } else if (synthId === 'synth_b'){
-            console.log('SYNTH B')
             return this.synthB
         } else {
-            console.log('SYNTH C')
             return this.synthC
         }
     }

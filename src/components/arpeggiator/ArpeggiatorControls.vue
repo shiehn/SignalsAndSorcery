@@ -55,7 +55,6 @@ export default {
     let currentCol = undefined
 
     const renderCompleteCallback = function (id) {
-      console.log('buffer callback arp-ctrl')
       new GridProcessor(store.state.grid).updateArpeggioBuffersRendered(id)
       emit('displayRenderBtn', true)
     }

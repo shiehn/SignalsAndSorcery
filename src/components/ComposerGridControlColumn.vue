@@ -1,27 +1,12 @@
 <template>
-  <div class="flex flex-col min-w-fit w-1/12 border-2 border-black rounded-lg mr-2 pt-2  px-2"
+
+  <div v-if="!isMobile" class="flex flex-col min-w-fit w-1/12 border-2 border-black rounded-lg mr-2 pt-2  px-2"
        style="background-color: rgba(255,255,255,0.9);">
     <button @click="addSectionPrompt" class="flex mb-2 w-full justify-center hover:cursor-pointer">
       <img :src=imageUrls.plusIcon class="w-6 h-6 hover:shadow-lg rounded-full hover:ring-4 hover:ring-green-500">
     </button>
 
-    <!--    <div class="flex">-->
-    <!--      <div @click="handleClick('arp')"-->
-    <!--           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2-->
-    <!--            hover:cursor-pointer hover:shadow-lg hover:border-green-500">-->
-    <!--        <div class="">-->
-    <!--          <img :src=imageUrls.arpIcon class="w-8 h-8">-->
-    <!--          <div class="w-full text-center text-white bg-black text-xs mt-1">Arp</div>-->
-    <!--        </div>-->
-    <!--      </div>-->
-
-    <!--      <div class="pl-2">-->
-    <!--        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleFX('arp')">FX</div>-->
-    <!--        <div class="bg-white border-2 border-black rounded-lg text-xs p-1 hover:cursor-pointer hover:shadow-lg hover:border-green-500" @click="handleVol('arp')">Vol</div>-->
-    <!--      </div>-->
-    <!--    </div>-->
-
-    <div class="flex">
+    <div class="flex justify-center">
       <div @click="handleClick('hi')"
            class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
         <div class="">
@@ -29,7 +14,6 @@
           <div class="w-full text-center text-white bg-black text-xs mt-1">Hi</div>
         </div>
       </div>
-
       <div class="flex flex-col justify-evenly h-16 pl-2">
         <div
             class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
@@ -46,7 +30,7 @@
       </div>
     </div>
 
-    <div class="flex">
+    <div class="flex justify-center">
       <div @click="handleClick('mid')"
            class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
         <div class="">
@@ -54,7 +38,6 @@
           <div class="w-full text-center text-white bg-black text-xs mt-1">Mid</div>
         </div>
       </div>
-
       <div class="flex flex-col justify-evenly h-16 pl-2">
         <div
             class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
@@ -71,7 +54,7 @@
       </div>
     </div>
 
-    <div class="flex">
+    <div class="flex justify-center">
       <div @click="handleClick('low')"
            class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
         <div class="">
@@ -79,7 +62,6 @@
           <div class="w-full text-center text-white bg-black text-xs mt-1">Bass</div>
         </div>
       </div>
-
       <div class="flex flex-col justify-evenly h-16 pl-2">
         <div
             class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
@@ -96,7 +78,7 @@
       </div>
     </div>
 
-    <div class="flex">
+    <div class="flex justify-center">
       <div @click="handleClick('drum')"
            class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
         <div class="">
@@ -104,7 +86,6 @@
           <div class="w-full text-center text-white bg-black text-xs mt-1">Drum</div>
         </div>
       </div>
-
       <div class="flex flex-col justify-evenly h-16 pl-2">
         <div
             class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
@@ -121,7 +102,7 @@
       </div>
     </div>
 
-    <div class="flex">
+    <div class="flex justify-center">
       <div @click="handleClick('fill')"
            class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
         <div class="">
@@ -129,7 +110,6 @@
           <div class="w-full text-center text-white bg-black text-xs mt-1">Fill</div>
         </div>
       </div>
-
       <div class="flex flex-col justify-evenly h-16 pl-2">
         <div
             class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
@@ -148,10 +128,140 @@
 
     <composer-controls></composer-controls>
   </div>
+
+  <div v-else class="flex flex-col min-w-fit w-1/12 border-2 border-black rounded-lg mr-2 pt-2  px-2"
+       style="background-color: rgba(255,255,255,0.9);">
+    <button @click="addSectionPrompt" class="flex mb-2 w-full justify-center hover:cursor-pointer">
+      <img :src=imageUrls.plusIcon class="w-6 h-6 hover:shadow-lg rounded-full hover:ring-4 hover:ring-green-500">
+    </button>
+
+    <div class="flex justify-center">
+      <div @click="handleClick('hi')"
+           class="flex justify-center items-center w-16 h-32 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
+        <div class="">
+          <img :src=imageUrls.hiIcon class="w-12 h-12">
+          <div class="w-full text-center text-white bg-black text-sm mt-1">Hi</div>
+        </div>
+      </div>
+      <div class="flex flex-col justify-evenly h-32 pl-2">
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleFX('hi')">FX
+        </div>
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleVol('hi')">Vol
+        </div>
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleClearRow('hi')">Clr
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-center">
+      <div @click="handleClick('mid')"
+           class="flex justify-center items-center w-16 h-32 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
+        <div class="">
+          <img :src=imageUrls.midIcon class="w-12 h-12">
+          <div class="w-full text-center text-white bg-black text-sm mt-1">Mid</div>
+        </div>
+      </div>
+      <div class="flex flex-col justify-evenly h-32 pl-2">
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleFX('mid')">FX
+        </div>
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleVol('mid')">Vol
+        </div>
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleClearRow('mid')">Clr
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-center">
+      <div @click="handleClick('low')"
+           class="flex justify-center items-center w-16 h-32 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
+        <div class="">
+          <img :src=imageUrls.lowIcon class="w-12 h-12">
+          <div class="w-full text-center text-white bg-black text-sm mt-1">Bass</div>
+        </div>
+      </div>
+      <div class="flex flex-col justify-evenly h-32 pl-2">
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleFX('low')">FX
+        </div>
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleVol('low')">Vol
+        </div>
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleClearRow('low')">Clr
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-center">
+      <div @click="handleClick('drum')"
+           class="flex justify-center items-center w-16 h-32 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
+        <div class="">
+          <img :src=imageUrls.drumIcon class="w-12 h-12">
+          <div class="w-full text-center text-white bg-black text-sm mt-1">Drum</div>
+        </div>
+      </div>
+      <div class="flex flex-col justify-evenly h-32 pl-2">
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleFX('drum')">FX
+        </div>
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleVol('drum')">Vol
+        </div>
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleClearRow('drum')">Clr
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-center">
+      <div @click="handleClick('fill')"
+           class="flex justify-center items-center w-16 h-32 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
+        <div class="">
+          <img :src=imageUrls.fillIcon class="w-12 h-12">
+          <div class="w-full text-center text-white bg-black text-sm mt-1">Fill</div>
+        </div>
+      </div>
+      <div class="flex flex-col justify-evenly h-32 pl-2">
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleFX('fill')">FX
+        </div>
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleVol('fill')">Vol
+        </div>
+        <div
+            class="bg-black rounded-md text-white text-sm p-2 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleClearRow('fill')">Clr
+        </div>
+      </div>
+    </div>
+
+    <composer-controls></composer-controls>
+  </div>
+
 </template>
 
 <script>
-import {inject} from "vue";
+import {inject, nextTick, onMounted, ref} from "vue";
 import ComposerControls from "./ComposerControls";
 import GridProcessor from "../processors/grid-processor";
 import {v4} from "uuid";
@@ -168,6 +278,7 @@ export default {
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
+    const isMobile = ref(store.isMobile ? true : false)
     const toast = inject('toast');
     const imageUrls = {
       arpIcon: store.state.staticUrl + "icons/eq-arp.png",
@@ -243,6 +354,12 @@ export default {
       emit('launchModal', modalClearRowConfirmPayload)
     }
 
+    onMounted(() => {
+      nextTick(() => {
+        isMobile.value = store.isMobile ? true : false
+      })
+    });
+
     watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
       if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === addSectionModalId) {
         if (modalResponsePayload[0].getResponse()) {
@@ -259,6 +376,7 @@ export default {
 
     return {
       addSectionPrompt,
+      isMobile: isMobile,
       handleClick,
       handleFX,
       handleVol,
