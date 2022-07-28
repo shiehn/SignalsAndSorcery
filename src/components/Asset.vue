@@ -1,6 +1,6 @@
 <template>
 
-  <li v-if="isMobile"
+  <li v-if="!isMobile"
       class="drag-el list-none bg-cover w-16 h-16 relative rounded-lg overflow-hidden shadow-lg"
       draggable="true"
       @dragstart="startDrag($event, stem)"
@@ -51,10 +51,11 @@
 </template>
 
 <script>
-import {inject, onBeforeUpdate, ref, watch} from "vue";
+import {inject, onBeforeUpdate, nextTick, onMounted, ref, watch} from "vue";
 import useEventsBus from "../events/eventBus";
 import GridProcessor from "../processors/grid-processor";
 import {v4} from "uuid";
+import store from "../store/store";
 
 export default {
   name: "Asset",
@@ -62,7 +63,7 @@ export default {
   setup(props) {
     let ignoreSelf = false
     const store = inject('store')
-    const isMobile = ref(store.isMobile ? false : true)
+    const isMobile = ref(store.isMobile ? true : false)
     const {bus, emit} = useEventsBus()
 
     const audioTag = ref({})
@@ -74,6 +75,12 @@ export default {
     // Make sure to reset the refs before each update.
     onBeforeUpdate(() => {
       audioTag.value = {};
+    });
+
+    onMounted(() => {
+      nextTick(() => {
+        isMobile.value = store.isMobile ? true : false
+      })
     });
 
     const startDrag = (evt, stem) => {

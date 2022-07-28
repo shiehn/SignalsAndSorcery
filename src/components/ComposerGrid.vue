@@ -29,7 +29,7 @@
 
     <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
          class="flex flex-none justify-between">
-      <div v-if="isMobile" v-for="gridRowItem in gridRow.value"
+      <div v-if="!isMobile" v-for="gridRowItem in gridRow.value"
            class="ml-1 mb-2 w-16 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg  hover:bg-gray-400 hover:cursor-pointer"
            :class="{
             'bg-green-100': gridRowItem.compatibility === 2,
@@ -89,7 +89,7 @@ export default {
   components: {Asset, ComposerControlsLoopBar, ComposerControlsScrollBar},
   setup() {
 
-    // v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.3) ' + progressBar + '%,  gray ' + progressBar + '%' }"
+    //
 
     const store = inject('store')
     const {bus, emit} = useEventsBus()
@@ -99,7 +99,7 @@ export default {
       plusIcon: store.state.staticUrl + "icons/plus.png",
       minusIcon: store.state.staticUrl + "icons/minus.png",
     }
-    const isMobile = ref(store.isMobile ? false : true)
+    const isMobile = ref(store.isMobile ? true : false)
 
     const numOfGridRows = 5
     let numOfGridCols = 6
@@ -193,7 +193,7 @@ export default {
         col: col,
       }
 
-      if (store.isMobile) {
+      if (isMobile.value) {
         new GridProcessor(store.state.grid).setAcceptMobileTransfer(row, col)
       }
 
@@ -265,9 +265,9 @@ export default {
 
     onMounted(() => {
       nextTick(() => {
-        isMobile.value = store.isMobile ? false : true
+        isMobile.value = store.isMobile ? true : false
 
-        if (store.isMobile) {
+        if (isMobile.value) {
           numOfGridCols = 4
           numOfSections = 1
         }
@@ -275,7 +275,7 @@ export default {
         store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
 
         //add a 2nd section by default
-        if (!store.isMobile) {
+        if (!isMobile.value) {
           new GridProcessor(store.state.grid).addSection('part_2', 6)
         }
       })
