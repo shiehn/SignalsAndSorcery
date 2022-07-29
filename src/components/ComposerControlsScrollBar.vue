@@ -1,6 +1,6 @@
 <template>
   <div ref="clickBar" class="w-auto horizontal-line rounded-lg h-6 hover:cursor-pointer"
-       @click="scrubToPosition($event)">
+       @click="scrubToPosition($event)" :class="{'h-6': !isMobile, 'h-24': isMobile}">
     <div ref="playHead" class="w-2 h-full bg-black"></div>
   </div>
 </template>
@@ -18,6 +18,13 @@ export default {
     const progressBar = ref(0)
     const clickBar = ref(null)
     const playHead = ref(null)
+    const isMobile = ref(store.isMobile ? true : false)
+
+    onMounted(() => {
+      nextTick(() => {
+        isMobile.value = store.isMobile ? true : false
+      })
+    });
 
     const scrubToPosition = (event) => {
       event.preventDefault()
@@ -37,7 +44,7 @@ export default {
     }
 
     watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
-      if(progressInt == 0){
+      if (progressInt == 0) {
         //move the playhead to the startloop
         playHead.value.style.marginLeft = (store.state.playBack.loopStartPercent * 0.01 * clickBar.value.clientWidth) + 'px'
         return
@@ -54,20 +61,26 @@ export default {
       let w16 = 4 /* assuming each grid item is tailwind w-16 ==  4rem */
       let m1 = 0.25 /* assuming each grid item has tailwind mr-1 ==  0.25rem */
 
-      if(store.isMobile) {
+      if (store.isMobile) {
         w16 = 8 // mobile support has grid items twice the size of desktop
       }
 
       let calculatedGridWidthRem = store.state.grid[0].value.length * (w16 + m1)
 
-      if(convertRemToPixels(calculatedGridWidthRem) < gridDrawCompletedParams[0].gridContainerRowWidth) {
+      if (convertRemToPixels(calculatedGridWidthRem) < gridDrawCompletedParams[0].gridContainerRowWidth) {
         clickBar.value.style.width = gridDrawCompletedParams[0].gridContainerRowWidth + 'px'
       } else {
         clickBar.value.style.width = calculatedGridWidthRem + 'rem'
       }
     })
 
-    return {clickBar, playHead, progressBar, scrubToPosition}
+    return {
+      clickBar,
+      isMobile,
+      playHead,
+      progressBar,
+      scrubToPosition
+    }
   }
 }
 </script>

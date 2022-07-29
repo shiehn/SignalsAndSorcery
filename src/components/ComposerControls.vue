@@ -12,13 +12,13 @@
 
   <div v-else class="flex my-2 justify-center">
     <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn"
-                                                            class="h-16 w-16 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
+                                                            class="h-26 w-24 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
     </button>
     <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn"
-                                                            class="h-16 w-16 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
+                                                            class="h-26 w-24 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
     </button>
-    <button @click="stopButton()"><img :src="imageAssets.stopBtn"
-                                       class="h-8 w-8 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
+<!--    <button @click="stopButton()"><img :src="imageAssets.stopBtn"-->
+<!--                                       class="h-8 w-8 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>-->
   </div>
 </template>
 

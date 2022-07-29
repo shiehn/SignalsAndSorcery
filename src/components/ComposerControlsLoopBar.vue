@@ -1,8 +1,9 @@
 <template>
-  <div ref="loopBar" id="loopBar" class="relative w-auto h-6 hover:cursor-pointer"
+  <div v-if="!isMobile" ref="loopBar" id="loopBar" class="relative w-auto h-6 hover:cursor-pointer"
        v-bind:style="{backgroundSize: bgGridWidth + 'px ' + bgGridHeight + 'px' }"
+       :class="{ 'h-24': isMobile, 'h-6': !isMobile }"
        @click="clickedLoopBar($event)">
-<!--    <label v-for="item in bgGridLabels">{{item}}</label>-->
+    <!--    <label v-for="item in bgGridLabels">{{item}}</label>-->
     <img ref="startLoop"
          :src="imageAssets.loopStartMarker"
          draggable="true"
@@ -31,7 +32,7 @@ export default {
 
     const bgGridWidth = ref(50)
     const bgGridHeight = ref(20)
-    // const bgGridLabels = ref([])
+    const isMobile = ref(store.isMobile ? true : false)
 
     const imageAssets = {
       loopStartMarker: store.state.staticUrl + 'icons/loop-start-marker.png',
@@ -55,6 +56,11 @@ export default {
 
     onMounted(() => {
       nextTick(() => {
+        isMobile.value = store.isMobile ? true : false
+        if(isMobile.value){
+          bgGridHeight.value = bgGridHeight.value * 4
+        }
+
         startLoop.value.style.marginLeft = (store.state.playBack.loopStartPercent * 0.01 * loopBar.value.clientWidth) + 'px'
         endLoop.value.style.marginLeft = (store.state.playBack.loopEndPercent * 0.01 * loopBar.value.clientWidth) + 'px'
       })
@@ -141,7 +147,7 @@ export default {
     const getGridLabels = () => {
       const gridLabels = []
 
-      for(let i=0; i<store.state.grid[0].value.length; i++) {
+      for (let i = 0; i < store.state.grid[0].value.length; i++) {
         gridLabels.push(i)
       }
 
@@ -220,6 +226,7 @@ export default {
       finishEndLoopDrag,
       finishStartLoopDrag,
       imageAssets,
+      isMobile,
       loopBar,
       startLoop
     }
@@ -229,14 +236,14 @@ export default {
 
 <style scoped>
 #loopBar {
-  background-color: #ffffff;
+  background-color: #eee;
   background-image: linear-gradient(90deg,
   rgba(73, 73, 73, 0.5) 0,
   rgba(73, 73, 73, 0.5) 2%,
   transparent 2%
   ),
   linear-gradient(180deg,
-      #ffffff 50%,
+      #ddd 50%,
       transparent 50%
   ),
   linear-gradient(90deg,
@@ -254,7 +261,7 @@ export default {
       transparent 77%
   ),
   linear-gradient(180deg,
-      #ffffff 70%,
+      #ddd 70%,
       transparent 70%
   ),
   linear-gradient(90deg,

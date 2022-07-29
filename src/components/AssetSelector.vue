@@ -290,10 +290,10 @@ export default {
             numOfResults = isMobile.value ? numOfResultsMobile : numOfResultsDesktop
 
             let updateParam = {
-              filterKey: 'c',
-              clipType: ROW_TO_TYPE_MAP[3],
+              filterKey: 'all',
+              clipType: ROW_TO_TYPE_MAP[0],
               chords: 'all',
-              row: 3,
+              row: 0,
               col: 0,
             }
             emit('updateAssetSelection', updateParam)

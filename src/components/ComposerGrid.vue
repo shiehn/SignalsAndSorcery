@@ -1,6 +1,6 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div class="rounded-lg w-11/12 overflow-x-scroll border-2 border-black p-2"
-       style="background-color: rgba(255,255,255,0.9);">
+       v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.9) ' + progressBarStart + '%, rgba(200, 247, 197,0.9) ' + progressBar + '%,  rgba(255,255,255,0.9) ' + progressBar + '%' }">
 
     <div v-for="(gridRow, i) in getGridRows()">
       <div v-if="i == 0" class="flex flex-none justify-between">
@@ -316,10 +316,21 @@ export default {
       resetCompatibility()
     })
 
+    const progressBarStart = ref(0)
     const progressBar = ref(0)
-    // watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
-    //   progressBar.value = progressInt
-    // })
+    watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
+      // progressBar.value = progressInt
+      // progressBarStart.value = progressInt - 5
+
+
+      // if(progressInt == 0){
+      //   //move the playhead to the startloop
+      //   playHead.value.style.marginLeft = (store.state.playBack.loopStartPercent * 0.01 * clickBar.value.clientWidth) + 'px'
+      //   return
+      // }
+      //
+      // playHead.value.style.marginLeft = (progressInt * 0.01 * clickBar.value.clientWidth) + 'px'
+    })
 
     return {
       arpeggioToggled,
@@ -336,6 +347,7 @@ export default {
       mouseLeaveGridItem,
       onDrop,
       progressBar,
+      progressBarStart,
       removeGridItem,
     }
   },
