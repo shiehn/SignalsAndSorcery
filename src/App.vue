@@ -38,6 +38,7 @@ export default defineComponent({
       }
 
       store.state.authorName = await new SASApi().getLoggedInUser(token)
+      store.token = token
     })
 
     return {}

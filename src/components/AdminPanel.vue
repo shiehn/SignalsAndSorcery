@@ -3,13 +3,16 @@
        style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
     <div class="flex justify-between">
-      <button @click="openProjectDialog()" class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
+      <button @click="openProjectDialog()"
+              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
           :src="imageAssets.loadBtn" class="h-6 "/>
       </button>
-      <button @click="saveProject()" class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
+      <button @click="saveProject()"
+              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
           :src="imageAssets.saveBtn" class="h-6"/>
       </button>
-      <button @click="downloadMix()" class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
+      <button @click="downloadMix()"
+              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
           :src="imageAssets.downloadBtn" class="h-6"/>
       </button>
     </div>
@@ -19,13 +22,16 @@
        style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
     <div class="flex w-1/4 justify-between">
-      <button @click="openProjectDialog()" class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
+      <button @click="openProjectDialog()"
+              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
           :src="imageAssets.loadBtn" class="w-8 h-6"/>
       </button>
-      <button @click="saveProject()" class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
+      <button @click="saveProject()"
+              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
           :src="imageAssets.saveBtn" class="w-8 h-6"/>
       </button>
-      <button @click="downloadMix()" class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
+      <button @click="downloadMix()"
+              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
           :src="imageAssets.downloadBtn" class="w-8 h-6"/>
       </button>
     </div>
@@ -38,6 +44,7 @@ import {inject, watch, nextTick, onMounted, ref} from "vue";
 import useEventsBus from "../events/eventBus";
 import SaveAndLoadAdapter from "../persistence/save-load-adapter";
 import ModalOpenPayload from "./ModalOpenPayload";
+import ComposerAPI from "../dal/ComposerAPI";
 
 export default {
   name: "AdminPanel",
@@ -83,34 +90,52 @@ export default {
       }
     })
 
-    const openProject = () => {
-      if (localStorage.getItem("sas-save")) {
-        const retrievedData = JSON.parse(localStorage.getItem("sas-save"))
-        const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(retrievedData)
+    const openProject = async () => {
 
-        store.state.projectName = retrievedRestoredData.projectName;
-        store.state.authorName = retrievedRestoredData.authorName;
-        store.state.globalBpm = retrievedRestoredData.globalBpm;
-        store.state.globalKey = retrievedRestoredData.globalKey;
-        store.state.grid = retrievedRestoredData.grid;
+      if (store.token) {
+        const composerApi = new ComposerAPI()
+        let users_compositions = await composerApi.getSavedCompositions(store.token)
 
-      } else {
-        toast.error('No saved project found')
+        console.log('SAVED PROJECTS', users_compositions)
       }
+
+
+      // if (localStorage.getItem("sas-save")) {
+      //   const retrievedData = JSON.parse(localStorage.getItem("sas-save"))
+      //   const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(retrievedData)
+      //
+      //   store.state.projectName = retrievedRestoredData.projectName;
+      //   store.state.authorName = retrievedRestoredData.authorName;
+      //   store.state.globalBpm = retrievedRestoredData.globalBpm;
+      //   store.state.globalKey = retrievedRestoredData.globalKey;
+      //   store.state.grid = retrievedRestoredData.grid;
+      //
+      // } else {
+      //   toast.error('No saved project found')
+      // }
     }
 
-    const saveProject = () => {
+    const saveProject = async () => {
+
       if (store.state.grid && store.state.grid.length > 0) {
+        //logged in or note
         let saveFormat = new SaveAndLoadAdapter().createSaveFormat(store.state)
+        console.log('SAVE_FORMAT', saveFormat)
+
+        if (store.token) {
+          const composerApi = new ComposerAPI()
+          await composerApi.save(store.token, saveFormat)
+        }
+
         localStorage.setItem("sas-save", JSON.stringify(saveFormat));
-        toast.info('Project saved in browser storage')
+        //toast.info('Project saved in browser storage')
       }
     }
 
     const logDebug = () => {
       let arpArray = []
 
-      for(let i=0; i<store.state.grid[0].value.length; i++){
+      for (let i = 0; i < store.state.grid[0].value.length; i++) {
         arpArray.push(store.state.grid[0].value[i].arpeggio)
       }
     }
