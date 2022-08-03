@@ -3,10 +3,6 @@
        style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
     <div class="flex justify-between">
-      <button @click="openProjectDialog()"
-              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
-          :src="imageAssets.loadBtn" class="h-6 "/>
-      </button>
       <button @click="saveProject()"
               class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
           :src="imageAssets.saveBtn" class="h-6"/>
@@ -22,10 +18,6 @@
        style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
     <div class="flex w-1/4 justify-between">
-      <button @click="openProjectDialog()"
-              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
-          :src="imageAssets.loadBtn" class="w-8 h-6"/>
-      </button>
       <button @click="saveProject()"
               class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
           :src="imageAssets.saveBtn" class="w-8 h-6"/>
@@ -70,25 +62,7 @@ export default {
       emit('downloadMix')
     }
 
-    const openProjectDialogModalId = 'openProjectWarning'
-    const openProjectDialog = () => {
-      const modalPayload = new ModalOpenPayload(
-          openProjectDialogModalId,
-          'Warning',
-          'You are about to open a project. This will erase all current data. Are you sure?',
-          'Continue',
-          'Cancel')
 
-      emit('launchModal', modalPayload)
-    }
-
-    watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
-      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === openProjectDialogModalId) {
-        if (modalResponsePayload[0].getResponse()) {
-          openProject()
-        }
-      }
-    })
 
     const openProject = async () => {
 
@@ -143,7 +117,6 @@ export default {
     return {
       logDebug,
       downloadMix,
-      openProjectDialog,
       saveProject,
       imageAssets,
       isMobile,

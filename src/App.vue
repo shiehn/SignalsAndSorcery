@@ -4,6 +4,7 @@
   <top-panels-wrapper></top-panels-wrapper>
   <composer-grid-wrapper></composer-grid-wrapper>
   <arpeggiator-wrapper></arpeggiator-wrapper>
+  <bottom-panels-wrapper></bottom-panels-wrapper>
   <modal></modal>
 </template>
 
@@ -13,6 +14,7 @@ import store from './store/store'
 import GlobalTrackValues from "./components/GlobalTrackValues.vue";
 import ComposerGridWrapper from "./components/ComposerGridWrapper";
 import TopPanelsWrapper from "./components/TopPanelsWrapper";
+import BottomPanelsWrapper from "./components/BottomPanelsWrapper";
 import Modal from "./components/Modal";
 import {onMounted} from "vue";
 import SASApi from "./dal/sas-api";
@@ -44,10 +46,11 @@ export default defineComponent({
     return {}
   },
   components: {
-    Modal,
-    TopPanelsWrapper,
+    BottomPanelsWrapper,
     ComposerGridWrapper,
     GlobalTrackValues,
+    Modal,
+    TopPanelsWrapper,
   }
 });
 </script>

@@ -232,5 +232,5 @@ const state = reactive({
 })
 
 export default {
-    isMobile, state,
+    isMobile, state, token
 }

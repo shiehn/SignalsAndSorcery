@@ -1,12 +1,12 @@
 import axios from "axios";
+import {BASE_API_URL} from "../constants/constants";
 
 export default class ComposerAPI {
 
     async getSavedCompositions(token) {
 
         try {
-            const url = 'http://localhost:8000/api/compositions/user'
-            //const url = 'https://signalsandsorcery.org/api/compositions/user'
+            const url = BASE_API_URL + 'compositions/user'
 
             let axiosConfig = {
                 headers: {
@@ -34,8 +34,7 @@ export default class ComposerAPI {
     async save(token, saveData) {
 
         try {
-            // const url = 'http://localhost:8000/api/composition'
-            const url = 'https://signalsandsorcery.org/api/composition'
+            const url = BASE_API_URL + 'composition'
 
             let axiosConfig = {
                 headers: {

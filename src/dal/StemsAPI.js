@@ -1,6 +1,7 @@
 import axios from 'axios'
 import MrTapObjWrapper from './mrTapAPI'
 import {v4} from "uuid"
+import {BASE_API_URL} from "../constants/constants";
 
 export class StemsAPI {
 
@@ -26,8 +27,7 @@ export class StemsAPI {
         }
 
         try {
-            // const url = 'http://localhost:8000/api/mrtaps'
-            const url = 'https://signalsandsorcery.org/api/mrtaps'
+            const url = BASE_API_URL + 'mrtaps'
 
             let res = await axios.get(url);
 
