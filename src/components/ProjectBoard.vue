@@ -36,22 +36,18 @@ export default {
     }
 
     onMounted(() => {
-
-      nextTick(() => {
-        isLoggedIn.value = store.token ? true : false
-      })
-
       setTimeout(async () => {
+        isLoggedIn.value = store.token ? true : false
         isMobile.value = store.isMobile ? true : false
 
         if (store.token) {
           const projects = await new ComposerAPI().getSavedCompositions(store.token)
 
-          console.log('RETRIEVED PROJECTS', projects)
-
-          projects.forEach((project) => {
-            savedProjects.value.push(project)
-          })
+          if(projects) {
+            projects.forEach((project) => {
+              savedProjects.value.push(project)
+            })
+          }
         }
       }, 1000)
     });

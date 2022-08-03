@@ -63,17 +63,13 @@ export default {
     }
 
     const saveProject = async () => {
-      console.log('STATE BEFORE SAVE FORMAT', store.state)
-
       if (store.state.clipCount() < 1) {
         toast.warning('Project is empty. Please add clips before saving.')
         return
       }
 
       if (store.state.grid && store.state.grid.length > 0) {
-        //logged in or note
         let saveFormat = new SaveAndLoadAdapter().createSaveFormat(store.state)
-        console.log('SAVE_FORMAT', saveFormat)
 
         if (store.token) {
           const composerApi = new ComposerAPI()

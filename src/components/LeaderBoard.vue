@@ -81,9 +81,6 @@ export default {
             item['ratingImgSrc'] = imageAssets['rating' + item.avg_rating]
             leaderBoardRows.value.push(item)
           })
-
-
-          console.log('LEADER BOARD', leaderBoardItems)
         }
       }, 1000)
     });

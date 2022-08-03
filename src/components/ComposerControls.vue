@@ -198,11 +198,6 @@ export default {
 
           //GET THE TRACKS IN ONE ROW
           let tracksInRow = getTrackListByRow(n)
-          // console.log('tracksInRow_' + n, tracksInRow)
-
-          // if (n == 4) {
-          //   console.log('TRACKS IN ROW 5', tracksInRow)
-          // }
 
           //GET THE BUFFERS FOR ONE ROW
           let buffer_list_row = await getBufferInRow(store.context, tracksInRow, emptyBuffer);
