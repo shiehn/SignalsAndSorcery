@@ -33,6 +33,8 @@ export default class ComposerAPI {
 
     async save(token, saveData) {
 
+        console.log('saveData sent', saveData)
+
         try {
             const url = BASE_API_URL + 'composition'
 

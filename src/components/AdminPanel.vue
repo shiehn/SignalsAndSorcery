@@ -62,34 +62,13 @@ export default {
       emit('downloadMix')
     }
 
-
-
-    const openProject = async () => {
-
-      if (store.token) {
-        const composerApi = new ComposerAPI()
-        let users_compositions = await composerApi.getSavedCompositions(store.token)
-
-        console.log('SAVED PROJECTS', users_compositions)
-      }
-
-
-      // if (localStorage.getItem("sas-save")) {
-      //   const retrievedData = JSON.parse(localStorage.getItem("sas-save"))
-      //   const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(retrievedData)
-      //
-      //   store.state.projectName = retrievedRestoredData.projectName;
-      //   store.state.authorName = retrievedRestoredData.authorName;
-      //   store.state.globalBpm = retrievedRestoredData.globalBpm;
-      //   store.state.globalKey = retrievedRestoredData.globalKey;
-      //   store.state.grid = retrievedRestoredData.grid;
-      //
-      // } else {
-      //   toast.error('No saved project found')
-      // }
-    }
-
     const saveProject = async () => {
+      console.log('STATE BEFORE SAVE FORMAT', store.state)
+
+      if (store.state.clipCount() < 1) {
+        toast.warning('Project is empty. Please add clips before saving.')
+        return
+      }
 
       if (store.state.grid && store.state.grid.length > 0) {
         //logged in or note
@@ -99,6 +78,8 @@ export default {
         if (store.token) {
           const composerApi = new ComposerAPI()
           await composerApi.save(store.token, saveFormat)
+
+          toast.success('Project saved successfully.')
         }
 
         localStorage.setItem("sas-save", JSON.stringify(saveFormat));

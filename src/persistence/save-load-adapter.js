@@ -5,6 +5,8 @@ export default class SaveAndLoadAdapter {
     createSaveFormat(state) {
 
         let saveFormat = {
+            'projectId': state.projectId,
+            'projectVersionId': state.projectVersionId,
             'projectName': state.projectName,
             'authorName': state.authorName,
             'globalBpm': state.globalBpm,
@@ -47,6 +49,8 @@ export default class SaveAndLoadAdapter {
         }
 
         const retrievedData = {
+            'projectId': saveFormat.projectId,
+            'projectVersionId': saveFormat.projectVersionId,
             'projectName': saveFormat.projectName,
             'authorName': saveFormat.authorName,
             'globalBpm': saveFormat.globalBpm,

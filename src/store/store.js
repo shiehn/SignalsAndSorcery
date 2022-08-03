@@ -7,6 +7,8 @@ let isMobile = false
 let token = undefined
 
 const state = reactive({
+    projectId: undefined,
+    projectVersionId: undefined,
     projectName: 'Untitled Project',
     authorName: '',
     globalBpm: undefined,
