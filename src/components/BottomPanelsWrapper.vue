@@ -4,7 +4,7 @@
     <project-board></project-board>
   </div>
 
-  <div v-else class="flex flex-col w-full justify-between">
+  <div v-else class="w-full mt-4">
     <leader-board></leader-board>
     <project-board></project-board>
   </div>

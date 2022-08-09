@@ -3,6 +3,32 @@ import {BASE_API_URL} from "../constants/constants";
 
 export default class ComposerAPI {
 
+
+    async rateComposition(token, compositionId, rating) {
+
+        try {
+            const url = BASE_API_URL + `composition/${compositionId}/rating/${rating}/`
+
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Authorization': 'Token ' + token,
+                }
+            };
+
+            this.isLoading = true
+            let res = await axios.post(url, {}, axiosConfig)
+
+            console.log('RES', res)
+
+            return res['status'] === 200
+        } catch (e) {
+            console.log('Error', "Unable to SAVE: " + e)
+        }
+
+        return false
+    }
+
     async getSavedCompositions(token) {
 
         try {
