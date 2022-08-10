@@ -3,51 +3,12 @@
     <div class="flex justify-between">
       <h4 class="text-white m-4">Popular</h4>
       <div class="flex text-white mr-4">
-        <button v-if="hasPrevPage" @click="pageResults('prev')" class="mr-2"><img class="h-6 w-6" :src="imageAssets.pagePrev" /></button>
-        <button v-else class="mr-2 opacity-50"><img class="h-6 w-6" :src="imageAssets.pagePrev" /></button>
-        <button v-if="hasNextPage" @click="pageResults('next')" class="mr-4"><img class="h-6 w-6" :src="imageAssets.pageNext" /></button>
-        <button v-else class="mr-4"><img class="h-6 w-6 opacity-50" :src="imageAssets.pageNext" /></button>
-      </div>
-    </div>
-
-    <div v-for="row in leaderBoardRows" class="flex w-full justify-between border-b-2 border-gray-700 p-2 my-2">
-      <audio class="w-5/12 h-8 mr-4" controls
-             :src="row.preview_audio_url"
-             preload="auto">
-        <p>Your browser does not support the <code>audio</code> element.</p>
-      </audio>
-
-      <div class="w-3/6 flex justify-between text-white my-auto mr-6 overflow-hidden text-ellipsis">
-        <span class="text-white uppercase">{{ row.composition_name }}</span>
-        <span>---</span>
-        <span class="text-gray-400">{{ row.author_name }}</span>
-      </div>
-      <div class="w-1/6 h-full m-auto bg-gray-300 rounded-lg overflow-hidden">
-        <img :src="row.ratingImgSrc" class="w-3/4 h-full m-auto">
-      </div>
-      <div class="w-1/6 flex justify-center text-white center m-auto overflow-hidden text-ellipsis">
-        <button @click="rateProject(row.composition_id)" class="h-full m-auto bg-gray-300 rounded-lg text-black p-2">
-          RATE
-        </button>
-      </div>
-
-      <button @click="openProjectDialog(project.id)"
-              class="w-1/12 border-2 bg-gray-300 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
-        <img
-            :src="imageAssets.loadBtn" class="h-6 m-auto"/>
-      </button>
-
-    </div>
-  </div>
-
-  <div v-else class="w-2/3 border-2 border-white rounded-lg p-2">
-    <div class="flex justify-between">
-      <h4 class="text-white m-4">Popular</h4>
-      <div class="flex text-white mr-4">
-        <button v-if="hasPrevPage" @click="pageResults('prev')" class="mr-2"><img class="h-6 w-6" :src="imageAssets.pagePrev" /></button>
-        <button v-else class="mr-2 opacity-50"><img class="h-6 w-6" :src="imageAssets.pagePrev" /></button>
-        <button v-if="hasNextPage" @click="pageResults('next')" class="mr-4"><img class="h-6 w-6" :src="imageAssets.pageNext" /></button>
-        <button v-else class="mr-4"><img class="h-6 w-6 opacity-50" :src="imageAssets.pageNext" /></button>
+        <button v-if="hasPrevPage" @click="pageResults('prev')" class="mr-2"><img class="h-6 w-6"
+                                                                                  :src="imageAssets.pagePrev"/></button>
+        <button v-else class="mr-2 opacity-50"><img class="h-6 w-6" :src="imageAssets.pagePrev"/></button>
+        <button v-if="hasNextPage" @click="pageResults('next')" class="mr-4"><img class="h-6 w-6"
+                                                                                  :src="imageAssets.pageNext"/></button>
+        <button v-else class="mr-4"><img class="h-6 w-6 opacity-50" :src="imageAssets.pageNext"/></button>
       </div>
     </div>
 
@@ -60,8 +21,49 @@
 
       <div class="w-4/6 flex justify-between text-white my-auto mr-4 overflow-hidden text-ellipsis">
         <span class="text-white uppercase overflow-hidden">{{ row.composition_name }}</span>
-        <span class="overflow-hidden">---</span>
-        <span class="text-gray-400 overflow-hidden">{{ row.author_name }}</span>
+        <span>
+          <span class="overflow-hidden mr-4">---</span>
+          <span class="text-gray-400 overflow-hidden">{{ row.author_name }}</span>
+        </span>
+      </div>
+      <div class="w-1/6 h-full m-auto bg-gray-300 rounded-lg mr-4 overflow-hidden">
+        <img :src="row.ratingImgSrc" @click="openRateProject(row.composition_id)" class="w-3/4 h-full m-auto">
+      </div>
+
+      <button @click="openProjectDialog(project.id)"
+              class="w-1/12 border-2 bg-gray-300 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+        <img
+            :src="imageAssets.loadBtn" class="h-6 m-auto"/>
+      </button>
+    </div>
+  </div>
+
+  <div v-if="!isMobile" class="w-2/3 border-2 border-white rounded-lg p-2">
+    <div class="flex justify-between">
+      <h4 class="text-white m-4">Popular</h4>
+      <div class="flex text-white mr-4">
+        <button v-if="hasPrevPage" @click="pageResults('prev')" class="mr-2"><img class="h-6 w-6"
+                                                                                  :src="imageAssets.pagePrev"/></button>
+        <button v-else class="mr-2 opacity-50"><img class="h-6 w-6" :src="imageAssets.pagePrev"/></button>
+        <button v-if="hasNextPage" @click="pageResults('next')" class="mr-4"><img class="h-6 w-6"
+                                                                                  :src="imageAssets.pageNext"/></button>
+        <button v-else class="mr-4"><img class="h-6 w-6 opacity-50" :src="imageAssets.pageNext"/></button>
+      </div>
+    </div>
+
+    <div v-for="row in leaderBoardRows" class="flex w-full justify-between border-b-2 border-gray-700 p-2 my-2">
+      <audio class="w-5/12 h-8 mr-4" controls
+             :src="row.preview_audio_url"
+             preload="auto">
+        <p>Your browser does not support the <code>audio</code> element.</p>
+      </audio>
+
+      <div class="w-4/6 flex justify-between text-white my-auto mr-4 overflow-hidden text-ellipsis">
+        <span class="text-white uppercase overflow-hidden">{{ row.composition_name }}</span>
+        <span>
+          <span class="overflow-hidden mr-4">---</span>
+          <span class="text-gray-400 overflow-hidden">{{ row.author_name }}</span>
+        </span>
       </div>
       <div class="w-1/6 h-full m-auto bg-gray-300 rounded-lg mr-4 overflow-hidden">
         <img :src="row.ratingImgSrc" @click="openRateProject(row.composition_id)" class="w-3/4 h-full m-auto">
