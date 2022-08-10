@@ -3,9 +3,9 @@ import {BASE_API_URL} from "../constants/constants";
 
 export default class LeaderBoardAAPI {
 
-    async getLeaderBoard(token) {
+    async getLeaderBoard(token, page) {
         try {
-            const url = BASE_API_URL + 'leaderboard'
+            const url = BASE_API_URL + 'leaderboard' + '?page=' + String(page ? page : 0);
 
             let axiosConfig = {
                 headers: {
@@ -19,7 +19,6 @@ export default class LeaderBoardAAPI {
 
             if (res['data']) {
                 return res['data']
-                //NOT EVEN SURE
             } else {
                 console.log('Error', "Unable to read USERS COMPOSITIONS : " + res['error'])
             }
@@ -30,12 +29,3 @@ export default class LeaderBoardAAPI {
         return
     }
 }
-
-// {
-//     "composition_id": 2,
-//     "avg_rating": 3,
-//     "num_ratings": 6,
-//     "author_id": 1,
-//     "author_name": "John Doe",
-//     "preview_audio_url": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/00f725fd-c2ac-4a46-8781-fb04ddac9f95.mp3"
-// },

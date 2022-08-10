@@ -1,6 +1,14 @@
 <template>
   <div v-if="isMobile" class="w-full border-2 border-white rounded-lg mb-4 p-2">
-    <h4 class="text-white m-4">Popular</h4>
+    <div class="flex justify-between">
+      <h4 class="text-white m-4">Popular</h4>
+      <div class="flex text-white mr-4">
+        <button v-if="hasPrevPage" @click="pageResults('prev')" class="mr-2"><img class="h-6 w-6" :src="imageAssets.pagePrev" /></button>
+        <button v-else class="mr-2 opacity-50"><img class="h-6 w-6" :src="imageAssets.pagePrev" /></button>
+        <button v-if="hasNextPage" @click="pageResults('next')" class="mr-4"><img class="h-6 w-6" :src="imageAssets.pageNext" /></button>
+        <button v-else class="mr-4"><img class="h-6 w-6 opacity-50" :src="imageAssets.pageNext" /></button>
+      </div>
+    </div>
 
     <div v-for="row in leaderBoardRows" class="flex w-full justify-between border-b-2 border-gray-700 p-2 my-2">
       <audio class="w-5/12 h-8 mr-4" controls
@@ -33,7 +41,15 @@
   </div>
 
   <div v-else class="w-2/3 border-2 border-white rounded-lg p-2">
-    <h4 class="text-white m-4">Popular</h4>
+    <div class="flex justify-between">
+      <h4 class="text-white m-4">Popular</h4>
+      <div class="flex text-white mr-4">
+        <button v-if="hasPrevPage" @click="pageResults('prev')" class="mr-2"><img class="h-6 w-6" :src="imageAssets.pagePrev" /></button>
+        <button v-else class="mr-2 opacity-50"><img class="h-6 w-6" :src="imageAssets.pagePrev" /></button>
+        <button v-if="hasNextPage" @click="pageResults('next')" class="mr-4"><img class="h-6 w-6" :src="imageAssets.pageNext" /></button>
+        <button v-else class="mr-4"><img class="h-6 w-6 opacity-50" :src="imageAssets.pageNext" /></button>
+      </div>
+    </div>
 
     <div v-for="row in leaderBoardRows" class="flex w-full justify-between border-b-2 border-gray-700 p-2 my-2">
       <audio class="w-5/12 h-8 mr-4" controls
@@ -75,16 +91,6 @@
   </div>
 </template>
 
-
-<!--leaderboard_item_1 = {-->
-<!--"composition_id": 2,-->
-<!--"avg_rating": 3,-->
-<!--"num_ratings": 6,-->
-<!--"author_id": 1,-->
-<!--"author_name": "John Doe",-->
-<!--"preview_audio_url": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/00f725fd-c2ac-4a46-8781-fb04ddac9f95.mp3",-->
-<!--}-->
-
 <script>
 import {inject, nextTick, onMounted, ref, watch} from "vue";
 import LeaderBoardAAPI from "../dal/LeaderBoardAPI";
@@ -101,6 +107,9 @@ export default {
     const leaderBoardRows = ref([])
     let showRateProject = ref(false)
     let projectToRate = undefined
+    let currentPage = 0
+    const hasNextPage = ref(false)
+    const hasPrevPage = ref(false)
 
     const imageAssets = {
       loadBtn: store.state.staticUrl + 'icons/open-icon.png',
@@ -111,6 +120,8 @@ export default {
       rating3: store.state.staticUrl + 'icons/rating-3.png',
       rating4: store.state.staticUrl + 'icons/rating-4.png',
       rating5: store.state.staticUrl + 'icons/rating-5.png',
+      pagePrev: store.state.staticUrl + 'icons/shuffle-left-white.png',
+      pageNext: store.state.staticUrl + 'icons/shuffle-right-white.png',
     }
 
     onMounted(() => {
@@ -122,7 +133,7 @@ export default {
         isMobile.value = store.isMobile ? true : false
 
         if (store.token) {
-          emit('refreshLeaderBoard')
+          emit('refreshLeaderBoard', currentPage)
         }
       }, 1000)
     });
@@ -137,32 +148,51 @@ export default {
       showRateProject.value = true
     }
 
+    const pageResults = (direction) => {
+      if (direction === 'next') {
+        currentPage = currentPage + 1
+        emit('refreshLeaderBoard', currentPage)
+      } else if (direction === 'prev') {
+        currentPage = currentPage - 1
+        emit('refreshLeaderBoard', currentPage)
+      } else {
+        console.log('ERROR: unexpected paging direction')
+      }
+    }
+
     const rateProject = async (rating) => {
       const res = await new ComposerAPI().rateComposition(store.token, projectToRate, rating)
 
       if (!res) {
         toast.error('Error rating project')
       } else {
-        //success ... refresh leaderboard
-        emit('refreshLeaderBoard')
+        emit('refreshLeaderBoard', currentPage)
       }
 
       showRateProject.value = false
     }
 
-    watch(() => bus.value.get('refreshLeaderBoard'), async () => {
-      const leaderBoardItems = await new LeaderBoardAAPI().getLeaderBoard(store.token)
+    watch(() => bus.value.get('refreshLeaderBoard'), async (page) => {
+      const leaderBoardResponse = await new LeaderBoardAAPI().getLeaderBoard(store.token, page[0])
       leaderBoardRows.value = []
-      leaderBoardItems.forEach((item) => {
+
+      leaderBoardResponse['leaderboard'].forEach((item) => {
         item['ratingImgSrc'] = imageAssets['rating' + item.avg_rating]
         leaderBoardRows.value.push(item)
       })
+
+      currentPage = leaderBoardResponse['pagination']['page']
+      hasNextPage.value = leaderBoardResponse['pagination']['has_next']
+      hasPrevPage.value = leaderBoardResponse['pagination']['has_prev']
     })
 
     return {
+      hasPrevPage,
+      hasNextPage,
       imageAssets,
       isMobile,
       leaderBoardRows,
+      pageResults,
       rateProject,
       openRateProject,
       showRateProject

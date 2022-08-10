@@ -29,10 +29,38 @@ export default class ComposerAPI {
         return false
     }
 
-    async getSavedCompositions(token) {
+    async getSavedCompositions(token, page) {
 
         try {
-            const url = BASE_API_URL + 'compositions/user'
+            const url = BASE_API_URL + 'compositions/user' + '?page=' + page
+
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Authorization': 'Token ' + token,
+                }
+            };
+
+            this.isLoading = true
+            let res = await axios.get(url, axiosConfig)
+
+            if (res['data']) {
+                return res['data']
+                //NOT EVEN SURE
+            } else {
+                console.log('Error', "Unable to read USERS COMPOSITIONS : " + res['error'])
+            }
+        } catch (e) {
+            console.log('Error', "Unable to get USERS COMPOSITIONS : " + e)
+        }
+
+        return
+    }
+
+    async getSavedComposition(token, id) {
+
+        try {
+            const url = BASE_API_URL + 'composition/' + id
 
             let axiosConfig = {
                 headers: {
