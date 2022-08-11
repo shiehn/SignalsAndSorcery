@@ -55,27 +55,33 @@
       </button>
     </div>
   </div>
+
+  <loading-spinner :showLoadingProp="showLoadingSpinner"></loading-spinner>
 </template>
 
 <script>
-import {inject, nextTick, onMounted, ref, watch} from "vue";
+import {inject, onMounted, ref, watch} from "vue";
 import ComposerAPI from "../dal/ComposerAPI";
 import SaveAndLoadAdapter from "../persistence/save-load-adapter";
 import ModalOpenPayload from "./ModalOpenPayload";
 import useEventsBus from "../events/eventBus";
-import LeaderBoardAAPI from "../dal/LeaderBoardAPI";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default {
   name: "ProjectBoard",
+  components: {LoadingSpinner},
   setup() {
     const {bus, emit} = useEventsBus()
     const store = inject('store')
-    const isMobile = ref(store.isMobile ? true : false)
-    const savedProjects = ref([])
-    const isLoggedIn = ref(undefined)
-    let currentPage = 0
+
     const hasNextPage = ref(false)
     const hasPrevPage = ref(false)
+    const isMobile = ref(store.isMobile ? true : false)
+    const isLoggedIn = ref(undefined)
+    const savedProjects = ref([])
+    const showLoadingSpinner = ref(false)
+
+    let currentPage = 0
     const imageAssets = {
       loadBtn: store.state.staticUrl + 'icons/open-icon.png',
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
@@ -100,7 +106,9 @@ export default {
     });
 
     const loadProject = async (projectId) => {
+      showLoadingSpinner.value = true
       const project = await new ComposerAPI().getSavedComposition(store.token, projectId)
+      showLoadingSpinner.value = false
 
       const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(project)
 
@@ -149,7 +157,9 @@ export default {
     })
 
     watch(() => bus.value.get('refreshProjects'), async (page) => {
+      showLoadingSpinner.value = true
       const response = await new ComposerAPI().getSavedCompositions(store.token, page[0])
+      showLoadingSpinner.value = false
 
       savedProjects.value = []
       if (response['compositions']) {
@@ -172,7 +182,8 @@ export default {
       loadProject,
       openProjectDialog,
       pageResults,
-      savedProjects
+      savedProjects,
+      showLoadingSpinner
     }
   }
 }

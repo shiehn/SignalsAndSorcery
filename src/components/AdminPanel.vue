@@ -28,29 +28,33 @@
       </button>
     </div>
   </div>
+
+  <loading-spinner :showLoadingProp="showLoadingSpinner"></loading-spinner>
 </template>
 
 <script>
 import GlobalTrackValues from "./GlobalTrackValues";
-import {inject, watch, nextTick, onMounted, ref} from "vue";
+import {inject, nextTick, onMounted, ref} from "vue";
 import useEventsBus from "../events/eventBus";
 import SaveAndLoadAdapter from "../persistence/save-load-adapter";
-import ModalOpenPayload from "./ModalOpenPayload";
+import LoadingSpinner from "./LoadingSpinner";
 import ComposerAPI from "../dal/ComposerAPI";
 
 export default {
   name: "AdminPanel",
-  components: {GlobalTrackValues},
+  components: {GlobalTrackValues, LoadingSpinner},
   setup() {
     const {bus, emit} = useEventsBus()
     const store = inject('store')
     const toast = inject('toast');
+    const isMobile = ref(store.isMobile ? true : false)
+    const showLoadingSpinner = ref(false)
     const imageAssets = {
       loadBtn: store.state.staticUrl + 'icons/open-icon.png',
       saveBtn: store.state.staticUrl + 'icons/save-icon.png',
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
     }
-    const isMobile = ref(store.isMobile ? true : false)
+
 
     onMounted(() => {
       nextTick(() => {
@@ -72,14 +76,14 @@ export default {
         let saveFormat = new SaveAndLoadAdapter().createSaveFormat(store.state)
 
         if (store.token) {
-          const composerApi = new ComposerAPI()
-          await composerApi.save(store.token, saveFormat)
+          showLoadingSpinner.value = true
+          await new ComposerAPI().save(store.token, saveFormat)
+          showLoadingSpinner.value = false
 
           toast.success('Project saved successfully.')
         }
 
         localStorage.setItem("sas-save", JSON.stringify(saveFormat));
-        //toast.info('Project saved in browser storage')
       }
     }
 
@@ -92,11 +96,12 @@ export default {
     }
 
     return {
-      logDebug,
       downloadMix,
-      saveProject,
       imageAssets,
       isMobile,
+      logDebug,
+      saveProject,
+      showLoadingSpinner
     }
   },
 }

@@ -88,9 +88,6 @@ export default {
   name: 'ComposerGrid',
   components: {Asset, ComposerControlsLoopBar, ComposerControlsScrollBar},
   setup() {
-
-    //
-
     const store = inject('store')
     const {bus, emit} = useEventsBus()
     const gridContainerRows = ref([]);

@@ -91,6 +91,8 @@
       </div>
     </div>
   </div>
+
+  <loading-spinner :showLoadingProp="showLoadingSpinner"></loading-spinner>
 </template>
 
 <script>
@@ -98,9 +100,11 @@ import {inject, nextTick, onMounted, ref, watch} from "vue";
 import LeaderBoardAAPI from "../dal/LeaderBoardAPI";
 import ComposerAPI from "../dal/ComposerAPI";
 import useEventsBus from "../events/eventBus";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default {
   name: "LeaderBoard",
+  components: {LoadingSpinner},
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
@@ -108,6 +112,7 @@ export default {
     const isMobile = ref(store.isMobile ? true : false)
     const leaderBoardRows = ref([])
     let showRateProject = ref(false)
+    const showLoadingSpinner = ref(false)
     let projectToRate = undefined
     let currentPage = 0
     const hasNextPage = ref(false)
@@ -163,7 +168,9 @@ export default {
     }
 
     const rateProject = async (rating) => {
+      showLoadingSpinner.value = true
       const res = await new ComposerAPI().rateComposition(store.token, projectToRate, rating)
+      showLoadingSpinner.value = false
 
       if (!res) {
         toast.error('Error rating project')
@@ -175,7 +182,10 @@ export default {
     }
 
     watch(() => bus.value.get('refreshLeaderBoard'), async (page) => {
+      showLoadingSpinner.value = true
       const leaderBoardResponse = await new LeaderBoardAAPI().getLeaderBoard(store.token, page[0])
+      showLoadingSpinner.value = false
+
       leaderBoardRows.value = []
 
       leaderBoardResponse['leaderboard'].forEach((item) => {
@@ -194,9 +204,10 @@ export default {
       imageAssets,
       isMobile,
       leaderBoardRows,
+      openRateProject,
       pageResults,
       rateProject,
-      openRateProject,
+      showLoadingSpinner,
       showRateProject
     }
   }
