@@ -67,6 +67,9 @@ export default {
     }
 
     const saveProject = async () => {
+
+      console.log('STORE_GRID', store.state.grid)
+
       if (store.state.clipCount() < 1) {
         toast.warning('Project is empty. Please add clips before saving.')
         return
@@ -75,12 +78,22 @@ export default {
       if (store.state.grid && store.state.grid.length > 0) {
         let saveFormat = new SaveAndLoadAdapter().createSaveFormat(store.state)
 
+        console.log('SAVE_FORMAT', saveFormat)
+
         if (store.token) {
           showLoadingSpinner.value = true
-          await new ComposerAPI().save(store.token, saveFormat)
+          const res = await new ComposerAPI().save(store.token, saveFormat)
           showLoadingSpinner.value = false
 
-          toast.success('Project saved successfully.')
+          if(res){
+            toast.success('Project saved successfully.')
+          } else {
+            if(store.token && store.token != 'None') {
+              toast.error('Error saving project.')
+            } else {
+              toast.error('Please login to save project.')
+            }
+          }
         }
 
         localStorage.setItem("sas-save", JSON.stringify(saveFormat));

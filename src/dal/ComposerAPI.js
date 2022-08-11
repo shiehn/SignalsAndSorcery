@@ -3,7 +3,6 @@ import {BASE_API_URL} from "../constants/constants";
 
 export default class ComposerAPI {
 
-
     async rateComposition(token, compositionId, rating) {
 
         try {
@@ -16,10 +15,7 @@ export default class ComposerAPI {
                 }
             };
 
-            this.isLoading = true
             let res = await axios.post(url, {}, axiosConfig)
-
-            console.log('RES', res)
 
             return res['status'] === 200
         } catch (e) {
@@ -41,12 +37,10 @@ export default class ComposerAPI {
                 }
             };
 
-            this.isLoading = true
             let res = await axios.get(url, axiosConfig)
 
             if (res['data']) {
                 return res['data']
-                //NOT EVEN SURE
             } else {
                 console.log('Error', "Unable to read USERS COMPOSITIONS : " + res['error'])
             }
@@ -54,7 +48,7 @@ export default class ComposerAPI {
             console.log('Error', "Unable to get USERS COMPOSITIONS : " + e)
         }
 
-        return
+        return undefined
     }
 
     async getSavedComposition(token, id) {
@@ -69,12 +63,10 @@ export default class ComposerAPI {
                 }
             };
 
-            this.isLoading = true
             let res = await axios.get(url, axiosConfig)
 
             if (res['data']) {
                 return res['data']
-                //NOT EVEN SURE
             } else {
                 console.log('Error', "Unable to read USERS COMPOSITIONS : " + res['error'])
             }
@@ -82,7 +74,7 @@ export default class ComposerAPI {
             console.log('Error', "Unable to get USERS COMPOSITIONS : " + e)
         }
 
-        return
+        return undefined
     }
 
     async save(token, saveData) {
@@ -90,7 +82,7 @@ export default class ComposerAPI {
         console.log('saveData sent', saveData)
 
         try {
-            const url = BASE_API_URL + 'composition'
+            const url = BASE_API_URL + 'composition/'
 
             let axiosConfig = {
                 headers: {
@@ -99,17 +91,18 @@ export default class ComposerAPI {
                 }
             };
 
-            this.isLoading = true
-            let res = await axios.post('/api/composition', saveData, axiosConfig)
+            let res = await axios.post(url, saveData, axiosConfig)
 
             if (res['data']) {
-                console.log('SAVE RESPONSE: ', res['data'])
-                //NOT EVEN SURE
+                console.log('SAVE RESPONSE: ', res['status'])
+                return true
             } else {
                 console.log('Error', "Unable to read save response: " + res['error'])
             }
         } catch (e) {
             console.log('Error', "Unable to SAVE: " + e)
         }
+
+        return false
     }
 }
