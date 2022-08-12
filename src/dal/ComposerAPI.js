@@ -77,6 +77,32 @@ export default class ComposerAPI {
         return undefined
     }
 
+    async exportComposition(token, id) {
+
+        try {
+            const url = BASE_API_URL + 'export/composition/' + id
+
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Authorization': 'Token ' + token,
+                }
+            };
+
+            let res = await axios.get(url, axiosConfig)
+
+            if (res['data']) {
+                return res['data']['file']
+            } else {
+                console.log('Error', "Unable to read USERS COMPOSITIONS : " + res['error'])
+            }
+        } catch (e) {
+            console.log('Error', "Unable to get USERS COMPOSITIONS : " + e)
+        }
+
+        return false
+    }
+
     async save(token, saveData) {
 
         console.log('saveData sent', saveData)
@@ -95,7 +121,8 @@ export default class ComposerAPI {
 
             if (res['data']) {
                 console.log('SAVE RESPONSE: ', res['status'])
-                return true
+                console.log('SAVE RES DATA: ', res['data'])
+                return res['data']
             } else {
                 console.log('Error', "Unable to read save response: " + res['error'])
             }
