@@ -30,10 +30,10 @@
         <img :src="row.ratingImgSrc" @click="openRateProject(row.composition_id)" class="w-3/4 h-full m-auto">
       </div>
 
-      <button @click="openProjectDialog(project.id)"
+      <button @click="copyHyperLink(row.preview_audio_url)"
               class="w-1/12 border-2 bg-gray-300 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
         <img
-            :src="imageAssets.loadBtn" class="h-6 m-auto"/>
+            :src="imageAssets.linkBtn" class="h-6 m-auto"/>
       </button>
     </div>
   </div>
@@ -69,10 +69,10 @@
         <img :src="row.ratingImgSrc" @click="openRateProject(row.composition_id)" class="w-3/4 h-full m-auto">
       </div>
 
-      <button @click="openProjectDialog(project.id)"
+      <button @click="copyHyperLink(row.preview_audio_url)"
               class="w-1/12 border-2 bg-gray-300 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
         <img
-            :src="imageAssets.loadBtn" class="h-6 m-auto"/>
+            :src="imageAssets.linkBtn" class="h-6 m-auto"/>
       </button>
     </div>
   </div>
@@ -119,6 +119,7 @@ export default {
     const hasPrevPage = ref(false)
 
     const imageAssets = {
+      linkBtn: store.state.staticUrl + '/icons/link.png',
       loadBtn: store.state.staticUrl + 'icons/open-icon.png',
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
       rating0: store.state.staticUrl + 'icons/rating-0.png',
@@ -181,6 +182,15 @@ export default {
       showRateProject.value = false
     }
 
+    const copyHyperLink = async (url) => {
+      try {
+        await navigator.clipboard.writeText(url);
+        toast.success('URL copied to clipboard')
+      } catch (e) {
+        alert(url);
+      }
+    }
+
     watch(() => bus.value.get('refreshLeaderBoard'), async (page) => {
       showLoadingSpinner.value = true
       const leaderBoardResponse = await new LeaderBoardAAPI().getLeaderBoard(store.token, page[0])
@@ -199,6 +209,7 @@ export default {
     })
 
     return {
+      copyHyperLink,
       hasPrevPage,
       hasNextPage,
       imageAssets,
