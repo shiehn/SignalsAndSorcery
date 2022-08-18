@@ -21,7 +21,7 @@
   <div v-else class="flex w-full border-2 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
        style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
-    <div class="flex w-1/4 justify-between">
+    <div class="flex w-2/4 justify-between">
       <button @click="saveProject()"
               class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
           :src="imageAssets.saveBtn" class="w-8 h-6"/>

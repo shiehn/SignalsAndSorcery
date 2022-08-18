@@ -1,10 +1,10 @@
 <template>
-  <div v-if="!isMobile" class="flex w-full justify-between py-4">
+  <div v-if="isMobile" class="flex flex-col w-full justify-between ">
     <admin-panel></admin-panel>
     <asset-selector></asset-selector>
   </div>
 
-  <div v-else class="flex flex-col w-full justify-between ">
+  <div v-if="!isMobile" class="flex w-full justify-between py-4">
     <admin-panel></admin-panel>
     <asset-selector></asset-selector>
   </div>

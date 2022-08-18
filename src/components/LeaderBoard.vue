@@ -119,7 +119,7 @@ export default {
     const hasPrevPage = ref(false)
 
     const imageAssets = {
-      linkBtn: store.state.staticUrl + '/icons/link.png',
+      linkBtn: store.state.staticUrl + 'icons/link.png',
       loadBtn: store.state.staticUrl + 'icons/open-icon.png',
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
       rating0: store.state.staticUrl + 'icons/rating-0.png',

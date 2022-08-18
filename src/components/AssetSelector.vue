@@ -36,43 +36,6 @@
     </div>
   </div>
 
-  <div v-else
-       class="flex w-full border-2 border-black rounded-lg justify-between font-bold p-2 nowrap overflow-hidden"
-       style="background-color: rgba(255,255,255,0.9);">
-    <div class="flex w-1/4 h-8 justify-between ml-2 mr-4">
-      <label for="bpm-filter" class="w-1/4 my-2 text-sm">BPM</label>
-      <select v-if="filterBpm != undefined" v-model="filterBpm" id="bpm-filter" class="w-3/4 text-xs rounded-lg">
-        <option :value="item" v-for="item in filterBpmOptions.arr">{{ item }}
-        </option>
-      </select>
-    </div>
-
-    <div class="flex w-1/4 h-8 justify-between mx-4">
-      <label for="type-filter" class="w-1/4 my-2 text-sm">TYPE</label>
-      <select v-if="filterType != undefined" v-model="filterType" id="type-filter" class="w-3/4 text-xs rounded-lg">
-        <option :value="item" v-for="item in filterTypeOptions.arr">{{ item }}
-        </option>
-      </select>
-    </div>
-
-    <div class="flex w-1/4 h-8 justify-between mx-4">
-      <label for="key-filter" class="w-1/4 my-2 text-sm">KEY</label>
-      <select v-if="filterKey != undefined" v-model="filterKey" id="key-filter" class="w-3/4 text-xs rounded-lg">
-        <option :value="item" v-for="item in filterKeyOptions.arr">{{ item }}
-        </option>
-      </select>
-    </div>
-
-    <div class="flex w-1/4 h-8 justify-between ml-4">
-      <label for="chord-filter" class="w-1/4 my-2 text-sm">CHORD</label>
-      <select v-if="filterChord != undefined" v-model="filterChord" id="chord-filter"
-              class="w-3/4 text-xs rounded-lg">
-        <option :value="item" v-for="item in filterChordOptions.arr">{{ item }}
-        </option>
-      </select>
-    </div>
-  </div>
-
   <div v-if="!isMobile" class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"
        style="background-color: rgba(255,255,255,0.9);">
     <div
@@ -91,7 +54,7 @@
     </div>
   </div>
 
-  <div v-else class="flex w-full justify-center border-2 border-black my-2 py-4 rounded-lg"
+  <div v-if="isMobile" class="flex w-full justify-center border-2 border-black my-2 py-4 rounded-lg"
        style="background-color: rgba(255,255,255,0.9);">
     <div
         class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
@@ -109,7 +72,6 @@
       <img :src="staticImages.pageRightImgSrc" class="w-8 h-8">
     </div>
   </div>
-
 
 </template>
 <script>
@@ -140,7 +102,7 @@ export default {
     const filterChord = ref()
     const filterChordOptions = reactive({arr: ['all']})
     const pageIndex = ref(0)
-    const numOfResultsMobile = 6
+    const numOfResultsMobile = 4
     const numOfResultsDesktop = 16
     let numOfResults = numOfResultsMobile //assume mobile then adjust for desktop
 

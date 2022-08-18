@@ -1,5 +1,58 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div class="rounded-lg w-11/12 overflow-x-scroll border-2 border-black p-2"
+
+  <div v-if="isMobile" class="rounded-lg w-full overflow-x-scroll border-2 border-black p-2"
+       v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.9) ' + progressBarStart + '%, rgba(200, 247, 197,0.9) ' + progressBar + '%,  rgba(255,255,255,0.9) ' + progressBar + '%' }">
+
+<!--    <div v-for="(gridRow, i) in getGridRows()">-->
+<!--      <div v-if="i == 0" class="flex flex-none justify-between">-->
+<!--        <div v-for="(gridRowItem, j) in gridRow.value" class="ml-1 mb-2 w-16 flex-none">-->
+<!--          <div v-if="gridRowItem.section.position == 'start'" style="white-space: nowrap"-->
+<!--               class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-black">-->
+<!--            <span class="ml-2 hover:cursor-move">{{ gridRowItem.section.name }}</span>-->
+<!--          </div>-->
+
+<!--          <div v-if="gridRowItem.section.position == 'end'" class="ml-1 w-16 h-6 flex">-->
+<!--            <button @click="editSection(gridRowItem.section.id)">-->
+<!--              <img :src=imageUrls.editIcon class="w-4 h-4 rounded-full hover:ring-2 hover:ring-yellow-500">-->
+<!--            </button>-->
+
+<!--            <button @click="columnAdd(gridRowItem.section.id)">-->
+<!--              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-1 rounded-full hover:ring-2 hover:ring-green-500">-->
+<!--            </button>-->
+
+<!--            <button @click="columnRemove(gridRowItem.section.id)">-->
+<!--              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-1 rounded-full hover:ring-2 hover:ring-red-500">-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+    <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
+         class="flex flex-none justify-between">
+
+      <div v-for="gridRowItem in gridRow.value"
+           class="ml-1 mb-2 w-32 h-32 flex-none overflow-hidden relative rounded-lg shadow-lg  hover:bg-gray-400 hover:cursor-pointer"
+           :class="{
+            'bg-green-100': gridRowItem.compatibility === 2,
+            'bg-yellow-100': gridRowItem.compatibility === 1,
+            'bg-red-100': gridRowItem.compatibility === 0
+        }"
+           v-on:mouseover="mouseOverGridItem(gridRowItem.row, gridRowItem.col)"
+           v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
+           @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
+        <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
+        <img v-if="gridRowItem.showDeleteIcon" :src=gridRowItem.deleteIconPath
+             @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
+             class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
+      </div>
+    </div>
+
+    <composer-controls-loop-bar></composer-controls-loop-bar>
+    <composer-controls-scroll-bar></composer-controls-scroll-bar>
+  </div>
+
+  <div v-if="!isMobile" class="rounded-lg w-11/12 overflow-x-scroll border-2 border-black p-2"
        v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.9) ' + progressBarStart + '%, rgba(200, 247, 197,0.9) ' + progressBar + '%,  rgba(255,255,255,0.9) ' + progressBar + '%' }">
 
     <div v-for="(gridRow, i) in getGridRows()">
@@ -29,7 +82,7 @@
 
     <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
          class="flex flex-none justify-between">
-      <div v-if="!isMobile" v-for="gridRowItem in gridRow.value"
+      <div v-for="gridRowItem in gridRow.value"
            class="ml-1 mb-2 w-16 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg  hover:bg-gray-400 hover:cursor-pointer"
            :class="{
             'bg-green-100': gridRowItem.compatibility === 2,
@@ -47,26 +100,12 @@
              @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
              class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
       </div>
-      <div v-else v-for="gridRowItem in gridRow.value"
-           class="ml-1 mb-2 w-32 h-32 flex-none overflow-hidden relative rounded-lg shadow-lg  hover:bg-gray-400 hover:cursor-pointer"
-           :class="{
-            'bg-green-100': gridRowItem.compatibility === 2,
-            'bg-yellow-100': gridRowItem.compatibility === 1,
-            'bg-red-100': gridRowItem.compatibility === 0
-        }"
-           v-on:mouseover="mouseOverGridItem(gridRowItem.row, gridRowItem.col)"
-           v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
-           @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
-        <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
-        <img v-if="gridRowItem.showDeleteIcon" :src=gridRowItem.deleteIconPath
-             @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
-             class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
-      </div>
     </div>
 
     <composer-controls-loop-bar></composer-controls-loop-bar>
     <composer-controls-scroll-bar></composer-controls-scroll-bar>
   </div>
+
 </template>
 
 <script>
@@ -278,12 +317,20 @@ export default {
       })
 
       nextTick(() => {
+        if(!gridContainerRows.value[0]){
+          return
+        }
+
         emit('gridDrawCompleted', {
           'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
         })
       })
 
       window.addEventListener('resize', () => {
+        if(!gridContainerRows.value[0]){
+          return
+        }
+
         emit('gridDrawCompleted', {
           'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
         })

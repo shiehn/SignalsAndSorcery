@@ -57,8 +57,12 @@ export default {
     onMounted(() => {
       nextTick(() => {
         isMobile.value = store.isMobile ? true : false
-        if(isMobile.value){
+        if (isMobile.value) {
           bgGridHeight.value = bgGridHeight.value * 4
+        }
+
+        if (!startLoop.value) {
+          return
         }
 
         startLoop.value.style.marginLeft = (store.state.playBack.loopStartPercent * 0.01 * loopBar.value.clientWidth) + 'px'
@@ -155,6 +159,10 @@ export default {
     }
 
     watch(() => bus.value.get('gridDrawCompleted'), (gridDrawCompletedParams) => {
+      if (!loopBar.value) {
+        return
+      }
+
       const w16 = 4 /* assuming each grid item is tailwind w-16 ==  4rem */
       const m1 = 0.25 /* assuming each grid item has tailwind mr-1 ==  0.25rem */
       let calculatedGridWidthRem = store.state.grid[0].value.length * (w16 + m1)
