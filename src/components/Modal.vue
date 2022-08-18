@@ -1,15 +1,17 @@
 <template>
-  <div v-if="open" class="modal w-1/3 bg-white border-2 border-black rounded-lg p-4 shadow-lg">
+  <div v-if="open" class="modal bg-white border-2 border-black rounded-lg p-4 shadow-lg" :class="{'w-2/3': isMobile, 'w-1/3': !isMobile}">
     <div class="bg-gray-100 rounded-lg p-2 mb-2">
       <h4 v-if="title" class="w-full border-b-2 border-gray-600">{{ title }}</h4>
       <p v-if="body" class="my-2">{{ body }}</p>
       <input v-if="isTextInput" class="w-full h-10 p-2" v-model="textInput">
     </div>
     <div class="flex justify-end">
-      <button v-if="cancelBtnText" @click="cancelClick()" class="border-2 border-black ml-2 p-1 rounded-md hover:shadow-lg hover:border-red-500">
+      <button v-if="cancelBtnText" @click="cancelClick()"
+              class="border-2 border-black ml-2 p-1 rounded-md hover:shadow-lg hover:border-red-500">
         {{ cancelBtnText }}
       </button>
-      <button v-if="confirmBtnText" @click="confirmClick()" class="border-2 border-black ml-2 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+      <button v-if="confirmBtnText" @click="confirmClick()"
+              class="border-2 border-black ml-2 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
         {{ confirmBtnText }}
       </button>
     </div>
@@ -17,10 +19,10 @@
 </template>
 
 <script>
-import {ref} from 'vue'
+import {ref, watch, nextTick, onMounted} from 'vue'
 import useEventsBus from "../events/eventBus";
-import {watch} from "vue";
 import ModalResponsePayload from "./ModalResponsePayload";
+import store from "../store/store";
 
 export default {
   name: "Modal",
@@ -31,6 +33,7 @@ export default {
     const title = ref(undefined)
     const body = ref(undefined)
     const isTextInput = ref(false)
+    const isMobile = ref(store.isMobile ? true : false)
     const confirmBtnText = ref(undefined)
     const cancelBtnText = ref(undefined)
     const open = ref(false)
@@ -66,6 +69,12 @@ export default {
       closeModal()
     }
 
+    onMounted(() => {
+      nextTick(() => {
+        isMobile.value = store.isMobile ? true : false
+      })
+    })
+
     watch(() => bus.value.get('launchModal'), (modalPayload) => {
       if (open.value) {
         console.log('A modal is already open')
@@ -91,6 +100,7 @@ export default {
       confirmBtnText,
       confirmClick,
       isTextInput,
+      isMobile,
       open,
       textInput,
     }

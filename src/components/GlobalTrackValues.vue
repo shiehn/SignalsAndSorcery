@@ -25,7 +25,7 @@
   <div v-if="isMobile" class="flex w-2/4 overflow-hidden">
     <div class="flex w-full h-6 mt-2 mb-2 overflow-clip">
       <input v-model="store.state.projectName" placeholder="project"
-             class="w-3/4 ml-2 bg-black text-white text-sm px-2"/>
+             class="w-5/6 ml-2 bg-black text-white text-sm px-2"/>
     </div>
   </div>
 </template>

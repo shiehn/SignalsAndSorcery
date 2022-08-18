@@ -3,31 +3,6 @@
   <div v-if="isMobile" class="rounded-lg w-full overflow-x-scroll border-2 border-black p-2"
        v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.9) ' + progressBarStart + '%, rgba(200, 247, 197,0.9) ' + progressBar + '%,  rgba(255,255,255,0.9) ' + progressBar + '%' }">
 
-<!--    <div v-for="(gridRow, i) in getGridRows()">-->
-<!--      <div v-if="i == 0" class="flex flex-none justify-between">-->
-<!--        <div v-for="(gridRowItem, j) in gridRow.value" class="ml-1 mb-2 w-16 flex-none">-->
-<!--          <div v-if="gridRowItem.section.position == 'start'" style="white-space: nowrap"-->
-<!--               class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-black">-->
-<!--            <span class="ml-2 hover:cursor-move">{{ gridRowItem.section.name }}</span>-->
-<!--          </div>-->
-
-<!--          <div v-if="gridRowItem.section.position == 'end'" class="ml-1 w-16 h-6 flex">-->
-<!--            <button @click="editSection(gridRowItem.section.id)">-->
-<!--              <img :src=imageUrls.editIcon class="w-4 h-4 rounded-full hover:ring-2 hover:ring-yellow-500">-->
-<!--            </button>-->
-
-<!--            <button @click="columnAdd(gridRowItem.section.id)">-->
-<!--              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-1 rounded-full hover:ring-2 hover:ring-green-500">-->
-<!--            </button>-->
-
-<!--            <button @click="columnRemove(gridRowItem.section.id)">-->
-<!--              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-1 rounded-full hover:ring-2 hover:ring-red-500">-->
-<!--            </button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-
     <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
          class="flex flex-none justify-between">
 
@@ -174,6 +149,9 @@ export default {
         col: col,
       })
       emit('renderMixIfNeeded')
+
+      //NOT SURE IF THIS NEEDS TO HAPPEN ON EVERY DROP
+      emit('saveProjectToLocalStorage')
     }
 
     const removeGridItem = (row, col) => {
@@ -304,7 +282,7 @@ export default {
         isMobile.value = store.isMobile ? true : false
 
         if (isMobile.value) {
-          numOfGridCols = 4
+          numOfGridCols = 2
           numOfSections = 1
         }
 
@@ -314,6 +292,8 @@ export default {
         if (!isMobile.value) {
           new GridProcessor(store.state.grid).addSection('part_2', 6)
         }
+
+        emit('loadProjectFromLocalStorage')
       })
 
       nextTick(() => {
