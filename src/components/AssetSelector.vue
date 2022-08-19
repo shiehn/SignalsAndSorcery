@@ -57,9 +57,9 @@
   <div v-if="isMobile" class="flex w-full justify-center border-2 border-black my-2 py-4 rounded-lg"
        style="background-color: rgba(255,255,255,0.9);">
     <div
-        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
+        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer opacity-25 hover:opacity-75"
         @click="pagePrev">
-      <img :src="staticImages.pageLeftImgSrc" class="w-8 h-8">
+      <img :src="staticImages.pageLeftImgSrc" class="object-scale-down">
     </div>
 
     <ul class="grid grid-cols-6 gap-2">
@@ -67,9 +67,9 @@
     </ul>
 
     <div
-        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
+        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer opacity-25 hover:opacity-75"
         @click="pageNext">
-      <img :src="staticImages.pageRightImgSrc" class="w-8 h-8">
+      <img :src="staticImages.pageRightImgSrc" class="object-scale-down">
     </div>
   </div>
 

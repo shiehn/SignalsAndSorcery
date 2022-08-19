@@ -1,6 +1,6 @@
 <template>
 
-  <div v-if="isMobile" class="flex flex-col w-full border-2 border-black rounded-lg mr-2 pt-2 px-2"
+  <div v-if="isMobile" class="fixed bottom-0 left-0 z-20 flex flex-col w-full border-2 border-black rounded-lg"
        style="background-color: rgba(255,255,255,0.9);">
     <composer-controls></composer-controls>
   </div>
@@ -265,5 +265,12 @@ export default {
 </script>
 
 <style scoped>
-
+/*.footer {*/
+/*  background: red;*/
+/*  position: fixed;*/
+/*  left: 0;*/
+/*  right: 0;*/
+/*  bottom: 0;*/
+/*  height: 50px;*/
+/*}*/
 </style>

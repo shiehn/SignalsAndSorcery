@@ -150,6 +150,8 @@ export default {
             store.state.globalBpm = res['globalBpm']
             store.state.globalKey = res['globalKey']
 
+            emit('refreshProjects', 0)
+            emit('refreshLeaderBoard', 0)
             toast.success('Project saved successfully.')
           } else {
             if (store.token && store.token != 'None') {

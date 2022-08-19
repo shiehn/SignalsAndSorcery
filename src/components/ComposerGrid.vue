@@ -19,7 +19,7 @@
         <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
         <img v-if="gridRowItem.showDeleteIcon" :src=gridRowItem.deleteIconPath
              @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
-             class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
+             class="w-12 h-12 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
       </div>
     </div>
 

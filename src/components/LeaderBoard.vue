@@ -192,6 +192,10 @@ export default {
     }
 
     watch(() => bus.value.get('refreshLeaderBoard'), async (page) => {
+      if(!page[0]){
+        page[0] = 0
+      }
+
       showLoadingSpinner.value = true
       const leaderBoardResponse = await new LeaderBoardAAPI().getLeaderBoard(store.token, page[0])
       showLoadingSpinner.value = false

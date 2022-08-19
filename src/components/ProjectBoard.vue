@@ -159,6 +159,10 @@ export default {
     })
 
     watch(() => bus.value.get('refreshProjects'), async (page) => {
+      if(!page[0]){
+        page[0] = 0
+      }
+
       showLoadingSpinner.value = true
       const response = await new ComposerAPI().getSavedCompositions(store.token, page[0])
       showLoadingSpinner.value = false
