@@ -19,11 +19,16 @@
     <div v-if="isLoggedIn" v-for="project in savedProjects"
          class="flex justify-between w-full border-b-2 border-gray-700 p-2 mb-2">
       <div class="text-white my-auto">{{ project.projectName }}</div>
-      <button @click="openProjectDialog(project.projectId)"
-              class="border-2 bg-gray-300 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
-        <img
-            :src="imageAssets.loadBtn" class="h-6 h-6 m-auto"/>
-      </button>
+      <div>
+        <button @click="openDeleteProjectDialog(project.projectId)"
+                class="border-2 bg-gray-300 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500 mr-2">
+          <img :src="imageAssets.deleteBtn" class="h-6 h-6 m-auto"/></button>
+        <button @click="openProjectDialog(project.projectId)"
+                class="border-2 bg-gray-300 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+          <img
+              :src="imageAssets.loadBtn" class="h-6 h-6 m-auto"/>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -47,12 +52,17 @@
 
     <div v-if="isLoggedIn" v-for="project in savedProjects"
          class="flex justify-between w-full border-b-2 border-gray-700 p-2 mb-2">
-      <div class="text-white my-auto">{{ project.projectName }}</div>
-      <button @click="openProjectDialog(project.projectId)"
-              class="border-2 bg-gray-300 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
-        <img
-            :src="imageAssets.loadBtn" class="h-6 h-6 m-auto"/>
-      </button>
+      <div class="text-white my-auto">{{ project.projectName }}xxx</div>
+      <div>
+        <button @click="openDeleteProjectDialog(project.projectId)"
+                class="border-2 bg-gray-300 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500 mr-2">
+          <img :src="imageAssets.deleteBtn" class="h-6 h-6 m-auto"/></button>
+        <button @click="openProjectDialog(project.projectId)"
+                class="border-2 bg-gray-300 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+          <img
+              :src="imageAssets.loadBtn" class="h-6 h-6 m-auto"/>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -87,6 +97,7 @@ export default {
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
       pagePrev: store.state.staticUrl + 'icons/shuffle-left-white.png',
       pageNext: store.state.staticUrl + 'icons/shuffle-right-white.png',
+      deleteBtn: store.state.staticUrl + 'icons/bin.png',
     }
 
     onMounted(() => {
@@ -105,6 +116,14 @@ export default {
       }, 1000)
     });
 
+    const deleteProject = async (projectId) => {
+      showLoadingSpinner.value = true
+      const res = await new ComposerAPI().deleteComposition(store.token, projectId)
+      showLoadingSpinner.value = false
+
+      emit('refreshProjects', currentPage)
+    }
+
     const loadProject = async (projectId) => {
       showLoadingSpinner.value = true
       const project = await new ComposerAPI().getSavedComposition(store.token, projectId)
@@ -121,6 +140,21 @@ export default {
       store.state.grid = retrievedRestoredData.grid;
 
       emit('saveProjectToLocalStorage')
+    }
+
+    const openDeleteProjectDialogModalId = 'openDeleteProjectWarning'
+    const openDeleteProjectDialog = (projectId) => {
+      const modalPayload = new ModalOpenPayload(
+          openDeleteProjectDialogModalId,
+          'Warning',
+          'You are about to permanently delete a project. Are you sure?',
+          'Continue',
+          'Cancel',
+          false,
+          projectId
+      )
+
+      emit('launchModal', modalPayload)
     }
 
     const openProjectDialogModalId = 'openProjectWarning'
@@ -156,10 +190,16 @@ export default {
           loadProject(modalResponsePayload[0].getRelayData())
         }
       }
+
+      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === openDeleteProjectDialogModalId) {
+        if (modalResponsePayload[0].getResponse()) {
+          deleteProject(modalResponsePayload[0].getRelayData())
+        }
+      }
     })
 
     watch(() => bus.value.get('refreshProjects'), async (page) => {
-      if(!page[0]){
+      if (!page[0]) {
         page[0] = 0
       }
 
@@ -185,7 +225,7 @@ export default {
       isLoggedIn,
       imageAssets,
       isMobile,
-      loadProject,
+      openDeleteProjectDialog,
       openProjectDialog,
       pageResults,
       savedProjects,

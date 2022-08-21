@@ -72,7 +72,7 @@ export default {
     const isMobile = ref(store.isMobile ? true : false)
     const showLoadingSpinner = ref(false)
     const imageAssets = {
-      closeBtn: store.state.staticUrl + "/icons/delete-x.png",
+      closeBtn: store.state.staticUrl + "icons/delete-x.png",
       loadBtn: store.state.staticUrl + 'icons/open-icon.png',
       saveBtn: store.state.staticUrl + 'icons/save-icon.png',
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',

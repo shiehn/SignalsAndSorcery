@@ -54,7 +54,7 @@ export default class ComposerAPI {
     async getSavedComposition(token, id) {
 
         try {
-            const url = BASE_API_URL + 'composition/' + id
+            const url = BASE_API_URL + 'composition/' + id + '/'
 
             let axiosConfig = {
                 headers: {
@@ -72,6 +72,33 @@ export default class ComposerAPI {
             }
         } catch (e) {
             console.log('Error', "Unable to get USERS COMPOSITIONS : " + e)
+        }
+
+        return undefined
+    }
+
+
+    async deleteComposition(token, id) {
+
+        try {
+            const url = BASE_API_URL + `composition/delete/${id}/`
+
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Authorization': 'Token ' + token,
+                }
+            };
+
+            let res = await axios.delete(url, axiosConfig)
+
+            if (res['data']) {
+                return res['data']
+            } else {
+                console.log('Error', "Unable to delete COMPOSITION: " + res['error'])
+            }
+        } catch (e) {
+            console.log('Error', "Unable to delete COMPOSITION : " + e)
         }
 
         return undefined
@@ -104,8 +131,6 @@ export default class ComposerAPI {
     }
 
     async save(token, saveData) {
-
-        console.log('saveData sent', saveData)
 
         try {
             const url = BASE_API_URL + 'composition/'
