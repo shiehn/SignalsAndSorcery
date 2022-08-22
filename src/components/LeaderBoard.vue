@@ -23,7 +23,7 @@
         <span class="text-white uppercase overflow-hidden">{{ row.composition_name }}</span>
         <span>
           <span class="overflow-hidden mr-4">---</span>
-          <span class="text-gray-400 overflow-hidden">{{ row.author_name }}</span>
+          <a :href="row.profileLink" class="text-gray-400 overflow-hidden">{{ row.author_name }}</a>
         </span>
       </div>
       <div class="w-1/6 h-full m-auto bg-gray-300 rounded-lg mr-4 overflow-hidden">
@@ -60,10 +60,7 @@
 
       <div class="w-4/6 flex justify-between text-white my-auto mr-4 overflow-hidden text-ellipsis">
         <span class="text-white uppercase overflow-hidden">{{ row.composition_name }}</span>
-        <span>
-          <span class="overflow-hidden mr-4">---</span>
-          <span class="text-gray-400 overflow-hidden">{{ row.author_name }}</span>
-        </span>
+        <a :href="row.profileLink" class="text-gray-400 overflow-hidden">{{ row.author_name }}</a>
       </div>
       <div class="w-1/6 h-full m-auto bg-gray-300 rounded-lg mr-4 overflow-hidden">
         <img :src="row.ratingImgSrc" @click="openRateProject(row.composition_id)" class="w-3/4 h-full m-auto">
@@ -192,7 +189,7 @@ export default {
     }
 
     watch(() => bus.value.get('refreshLeaderBoard'), async (page) => {
-      if(!page[0]){
+      if (!page[0]) {
         page[0] = 0
       }
 
@@ -204,6 +201,7 @@ export default {
 
       leaderBoardResponse['leaderboard'].forEach((item) => {
         item['ratingImgSrc'] = imageAssets['rating' + item.avg_rating]
+        item['profileLink'] = `/sas/profile?username=${item.author_name}`
         leaderBoardRows.value.push(item)
       })
 
