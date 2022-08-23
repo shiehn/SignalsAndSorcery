@@ -121,6 +121,7 @@ export default {
       const res = await new ComposerAPI().deleteComposition(store.token, projectId)
       showLoadingSpinner.value = false
 
+      emit('stopAllAudio')
       emit('refreshProjects', currentPage)
     }
 
@@ -139,6 +140,8 @@ export default {
       store.state.globalKey = retrievedRestoredData.globalKey;
       store.state.grid = retrievedRestoredData.grid;
 
+      emit('stopAllAudio')
+      emit('renderMix')
       emit('saveProjectToLocalStorage')
     }
 

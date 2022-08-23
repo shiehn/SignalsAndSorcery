@@ -23,8 +23,8 @@
       </div>
     </div>
 
-    <composer-controls-loop-bar></composer-controls-loop-bar>
-    <composer-controls-scroll-bar></composer-controls-scroll-bar>
+<!--    <composer-controls-loop-bar></composer-controls-loop-bar>-->
+<!--    <composer-controls-scroll-bar></composer-controls-scroll-bar>-->
   </div>
 
   <div v-if="!isMobile" class="rounded-lg w-11/12 overflow-x-scroll border-2 border-black p-2"

@@ -10,15 +10,24 @@
                                        class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
   </div>
 
-  <div v-else class="flex my-2 justify-center">
-    <button v-if="isPlaying === false" @click="play()" class="flex w-full justify-center"><img :src="imageAssets.playBtn"
-                                                            class="h-16 w-16 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
-    </button>
-    <button v-if="isPlaying === true" @click="pause()" class="flex w-full justify-center"><img :src="imageAssets.pauseBtn"
-                                                            class="h-16 w-16 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
-    </button>
-<!--    <button @click="stopButton()"><img :src="imageAssets.stopBtn"-->
-<!--                                       class="h-8 w-8 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>-->
+  <div v-if="isMobile" class="flex my-2 justify-center"
+       v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.9) ' + progressBarStart + '%, rgba(200, 247, 197,0.9) ' + progressBar + '%,  rgba(255,255,255,0.9) ' + progressBar + '%' }">
+    <div class="flex w-full justify-center">
+      <button v-if="isPlaying === false" @click="play()" class=""><img
+          :src="imageAssets.playBtn"
+          class="h-16 w-16 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
+      </button>
+      <button v-if="isPlaying === true" @click="pause()" class=""><img
+          :src="imageAssets.pauseBtn"
+          class="h-16 w-16 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
+      </button>
+      <button @click="stopButton()"><img :src="imageAssets.stopBtn"
+                                         class="h-10 w-10 ml-4 rounded-full hover:ring-4 hover:ring-red-500"/></button>
+    </div>
+    <audio v-if="showInitAudio" ref=initAudioTag class="h-0">
+      <source v-bind:src=initAudioSrc type="audio/mpeg"/>
+      Your browser does not support the audio element.
+    </audio>
   </div>
 </template>
 
@@ -29,14 +38,20 @@ import useEventsBus from "../events/eventBus";
 import axios from "axios";
 import Crunker from "crunker";
 import GridProcessor from "../processors/grid-processor";
+import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
 
 export default {
   name: "ComposerControls",
+  components: {ComposerControlsScrollBar},
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
     const toast = inject('toast');
     const isMobile = ref(store.isMobile ? true : false)
+
+    const initAudioTag = ref({})
+    const showInitAudio = ref(true)
+    const initAudioSrc = ref('https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/000c4c90-cb49-4b37-acb6-9f867a6b0758.mp3')
 
     let BUFFER_CACHE = {}
     let BUFFER_ROW_CACHE = []
@@ -48,6 +63,9 @@ export default {
     let pausedAt = 0
     const isPlaying = ref(false)
     const isRendering = ref(false)
+
+    const progressBarStart = ref(0)
+    const progressBar = ref(0)
 
     const imageAssets = {
       playBtn: store.state.staticUrl + 'icons/play-button.png',
@@ -76,6 +94,7 @@ export default {
       let totalBeats = 4 * barCount;
       return msPerBeatAtBpm * totalBeats / 1000
     }
+
 
     const getBufferInRow = async (actx, trackSourceUrls, emptyBuffer) => {
       let buffer_list = new Array();
@@ -173,21 +192,23 @@ export default {
           store.context = new AudioContext();
 
           try {
-            await this.store.context.resume()
+            await store.context.resume()
           } catch (e) {
+            alert('RESUME: ' + e)
             console.log('Error resuming WebAudio Context');
           }
         } catch (e) {
+          alert('WebAudio api is not supported: ' + e)
           console.log('WebAudio api is not supported!!');
         }
         let secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
-        const bufferSizePerLoop = secondsInLoop * 44100;
+        const bufferSizePerLoop = secondsInLoop * store.context.sampleRate;
         const leftChannel = 0
         const rightChannel = 1
         const numOfRows = store.state.grid.length;
         let listOfTrimmedRowBuffers = new Array(numOfRows);
 
-        let emptyBuffer = generateEmptyBuffer(store.context, bufferSizePerLoop, 44100)
+        let emptyBuffer = generateEmptyBuffer(store.context, bufferSizePerLoop, store.context.sampleRate)
         //ALL THIS ROW STUFF COULD BE A FUNC
         for (let n = 0; n < numOfRows; n++) {
           //CHECK IF THE ROW IS ALREADY CACHED
@@ -209,7 +230,7 @@ export default {
           let trimmedBufferListRow = new Array(buffer_list_row.length)
           for (let i = 0; i < buffer_list_row.length; i++) {
             // Create an empty buffer at the target length
-            let newBuffer = store.context.createBuffer(2, bufferSizePerLoop, 44100);
+            let newBuffer = store.context.createBuffer(2, bufferSizePerLoop, store.context.sampleRate);
 
             // for (let channel = 0; channel < 2; channel++) {
             // This gives us the actual array that contains the data
@@ -230,7 +251,7 @@ export default {
           //MERGE ALL THE BUFFERS FOR A ROW
           //MERGE ALL THE BUFFERS FOR A ROW
           // MERGE ALL THE BUFFERS FOR A ROW
-          let finalRowBuffer = store.context.createBuffer(2, bufferSizePerLoop * trimmedBufferListRow.length, 44100);
+          let finalRowBuffer = store.context.createBuffer(2, bufferSizePerLoop * trimmedBufferListRow.length, store.context.sampleRate);
 
           let nowBufferingFinalRowLeft = finalRowBuffer.getChannelData(leftChannel);
           let nowBufferingFinalRowRight = finalRowBuffer.getChannelData(rightChannel);
@@ -272,7 +293,21 @@ export default {
       new GridProcessor(store.state.grid).updateArpeggioRenderedInMix()
     }
 
-    const playMix = async (offsetStartPercentage) => {
+    const initAudio = () => {
+      if (isMobile.value) {
+        if (showInitAudio.value) {
+          initAudioTag.value.load()
+          initAudioTag.value.play()
+          initAudioTag.value.pause()
+          showInitAudio.value = false
+        }
+      }
+    }
+
+    const play = async (offsetStartPercentage) => {
+
+      initAudio()
+
       if (store.state.clipCount() < 1) {
         toast.warning('Add clips to the arranger!');
       }
@@ -311,7 +346,7 @@ export default {
         isPlaying.value = true;
       } else {
         await renderMix()
-        await playMix()
+        await play()
       }
     }
 
@@ -400,12 +435,12 @@ export default {
 
       if (isPlaying.value && buffer && scrubToPercent && scrubToPercent > 0 && scrubToPercent <= 100) {
         await pause()
-        await playMix(scrubToPercent)
+        await play(scrubToPercent)
       } else {
         // it is currently not playing, so start now
-        await playMix()
+        await play()
         await pause()
-        await playMix(scrubToPercent)
+        await play(scrubToPercent)
       }
     })
 
@@ -423,7 +458,7 @@ export default {
 
       let progress = 0
 
-      positionInLoopSection = (displayCurrentTime-startTime) % loopDuration
+      positionInLoopSection = (displayCurrentTime - startTime) % loopDuration
 
       markerPositionInLoop = startTime + positionInLoopSection
       progress = Math.round(markerPositionInLoop / displayDuration * 100)
@@ -440,15 +475,28 @@ export default {
     setInterval(progressUITick, 50)
     // THIS IS THE MAIN APPLICATION TICK - STOP
 
+    watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
+      if (!isMobile.value) {
+        return
+      }
+
+      progressBar.value = progressInt
+    })
+
     return {
+      initAudioSrc,
+      initAudioTag,
+      showInitAudio,
       displayRenderBtn,
       downloadMix,
       imageAssets,
       isMobile,
       isPlaying,
       isRendering,
-      play: playMix,
+      play,
       pause,
+      progressBarStart,
+      progressBar,
       stopButton,
       // renderArpeggios,
       renderMix,
