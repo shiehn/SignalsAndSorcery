@@ -1,4 +1,32 @@
 <template>
+
+  <div v-if="isMobile" class="flex w-full border-2 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
+       style="background-color: rgba(255,255,255,0.9);">
+    <global-track-values></global-track-values>
+    <div class="flex w-2/4 justify-between">
+      <button @click="newProjectDialog()"
+              class="border-2 border-black p-1 mr-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+        <img
+            :src="imageAssets.newProject" class="w-8 h-6"/>
+      </button>
+      <button @click="saveProject()"
+              class="border-2 border-black p-1 mr-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+        <img
+            :src="imageAssets.saveBtn" class="w-8 h-6"/>
+      </button>
+      <button @click="downloadMix()"
+              class="border-2 border-black p-1 mr-1  rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+        <img
+            :src="imageAssets.downloadMP3" class="w-8 h-6"/>
+      </button>
+      <button @click="toggleProjectsBoard()"
+              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
+          :src="showProjectsBoard ? imageAssets.closeBtn : imageAssets.loadBtn"
+          class="w-8 h-6"/>
+      </button>
+    </div>
+  </div>
+
   <div v-if="!isMobile" class="w-1/6 h-48 border-2 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
        style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
@@ -18,30 +46,6 @@
       <button @click="exportProject()"
               class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
           :src="imageAssets.downloadBtn" class="h-6"/>
-      </button>
-    </div>
-  </div>
-
-  <div v-if="isMobile" class="flex w-full border-2 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
-       style="background-color: rgba(255,255,255,0.9);">
-    <global-track-values></global-track-values>
-    <div class="flex w-2/4 justify-between">
-      <button @click="newProjectDialog()"
-              class="border-2 border-black p-1 mr-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
-          :src="imageAssets.newProject" class="w-8 h-6"/>
-      </button>
-      <button @click="saveProject()"
-              class="border-2 border-black p-1 mr-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
-          :src="imageAssets.saveBtn" class="w-8 h-6"/>
-      </button>
-      <button @click="downloadMix()"
-              class="border-2 border-black p-1 mr-1  rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
-          :src="imageAssets.downloadMP3" class="w-8 h-6"/>
-      </button>
-      <button @click="toggleProjectsBoard()"
-              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
-          :src="showProjectsBoard ? imageAssets.closeBtn : imageAssets.loadBtn"
-          class="w-8 h-6"/>
       </button>
     </div>
   </div>
@@ -124,8 +128,9 @@ export default {
       store.state.globalBpm = undefined
       store.state.globalKey = undefined
       store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
-    }
 
+      emit('renderMix')
+    }
 
 
     const saveProject = async () => {
@@ -220,6 +225,10 @@ export default {
         store.state.globalKey = retrievedRestoredData.globalKey;
         store.state.grid = retrievedRestoredData.grid;
       }
+    })
+
+    watch(() => bus.value.get('closeProjectsBoard'), async () => {
+      showProjectsBoard.value = false
     })
 
     return {

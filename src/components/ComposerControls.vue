@@ -175,6 +175,8 @@ export default {
     const renderMix = async () => {
       await stop()
 
+      buffer = undefined
+
       isRendering.value = true
       try {
         /* load audio buffers - start */
@@ -272,9 +274,6 @@ export default {
           store.state.updateRowStateHash(n)
         }
 
-        if (store.arpeggioBuffer) {
-          listOfTrimmedRowBuffers.push(store.arpeggioBuffer)
-        }
         buffer = mixDown(store.context, listOfTrimmedRowBuffers, listOfTrimmedRowBuffers[0].length);
       } catch (e) {
         console.log('ERROR', e)

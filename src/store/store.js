@@ -2,7 +2,6 @@ import {reactive} from "vue";
 
 let debugMode = true
 let context = undefined
-let arpeggioBuffer = undefined
 let isMobile = false
 let token = undefined
 

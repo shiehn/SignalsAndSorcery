@@ -140,8 +140,8 @@ export default {
       store.state.globalKey = retrievedRestoredData.globalKey;
       store.state.grid = retrievedRestoredData.grid;
 
-      emit('stopAllAudio')
       emit('renderMix')
+      emit('closeProjectsBoard')
       emit('saveProjectToLocalStorage')
     }
 
