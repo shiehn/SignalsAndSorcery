@@ -1,7 +1,7 @@
 <template>
   <div ref="clickBar" class="w-auto horizontal-line rounded-lg h-6 hover:cursor-pointer"
        @click="scrubToPosition($event)" :class="{'h-6': !isMobile, 'h-24': isMobile}">
-    <div ref="playHead" class="w-2 h-full bg-black"></div>
+<!--    <div ref="playHead" class="w-2 h-full bg-black"></div>-->
   </div>
 </template>
 
@@ -17,7 +17,7 @@ export default {
     const {bus, emit} = useEventsBus()
     const progressBar = ref(0)
     const clickBar = ref(null)
-    const playHead = ref(null)
+    // const playHead = ref(null)
     const isMobile = ref(store.isMobile ? true : false)
 
     onMounted(() => {
@@ -43,15 +43,15 @@ export default {
       emit('scrubTo', horizontalPercentage)
     }
 
-    watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
-      if (progressInt == 0) {
-        //move the playhead to the startloop
-        playHead.value.style.marginLeft = (store.state.playBack.loopStartPercent * 0.01 * clickBar.value.clientWidth) + 'px'
-        return
-      }
-
-      playHead.value.style.marginLeft = (progressInt * 0.01 * clickBar.value.clientWidth) + 'px'
-    })
+    // watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
+    //   if (progressInt == 0) {
+    //     //move the playhead to the startloop
+    //     playHead.value.style.marginLeft = (store.state.playBack.loopStartPercent * 0.01 * clickBar.value.clientWidth) + 'px'
+    //     return
+    //   }
+    //
+    //   playHead.value.style.marginLeft = (progressInt * 0.01 * clickBar.value.clientWidth) + 'px'
+    // })
 
     const convertRemToPixels = (rem) => {
       return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
@@ -77,7 +77,7 @@ export default {
     return {
       clickBar,
       isMobile,
-      playHead,
+      // playHead,
       progressBar,
       scrubToPosition
     }

@@ -1,21 +1,10 @@
 <template>
-  <div v-if="!isMobile" class="flex my-2 justify-center">
-    <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn"
-                                                            class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
-    </button>
-    <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn"
-                                                            class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
-    </button>
-    <button @click="stopButton()"><img :src="imageAssets.stopBtn"
-                                       class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
-  </div>
-
-  <div v-if="isMobile" class="flex my-2 justify-center"
+  <div v-if="isMobile" class="flex justify-center"
        v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.9) ' + progressBarStart + '%, rgba(200, 247, 197,0.9) ' + progressBar + '%,  rgba(255,255,255,0.9) ' + progressBar + '%' }">
-    <div class="flex w-full justify-center">
-      <button v-if="isPlaying === false" @click="play()" class=""><img
+    <div class="flex w-full justify-center my-2">
+      <button v-if="isPlaying === false" @click="play()"><img
           :src="imageAssets.playBtn"
-          class="h-16 w-16 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
+          class="h-16 w-16 rounded-full hover:ring-4 hover:ring-green-500"/>
       </button>
       <button v-if="isPlaying === true" @click="pause()" class=""><img
           :src="imageAssets.pauseBtn"
@@ -28,6 +17,17 @@
       <source v-bind:src=initAudioSrc type="audio/mpeg"/>
       Your browser does not support the audio element.
     </audio>
+  </div>
+
+  <div v-if="!isMobile" class="flex my-2 justify-center">
+    <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn"
+                                                            class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
+    </button>
+    <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn"
+                                                            class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
+    </button>
+    <button @click="stopButton()"><img :src="imageAssets.stopBtn"
+                                       class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isMobile" ref="loopBar" id="loopBar" class="relative w-auto h-6 hover:cursor-pointer"
+  <div v-if="!isMobile" ref="loopBar" id="loopBar" class="relative w-auto h-6 rounded hover:cursor-pointer"
        v-bind:style="{backgroundSize: bgGridWidth + 'px ' + bgGridHeight + 'px' }"
        :class="{ 'h-24': isMobile, 'h-6': !isMobile }"
        @click="clickedLoopBar($event)">
