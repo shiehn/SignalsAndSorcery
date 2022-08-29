@@ -42,7 +42,7 @@ export default class CompatibilityProcessor {
             }
         }
 
-        if (!chords) {
+        if (chords === undefined) {
             return RATING.GREEN
         }
 

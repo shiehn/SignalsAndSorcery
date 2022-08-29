@@ -148,11 +148,16 @@ export default {
     })
 
     watch(() => bus.value.get('updateAssetSelection'), (assetFilter) => {
-      if (store.state.globalKey) {
-        filterKey.value = store.state.globalKey.toLowerCase()
-      } else {
+
+      /*
+      For now, we are not going to filter by key.  But this might need to change when melodies are introduced.
+       */
+      
+      // if (store.state.globalKey) {
+      //   filterKey.value = store.state.globalKey.toLowerCase()
+      // } else {
         filterKey.value = 'all'
-      }
+      // }
 
       if (store.state.globalBpm) {
         filterBpm.value = store.state.globalBpm
