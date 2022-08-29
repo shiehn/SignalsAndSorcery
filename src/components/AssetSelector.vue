@@ -142,6 +142,8 @@ export default {
 
       const filteredStems = new AssetSelectionFilter(stemSelections.arr, filterBpm.value, filterType.value, filterKey.value, filterChord.value).filter()
 
+      totalResults = filteredStems.length
+
       const pagedResults = filteredStems.slice(pageIndex.value, pageIndex.value + numOfResults)
 
       return pagedResults
@@ -152,7 +154,7 @@ export default {
       /*
       For now, we are not going to filter by key.  But this might need to change when melodies are introduced.
        */
-      
+
       // if (store.state.globalKey) {
       //   filterKey.value = store.state.globalKey.toLowerCase()
       // } else {
