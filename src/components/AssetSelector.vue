@@ -84,6 +84,7 @@ import useEventsBus from "../events/eventBus";
 import store from "../store/store";
 import {ROW_TO_TYPE_MAP} from "../constants/constants";
 import ArpeggiatorControls from "./arpeggiator/ArpeggiatorControls.vue";
+import AssetSelectionFilter from "../filters/AssetSelectionFilter";
 
 export default {
   name: "AssetSelector",
@@ -139,43 +140,9 @@ export default {
         pageIndex.value = 0
       }
 
-      let filteredByBpm = stemSelections.arr.filter(stem => {
-        if (filterBpm.value == 0) {
-          return true
-        }
+      const filteredStems = new AssetSelectionFilter(stemSelections.arr, filterBpm.value, filterType.value, filterKey.value, filterChord.value).filter()
 
-        return Math.round(stem.bpm) == filterBpm.value
-      })
-
-      let filteredByType = filteredByBpm.filter(stem => {
-        if (filterType.value === 'all') {
-          return true
-        }
-
-        return stem.type == filterType.value
-      })
-
-      let filteredByKey = filteredByType.filter(stem => {
-        if (filterKey.value === 'all') {
-          return true
-        }
-
-        return stem.key.toLowerCase() == filterKey.value.toLowerCase()
-      })
-
-
-      //TODO: FILTER BY CHORDS:
-      let filteredByChords = filteredByKey.filter(stem => {
-        if (filterChord.value === 'all') {
-          return true
-        }
-
-        return stem.chords == filterChord.value
-      })
-
-      totalResults = filteredByChords.length
-
-      const pagedResults = filteredByChords.slice(pageIndex.value, pageIndex.value + numOfResults)
+      const pagedResults = filteredStems.slice(pageIndex.value, pageIndex.value + numOfResults)
 
       return pagedResults
     })

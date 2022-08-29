@@ -139,6 +139,8 @@ export default {
       const stem = JSON.parse(stemStr)
       stem.instanceId = v4() //each stem should have a unique instanceId but possible the same stem id
 
+      console.log('STEM SRC', stem)
+
       const gridItem = store.state.grid[row].value[col]
       gridItem.stem = stem
       gridItem['deleteIconPath'] = store.state.staticUrl + 'icons/delete-x.png'

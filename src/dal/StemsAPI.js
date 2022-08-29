@@ -55,8 +55,8 @@ export class StemsAPI {
                     })
 
                     options.chords.forEach((chord) => {
-                        if (!stemsAndOptions.options.chords.includes(chord.toLowerCase())) {
-                            stemsAndOptions.options.chords.push(chord.toLowerCase());
+                        if (!stemsAndOptions.options.chords.includes(chord)) {
+                            stemsAndOptions.options.chords.push(chord);
                         }
                     })
 
