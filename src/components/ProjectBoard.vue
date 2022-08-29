@@ -52,7 +52,7 @@
 
     <div v-if="isLoggedIn" v-for="project in savedProjects"
          class="flex justify-between w-full border-b-2 border-gray-700 p-2 mb-2">
-      <div class="text-white my-auto">{{ project.projectName }}xxx</div>
+      <div class="text-white my-auto">{{ project.projectName }}</div>
       <div>
         <button @click="openDeleteProjectDialog(project.projectId)"
                 class="border-2 bg-gray-300 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500 mr-2">
@@ -139,6 +139,8 @@ export default {
       store.state.globalBpm = retrievedRestoredData.globalBpm;
       store.state.globalKey = retrievedRestoredData.globalKey;
       store.state.grid = retrievedRestoredData.grid;
+
+      console.log('retrievedRestoredData.grid', retrievedRestoredData.grid)
 
       emit('renderMix')
       emit('closeProjectsBoard')

@@ -143,8 +143,8 @@ export default {
         const targetCol = mobileTransferEnabledGridItem[1]
         const gridItem = store.state.grid[targetRow].value[targetCol]
         gridItem.stem = stem
-        gridItem['deleteIconPath'] = store.state.staticUrl + 'icons/delete-x.png'
-        gridItem['previewIconPath'] = store.state.staticUrl + 'icons/play-button.png'
+        gridItem['deleteIconPath'] = 'icons/delete-x.png'
+        gridItem['previewIconPath'] = 'icons/play-button.png'
 
         store.state.updateGlobalBpm()
         store.state.updateGlobalKey()
@@ -196,7 +196,7 @@ export default {
       onPlayClip,
       onPlayOrTransferClip,
       progressBar,
-      startDrag
+      startDrag,
     }
   }
 }

@@ -19,7 +19,7 @@
              v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
              @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
           <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
-          <img v-if="gridRowItem.showDeleteIcon" :src=gridRowItem.deleteIconPath
+          <img v-if="gridRowItem.showDeleteIcon" :src="imageUrls.staticUrl + gridRowItem.deleteIconPath"
                @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
                class="w-12 h-12 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
         </div>
@@ -72,7 +72,7 @@
            v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
            @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
         <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
-        <img v-if="gridRowItem.showDeleteIcon" :src=gridRowItem.deleteIconPath
+        <img v-if="gridRowItem.showDeleteIcon" :src="imageUrls.staticUrl + gridRowItem.deleteIconPath"
              @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
              class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
       </div>
@@ -109,6 +109,7 @@ export default {
     const gridContainer = ref(null);
     const gridInnerContainer = ref(null);
     const imageUrls = {
+      staticUrl: store.state.staticUrl,
       editIcon: store.state.staticUrl + 'icons/edit.png',
       plusIcon: store.state.staticUrl + "icons/plus.png",
       minusIcon: store.state.staticUrl + "icons/minus.png",
@@ -139,12 +140,10 @@ export default {
       const stem = JSON.parse(stemStr)
       stem.instanceId = v4() //each stem should have a unique instanceId but possible the same stem id
 
-      console.log('STEM SRC', stem)
-
       const gridItem = store.state.grid[row].value[col]
       gridItem.stem = stem
-      gridItem['deleteIconPath'] = store.state.staticUrl + 'icons/delete-x.png'
-      gridItem['previewIconPath'] = store.state.staticUrl + 'icons/play-button.png'
+      gridItem['deleteIconPath'] = 'icons/delete-x.png'
+      gridItem['previewIconPath'] = 'icons/play-button.png'
 
       store.state.updateGlobalBpm()
       store.state.updateGlobalKey()
