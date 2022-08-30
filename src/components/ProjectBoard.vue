@@ -12,8 +12,8 @@
       </div>
     </div>
 
-    <div v-if="!isLoggedIn" class="w-full h-full text-sm text-center center mx-auto my-24 text-gray-400">Login to see
-      projects
+    <div v-if="!isLoggedIn" class="w-full h-full text-center center mx-auto my-24">
+      <a href="/accounts/login/" class="text-gray-400 text-sm">Login to see projects</a>
     </div>
 
     <div v-if="isLoggedIn" v-for="project in savedProjects"
@@ -46,8 +46,8 @@
       </div>
     </div>
 
-    <div v-if="!isLoggedIn" class="w-full h-full text-sm text-center center mx-auto my-24 text-gray-400">Login to see
-      projects
+    <div v-if="!isLoggedIn" class="w-full h-full text-center center mx-auto my-24">
+      <a href="/accounts/login/" class="text-gray-400 text-sm">Login to see projects</a>
     </div>
 
     <div v-if="isLoggedIn" v-for="project in savedProjects"

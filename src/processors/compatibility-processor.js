@@ -57,9 +57,6 @@ export default class CompatibilityProcessor {
     }
 
     eval() {
-
-        console.log('COMPAT PROCESSOR CALLED')
-
         this.processFilledGridItems()
 
         for (let row = 0; row < this.state.grid.length; row++) {
