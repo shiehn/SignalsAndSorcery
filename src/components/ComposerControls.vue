@@ -13,10 +13,6 @@
       <button @click="stopButton()"><img :src="imageAssets.stopBtn"
                                          class="h-10 w-10 ml-4 rounded-full hover:ring-4 hover:ring-red-500"/></button>
     </div>
-    <audio v-if="showInitAudio" ref=initAudioTag class="h-0">
-      <source v-bind:src=initAudioSrc type="audio/mpeg"/>
-      Your browser does not support the audio element.
-    </audio>
   </div>
 
   <div v-if="!isMobile" class="flex my-2 justify-center">
@@ -29,6 +25,28 @@
     <button @click="stopButton()"><img :src="imageAssets.stopBtn"
                                        class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
   </div>
+  <div class="text-gray-300 text-xs text-center bg-white">build {{ buildNumber }}</div>
+
+
+
+
+  <div v-if="showInitAudio" class="modal bg-white border-2 border-black rounded-lg p-4 shadow-lg" :class="{'w-2/3': isMobile, 'w-1/3': !isMobile}">
+    <div class="bg-gray-100 rounded-lg p-2 mb-2">
+      <h4 v-if="title" class="w-full border-b-2 border-gray-600">{{ title }}</h4>
+      <p v-if="body" class="my-2">{{ body }}</p>
+      <input v-if="isTextInput" class="w-full h-10 p-2" v-model="textInput">
+    </div>
+    <div class="flex justify-end">
+      <audio v-if="showInitAudio" ref=initAudioTag class="w-full h-10">
+        <source v-bind:src=initAudioSrc type="audio/mpeg"/>
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  </div>
+
+
+
+
 </template>
 
 <script>
@@ -39,6 +57,7 @@ import axios from "axios";
 import Crunker from "crunker";
 import GridProcessor from "../processors/grid-processor";
 import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
+import {BUILD_NUMBER} from "../constants/constants";
 
 export default {
   name: "ComposerControls",
@@ -73,6 +92,8 @@ export default {
       stopBtn: store.state.staticUrl + 'icons/stop-button.png',
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
     }
+
+    const buildNumber = ref(BUILD_NUMBER)
 
     onMounted(() => {
       store.state.updateArpeggioStateHash()
@@ -172,6 +193,27 @@ export default {
       return emptyBuffer;
     }
 
+    const unlockingAudioContext = (audioCtx) => {
+      if (audioCtx.state !== 'suspended') return false;
+
+      isPlaying.value = false
+      const b = document.body;
+      const events = ['touchstart', 'touchend', 'mousedown', 'keydown'];
+      events.forEach(e => b.addEventListener(e, unlock, false));
+
+      function unlock() {
+        audioCtx.resume().then(clean);
+      }
+
+      function clean() {
+        events.forEach(e => b.removeEventListener(e, unlock));
+      }
+
+      toast.success('Audio enabled. Click play to start!')
+
+      return true;
+    }
+
     const renderMix = async () => {
       await stop()
 
@@ -179,30 +221,27 @@ export default {
 
       isRendering.value = true
       try {
-        /* load audio buffers - start */
-        try {
-          if (store.context) {
-            try {
-              if (store.context.state !== 'closed') {
-                await store.context.close();
-              }
-            } catch (e) {
-              console.log('Unable to close WebAudio Context');
-            }
-          }
+        if (!store.context || store.context.state === 'closed') {
           let AudioContext = window.AudioContext || window.webkitAudioContext;
           store.context = new AudioContext();
 
-          try {
-            await store.context.resume()
-          } catch (e) {
-            alert('RESUME: ' + e)
-            console.log('Error resuming WebAudio Context');
-          }
-        } catch (e) {
-          alert('WebAudio api is not supported: ' + e)
-          console.log('WebAudio api is not supported!!');
+          // initAudio()
         }
+
+        if (unlockingAudioContext(store.context)) {
+          return false
+        }
+
+        // try {
+        //   await store.context.resume()
+        // } catch (e) {
+        //   alert('RESUME: ' + e)
+        //   console.log('Error resuming WebAudio Context');
+        // }
+        // } catch (e) {
+        //   alert('WebAudio api is not supported: ' + e)
+        //   console.log('WebAudio api is not supported!!');
+        // }
         let secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
         const bufferSizePerLoop = secondsInLoop * store.context.sampleRate;
         const leftChannel = 0
@@ -286,6 +325,8 @@ export default {
       updateRenderedArpeggios()
       store.state.updateArpeggioStateHash()
       emit('displayRenderBtn', false)
+
+      return true
     }
 
     const updateRenderedArpeggios = () => {
@@ -305,7 +346,7 @@ export default {
 
     const play = async (offsetStartPercentage) => {
 
-      initAudio()
+      // initAudio()
 
       if (store.state.clipCount() < 1) {
         toast.warning('Add clips to the arranger!');
@@ -342,10 +383,12 @@ export default {
 
         startedAt = store.context.currentTime - offset;
         pausedAt = 0;
+        console.log('isPlaying', 'play()')
         isPlaying.value = true;
       } else {
-        await renderMix()
-        await play()
+        if(await renderMix()){
+          await play()
+        }
       }
     }
 
@@ -361,6 +404,7 @@ export default {
       }
       pausedAt = 0;
       startedAt = 0;
+      console.log('isPlaying', 'stop()')
       isPlaying.value = false;
     }
 
@@ -483,9 +527,10 @@ export default {
     })
 
     return {
-      initAudioSrc,
-      initAudioTag,
-      showInitAudio,
+      buildNumber,
+      // initAudioSrc,
+      // initAudioTag,
+      // showInitAudio,
       displayRenderBtn,
       downloadMix,
       imageAssets,
@@ -505,5 +550,11 @@ export default {
 </script>
 
 <style scoped>
-
+.modal {
+  position: fixed;
+  z-index: 999;
+  top: 20%;
+  left: 50%;
+  margin-left: -150px;
+}
 </style>
