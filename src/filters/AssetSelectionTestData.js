@@ -8,7 +8,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/4c3ab9ea-f975-4162-a49c-b1e7b40dfc23.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/c-hi-1-3a4c5fd3-6d01-4a50-a8f2-045d2ad8e349.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -21,7 +21,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/5a070a2d-a522-4c2e-81ba-b121e00fb777.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_two-mid-0-c072e844-3586-4cb4-9a39-5a72882ad5fb.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -34,7 +34,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/39175ef6-49df-457e-99fb-346adb318bae.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_one-mid-0-111ac578-df2c-4529-8e17-76a7f6cec8d2.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -47,7 +47,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/d323327e-e772-4a3e-badb-2e4f8fbbd09a.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/c-hi-0-9acc0f41-6c32-41f3-bbeb-87bfc1eda6ff.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -63,7 +63,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_one-hi-2-203c4d95-0938-4764-85d8-2392711d168b.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_one-hi-2-203c4d95-0938-4764-85d8-2392711d168b.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -76,7 +76,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/17f8fcef-20f1-4e14-b3a9-684b6b776eac.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_one-mid-0-2324b7e4-dfd2-4b3a-b817-afd8253940e9.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -89,7 +89,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/560a956e-dc1e-4d73-af15-b51ef6d414d6.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_one-mid-2-cb11ddbf-b68b-4479-8334-7097f16fba39.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -102,7 +102,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/5fe2aa17-0cad-4f2a-854c-98b741246308.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/b-mid-0-b6abd352-c551-46e9-944d-fc1fe74eb728.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -118,7 +118,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_three-drum-0-1723754f-2e34-492e-a24b-12361452813f.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_three-drum-0-1723754f-2e34-492e-a24b-12361452813f.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -134,7 +134,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_three-drum-0-1723754f-2e34-492e-a24b-12361452813f.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_three-drum-0-1723754f-2e34-492e-a24b-12361452813f.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -150,7 +150,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_three-drum-0-1723754f-2e34-492e-a24b-12361452813f.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_three-drum-0-1723754f-2e34-492e-a24b-12361452813f.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -163,7 +163,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/9d83d475-942d-4dfd-a095-d8ec961807eb.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_two-low-1-a13f9efb-39ee-4fe8-98bf-c05fca2035b7.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -176,7 +176,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/55592349-4e7d-4f90-8779-a1f2adf5474c.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/c-mid-1-3488914a-f5dd-4fca-bc34-119fb7d0a4f8.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -189,7 +189,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/9bff1687-f171-449f-89e3-7e607ae1ef55.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_one-low-0-5eaf8b6e-2aee-49aa-b569-0084c36b248a.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -202,7 +202,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/9179c4e6-8a87-4438-a622-2e163ad2a286.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_one-mid-1-87e612c0-61d9-4d20-b0b0-e057a35d09ee.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -215,7 +215,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/6a6666e0-a30d-47ea-aad7-dbb4662a6f4a.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/a-mid-1-ba82fc7e-9db7-498c-a03c-9c7375b119d8.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -231,7 +231,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_one-hi-0-3aa4facf-eea7-4140-be95-41d01a86617b.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/section_one-hi-0-3aa4facf-eea7-4140-be95-41d01a86617b.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -244,7 +244,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/9e224991-4848-4fc8-93d0-4c1d4852f4cf.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/c-hi-0-3db17dcd-d6d8-4e65-a822-13739047f325.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     },
@@ -257,7 +257,7 @@ export const stems = [
         "source": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/8368a0a6-137f-4f8a-a92c-6d1584570621.mp3",
         "waveform": "https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/part_a-hi-0-e1150bf4-0a9f-4dc2-895f-13d0e149d815.png",
         "showPreviewIcon": false,
-        "previewIconPath": "/static/icons/play-button.png",
+        "previewPlayIconPath": "/static/icons/play-button.png",
         "previewPlayIconPath": "/static/icons/play-button.png",
         "previewStopIconPath": "/static/icons/stop-button.png"
     }

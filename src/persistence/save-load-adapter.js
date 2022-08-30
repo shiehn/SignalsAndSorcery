@@ -1,4 +1,5 @@
 import GridGenerator from "../generators/grid-generator";
+import {RATING} from "../processors/compatibility-processor";
 
 export default class SaveAndLoadAdapter {
 
@@ -18,6 +19,7 @@ export default class SaveAndLoadAdapter {
             let newRow = []
             for (let col = 0; col < state.grid[row].value.length; col++) {
                 newRow[col] = state.grid[row].value[col]
+                newRow[col].compatibility = RATING.GRAY
             }
 
             saveFormat.grid[row] = newRow

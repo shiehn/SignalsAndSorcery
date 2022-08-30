@@ -17,7 +17,7 @@
       </div>
       <div v-if="stem.type == 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">drum
       </div>
-      <img :src=stem.previewIconPath class="w-4 h-4 absolute bottom-0 m-0.5">
+      <img :src=stem.previewPlayIconPath class="w-4 h-4 absolute bottom-0 m-0.5">
       <div class="absolute bottom-0 right-0 p-1 text-xs bg-red-200 bg-opacity-50">{{ stem.bpm }}</div>
       <audio :ref="el => { audioTag = el }" loop>
         <source v-bind:src=stem.source type="audio/mpeg"/>
@@ -40,7 +40,7 @@
       </div>
       <div v-if="stem.type == 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">drum
       </div>
-      <img :src=stem.previewIconPath class="w-4 h-4 absolute bottom-0 m-0.5">
+      <img :src=stem.previewPlayIconPath class="w-4 h-4 absolute bottom-0 m-0.5">
       <div class="absolute bottom-0 right-0 p-1 text-xs bg-red-200 bg-opacity-50">{{ stem.bpm }}</div>
       <audio :ref="el => { audioTag = el }" loop>
         <source v-bind:src=stem.source type="audio/mpeg"/>
@@ -117,7 +117,7 @@ export default {
 
       if (isPlaying()) {
         audioTag.value.pause()
-        stem.previewIconPath = stem.previewPlayIconPath
+        stem.previewPlayIconPath = stem.previewPlayIconPath
       } else {
         audioTag.value.load()
         audioTag.value.play()
@@ -125,7 +125,7 @@ export default {
           duration = audioTag.value.duration
         };
 
-        stem.previewIconPath = stem.previewStopIconPath
+        stem.previewPlayIconPath = stem.previewStopIconPath
       }
     }
 
@@ -144,7 +144,7 @@ export default {
         const gridItem = store.state.grid[targetRow].value[targetCol]
         gridItem.stem = stem
         gridItem['deleteIconPath'] = 'icons/delete-x.png'
-        gridItem['previewIconPath'] = 'icons/play-button.png'
+        gridItem['previewPlayIconPath'] = 'icons/play-button.png'
 
         store.state.updateGlobalBpm()
         store.state.updateGlobalKey()
@@ -179,7 +179,7 @@ export default {
       if (callerId != props.stem.instanceId) {
         if (isPlaying()) {
           audioTag.value.pause()
-          props.stem.previewIconPath = props.stem.previewPlayIconPath + "?x-request=html" //s3 hack to prevent request from 2 origins
+          props.stem.previewPlayIconPath = props.stem.previewPlayIconPath + "?x-request=html" //s3 hack to prevent request from 2 origins
           progressBar.value = 0
         }
       }

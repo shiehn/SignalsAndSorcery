@@ -193,7 +193,7 @@ export default {
           stems.stems.forEach((stem) => {
             stem['waveform'] = stem['waveform'] ? stem['waveform'] : stem['source'].replace('.mp3', '.png')
             stem['showPreviewIcon'] = false
-            stem['previewIconPath'] = store.state.staticUrl + 'icons/play-button.png'
+            stem['previewPlayIconPath'] = store.state.staticUrl + 'icons/play-button.png'
             stem['previewPlayIconPath'] = store.state.staticUrl + 'icons/play-button.png'
             stem['previewStopIconPath'] = store.state.staticUrl + 'icons/stop-button.png'
             stemSelections.arr.push(stem)

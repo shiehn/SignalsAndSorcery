@@ -143,7 +143,7 @@ export default {
       const gridItem = store.state.grid[row].value[col]
       gridItem.stem = stem
       gridItem['deleteIconPath'] = 'icons/delete-x.png'
-      gridItem['previewIconPath'] = 'icons/play-button.png'
+      gridItem['previewPlayIconPath'] = 'icons/play-button.png'
 
       store.state.updateGlobalBpm()
       store.state.updateGlobalKey()

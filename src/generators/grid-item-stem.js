@@ -3,7 +3,6 @@ import {v4} from "uuid";
 export default class GridItemStem {
     constructor(id, bpm, chords, key, sectionId, type, variationId, source, waveform,
                 showPreviewIcon,
-                previewIconPath,
                 previewPlayIconPath,
                 previewStopIconPath
     ) {
@@ -18,7 +17,6 @@ export default class GridItemStem {
         this.source = source
         this.waveform = waveform
         this.showPreviewIcon = showPreviewIcon
-        this.previewIconPath = previewIconPath
         this.previewPlayIconPath = previewPlayIconPath
         this.previewStopIconPath = previewStopIconPath
     }

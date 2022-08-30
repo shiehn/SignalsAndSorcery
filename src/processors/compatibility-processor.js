@@ -57,6 +57,9 @@ export default class CompatibilityProcessor {
     }
 
     eval() {
+
+        console.log('COMPAT PROCESSOR CALLED')
+
         this.processFilledGridItems()
 
         for (let row = 0; row < this.state.grid.length; row++) {
@@ -81,8 +84,6 @@ export default class CompatibilityProcessor {
                         this.state.grid[row].value[col].compatibility = RATING.RED
                         continue
                     }
-
-                    //GET CHORD COLUMN COMPATIBILITY
 
 
                     //IF NOT SET THEN MAKE IT GREEN
