@@ -130,6 +130,7 @@ export default {
       store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
 
       emit('renderMix')
+      emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
     }
 
 

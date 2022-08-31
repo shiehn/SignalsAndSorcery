@@ -28,23 +28,21 @@
   <div class="text-gray-300 text-xs text-center bg-white">build {{ buildNumber }}</div>
 
 
-
-
-  <div v-if="showInitAudio" class="modal bg-white border-2 border-black rounded-lg p-4 shadow-lg" :class="{'w-2/3': isMobile, 'w-1/3': !isMobile}">
-    <div class="bg-gray-100 rounded-lg p-2 mb-2">
-      <h4 v-if="title" class="w-full border-b-2 border-gray-600">{{ title }}</h4>
-      <p v-if="body" class="my-2">{{ body }}</p>
-      <input v-if="isTextInput" class="w-full h-10 p-2" v-model="textInput">
-    </div>
-    <div class="flex justify-end">
-      <audio v-if="showInitAudio" ref=initAudioTag class="w-full h-10">
-        <source v-bind:src=initAudioSrc type="audio/mpeg"/>
-        Your browser does not support the audio element.
-      </audio>
+  <div v-if="showInitAudio" class="modal w-full flex justify-center">
+    <div class="bg-white border-2 border-black rounded-lg p-4 shadow-lg"
+         :class="{'w-3/4': isMobile, 'w-1/3': !isMobile}">
+      <div class="bg-gray-100 rounded-lg p-2 mb-2">
+        <p class="my-2 text-sm">This application requires the WebAudioApi to be explicitly enabled via user action.</p>
+      </div>
+      <div class="flex justify-end">
+        <audio ref=initAudioTag class="w-full h-12">
+          <source v-bind:src=initAudioSrc type="audio/mpeg"/>
+          Your browser does not support the audio element.
+        </audio>
+        <button class="sas-green-btn w-full py-2 px-4" @click="initAudio">Enable Web Audio</button>
+      </div>
     </div>
   </div>
-
-
 
 
 </template>
@@ -70,7 +68,7 @@ export default {
 
     const initAudioTag = ref({})
     const showInitAudio = ref(true)
-    const initAudioSrc = ref('https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/000c4c90-cb49-4b37-acb6-9f867a6b0758.mp3')
+    const initAudioSrc = ref('https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/init-audio-sample.mp3')
 
     let BUFFER_CACHE = {}
     let BUFFER_ROW_CACHE = []
@@ -98,6 +96,7 @@ export default {
     onMounted(() => {
       store.state.updateArpeggioStateHash()
       isMobile.value = store.isMobile ? true : false
+      showInitAudio.value = isMobile.value
     })
 
     const getTrackListByRow = (row) => {
@@ -334,14 +333,12 @@ export default {
     }
 
     const initAudio = () => {
-      if (isMobile.value) {
-        if (showInitAudio.value) {
-          initAudioTag.value.load()
-          initAudioTag.value.play()
-          initAudioTag.value.pause()
-          showInitAudio.value = false
-        }
-      }
+      initAudioTag.value.load()
+      initAudioTag.value.play()
+      setTimeout(() => {
+        initAudioTag.value.pause()
+        showInitAudio.value = false
+      }, 2000);
     }
 
     const play = async (offsetStartPercentage) => {
@@ -386,7 +383,7 @@ export default {
         console.log('isPlaying', 'play()')
         isPlaying.value = true;
       } else {
-        if(await renderMix()){
+        if (await renderMix()) {
           await play()
         }
       }
@@ -528,9 +525,10 @@ export default {
 
     return {
       buildNumber,
-      // initAudioSrc,
-      // initAudioTag,
-      // showInitAudio,
+      initAudio,
+      initAudioSrc,
+      initAudioTag,
+      showInitAudio,
       displayRenderBtn,
       downloadMix,
       imageAssets,
@@ -554,7 +552,5 @@ export default {
   position: fixed;
   z-index: 999;
   top: 20%;
-  left: 50%;
-  margin-left: -150px;
 }
 </style>

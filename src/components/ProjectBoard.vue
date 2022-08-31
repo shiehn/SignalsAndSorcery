@@ -130,6 +130,8 @@ export default {
       const project = await new ComposerAPI().getSavedComposition(store.token, projectId)
       showLoadingSpinner.value = false
 
+      emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
+
       const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(project)
 
       store.state.projectId = retrievedRestoredData.projectId

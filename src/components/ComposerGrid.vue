@@ -291,6 +291,13 @@ export default {
       }
     }
 
+    const resetInnerGridContainer = () => {
+      if (!isMobile.value) {
+        return
+      }
+      gridInnerContainer.value.style.width = screen.availWidth + 'px'
+    }
+
     onMounted(() => {
       nextTick(() => {
         isMobile.value = store.isMobile ? true : false
@@ -359,6 +366,10 @@ export default {
       'background-size': '2px 100%',
       'background-repeat': 'no-repeat',
       'background-position': '0px center'
+    })
+
+    watch(() => bus.value.get('resetInnerGridContainer'), (progressInt) => {
+      resetInnerGridContainer()
     })
 
     watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
