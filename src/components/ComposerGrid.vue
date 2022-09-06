@@ -8,7 +8,7 @@
            class="flex flex-none justify-between">
 
         <div v-for="gridRowItem in gridRow.value"
-             class="overflow-auto mr-1 mb-2 w-32 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg bg-white opacity-40 hover:cursor-pointer"
+             class="overflow-auto mr-1 mb-2 w-32 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg bg-white opacity-40 border-4 border-gray-500 hover:cursor-pointer"
              :class="{
               'init-pulse': gridRowItem.acceptMobileTransfer,
               'border-pulsate': gridRowItem.acceptMobileTransfer,
@@ -22,7 +22,7 @@
              v-on:mouseover="mouseOverGridItem(gridRowItem.row, gridRowItem.col)"
              v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
              @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
-          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
+          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem"></asset>
           <img v-if="gridRowItem.showDeleteIcon" :src="imageUrls.staticUrl + gridRowItem.deleteIconPath"
                @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
                class="w-8 h-8 absolute top-0 right-0 bg-white ml-1 mt-1 rounded-md">
@@ -177,6 +177,7 @@ export default {
         col: col,
       })
       emit('renderMixIfNeeded')
+      emit('disableAnimateSelector')
     }
 
     const mouseOverGridItem = (row, col) => {
@@ -307,7 +308,7 @@ export default {
         isMobile.value = store.isMobile ? true : false
 
         if (isMobile.value) {
-          numOfGridCols = 2
+          numOfGridCols = 4
           numOfSections = 1
         }
 

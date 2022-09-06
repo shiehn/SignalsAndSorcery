@@ -54,7 +54,7 @@
     </div>
   </div>
 
-  <div v-if="isMobile" class="flex w-full justify-center border-2 border-black my-2 py-4 rounded-lg"
+  <div v-if="isMobile" class="flex w-full justify-center border-4 border-black my-2 py-4 rounded-lg"
        :class="{
         'border-4': animateSelector,
         'init-pulse': animateSelector,

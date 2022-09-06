@@ -1,6 +1,6 @@
 <template>
 
-  <div v-if="isMobile" class="flex w-full border-2 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
+  <div v-if="isMobile" class="flex w-full border-4 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
        style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
     <div class="flex w-2/4 justify-between">
@@ -117,7 +117,7 @@ export default {
       let numOfSections = 2
 
       if (isMobile.value) {
-        numOfGridCols = 2
+        numOfGridCols = 4
         numOfSections = 1
       }
 

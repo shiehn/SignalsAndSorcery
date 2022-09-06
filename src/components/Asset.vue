@@ -27,21 +27,26 @@
   </li>
 
   <li v-if="isMobile"
-      class="list-none bg-contain w-32 h-16 relative rounded-lg overflow-hidden shadow-lg"
-      :class="{ 'w-16': hostType==='selector' }"
+      class="list-none bg-contain w-32 h-16 relative overflow-hidden shadow-lg"
+      :class="{
+        'w-16': hostType==='selector',
+        'rounded-lg': hostType==='selector'
+      }"
       v-on:mouseover="mouseOverGridItem(stem)"
       v-on:mouseleave="mouseLeaveGridItem(stem)"
       @click="onPlayOrTransferClip(stem)"
       v-bind:style="{ backgroundImage: 'url(' + stem.waveform + ')',  }">
 
-    <div class="w-full h-full absolute top-0 left-0 hover:shadow-lg hover:cursor-move"
+    <div class="w-full h-full hover:shadow-lg hover:cursor-move"
          v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.5) ' + progressBar + '%, rgba(255, 255, 255, 0) ' + progressBar + '%' }">
       <div v-if="stem.type != 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">
         {{ stem.chords }}
       </div>
       <div v-if="stem.type == 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">drum
       </div>
-      <img :src=stem.previewPlayIconPath class="w-4 h-4 absolute bottom-0 m-0.5">
+      <img :src=stem.previewPlayIconPath class="w-4 h-4 absolute bottom-2 m-0.5" :class="{
+        'bottom-0': hostType==='selector',
+      }">
       <div class="absolute bottom-0 right-0 p-1 text-xs bg-red-200 bg-opacity-50">{{ stem.bpm }}</div>
       <audio :ref="el => { audioTag = el }" loop>
         <source v-bind:src=stem.source type="audio/mpeg"/>
@@ -61,6 +66,7 @@ import {ROW_TO_TYPE_MAP} from "../constants/constants";
 
 export default {
   name: "Asset",
+  inheritAttrs: false,
   props: {
     stem: Object,
   },
@@ -144,20 +150,27 @@ export default {
         //DO THE TRANSFER
         const stemStr = JSON.stringify(stemInput)
         const stem = JSON.parse(stemStr)
-        stem.instanceId = v4() //each stem should have a unique instanceId but possible the same stem id
-        stem['host'] = 'grid' //THIS ALLOWS THE ASSET TO CHANGE DIMENSIONS DYNAMICALLY
+
+
 
         const targetRow = mobileTransferEnabledGridItem[0]
         const targetCol = mobileTransferEnabledGridItem[1]
 
-        console.log('targetRow', targetRow)
-        console.log('stem row', ROW_TO_TYPE_MAP.indexOf(stem.type))
         //first determine if the row is the same
         if (targetRow != ROW_TO_TYPE_MAP.indexOf(stem.type)) {
           return
         }
 
         const gridItem = store.state.grid[targetRow].value[targetCol]
+
+        if(gridItem && gridItem.stem && gridItem.stem.instanceId === stem.instanceId) {
+          onPlayClip(stemInput)
+          return
+        }
+
+        stem.instanceId = v4() //each stem should have a unique instanceId but possible the same stem id
+        stem['host'] = 'grid' //THIS ALLOWS THE ASSET TO CHANGE DIMENSIONS DYNAMICALLY
+
         gridItem.stem = stem
         gridItem['deleteIconPath'] = 'icons/delete-x.png'
         gridItem['previewPlayIconPath'] = 'icons/play-button.png'
@@ -174,7 +187,6 @@ export default {
         new GridProcessor(store.state.grid).clearAcceptMobileTransfer()
         emit('disableAnimateSelector')
       } else {
-        //PLAY THE CLIP
         onPlayClip(stemInput)
       }
     }
