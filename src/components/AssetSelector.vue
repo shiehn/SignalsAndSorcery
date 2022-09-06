@@ -55,6 +55,11 @@
   </div>
 
   <div v-if="isMobile" class="flex w-full justify-center border-2 border-black my-2 py-4 rounded-lg"
+       :class="{
+        'border-4': animateSelector,
+        'init-pulse': animateSelector,
+        'border-pulsate': animateSelector,
+        }"
        style="background-color: rgba(255,255,255,0.9);">
     <div
         class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer opacity-25 hover:opacity-75"
@@ -62,7 +67,7 @@
       <img :src="staticImages.pageLeftImgSrc" class="object-scale-down">
     </div>
 
-    <ul class="grid grid-cols-6 gap-2">
+    <ul class="grid grid-cols-4 gap-2">
       <asset v-for="stem in getFilteredStems" :stem=stem></asset>
     </ul>
 
@@ -85,6 +90,7 @@ import store from "../store/store";
 import {ROW_TO_TYPE_MAP} from "../constants/constants";
 import ArpeggiatorControls from "./arpeggiator/ArpeggiatorControls.vue";
 import AssetSelectionFilter from "../filters/AssetSelectionFilter";
+import GridProcessor from "../processors/grid-processor";
 
 export default {
   name: "AssetSelector",
@@ -102,6 +108,7 @@ export default {
     const filterKeyOptions = reactive({arr: ['all']})
     const filterChord = ref()
     const filterChordOptions = reactive({arr: ['all']})
+    const animateSelector = ref(false)
     const pageIndex = ref(0)
     const numOfResultsMobile = 4
     const numOfResultsDesktop = 16
@@ -142,11 +149,22 @@ export default {
 
       const filteredStems = new AssetSelectionFilter(stemSelections.arr, filterBpm.value, filterType.value, filterKey.value, filterChord.value).filter()
 
+      if(isMobile.value){
+        filteredStems.forEach(stem => {
+          stem['host'] = 'selector'
+        })
+      }
+
       totalResults = filteredStems.length
 
       const pagedResults = filteredStems.slice(pageIndex.value, pageIndex.value + numOfResults)
 
       return pagedResults
+    })
+
+    watch(() => bus.value.get('disableAnimateSelector'), () => {
+      animateSelector.value = false
+      new GridProcessor(store.state.grid).clearAcceptMobileTransfer()
     })
 
     watch(() => bus.value.get('updateAssetSelection'), (assetFilter) => {
@@ -183,6 +201,10 @@ export default {
 
       if (assetFilter[0].chords) {
         filterChord.value = assetFilter[0].chords //TODO DO NOT LOWERCASE
+      }
+
+      if(new GridProcessor(store.state.grid).isAcceptingMobileTransfers()){
+        animateSelector.value = true
       }
     })
 
@@ -238,6 +260,7 @@ export default {
     )
 
     return {
+      animateSelector,
       isMobile,
       filterBpm,
       filterBpmOptions,
@@ -255,9 +278,16 @@ export default {
       store,
     }
   },
-
 }
 </script>
 
 <style scoped>
+.init-pulse {
+  animation: border-pulsate 2s infinite;
+}
+@keyframes border-pulsate {
+  0%   { border-color: rgba(34, 197, 94, 1); }
+  50% { border-color: rgba(34, 197, 94, 0); }
+  100%   { border-color: rgba(34, 197, 94, 1); }
+}
 </style>

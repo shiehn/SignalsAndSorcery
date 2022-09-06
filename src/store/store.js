@@ -49,7 +49,6 @@ const state = reactive({
     },
     staticUrl: '',
     grid: [],
-
     currentStateHash: '',
     hasRowStateChanged: function (rowIndex) {
         return this.currentRowHash[rowIndex] !== this.calculateRowHash(rowIndex)

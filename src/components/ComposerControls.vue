@@ -387,10 +387,13 @@ export default {
           await play()
         }
       }
+
+      emit('disableAnimateSelector')
     }
 
     const stopButton = () => {
       emit('stopAllAudio')
+      emit('disableAnimateSelector')
     }
 
     const stop = async () => {

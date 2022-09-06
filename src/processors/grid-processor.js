@@ -250,4 +250,14 @@ export default class GridProcessor {
 
         return undefined
     }
+
+    isAcceptingMobileTransfers = () => {
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                if (this.grid[row].value[col].acceptMobileTransfer) {
+                    return true
+                }
+            }
+        }
+    }
 }

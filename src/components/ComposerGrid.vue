@@ -1,6 +1,6 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div v-if="isMobile" ref="gridContainer"
-       class="w-full rounded-lg w-full overflow-x-scroll">
+       class="w-full rounded-lg overflow-x-scroll">
 
     <div ref="gridInnerContainer" class="w-full"
          :style="playHeadCSS">
@@ -8,12 +8,16 @@
            class="flex flex-none justify-between">
 
         <div v-for="gridRowItem in gridRow.value"
-             class="overflow-auto mr-1 mb-2 w-32 h-32 flex-none overflow-hidden relative rounded-lg shadow-lg bg-white opacity-40 hover:bg-gray-400 hover:cursor-pointer"
+             class="overflow-auto mr-1 mb-2 w-32 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg bg-white opacity-40 hover:cursor-pointer"
              :class="{
-             'opacity-100': gridRowItem.stem,
-            'bg-green-100': gridRowItem.compatibility === 2,
-            'bg-yellow-100': gridRowItem.compatibility === 1,
-            'bg-red-100': gridRowItem.compatibility === 0
+              'init-pulse': gridRowItem.acceptMobileTransfer,
+              'border-pulsate': gridRowItem.acceptMobileTransfer,
+              'opacity-95': gridRowItem.acceptMobileTransfer,
+              'border-4': gridRowItem.acceptMobileTransfer,
+              'opacity-100': gridRowItem.stem,
+              'bg-green-100': gridRowItem.compatibility === 2,
+              'bg-yellow-100': gridRowItem.compatibility === 1,
+              'bg-red-100': gridRowItem.compatibility === 0
         }"
              v-on:mouseover="mouseOverGridItem(gridRowItem.row, gridRowItem.col)"
              v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
@@ -21,7 +25,7 @@
           <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
           <img v-if="gridRowItem.showDeleteIcon" :src="imageUrls.staticUrl + gridRowItem.deleteIconPath"
                @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
-               class="w-12 h-12 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
+               class="w-8 h-8 absolute top-0 right-0 bg-white ml-1 mt-1 rounded-md">
         </div>
       </div>
     </div>
@@ -435,27 +439,36 @@ export default {
   padding: 5px;
 }
 
-.pulse-effect {
-  /*transform: translateX(0.5rem);*/
-  /*-webkit-animation: pulse 200ms ease-in-out infinite alternate;*/
-  /*animation: pulse 200ms ease-in-out infinite alternate;*/
-}
+/*.pulse-effect {*/
+/*  transform: translateX(0.5rem);*/
+/*  -webkit-animation: pulse 200ms ease-in-out infinite alternate;*/
+/*  animation: pulse 200ms ease-in-out infinite alternate;*/
+/*}*/
 
-@-webkit-keyframes pulse {
-  from {
-    transform: translateX(0.5rem) scale(1);
-  }
-  to {
-    transform: translateX(0.5rem) scale(1.1);
-  }
-}
+/*@-webkit-keyframes pulse {*/
+/*  from {*/
+/*    transform: translateX(0.5rem) scale(1);*/
+/*  }*/
+/*  to {*/
+/*    transform: translateX(0.5rem) scale(1.1);*/
+/*  }*/
+/*}*/
 
-@keyframes pulse {
-  from {
-    transform: translateX(0.5rem) scale(1);
-  }
-  to {
-    transform: translateX(0.5rem) scale(1.1);
-  }
+/*@keyframes pulse {*/
+/*  from {*/
+/*    transform: translateX(0.5rem) scale(1);*/
+/*  }*/
+/*  to {*/
+/*    transform: translateX(0.5rem) scale(1.1);*/
+/*  }*/
+/*}*/
+
+.init-pulse {
+  animation: border-pulsate 2s infinite;
+}
+@keyframes border-pulsate {
+  0%   { border-color: rgba(34, 197, 94, 1); }
+  50% { border-color: rgba(34, 197, 94, 0); }
+  100%   { border-color: rgba(34, 197, 94, 1); }
 }
 </style>

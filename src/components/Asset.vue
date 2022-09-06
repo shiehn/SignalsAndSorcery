@@ -26,8 +26,9 @@
     </div>
   </li>
 
-  <li v-else
-      class="list-none bg-cover w-32 h-32 relative rounded-lg overflow-hidden shadow-lg"
+  <li v-if="isMobile"
+      class="list-none bg-contain w-32 h-16 relative rounded-lg overflow-hidden shadow-lg"
+      :class="{ 'w-16': hostType==='selector' }"
       v-on:mouseover="mouseOverGridItem(stem)"
       v-on:mouseleave="mouseLeaveGridItem(stem)"
       @click="onPlayOrTransferClip(stem)"
@@ -56,10 +57,13 @@ import useEventsBus from "../events/eventBus";
 import GridProcessor from "../processors/grid-processor";
 import {v4} from "uuid";
 import store from "../store/store";
+import {ROW_TO_TYPE_MAP} from "../constants/constants";
 
 export default {
   name: "Asset",
-  props: ['stem'],
+  props: {
+    stem: Object,
+  },
   setup(props) {
     let ignoreSelf = false
     const store = inject('store')
@@ -68,6 +72,9 @@ export default {
 
     const audioTag = ref({})
     const progressBar = ref(0)
+
+    const hostType = ref(props.stem.host)
+
 
     let currentTime = 0
     let duration = 0
@@ -138,9 +145,18 @@ export default {
         const stemStr = JSON.stringify(stemInput)
         const stem = JSON.parse(stemStr)
         stem.instanceId = v4() //each stem should have a unique instanceId but possible the same stem id
+        stem['host'] = 'grid' //THIS ALLOWS THE ASSET TO CHANGE DIMENSIONS DYNAMICALLY
 
         const targetRow = mobileTransferEnabledGridItem[0]
         const targetCol = mobileTransferEnabledGridItem[1]
+
+        console.log('targetRow', targetRow)
+        console.log('stem row', ROW_TO_TYPE_MAP.indexOf(stem.type))
+        //first determine if the row is the same
+        if (targetRow != ROW_TO_TYPE_MAP.indexOf(stem.type)) {
+          return
+        }
+
         const gridItem = store.state.grid[targetRow].value[targetCol]
         gridItem.stem = stem
         gridItem['deleteIconPath'] = 'icons/delete-x.png'
@@ -156,6 +172,7 @@ export default {
         emit('renderMixIfNeeded')
         //CLEAR THE TRANSFER FLAG
         new GridProcessor(store.state.grid).clearAcceptMobileTransfer()
+        emit('disableAnimateSelector')
       } else {
         //PLAY THE CLIP
         onPlayClip(stemInput)
@@ -190,6 +207,7 @@ export default {
     return {
       audioTag,
       endDrag,
+      hostType,
       isMobile,
       mouseOverGridItem,
       mouseLeaveGridItem,

@@ -131,6 +131,7 @@ export default {
 
       emit('renderMix')
       emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
+      emit('disableAnimateSelector')
     }
 
 
