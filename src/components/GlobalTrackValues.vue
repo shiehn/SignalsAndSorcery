@@ -7,7 +7,7 @@
     </div>
     <div class="flex w-full h-6 mb-2 overflow-clip">
       <div class="w-1/3 m-auto font-bold text-sm">AUTHOR:</div>
-      <input v-model="store.state.authorName" placeholder="author"
+      <input readonly v-model="store.state.authorName" placeholder="author"
              class="w-2/3 ml-2 text-sm px-2"/>
     </div>
     <div class="flex w-full h-6 mb-2 overflow-clip">
