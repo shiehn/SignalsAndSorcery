@@ -183,6 +183,7 @@ export default {
           'Add Section',
           'Provide a name for the section',
           'Add',
+          undefined,
           'Cancel',
           true,
       )
@@ -222,6 +223,7 @@ export default {
           'Clear Row?',
           'Are you sure you want to clear the row?',
           'Yes',
+          undefined,
           'Cancel',
           false,
           type

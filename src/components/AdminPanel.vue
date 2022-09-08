@@ -185,13 +185,25 @@ export default {
       }
     }
 
-    const createNewProjectDialogModalId = 'newProjectWarning'
+    const createNewProjectWarningDialogModalId = 'newProjectWarning'
     const newProjectDialog = (projectId) => {
+      // const modalPayload = new ModalOpenPayload(
+      //     createNewProjectWarningDialogModalId,
+      //     'Empty or Random',
+      //     'Would you like an empty or random project? WARNING: Either option will erase all current data.',
+      //     'Empty',
+      //     'Random',
+      //     'Cancel',
+      //     false,
+      //     projectId
+      // )
+
       const modalPayload = new ModalOpenPayload(
-          createNewProjectDialogModalId,
+          createNewProjectWarningDialogModalId,
           'Warning',
           'You are about to create a new project. This will erase all current data. Are you sure?',
           'Continue',
+          undefined,
           'Cancel',
           false,
           projectId
@@ -201,8 +213,9 @@ export default {
     }
 
     watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
-      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === createNewProjectDialogModalId) {
+      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === createNewProjectWarningDialogModalId) {
         if (modalResponsePayload[0].getResponse()) {
+          //alert(modalResponsePayload[0].getRelayData())
           createNewProject()
         }
       }

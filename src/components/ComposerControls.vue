@@ -404,7 +404,6 @@ export default {
       }
       pausedAt = 0;
       startedAt = 0;
-      console.log('isPlaying', 'stop()')
       isPlaying.value = false;
     }
 

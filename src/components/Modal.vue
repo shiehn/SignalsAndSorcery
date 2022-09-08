@@ -14,6 +14,10 @@
               class="border-2 border-black ml-2 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
         {{ confirmBtnText }}
       </button>
+      <button v-if="confirmBtnTextTwo" @click="confirmClickTwo()"
+              class="border-2 border-black ml-2 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+        {{ confirmBtnTextTwo }}
+      </button>
     </div>
   </div>
 </template>
@@ -35,6 +39,7 @@ export default {
     const isTextInput = ref(false)
     const isMobile = ref(store.isMobile ? true : false)
     const confirmBtnText = ref(undefined)
+    const confirmBtnTextTwo = ref(undefined)
     const cancelBtnText = ref(undefined)
     const open = ref(false)
     const textInput = ref(undefined)
@@ -46,6 +51,7 @@ export default {
       body.value = undefined
       isTextInput.value = false
       confirmBtnText.value = undefined
+      confirmBtnTextTwo.value = undefined
       cancelBtnText.value = undefined
       open.value = false
       textInput.value = undefined
@@ -62,6 +68,25 @@ export default {
       let response = true
       if (isTextInput.value) {
         response = textInput.value
+      }
+
+      if(confirmBtnTextTwo.value){
+        relayData = confirmBtnText.value
+      }
+
+      const modalResponsePayload = new ModalResponsePayload(id.value, response, relayData)
+      emit('modalResponse', modalResponsePayload)
+      closeModal()
+    }
+
+    const confirmClickTwo = () => {
+      let response = true
+      if (isTextInput.value) {
+        response = textInput.value
+      }
+
+      if(confirmBtnTextTwo.value){
+        relayData = confirmBtnTextTwo.value
       }
 
       const modalResponsePayload = new ModalResponsePayload(id.value, response, relayData)
@@ -86,6 +111,7 @@ export default {
         body.value = modalPayload[0].getBody()
         isTextInput.value = modalPayload[0].getIsTextInput()
         confirmBtnText.value = modalPayload[0].getConfirmText()
+        confirmBtnTextTwo.value = modalPayload[0].getConfirmTextTwo()
         cancelBtnText.value = modalPayload[0].getCancelText()
         open.value = true
         relayData = modalPayload[0].getRelayData()
@@ -98,7 +124,9 @@ export default {
       cancelBtnText,
       cancelClick,
       confirmBtnText,
+      confirmBtnTextTwo,
       confirmClick,
+      confirmClickTwo,
       isTextInput,
       isMobile,
       open,

@@ -156,6 +156,7 @@ export default {
           'Warning',
           'You are about to permanently delete a project. Are you sure?',
           'Continue',
+          undefined,
           'Cancel',
           false,
           projectId
@@ -171,6 +172,7 @@ export default {
           'Warning',
           'You are about to open a project. This will erase all current data. Are you sure?',
           'Continue',
+          undefined,
           'Cancel',
           false,
           projectId

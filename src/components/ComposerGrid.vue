@@ -256,6 +256,7 @@ export default {
           'Rename Section',
           undefined,
           'Rename',
+          undefined,
           'Cancel',
           true,
           sectionId

@@ -52,8 +52,8 @@
     </div>
 
     <div v-for="row in leaderBoardRows" class="flex w-full justify-between border-b-2 border-gray-700 p-2 my-2">
-      <audio class="w-5/12 h-8 mr-4" controls
-             :src="row.preview_audio_url"
+      <audio ref="leaderBoardAudio" class="w-5/12 h-8 mr-4"  controls
+             :src="row.preview_audio_url" @playing="onPlaying"
              preload="auto">
         <p>Your browser does not support the <code>audio</code> element.</p>
       </audio>
@@ -108,6 +108,7 @@ export default {
     const toast = inject('toast')
     const isMobile = ref(store.isMobile ? true : false)
     const leaderBoardRows = ref([])
+    const leaderBoardAudio = ref(null)
     let showRateProject = ref(false)
     const showLoadingSpinner = ref(false)
     let projectToRate = undefined
@@ -188,6 +189,22 @@ export default {
       }
     }
 
+    const stopAllLeaderBoardAudio = (currentElement) => {
+      if (leaderBoardAudio.value && leaderBoardAudio.value.length > 0) {
+        leaderBoardAudio.value.forEach((audio) => {
+          if(audio != currentElement) {
+            audio.pause()
+          }
+        })
+      }
+    }
+
+    watch(() => bus.value.get('stopAllAudio'), async (callerId) => {
+      if (callerId != 'leader-board') {
+        stopAllLeaderBoardAudio()
+      }
+    })
+
     watch(() => bus.value.get('refreshLeaderBoard'), async (page) => {
       if (!page[0]) {
         page[0] = 0
@@ -208,7 +225,14 @@ export default {
       currentPage = leaderBoardResponse['pagination']['page']
       hasNextPage.value = leaderBoardResponse['pagination']['has_next']
       hasPrevPage.value = leaderBoardResponse['pagination']['has_prev']
+
+
     })
+
+    const onPlaying = (event) => {
+      emit('stopAllAudio', 'leader-board')
+      stopAllLeaderBoardAudio(event.currentTarget)
+    }
 
     return {
       copyHyperLink,
@@ -217,11 +241,14 @@ export default {
       imageAssets,
       isMobile,
       leaderBoardRows,
+      leaderBoardAudio,
+      onPlaying,
       openRateProject,
       pageResults,
       rateProject,
       showLoadingSpinner,
-      showRateProject
+      showRateProject,
+      stopAllLeaderBoardAudio,
     }
   }
 }
