@@ -3,6 +3,31 @@ import {BASE_API_URL} from "../constants/constants";
 
 export default class ComposerAPI {
 
+    async generateComposition() {
+        try {
+            const url = BASE_API_URL + `create/composition/`
+
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    // 'Authorization': 'Token ' + token,
+                }
+            };
+
+            let res = await axios.post(url, {}, axiosConfig)
+
+            if (res['data']) {
+                return res['data']
+            } else {
+                console.log('Error', "Unable to generate composition : " + res['error'])
+            }
+        } catch (e) {
+            console.log('Error', "Unable to generate composition : " + e)
+        }
+
+        return undefined
+    }
+
     async rateComposition(token, compositionId, rating) {
 
         try {

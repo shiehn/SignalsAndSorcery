@@ -111,7 +111,29 @@ export default {
       }
     }
 
-    const createNewProject = async () => {
+    const createRandomProject = async () => {
+      showLoadingSpinner.value = true
+      const project = await new ComposerAPI().generateComposition()
+      showLoadingSpinner.value = false
+
+      emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
+
+      const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(project)
+
+      store.state.projectId = retrievedRestoredData.projectId
+      store.state.projectVersionId = retrievedRestoredData.projectVersionId
+      store.state.projectName = retrievedRestoredData.projectName;
+      store.state.authorName = retrievedRestoredData.authorName;
+      store.state.globalBpm = retrievedRestoredData.globalBpm;
+      store.state.globalKey = retrievedRestoredData.globalKey;
+      store.state.grid = retrievedRestoredData.grid;
+
+      emit('renderMix')
+      emit('closeProjectsBoard')
+      emit('saveProjectToLocalStorage')
+    }
+
+    const createEmptyProject = async () => {
       const numOfGridRows = 5
       let numOfGridCols = 6
       let numOfSections = 2
@@ -187,27 +209,27 @@ export default {
 
     const createNewProjectWarningDialogModalId = 'newProjectWarning'
     const newProjectDialog = (projectId) => {
-      // const modalPayload = new ModalOpenPayload(
-      //     createNewProjectWarningDialogModalId,
-      //     'Empty or Random',
-      //     'Would you like an empty or random project? WARNING: Either option will erase all current data.',
-      //     'Empty',
-      //     'Random',
-      //     'Cancel',
-      //     false,
-      //     projectId
-      // )
-
       const modalPayload = new ModalOpenPayload(
           createNewProjectWarningDialogModalId,
-          'Warning',
-          'You are about to create a new project. This will erase all current data. Are you sure?',
-          'Continue',
-          undefined,
+          'Empty or Random',
+          'Would you like an empty or random project? WARNING: Either option will erase all current data.',
+          'Empty',
+          'Random',
           'Cancel',
           false,
           projectId
       )
+
+      // const modalPayload = new ModalOpenPayload(
+      //     createNewProjectWarningDialogModalId,
+      //     'Warning',
+      //     'You are about to create a new project. This will erase all current data. Are you sure?',
+      //     'Continue',
+      //     undefined,
+      //     'Cancel',
+      //     false,
+      //     projectId
+      // )
 
       emit('launchModal', modalPayload)
     }
@@ -215,8 +237,15 @@ export default {
     watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
       if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === createNewProjectWarningDialogModalId) {
         if (modalResponsePayload[0].getResponse()) {
-          //alert(modalResponsePayload[0].getRelayData())
-          createNewProject()
+          const projectType = modalResponsePayload[0].getRelayData().toLowerCase()
+          if(projectType === 'empty') {
+            createEmptyProject()
+          } else if (projectType === 'random') {
+            // createRandomProject()
+            createEmptyProject()
+          } else {
+            toast.error('Error creating new project')
+          }
         }
       }
     })
@@ -224,6 +253,9 @@ export default {
     watch(() => bus.value.get('saveProjectToLocalStorage'), async () => {
       if (store.state.grid && store.state.grid.length > 0) {
         let saveFormat = new SaveAndLoadAdapter().createSaveFormat(store.state)
+
+        console.log('SAVE_FORMAT', saveFormat)
+
         localStorage.setItem("sas-save", JSON.stringify(saveFormat));
       }
     })
