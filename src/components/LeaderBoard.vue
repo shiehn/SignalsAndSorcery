@@ -150,7 +150,6 @@ export default {
 
     const openRateProject = (projectId) => {
       projectToRate = projectId
-      console.log('projectId', projectId)
       showRateProject.value = true
     }
 

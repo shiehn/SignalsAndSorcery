@@ -112,6 +112,8 @@ export default {
     }
 
     const createRandomProject = async () => {
+      await createEmptyProject() //THIS IS A HACK BE CLEAR THE GRID
+
       showLoadingSpinner.value = true
       const project = await new ComposerAPI().generateComposition()
       showLoadingSpinner.value = false
@@ -238,11 +240,11 @@ export default {
       if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === createNewProjectWarningDialogModalId) {
         if (modalResponsePayload[0].getResponse()) {
           const projectType = modalResponsePayload[0].getRelayData().toLowerCase()
-          if(projectType === 'empty') {
+          if (projectType === 'empty') {
             createEmptyProject()
           } else if (projectType === 'random') {
-            // createRandomProject()
-            createEmptyProject()
+            createRandomProject()
+            // createEmptyProject()
           } else {
             toast.error('Error creating new project')
           }
@@ -253,11 +255,12 @@ export default {
     watch(() => bus.value.get('saveProjectToLocalStorage'), async () => {
       if (store.state.grid && store.state.grid.length > 0) {
         let saveFormat = new SaveAndLoadAdapter().createSaveFormat(store.state)
-
-        console.log('SAVE_FORMAT', saveFormat)
-
         localStorage.setItem("sas-save", JSON.stringify(saveFormat));
       }
+    })
+
+    watch(() => bus.value.get('generateRandomProject'), async () => {
+      createRandomProject()
     })
 
     watch(() => bus.value.get('loadProjectFromLocalStorage'), async () => {

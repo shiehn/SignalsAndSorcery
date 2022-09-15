@@ -320,7 +320,12 @@ export default {
           new GridProcessor(store.state.grid).addSection('part_2', 6)
         }
 
-        emit('loadProjectFromLocalStorage')
+        if (localStorage.getItem("sas-save")) {
+          emit('loadProjectFromLocalStorage')
+        } else {
+          //GENERATE RANDOM
+          emit('generateRandomProject')
+        }
       })
 
       nextTick(() => {
