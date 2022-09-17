@@ -81,9 +81,11 @@ export default {
 
     const hostType = ref(props.stem.host)
 
-
     let currentTime = 0
     let duration = 0
+
+    //by default the play button should be showing
+    props.stem.previewPlayIconPath = store.state.staticUrl + 'icons/play-button.png' + "?x-request=html"
 
     // Make sure to reset the refs before each update.
     onBeforeUpdate(() => {
@@ -130,15 +132,14 @@ export default {
 
       if (isPlaying()) {
         audioTag.value.pause()
-        stem.previewPlayIconPath = stem.previewPlayIconPath
+        stem.previewPlayIconPath = store.state.staticUrl + 'icons/play-button.png'
       } else {
         audioTag.value.load()
         audioTag.value.play()
         audioTag.value.onloadedmetadata = function () {
           duration = audioTag.value.duration
         };
-
-        stem.previewPlayIconPath = stem.previewStopIconPath
+        stem.previewPlayIconPath = store.state.staticUrl + 'icons/stop-button.png'
       }
     }
 
@@ -172,9 +173,8 @@ export default {
         stem['host'] = 'grid' //THIS ALLOWS THE ASSET TO CHANGE DIMENSIONS DYNAMICALLY
 
         gridItem.stem = stem
-        gridItem['deleteIconPath'] = 'icons/delete-x.png'
-        gridItem['previewPlayIconPath'] = 'icons/play-button.png'
-
+        gridItem['deleteIconPath'] = store.state.staticUrl + 'icons/delete-x.png'
+        gridItem['previewPlayIconPath'] = store.state.staticUrl + 'icons/play-button.png'
         store.state.updateGlobalBpm()
         store.state.updateGlobalKey()
 

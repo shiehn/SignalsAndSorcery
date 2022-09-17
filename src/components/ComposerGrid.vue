@@ -23,7 +23,7 @@
              v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
              @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
           <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem"></asset>
-          <img v-if="gridRowItem.showDeleteIcon" :src="imageUrls.staticUrl + gridRowItem.deleteIconPath"
+          <img v-if="gridRowItem.showDeleteIcon" :src="imageUrls.deleteIconPath"
                @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
                class="w-8 h-8 absolute top-0 right-0 bg-white ml-1 mt-1 rounded-md">
         </div>
@@ -76,7 +76,7 @@
            v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
            @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
         <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
-        <img v-if="gridRowItem.showDeleteIcon" :src="imageUrls.staticUrl + gridRowItem.deleteIconPath"
+        <img v-if="gridRowItem.showDeleteIcon" :src="imageUrls.deleteIconPath"
              @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
              class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
       </div>
@@ -117,6 +117,7 @@ export default {
       editIcon: store.state.staticUrl + 'icons/edit.png',
       plusIcon: store.state.staticUrl + "icons/plus.png",
       minusIcon: store.state.staticUrl + "icons/minus.png",
+      deleteIconPath: store.state.staticUrl + 'icons/delete-x.png',
     }
     const isMobile = ref(store.isMobile ? true : false)
 
@@ -146,8 +147,8 @@ export default {
 
       const gridItem = store.state.grid[row].value[col]
       gridItem.stem = stem
-      gridItem['deleteIconPath'] = 'icons/delete-x.png'
-      gridItem['previewPlayIconPath'] = 'icons/play-button.png'
+      // gridItem['deleteIconPath'] = 'icons/delete-x.png'
+      gridItem['previewPlayIconPath'] = imageUrls.staticUrl + 'icons/play-button.png'
 
       store.state.updateGlobalBpm()
       store.state.updateGlobalKey()
@@ -350,9 +351,6 @@ export default {
     });
 
     watch(store.state.grid, () => {
-
-      console.log('GRID CHANGE!')
-
       emit('gridDrawCompleted', {
         'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
       })

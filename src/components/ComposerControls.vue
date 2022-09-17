@@ -44,7 +44,7 @@
     </div>
   </div>
 
-
+  <loading-spinner :showLoadingProp="showLoadingSpinner"></loading-spinner>
 </template>
 
 <script>
@@ -56,10 +56,11 @@ import Crunker from "crunker";
 import GridProcessor from "../processors/grid-processor";
 import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
 import {BUILD_NUMBER} from "../constants/constants";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default {
   name: "ComposerControls",
-  components: {ComposerControlsScrollBar},
+  components: {ComposerControlsScrollBar, LoadingSpinner},
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
@@ -91,6 +92,7 @@ export default {
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
     }
 
+    const showLoadingSpinner = ref(false)
     const buildNumber = ref(BUILD_NUMBER)
 
     onMounted(() => {
@@ -342,9 +344,7 @@ export default {
     }
 
     const play = async (offsetStartPercentage) => {
-
-      // initAudio()
-
+      showLoadingSpinner.value = true
       if (store.state.clipCount() < 1) {
         toast.warning('Add clips to the arranger!');
       }
@@ -389,6 +389,7 @@ export default {
       }
 
       emit('disableAnimateSelector')
+      showLoadingSpinner.value = false
     }
 
     const stopButton = () => {
@@ -541,6 +542,7 @@ export default {
       pause,
       progressBarStart,
       progressBar,
+      showLoadingSpinner,
       stopButton,
       // renderArpeggios,
       renderMix,
