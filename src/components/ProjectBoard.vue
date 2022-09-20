@@ -76,6 +76,7 @@ import SaveAndLoadAdapter from "../persistence/save-load-adapter";
 import ModalOpenPayload from "./ModalOpenPayload";
 import useEventsBus from "../events/eventBus";
 import LoadingSpinner from "./LoadingSpinner";
+import Analytics from "../analytics/Analytics";
 
 export default {
   name: "ProjectBoard",
@@ -142,11 +143,11 @@ export default {
       store.state.globalKey = retrievedRestoredData.globalKey;
       store.state.grid = retrievedRestoredData.grid;
 
-      console.log('retrievedRestoredData.grid', retrievedRestoredData.grid)
-
       emit('renderMix')
       emit('closeProjectsBoard')
       emit('saveProjectToLocalStorage')
+
+      new Analytics().trackLoad()
     }
 
     const openDeleteProjectDialogModalId = 'openDeleteProjectWarning'

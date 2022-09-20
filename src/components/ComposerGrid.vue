@@ -294,7 +294,9 @@ export default {
       }
 
       if (gridInnerContainer.value.clientWidth != gridContainerRows.value[0].scrollWidth) {
-        gridInnerContainer.value.style.width = gridContainerRows.value[0].scrollWidth + 'px'
+        if(gridInnerContainer.value) {
+          gridInnerContainer.value.style.width = gridContainerRows.value[0].scrollWidth + 'px'
+        }
       }
     }
 
@@ -302,7 +304,10 @@ export default {
       if (!isMobile.value) {
         return
       }
-      gridInnerContainer.value.style.width = screen.availWidth + 'px'
+
+      if(gridInnerContainer.value) {
+        gridInnerContainer.value.style.width = screen.availWidth + 'px'
+      }
     }
 
     onMounted(() => {

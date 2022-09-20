@@ -1,5 +1,4 @@
 <template>
-
   <div v-if="isMobile" class="flex w-full border-4 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
        style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
@@ -65,6 +64,7 @@ import ComposerAPI from "../dal/ComposerAPI";
 import ProjectBoard from "./ProjectBoard";
 import GridGenerator from "../generators/grid-generator";
 import ModalOpenPayload from "./ModalOpenPayload";
+import Analytics from "../analytics/Analytics";
 
 export default {
   name: "AdminPanel",
@@ -109,6 +109,9 @@ export default {
       } else {
         toast.error('Error exporting project')
       }
+
+
+      new Analytics().trackExportPackage()
     }
 
     const createRandomProject = async () => {
@@ -133,6 +136,8 @@ export default {
       emit('renderMix')
       emit('closeProjectsBoard')
       emit('saveProjectToLocalStorage')
+
+      new Analytics().trackCreateRandom()
     }
 
     const createEmptyProject = async () => {
@@ -156,6 +161,8 @@ export default {
       emit('renderMix')
       emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
       emit('disableAnimateSelector')
+
+      new Analytics().trackCreateEmpty()
     }
 
 
@@ -194,6 +201,8 @@ export default {
         }
 
         emit('saveProjectToLocalStorage')
+
+        new Analytics().trackSave()
       }
     }
 
@@ -221,17 +230,6 @@ export default {
           false,
           projectId
       )
-
-      // const modalPayload = new ModalOpenPayload(
-      //     createNewProjectWarningDialogModalId,
-      //     'Warning',
-      //     'You are about to create a new project. This will erase all current data. Are you sure?',
-      //     'Continue',
-      //     undefined,
-      //     'Cancel',
-      //     false,
-      //     projectId
-      // )
 
       emit('launchModal', modalPayload)
     }

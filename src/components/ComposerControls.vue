@@ -2,13 +2,16 @@
   <div v-if="isMobile" class="flex justify-center"
        v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.9) ' + progressBarStart + '%, rgba(200, 247, 197,0.9) ' + progressBar + '%,  rgba(255,255,255,0.9) ' + progressBar + '%' }">
     <div class="flex w-full justify-center my-2">
+      <button @click="randomizeButton()"><img :src="imageAssets.randomizeBtn"
+                                              class="h-10 w-10 rounded-full hover:ring-4 hover:ring-orange-500"/>
+      </button>
       <button v-if="isPlaying === false" @click="play()"><img
           :src="imageAssets.playBtn"
-          class="h-16 w-16 rounded-full hover:ring-4 hover:ring-green-500"/>
+          class="h-16 w-16 ml-4 rounded-full hover:ring-4 hover:ring-green-500"/>
       </button>
       <button v-if="isPlaying === true" @click="pause()" class=""><img
           :src="imageAssets.pauseBtn"
-          class="h-16 w-16 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
+          class="h-16 w-16 ml-4 rounded-full hover:ring-4 hover:ring-orange-500"/>
       </button>
       <button @click="stopButton()"><img :src="imageAssets.stopBtn"
                                          class="h-10 w-10 ml-4 rounded-full hover:ring-4 hover:ring-red-500"/></button>
@@ -57,6 +60,8 @@ import GridProcessor from "../processors/grid-processor";
 import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
 import {BUILD_NUMBER} from "../constants/constants";
 import LoadingSpinner from "./LoadingSpinner";
+import ModalOpenPayload from "./ModalOpenPayload";
+import Analytics from "../analytics/Analytics";
 
 export default {
   name: "ComposerControls",
@@ -89,6 +94,7 @@ export default {
       playBtn: store.state.staticUrl + 'icons/play-button.png',
       pauseBtn: store.state.staticUrl + 'icons/pause-button.png',
       stopBtn: store.state.staticUrl + 'icons/stop-button.png',
+      randomizeBtn: store.state.staticUrl + 'icons/refresh-icon.png',
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
     }
 
@@ -335,11 +341,13 @@ export default {
     }
 
     const initAudio = () => {
+      showLoadingSpinner.value = true
       initAudioTag.value.load()
       initAudioTag.value.play()
       setTimeout(() => {
         initAudioTag.value.pause()
         showInitAudio.value = false
+        showLoadingSpinner.value = false
       }, 2000);
     }
 
@@ -390,6 +398,8 @@ export default {
 
       emit('disableAnimateSelector')
       showLoadingSpinner.value = false
+
+      new Analytics().trackPlay()
     }
 
     const stopButton = () => {
@@ -440,7 +450,34 @@ export default {
       let crunker = new Crunker();
       let output = crunker.export(buffer, 'audio/mp3')
       await crunker.download(output.blob, 'signals_and_sorcery') //TODO: the name should be the project name
+
+      new Analytics().trackExportMP3()
     }
+
+    const randomizeNewProjectWarningDialogModalId = 'randomizeNewProjectWarningDialogModalId'
+    const randomizeButton = async () => {
+      const modalPayload = new ModalOpenPayload(
+          randomizeNewProjectWarningDialogModalId,
+          'Warning',
+          'You are about to generate a new project. This will erase all current data. Are you sure?',
+          'Continue',
+          undefined,
+          'Cancel',
+          false,
+          undefined,
+      )
+
+      emit('launchModal', modalPayload)
+    }
+
+    watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
+      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === randomizeNewProjectWarningDialogModalId) {
+        if (modalResponsePayload[0].getResponse()) {
+          //GENERATE RANDOM PROJECT
+          emit('generateRandomProject')
+        }
+      }
+    })
 
     watch(() => bus.value.get('displayRenderBtn'), (payload) => {
       displayRenderBtn.value = payload[0]
@@ -544,7 +581,7 @@ export default {
       progressBar,
       showLoadingSpinner,
       stopButton,
-      // renderArpeggios,
+      randomizeButton,
       renderMix,
     }
   }

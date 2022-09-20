@@ -63,6 +63,7 @@ import GridProcessor from "../processors/grid-processor";
 import {v4} from "uuid";
 import store from "../store/store";
 import {ROW_TO_TYPE_MAP} from "../constants/constants";
+import Analytics from "../analytics/Analytics";
 
 export default {
   name: "Asset",
@@ -140,6 +141,8 @@ export default {
           duration = audioTag.value.duration
         };
         stem.previewPlayIconPath = store.state.staticUrl + 'icons/stop-button.png'
+
+        new Analytics().trackPlayAsset()
       }
     }
 
