@@ -548,7 +548,7 @@ export default {
       }
 
       if (displayCurrentTime > displayDuration) {
-        await stop()
+        // await stop()
       }
     }
 

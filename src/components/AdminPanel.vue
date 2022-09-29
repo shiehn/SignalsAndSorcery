@@ -26,27 +26,44 @@
     </div>
   </div>
 
-  <div v-if="!isMobile" class="w-1/6 h-48 border-2 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
+  <div v-if="!isMobile" class="w-1/6 h-48 min-w-28 border-2 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
        style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
+
     <div class="flex justify-between">
-      <button @click="newProjectDialog()"
-              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
-          :src="imageAssets.newProject" class="h-6"/>
-      </button>
-      <button @click="saveProject()"
-              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
-          :src="imageAssets.saveBtn" class="h-6"/>
-      </button>
-      <button @click="downloadMix()"
-              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
-          :src="imageAssets.downloadMP3" class="h-6"/>
-      </button>
-      <button @click="exportProject()"
-              class="border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
-          :src="imageAssets.downloadBtn" class="h-6"/>
-      </button>
+<!--      <div class="w-1/2 border-2 border-black p-1 rounded-md mr-2"><img-->
+<!--          :src="imageAssets.refreshBtn"/></div>-->
+      <div class="w-1/2">
+        <button @click="newProjectDialog()"
+                class="h-16 w-16">
+          <img
+              :src="imageAssets.refreshBtn" class="rounded-full hover:ring-4 hover:ring-green-500"/>
+        </button>
+      </div>
+
+
+      <div class="grid grid-cols-2 gap-1 w-1/2 h-18 justify-between">
+        <button @click="saveProject()"
+                class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
+            :src="imageAssets.saveBtn" class="h-5"/>
+        </button>
+        <button @click="downloadMix()"
+                class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
+            :src="imageAssets.downloadMP3" class="h-5"/>
+        </button>
+        <button @click="exportProject()"
+                class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
+            :src="imageAssets.downloadBtn" class="h-5"/>
+        </button>
+        <button
+                class="w-8 h-8 border-2 border-black p-1 rounded-md opacity-50">
+<!--          <img :src="imageAssets.newProject" class="h-5"/>-->
+        </button>
+      </div>
     </div>
+
+
+
   </div>
 
   <project-board v-if="showProjectsBoard"></project-board>
@@ -82,6 +99,7 @@ export default {
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
       downloadMP3: store.state.staticUrl + 'icons/file-symbol-mp3.png',
       newProject: store.state.staticUrl + 'icons/new-icon.png',
+      refreshBtn: store.state.staticUrl + 'icons/refresh-icon.png',
     }
     const showProjectsBoard = ref(false)
 

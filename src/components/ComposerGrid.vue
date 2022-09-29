@@ -138,6 +138,7 @@ export default {
     const onDrop = (evt, row, col) => {
       if (store.state.grid[row].value[col].compatibility === 0 || store.state.grid[row].value[col].compatibility === -1) {
         //NOT COMPATIBLE/PREVENT DROP
+        //alert('NOT COMPATIBLE')
         return
       }
 

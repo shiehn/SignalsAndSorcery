@@ -10,15 +10,17 @@
       <input readonly v-model="store.state.authorName" placeholder="author"
              class="w-2/3 ml-2 text-sm px-2"/>
     </div>
-    <div class="flex w-full h-6 mb-2 overflow-clip">
-      <div class="w-1/3 m-auto font-bold text-sm">BPM:</div>
-      <div v-if="store.state.globalBpm" class="w-2/3 ml-2">{{ store.state.globalBpm }}</div>
-      <div v-if="!store.state.globalBpm" class="w-2/3 ml-2"> ---</div>
-    </div>
-    <div class="flex w-full h-6 mb-2 overflow-clip">
-      <div class="w-1/3 m-auto font-bold text-sm">KEY:</div>
-      <div v-if="store.state.globalKey" class="w-2/3 ml-2">{{ store.state.globalKey }}</div>
-      <div v-if="!store.state.globalKey" class="w-2/3 ml-2"> ---</div>
+    <div class="flex w-full mb-1 justify-between overflow-clip">
+      <div class="flex w-1/2 h-6">
+        <div class="w-1/3 m-auto font-bold text-sm">BPM:</div>
+        <div v-if="store.state.globalBpm" class="w-2/3 ml-2">{{ store.state.globalBpm }}</div>
+        <div v-if="!store.state.globalBpm" class="w-2/3 ml-2"> ---</div>
+      </div>
+      <div class="flex w-1/2 h-6">
+        <div class="w-1/3 m-auto font-bold text-sm">KEY:</div>
+        <div v-if="store.state.globalKey" class="w-2/3 ml-2">{{ store.state.globalKey }}</div>
+        <div v-if="!store.state.globalKey" class="w-2/3 ml-2"> ---</div>
+      </div>
     </div>
   </div>
 

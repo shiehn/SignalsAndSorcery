@@ -146,6 +146,15 @@ export default {
       }
     }
 
+    function is_row_type_match(targetRow, stem) {
+      let stemType = stem.type
+      if (stemType == 'hit' || stemType == 'riser') {
+        stemType = 'fill'
+      }
+
+      return targetRow != ROW_TO_TYPE_MAP.indexOf(stemType);
+    }
+
     const onPlayOrTransferClip = (stemInput) => {
       //CHECK IF A GRID ITEM IS SET TO ACCEPT MOBILE TRANSFER
       const mobileTransferEnabledGridItem = new GridProcessor(store.state.grid).getMobileTransferEnabledGridItem()
@@ -155,19 +164,17 @@ export default {
         const stemStr = JSON.stringify(stemInput)
         const stem = JSON.parse(stemStr)
 
-
-
         const targetRow = mobileTransferEnabledGridItem[0]
         const targetCol = mobileTransferEnabledGridItem[1]
 
         //first determine if the row is the same
-        if (targetRow != ROW_TO_TYPE_MAP.indexOf(stem.type)) {
+        if (is_row_type_match(targetRow, stem)) {
           return
         }
 
         const gridItem = store.state.grid[targetRow].value[targetCol]
 
-        if(gridItem && gridItem.stem && gridItem.stem.instanceId === stem.instanceId) {
+        if (gridItem && gridItem.stem && gridItem.stem.instanceId === stem.instanceId) {
           onPlayClip(stemInput)
           return
         }

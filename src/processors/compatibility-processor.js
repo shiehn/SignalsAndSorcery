@@ -26,7 +26,7 @@ export default class CompatibilityProcessor {
 
     getChordCompatibilityForColumn(col) {
 
-        if(this.stem.type == 'drum' || this.stem.type == 'fill'){
+        if (this.stem.type == 'drum' || this.stem.type == 'fill') {
             return RATING.GREEN
         }
 
@@ -34,7 +34,7 @@ export default class CompatibilityProcessor {
 
         for (let row = 0; row < this.state.grid.length; row++) {
             if (this.state.grid[row].value[col].stem) {
-                if (this.state.grid[row].value[col].stem.type != 'drum' && this.state.grid[row].value[col].stem.type != 'fill') {
+                if (this.state.grid[row].value[col].stem.type != 'drum') {
                     if (!chords) {
                         chords = this.state.grid[row].value[col].stem.chords
                     }
@@ -46,7 +46,30 @@ export default class CompatibilityProcessor {
             return RATING.GREEN
         }
 
+
         //CHORDS DO EXIST IN ROW
+        // IF HIT MATCH ON FIRST CHORD
+        if(this.stem.type == 'hit') {
+            let colChord = chords.split(':')[0]
+            let stemChord = this.stem.chords.split(':')[0]
+
+            if(colChord == stemChord) {
+                return RATING.GREEN
+            }
+        }
+
+        // IF RISER MATCH ON LAST CHORD
+        if(this.stem.type == 'riser') {
+            let colChord = chords.split(':')[3]
+            let stemChord = this.stem.chords.split(':')[3]
+
+            if(colChord == stemChord) {
+                return RATING.GREEN
+            }
+        }
+
+
+        // OTHERWISE MATCH ON ALL CHORDS
         if (chords === this.stem.chords) {
             return RATING.GREEN
         }
@@ -63,15 +86,26 @@ export default class CompatibilityProcessor {
             for (let col = 0; col < this.state.grid[row].value.length; col++) {
                 if (!this.state.grid[row].value[col].stem) {
 
+                    //TODO: if stem is a hit, match on first chord
+                    //TODO: if stem is a riser, match on last chord
+
                     //CHECK CHORD COMPATIBILITY
                     const chordCompatibility = this.getChordCompatibilityForColumn(col)
-                    if(chordCompatibility === RATING.RED) {
+                    if (chordCompatibility === RATING.RED) {
                         this.state.grid[row].value[col].compatibility = RATING.RED
                         continue
                     }
 
+
+                    //TODO: if stem is a hit, match on first chord
+
                     // wrong type is red
-                    if (ROW_TO_TYPE_MAP[row] !== this.stem.type) {
+                    let stemType = this.stem.type
+                    if (stemType == 'hit' || stemType == 'riser') {
+                        stemType = 'fill'
+                    }
+
+                    if (ROW_TO_TYPE_MAP[row] !== stemType) {
                         this.state.grid[row].value[col].compatibility = RATING.RED
                         continue
                     }

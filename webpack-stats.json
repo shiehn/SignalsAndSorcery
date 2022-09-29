@@ -3,7 +3,7 @@
   "assets": {
     "main.js": {
       "name": "main.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/frontend/dist/main.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.js",
       "publicPath": "/static/dist/main.js"
     }
   },

@@ -22,6 +22,10 @@ export default class AssetSelectionFilter {
                 return true
             }
 
+            if (this.type === 'fill') {
+                return stem.type == 'hit' || stem.type == 'riser'
+            }
+
             return stem.type == this.type
         })
 
@@ -45,56 +49,3 @@ export default class AssetSelectionFilter {
         return filteredByChords
     }
 }
-
-
-/*
-const getFilteredStems = computed(() => {
-
-      if (filterBpm.value != prevFilterBpm || filterType.value != prevFilterType) {
-        prevFilterBpm = filterBpm.value;
-        prevFilterType = filterType.value;
-        pageIndex.value = 0
-      }
-
-      console.log('stemSelections.arr', stemSelections.arr)
-
-      let filteredByBpm = stemSelections.arr.filter(stem => {
-        if (filterBpm.value == 0) {
-          return true
-        }
-
-        return Math.round(stem.bpm) == filterBpm.value
-      })
-
-      let filteredByType = filteredByBpm.filter(stem => {
-        if (filterType.value === 'all') {
-          return true
-        }
-
-        return stem.type == filterType.value
-      })
-
-      let filteredByKey = filteredByType.filter(stem => {
-        if (filterKey.value === 'all') {
-          return true
-        }
-
-        return stem.key.toLowerCase() == filterKey.value.toLowerCase()
-      })
-
-      //TODO: FILTER BY CHORDS:
-      let filteredByChords = filteredByKey.filter(stem => {
-        if (filterChord.value === 'all') {
-          return true
-        }
-
-        return stem.chords.toLowerCase() == filterChord.value
-      })
-
-      totalResults = filteredByChords.length
-
-      const pagedResults = filteredByChords.slice(pageIndex.value, pageIndex.value + numOfResults)
-
-      return pagedResults
-    })
- */
