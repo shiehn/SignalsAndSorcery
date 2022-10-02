@@ -154,6 +154,7 @@ export default {
       emit('renderMix')
       emit('closeProjectsBoard')
       emit('saveProjectToLocalStorage')
+      emit('resetCompatibility')
 
       new Analytics().trackCreateRandom()
     }
@@ -179,6 +180,7 @@ export default {
       emit('renderMix')
       emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
       emit('disableAnimateSelector')
+      emit('resetCompatibility')
 
       new Analytics().trackCreateEmpty()
     }
@@ -290,6 +292,8 @@ export default {
         store.state.globalBpm = retrievedRestoredData.globalBpm;
         store.state.globalKey = retrievedRestoredData.globalKey;
         store.state.grid = retrievedRestoredData.grid;
+
+        emit('resetCompatibility')
       }
     })
 

@@ -388,7 +388,6 @@ export default {
 
         startedAt = store.context.currentTime - offset;
         pausedAt = 0;
-        console.log('isPlaying', 'play()')
         isPlaying.value = true;
       } else {
         if (await renderMix()) {

@@ -146,6 +146,7 @@ export default {
       emit('renderMix')
       emit('closeProjectsBoard')
       emit('saveProjectToLocalStorage')
+      emit('resetCompatibility')
 
       new Analytics().trackLoad()
     }

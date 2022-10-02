@@ -147,11 +147,7 @@ export default {
         pageIndex.value = 0
       }
 
-      console.log('filterType.value', filterType.value)
-
       const filteredStems = new AssetSelectionFilter(stemSelections.arr, filterBpm.value, filterType.value, filterKey.value, filterChord.value).filter()
-
-
 
       if(isMobile.value){
         filteredStems.forEach(stem => {

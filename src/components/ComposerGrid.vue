@@ -370,6 +370,10 @@ export default {
       resetCompatibility()
     })
 
+    watch(() => bus.value.get('resetCompatibility'), () => {
+      resetCompatibility()
+    })
+
     const progressBarStart = ref(0)
     const progressBarMidA = ref(0)
     const progressBarMidB = ref(0)
