@@ -1,31 +1,4 @@
 <template>
-
-  <li v-if="!isMobile"
-      class="drag-el list-none bg-cover w-16 h-16 relative rounded-lg overflow-hidden shadow-lg"
-      draggable="true"
-      @dragstart="startDrag($event, stem)"
-      @dragend="endDrag($event)"
-      v-on:mouseover="mouseOverGridItem(stem)"
-      v-on:mouseleave="mouseLeaveGridItem(stem)"
-      @click="onPlayClip(stem)"
-      v-bind:style="{ backgroundImage: 'url(' + stem.waveform + ')',  }">
-
-    <div class="w-full h-full absolute top-0 left-0 hover:shadow-lg hover:cursor-move"
-         v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.5) ' + progressBar + '%, rgba(255, 255, 255, 0) ' + progressBar + '%' }">
-      <div v-if="stem.type != 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">
-        {{ stem.chords }}
-      </div>
-      <div v-if="stem.type == 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">drum
-      </div>
-      <img :src=stem.previewPlayIconPath class="w-4 h-4 absolute bottom-0 m-0.5">
-      <div class="absolute bottom-0 right-0 p-1 text-xs bg-red-200 bg-opacity-50">{{ stem.bpm }}</div>
-      <audio :ref="el => { audioTag = el }" loop>
-        <source v-bind:src=stem.source type="audio/mpeg"/>
-        Your browser does not support the audio element.
-      </audio>
-    </div>
-  </li>
-
   <li v-if="isMobile"
       class="list-none bg-contain w-32 h-16 relative overflow-hidden shadow-lg"
       :class="{
@@ -54,6 +27,35 @@
       </audio>
     </div>
   </li>
+
+  <li v-if="!isMobile"
+      class="drag-el list-none bg-cover h-16 p-1 relative rounded-lg overflow-hidden shadow-lg"
+      :class="{ 'w-full': isGrid == true, 'w-16': isGrid == false }"
+      draggable="true"
+      @dragstart="startDrag($event, stem)"
+      @dragend="endDrag($event)"
+      v-on:mouseover="mouseOverGridItem(stem)"
+      v-on:mouseleave="mouseLeaveGridItem(stem)"
+      @click="onPlayClip(stem)"
+      v-bind:style="{ backgroundImage: 'url(' + stem.waveform + ')',  'background-size': '100% 100%' }">
+
+    <div class="w-full h-full absolute top-0 left-0 hover:shadow-lg hover:cursor-move"
+         v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.5) ' + progressBar + '%, rgba(255, 255, 255, 0) ' + progressBar + '%' }">
+      <div v-if="stem.type != 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">
+        {{ stem.chords }} <span v-if="isGrid"> - {{ stem.bpm }}</span>
+      </div>
+      <div v-if="stem.type == 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">drum
+      </div>
+      <img :src=stem.previewPlayIconPath
+           class="w-4 h-4 absolute m-1 bg-white rounded-xl"
+           :class="{ 'bottom-2': isGrid == true, 'bottom-0': isGrid == false }">
+      <div v-if="!isGrid" class="absolute bottom-0 right-0 p-1 text-xs bg-red-200 bg-opacity-50">{{ stem.bpm }}</div>
+      <audio :ref="el => { audioTag = el }" loop>
+        <source v-bind:src=stem.source type="audio/mpeg"/>
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  </li>
 </template>
 
 <script>
@@ -70,11 +72,13 @@ export default {
   inheritAttrs: false,
   props: {
     stem: Object,
+    grid: Boolean,
   },
   setup(props) {
     let ignoreSelf = false
     const store = inject('store')
     const isMobile = ref(store.isMobile ? true : false)
+    const isGrid = ref(props.grid ? true : false)
     const {bus, emit} = useEventsBus()
 
     const audioTag = ref({})
@@ -230,6 +234,7 @@ export default {
       audioTag,
       endDrag,
       hostType,
+      isGrid,
       isMobile,
       mouseOverGridItem,
       mouseLeaveGridItem,

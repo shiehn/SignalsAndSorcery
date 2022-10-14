@@ -31,54 +31,59 @@
     </div>
   </div>
 
-  <div v-if="!isMobile" ref="gridContainer" class="rounded-lg w-11/12 overflow-x-scroll p-2"
+  <div v-if="!isMobile" ref="gridContainer" class="rounded-lg w-11/12"
        :style="playHeadCSS">
 
-    <div v-for="(gridRow, i) in getGridRows()">
-      <div v-if="i == 0" class="flex flex-none justify-between bg-black">
-        <div v-for="(gridRowItem, j) in gridRow.value" class="ml-1 mb-2 w-16 flex-none">
-          <div v-if="gridRowItem.section.position == 'start'" style="white-space: nowrap"
-               class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-white">
-            <span class="ml-2 text-white hover:cursor-move">{{ gridRowItem.section.name }}</span>
-          </div>
+<!--    <div v-for="(gridRow, i) in getGridRows()">-->
+<!--      <div v-if="i == 0" class="flex flex-none justify-between bg-black">-->
+<!--        <div v-for="(gridRowItem, j) in gridRow.value" class="ml-1 mb-2 w-16 flex-none">-->
+<!--          <div v-if="gridRowItem.section.position == 'start'" style="white-space: nowrap"-->
+<!--               class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-white">-->
+<!--            <span class="ml-2 text-white hover:cursor-move">{{ gridRowItem.section.name }}</span>-->
+<!--          </div>-->
 
-          <div v-if="gridRowItem.section.position == 'end'" class="ml-1 w-16 h-6 flex">
-            <button @click="editSection(gridRowItem.section.id)">
-              <img :src=imageUrls.editIcon class="w-4 h-4 bg-white rounded-full hover:ring-2 hover:ring-yellow-500">
-            </button>
+<!--          <div v-if="gridRowItem.section.position == 'end'" class="ml-1 w-16 h-6 flex">-->
+<!--            <button @click="editSection(gridRowItem.section.id)">-->
+<!--              <img :src=imageUrls.editIcon class="w-4 h-4 bg-white rounded-full hover:ring-2 hover:ring-yellow-500">-->
+<!--            </button>-->
 
-            <button @click="columnAdd(gridRowItem.section.id)">
-              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-1 bg-white rounded-full hover:ring-2 hover:ring-green-500">
-            </button>
+<!--            <button @click="columnAdd(gridRowItem.section.id)">-->
+<!--              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-1 bg-white rounded-full hover:ring-2 hover:ring-green-500">-->
+<!--            </button>-->
 
-            <button @click="columnRemove(gridRowItem.section.id)">
-              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-1 bg-white rounded-full hover:ring-2 hover:ring-red-500">
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+<!--            <button @click="columnRemove(gridRowItem.section.id)">-->
+<!--              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-1 bg-white rounded-full hover:ring-2 hover:ring-red-500">-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
     <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
-         class="flex flex-none justify-between">
-      <div v-for="gridRowItem in gridRow.value"
-           class="ml-1 mb-2 w-16 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg bg-white opacity-40 hover:bg-gray-500 hover:cursor-pointer"
-           :class="{
+         class="flex flex-none justify-between mb-2">
+      <div v-for="gridRowItem in gridRow.value" class="w-1/4 h-16 pr-2 py-1">
+        <div
+            class="w-full h-full overflow-hidden relative rounded-lg shadow-lg opacity-40 hover:bg-gray-500 hover:cursor-pointer"
+            :class="{
             'opacity-100': gridRowItem.stem,
             'bg-green-100': gridRowItem.compatibility === 2,
             'bg-yellow-100': gridRowItem.compatibility === 1,
             'bg-red-100': gridRowItem.compatibility === 0
         }"
-           @drop="onDrop($event, gridRowItem.row, gridRowItem.col)"
-           @dragover.prevent
-           @dragenter.prevent
-           v-on:mouseover="mouseOverGridItem(gridRowItem.row, gridRowItem.col)"
-           v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
-           @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
-        <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" class="absolute top-0 left-0"></asset>
-        <img v-if="gridRowItem.showDeleteIcon" :src="imageUrls.deleteIconPath"
-             @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
-             class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-md">
+            @drop="onDrop($event, gridRowItem.row, gridRowItem.col)"
+            @dragover.prevent
+            @dragenter.prevent
+            v-on:mouseover="mouseOverGridItem(gridRowItem.row, gridRowItem.col)"
+            v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
+            @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
+          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :grid=true class=""></asset>
+          <img v-if="gridRowItem.showDeleteIcon" :src="imageUrls.deleteIconPath"
+               @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
+               class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-xl">
+          <img v-if="gridRowItem.stem" :src="imageUrls.downloadIconPath"
+               @click.stop="downloadGridItem(gridRowItem.row, gridRowItem.col)"
+               class="w-6 h-6 absolute top-4 right-0 bg-white mr-1 mt-1 border-2 border-gray-400 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+        </div>
       </div>
     </div>
 
@@ -102,6 +107,7 @@ import ComposerControlsLoopBar from "./ComposerControlsLoopBar";
 import ArpeggioRenderer from "./arpeggiator/arpeggio-renderer";
 import {v4} from "uuid";
 import store from "../store/store";
+import Analytics from "../analytics/Analytics";
 
 export default {
   name: 'ComposerGrid',
@@ -118,6 +124,7 @@ export default {
       plusIcon: store.state.staticUrl + "icons/plus.png",
       minusIcon: store.state.staticUrl + "icons/minus.png",
       deleteIconPath: store.state.staticUrl + 'icons/delete-x.png',
+      downloadIconPath: store.state.staticUrl + 'icons/download-icon.svg',
     }
     const isMobile = ref(store.isMobile ? true : false)
 
@@ -162,6 +169,12 @@ export default {
 
       //NOT SURE IF THIS NEEDS TO HAPPEN ON EVERY DROP
       emit('saveProjectToLocalStorage')
+    }
+
+    const downloadGridItem = (row, col) => {
+      const gridItem = store.state.grid[row].value[col]
+      new Analytics().trackDownloadSingleWAV(gridItem.stem.source)
+      window.location.href = gridItem.stem.source
     }
 
     const removeGridItem = (row, col) => {
@@ -295,7 +308,7 @@ export default {
       }
 
       if (gridInnerContainer.value.clientWidth != gridContainerRows.value[0].scrollWidth) {
-        if(gridInnerContainer.value) {
+        if (gridInnerContainer.value) {
           gridInnerContainer.value.style.width = gridContainerRows.value[0].scrollWidth + 'px'
         }
       }
@@ -306,7 +319,7 @@ export default {
         return
       }
 
-      if(gridInnerContainer.value) {
+      if (gridInnerContainer.value) {
         gridInnerContainer.value.style.width = screen.availWidth + 'px'
       }
     }
@@ -395,7 +408,7 @@ export default {
 
       resizeInnerGridContainer()
 
-      progressBar.value = Math.round(progressInt * 0.01 * gridContainer.value.scrollWidth) + 10
+      progressBar.value = Math.round(progressInt * 0.01 * gridContainer.value.scrollWidth)
       //console.log('gridContainer.value.scrollWidth', gridContainer.value.scrollWidth)
       // progressBarStart.value = progressInt - 5
       progressBarStart.value = progressBar.value > 60 ? progressBar.value - 60 : 0
@@ -418,6 +431,7 @@ export default {
       arpeggioToggled,
       columnAdd,
       columnRemove,
+      downloadGridItem,
       editSection,
       isMobile,
       getGridRows,
@@ -481,9 +495,16 @@ export default {
 .init-pulse {
   animation: border-pulsate 2s infinite;
 }
+
 @keyframes border-pulsate {
-  0%   { border-color: rgba(34, 197, 94, 1); }
-  50% { border-color: rgba(34, 197, 94, 0); }
-  100%   { border-color: rgba(34, 197, 94, 1); }
+  0% {
+    border-color: rgba(34, 197, 94, 1);
+  }
+  50% {
+    border-color: rgba(34, 197, 94, 0);
+  }
+  100% {
+    border-color: rgba(34, 197, 94, 1);
+  }
 }
 </style>

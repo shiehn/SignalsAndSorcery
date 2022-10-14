@@ -14,7 +14,7 @@
             :src="imageAssets.saveBtn" class="w-8 h-6"/>
       </button>
       <button @click="downloadMix()"
-              class="border-2 border-black p-1 mr-1  rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+              class="border-2 border-black p-1 mr-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
         <img
             :src="imageAssets.downloadMP3" class="w-8 h-6"/>
       </button>

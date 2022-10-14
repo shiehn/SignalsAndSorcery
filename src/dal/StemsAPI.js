@@ -71,32 +71,9 @@ export class StemsAPI {
                 let permutationStems = res['data']['permutations']
                 stemsAndOptions.stems = [].concat(stemsAndOptions.stems, permutationStems)
 
-
-                //CREATE STEMS FROM FILLS
-                //CREATE STEMS FROM FILLS
-                //CREATE STEMS FROM FILLS
-                // let fills = []
-                // for (let stemIndex = 0; stemIndex < res['data']['fills'].length; stemIndex++) {
-                //     let fill = res['data']['fills'][stemIndex]
-                //     const bpm = fill['bpm']
-                //     for (let i = 0; i < fill['sources'].length; i++) {
-                //         let fillStem = {
-                //             id: v4(),
-                //             bpm: bpm,
-                //             chords: "fill",
-                //             key: "all",
-                //             source: fill['sources'][i]['mp3'],
-                //             type: "fill",
-                //             waveform: "https://sas-fills.s3.us-west-2.amazonaws.com/global-fill-icon.png"
-                //         }
-                //
-                //         fills.push(fillStem)
-                //     }
-                // }
-                //
-                // fills.forEach((fill) => {
-                //     stemsAndOptions['stems'].push(fill)
-                // })
+                //GET AI GENERATED CONTENT STEMS
+                let generatedContentStems = res['data']['generated_content']
+                stemsAndOptions.stems = [].concat(stemsAndOptions.stems, generatedContentStems)
 
                 //RANDOMIZE RESULTS TO PREVENT THE SAME CLIPS DISPLAYED FIRST
                 stemsAndOptions.stems = this.randomizeArray(stemsAndOptions.stems)

@@ -3,34 +3,38 @@ export default class Analytics {
     }
 
     trackPlay() {
-        gtag('event', 'play', { 'type': 'main' });
+        gtag('event', 'play', {'type': 'main'});
     }
 
     trackPlayAsset() {
-        gtag('event', 'play', { 'type': 'asset' });
+        gtag('event', 'play', {'type': 'asset'});
     }
 
     trackCreateRandom() {
-        gtag('event', 'generate', { 'type': 'random' });
+        gtag('event', 'generate', {'type': 'random'});
     }
 
     trackCreateEmpty() {
-        gtag('event', 'generate', { 'type': 'empty' });
+        gtag('event', 'generate', {'type': 'empty'});
     }
 
     trackSave() {
-        gtag('event', 'save', { 'type': 'save' });
+        gtag('event', 'save', {'type': 'save'});
     }
 
     trackExportPackage() {
-        gtag('event', 'export', { 'type': 'package' });
+        gtag('event', 'export', {'type': 'package'});
     }
 
     trackExportMP3() {
-        gtag('event', 'export', { 'type': 'mp3' });
+        gtag('event', 'export', {'type': 'mp3'});
+    }
+
+    trackDownloadSingleWAV(wavFileName) {
+        gtag('event', 'download', {'type': 'wav', 'file': wavFileName});
     }
 
     trackLoad() {
-        gtag('event', 'load', { 'type': 'project' });
+        gtag('event', 'load', {'type': 'project'});
     }
 }

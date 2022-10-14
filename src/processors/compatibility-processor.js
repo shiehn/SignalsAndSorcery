@@ -34,9 +34,13 @@ export default class CompatibilityProcessor {
 
         for (let row = 0; row < this.state.grid.length; row++) {
             if (this.state.grid[row].value[col].stem) {
-                if (this.state.grid[row].value[col].stem.type != 'drum') {
+                if (this.state.grid[row].value[col].stem.type != 'drum'
+                    && this.state.grid[row].value[col].stem.type != 'fill'
+                    && this.state.grid[row].value[col].stem.type != 'hit'
+                    && this.state.grid[row].value[col].stem.type != 'riser') {
                     if (!chords) {
                         chords = this.state.grid[row].value[col].stem.chords
+                        console.log('CHORDS FOR COLUMN', chords)
                     }
                 }
             }
