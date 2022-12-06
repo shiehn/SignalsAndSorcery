@@ -42,9 +42,24 @@ export default class AssetSelectionFilter {
                 return true
             }
 
+            if(stem.type === 'hit') {
+                //HITS NEED TO MATCH ONLY FIRST CHORD
+                const chord_a = this.chords.split(':')[0]
+                const chord_b = stem.chords.split(':')[0]
+
+                return chord_a == chord_b
+            }
+
+            if(stem.type === 'riser') {
+                //HITS NEED TO MATCH ONLY LAST CHORD
+                const chord_a = this.chords.split(':')[3]
+                const chord_b = stem.chords.split(':')[3]
+
+                return chord_a == chord_b
+            }
+
             return stem.chords == this.chords
         })
-
 
         return filteredByChords
     }

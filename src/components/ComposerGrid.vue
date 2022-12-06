@@ -219,7 +219,6 @@ export default {
       }
 
       if (ROW_TO_TYPE_MAP[row] == 'fill') {
-        chords = 'all'
         key = 'all'
       }
 

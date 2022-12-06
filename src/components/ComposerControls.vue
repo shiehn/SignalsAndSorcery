@@ -74,7 +74,7 @@ export default {
 
     const initAudioTag = ref({})
     const showInitAudio = ref(true)
-    const initAudioSrc = ref('https://sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131.s3.us-west-2.amazonaws.com/init-audio-sample.mp3')
+    const initAudioSrc = ref('https://sas-user-data.s3.us-west-2.amazonaws.com/sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131/init-audio-sample.mp3')
 
     let BUFFER_CACHE = {}
     let BUFFER_ROW_CACHE = []
