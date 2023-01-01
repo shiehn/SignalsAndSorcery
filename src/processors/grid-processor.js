@@ -151,7 +151,9 @@ export default class GridProcessor {
     clearRow = (rowIndex) => {
         for (let col = 0; col < this.grid[rowIndex].value.length; col++) {
             if (this.grid[rowIndex].value[col]) {
-                this.grid[rowIndex].value[col].clearStemAndArpeggio()
+                console.log('ROW:' + rowIndex, this.grid[rowIndex].value[col]);
+                // this.grid[rowIndex].value[col].clearStemAndArpeggio()
+                this.grid[rowIndex].value[col].stem = undefined;
             }
         }
     }

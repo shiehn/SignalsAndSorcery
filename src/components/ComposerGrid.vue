@@ -34,31 +34,6 @@
   <div v-if="!isMobile" ref="gridContainer" class="rounded-lg w-11/12"
        :style="playHeadCSS">
 
-<!--    <div v-for="(gridRow, i) in getGridRows()">-->
-<!--      <div v-if="i == 0" class="flex flex-none justify-between bg-black">-->
-<!--        <div v-for="(gridRowItem, j) in gridRow.value" class="ml-1 mb-2 w-16 flex-none">-->
-<!--          <div v-if="gridRowItem.section.position == 'start'" style="white-space: nowrap"-->
-<!--               class="ml-1 w-16 h-6 flex overflow-visible nowrap items-center border-l-2 border-white">-->
-<!--            <span class="ml-2 text-white hover:cursor-move">{{ gridRowItem.section.name }}</span>-->
-<!--          </div>-->
-
-<!--          <div v-if="gridRowItem.section.position == 'end'" class="ml-1 w-16 h-6 flex">-->
-<!--            <button @click="editSection(gridRowItem.section.id)">-->
-<!--              <img :src=imageUrls.editIcon class="w-4 h-4 bg-white rounded-full hover:ring-2 hover:ring-yellow-500">-->
-<!--            </button>-->
-
-<!--            <button @click="columnAdd(gridRowItem.section.id)">-->
-<!--              <img :src=imageUrls.plusIcon class="w-4 h-4 ml-1 bg-white rounded-full hover:ring-2 hover:ring-green-500">-->
-<!--            </button>-->
-
-<!--            <button @click="columnRemove(gridRowItem.section.id)">-->
-<!--              <img :src=imageUrls.minusIcon class="w-4 h-4 ml-1 bg-white rounded-full hover:ring-2 hover:ring-red-500">-->
-<!--            </button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-
     <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
          class="flex flex-none justify-between mb-2">
       <div v-for="gridRowItem in gridRow.value" class="w-1/4 h-16 pr-2 py-1">
@@ -90,6 +65,12 @@
 
     <composer-controls-loop-bar></composer-controls-loop-bar>
     <composer-controls-scroll-bar></composer-controls-scroll-bar>
+    <div class="w-full h-10 flex flex-none justify-between text-white">
+      <div class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer" @click="showAltInfo()">alt 1</div>
+      <div class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer" @click="showAltInfo()">alt 2</div>
+      <div class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer" @click="showAltInfo()">alt 3</div>
+      <div class="w-1/4 h-full flex justify-center items-center rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer" @click="showAltInfo()">alt 4</div>
+    </div>
   </div>
 </template>
 
@@ -368,6 +349,21 @@ export default {
       })
     });
 
+    const showAltInfo = () => {
+      const modalOpenPayload = new ModalOpenPayload(
+          'altInfoModal',
+          'Alternative Versions',
+          'Each project can have up to 4 versions.  All 4 versions are available when the project is loaded from within the DAW Plugin.',
+          undefined,
+          undefined,
+          'Close',
+          false,
+          undefined
+      )
+
+      emit('launchModal', modalOpenPayload)
+    }
+
     watch(store.state.grid, () => {
       emit('gridDrawCompleted', {
         'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
@@ -448,6 +444,7 @@ export default {
       progressBarMidA,
       progressBarMidB,
       playHeadCSS,
+      showAltInfo,
       removeGridItem,
     }
   },

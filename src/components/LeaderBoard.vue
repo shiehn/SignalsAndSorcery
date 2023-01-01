@@ -171,7 +171,7 @@ export default {
       showLoadingSpinner.value = false
 
       if (!res) {
-        toast.error('Error rating project')
+        toast.error('Login Required')
       } else {
         emit('refreshLeaderBoard', currentPage)
       }

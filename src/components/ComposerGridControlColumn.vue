@@ -20,17 +20,25 @@
         </div>
       </div>
       <div class="flex flex-col justify-evenly h-16 pl-2">
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleFX('hi')">FX
-        </div>
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleVol('hi')">Vol
-        </div>
+<!--        <div-->
+<!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
+<!--            @click="handleFX('hi')">FX-->
+<!--        </div>-->
+<!--        <div-->
+<!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
+<!--            @click="handleVol('hi')">Vol-->
+<!--        </div>-->
         <div
             class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
             @click="handleClearRow('hi')">Clr
+        </div>
+        <div
+            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:drop-shadow-m">
+          &nbsp;&nbsp;&nbsp;
+        </div>
+        <div
+            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
+          &nbsp;&nbsp;&nbsp;
         </div>
       </div>
     </div>
@@ -44,17 +52,25 @@
         </div>
       </div>
       <div class="flex flex-col justify-evenly h-16 pl-2">
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleFX('mid')">FX
-        </div>
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleVol('mid')">Vol
-        </div>
+<!--        <div-->
+<!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
+<!--            @click="handleFX('mid')">FX-->
+<!--        </div>-->
+<!--        <div-->
+<!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
+<!--            @click="handleVol('mid')">Vol-->
+<!--        </div>-->
         <div
             class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
             @click="handleClearRow('mid')">Clr
+        </div>
+        <div
+            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:drop-shadow-m">
+          &nbsp;&nbsp;&nbsp;
+        </div>
+        <div
+            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
+          &nbsp;&nbsp;&nbsp;
         </div>
       </div>
     </div>
@@ -68,17 +84,25 @@
         </div>
       </div>
       <div class="flex flex-col justify-evenly h-16 pl-2">
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleFX('low')">FX
-        </div>
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleVol('low')">Vol
-        </div>
+<!--        <div-->
+<!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
+<!--            @click="handleFX('low')">FX-->
+<!--        </div>-->
+<!--        <div-->
+<!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
+<!--            @click="handleVol('low')">Vol-->
+<!--        </div>-->
         <div
             class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
             @click="handleClearRow('low')">Clr
+        </div>
+        <div
+            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:drop-shadow-m">
+          &nbsp;&nbsp;&nbsp;
+        </div>
+        <div
+            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
+          &nbsp;&nbsp;&nbsp;
         </div>
       </div>
     </div>
@@ -92,17 +116,25 @@
         </div>
       </div>
       <div class="flex flex-col justify-evenly h-16 pl-2">
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleFX('drum')">FX
-        </div>
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleVol('drum')">Vol
-        </div>
+<!--        <div-->
+<!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
+<!--            @click="handleFX('drum')">FX-->
+<!--        </div>-->
+<!--        <div-->
+<!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
+<!--            @click="handleVol('drum')">Vol-->
+<!--        </div>-->
         <div
             class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
             @click="handleClearRow('drum')">Clr
+        </div>
+        <div
+            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:drop-shadow-m">
+          &nbsp;&nbsp;&nbsp;
+        </div>
+        <div
+            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
+          &nbsp;&nbsp;&nbsp;
         </div>
       </div>
     </div>
@@ -118,16 +150,25 @@
       <div class="flex flex-col justify-evenly h-16 pl-2">
         <div
             class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleFX('fill')">FX
-        </div>
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleVol('fill')">Vol
-        </div>
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
             @click="handleClearRow('fill')">Clr
         </div>
+        <div
+            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:drop-shadow-m">
+          &nbsp;&nbsp;&nbsp;
+        </div>
+        <div
+            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
+          &nbsp;&nbsp;&nbsp;
+        </div>
+<!--        <div-->
+<!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
+<!--            @click="handleFX('fill')">FX-->
+<!--        </div>-->
+<!--        <div-->
+<!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
+<!--            @click="handleVol('fill')">Vol-->
+<!--        </div>-->
+
       </div>
     </div>
 
