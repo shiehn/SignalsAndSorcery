@@ -109,7 +109,7 @@ export default {
     }
     const isMobile = ref(store.isMobile ? true : false)
 
-    const numOfGridRows = 5
+    const numOfGridRows = 6
     let numOfGridCols = 6
     let numOfSections = 2
 

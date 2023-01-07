@@ -31,8 +31,8 @@
     <global-track-values></global-track-values>
 
     <div class="flex justify-between">
-<!--      <div class="w-1/2 border-2 border-black p-1 rounded-md mr-2"><img-->
-<!--          :src="imageAssets.refreshBtn"/></div>-->
+      <!--      <div class="w-1/2 border-2 border-black p-1 rounded-md mr-2"><img-->
+      <!--          :src="imageAssets.refreshBtn"/></div>-->
       <div class="w-1/2">
         <button @click="newProjectDialog()"
                 class="h-16 w-16">
@@ -44,24 +44,26 @@
 
       <div class="grid grid-cols-2 gap-1 w-1/2 h-18 justify-between">
         <button @click="saveProject()"
-                class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
-            :src="imageAssets.saveBtn" class="h-5"/>
+                class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+          <img
+              :src="imageAssets.saveBtn" class="h-5"/>
         </button>
         <button @click="downloadMix()"
-                class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
-            :src="imageAssets.downloadMP3" class="h-5"/>
+                class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+          <img
+              :src="imageAssets.downloadMP3" class="h-5"/>
         </button>
         <button @click="exportProject()"
-                class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500"><img
-            :src="imageAssets.downloadBtn" class="h-5"/>
+                class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+          <img
+              :src="imageAssets.downloadBtn" class="h-5"/>
         </button>
         <button
-                class="w-8 h-8 border-2 border-black p-1 rounded-md opacity-50">
-<!--          <img :src="imageAssets.newProject" class="h-5"/>-->
+            class="w-8 h-8 border-2 border-black p-1 rounded-md opacity-50">
+          <!--          <img :src="imageAssets.newProject" class="h-5"/>-->
         </button>
       </div>
     </div>
-
 
 
   </div>
@@ -142,6 +144,8 @@ export default {
       emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
 
       const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(project)
+
+      console.log('retrievedRestoredData', retrievedRestoredData)
 
       store.state.projectId = retrievedRestoredData.projectId
       store.state.projectVersionId = retrievedRestoredData.projectVersionId
