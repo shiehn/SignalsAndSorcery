@@ -164,7 +164,7 @@ export default {
     }
 
     const createEmptyProject = async () => {
-      const numOfGridRows = 5
+      const numOfGridRows = 6
       let numOfGridCols = 6
       let numOfSections = 2
 
