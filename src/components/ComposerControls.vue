@@ -231,24 +231,12 @@ export default {
         if (!store.context || store.context.state === 'closed') {
           let AudioContext = window.AudioContext || window.webkitAudioContext;
           store.context = new AudioContext();
-
-          // initAudio()
         }
 
         if (unlockingAudioContext(store.context)) {
           return false
         }
 
-        // try {
-        //   await store.context.resume()
-        // } catch (e) {
-        //   alert('RESUME: ' + e)
-        //   console.log('Error resuming WebAudio Context');
-        // }
-        // } catch (e) {
-        //   alert('WebAudio api is not supported: ' + e)
-        //   console.log('WebAudio api is not supported!!');
-        // }
         let secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
         const bufferSizePerLoop = secondsInLoop * store.context.sampleRate;
         const leftChannel = 0
@@ -259,11 +247,13 @@ export default {
         let emptyBuffer = generateEmptyBuffer(store.context, bufferSizePerLoop, store.context.sampleRate)
         //ALL THIS ROW STUFF COULD BE A FUNC
         for (let n = 0; n < numOfRows; n++) {
+
+          // TODO: BUFFER - THIS HAS BEEN COMMENTED OUT BECAUSE ITS NOT HANDLING THE NEW VOCAL ROW - jan12/23
           //CHECK IF THE ROW IS ALREADY CACHED
-          if (!store.state.hasRowStateChanged(n) && BUFFER_ROW_CACHE[n]) {
-            listOfTrimmedRowBuffers[n] = BUFFER_ROW_CACHE[n]
-            continue
-          }
+          // if (!store.state.hasRowStateChanged(n) && BUFFER_ROW_CACHE[n]) {
+          //   listOfTrimmedRowBuffers[n] = BUFFER_ROW_CACHE[n]
+          //   continue
+          // }
 
           //GET THE TRACKS IN ONE ROW
           let tracksInRow = getTrackListByRow(n)
@@ -315,8 +305,10 @@ export default {
           }
 
           listOfTrimmedRowBuffers[n] = finalRowBuffer
+
           //UPDATE THE ROW CACHE
-          BUFFER_ROW_CACHE[n] = finalRowBuffer
+          // TODO: BUFFER - THIS HAS BEEN COMMENTED OUT BECAUSE ITS NOT HANDLING THE NEW VOCAL ROW - jan12/23
+          // BUFFER_ROW_CACHE[n] = finalRowBuffer
           store.state.updateRowStateHash(n)
         }
 

@@ -145,7 +145,7 @@ const state = reactive({
     },
 
 
-    currentRowHash: ['', '', '', ''],
+    currentRowHash: ['', '', '', '', '', ''],
     calculateRowHash: function (rowIndex) {
         let newHash = ''
         for (let col = 0; col < this.grid[rowIndex].value.length; col++) {
