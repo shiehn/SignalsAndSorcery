@@ -85,7 +85,6 @@ import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
 import GridProcessor from "../processors/grid-processor";
 import ModalOpenPayload from "./ModalOpenPayload";
 import ComposerControlsLoopBar from "./ComposerControlsLoopBar";
-import ArpeggioRenderer from "./arpeggiator/arpeggio-renderer";
 import {v4} from "uuid";
 import store from "../store/store";
 import Analytics from "../analytics/Analytics";

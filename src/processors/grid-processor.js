@@ -1,6 +1,5 @@
 import GridGenerator, {SectionPositions} from "../generators/grid-generator";
 import {v4} from "uuid";
-import ArpeggioGridData from "../components/arpeggiator/arpeggio-grid-data";
 import GridItemSection from "../generators/grid-item-section";
 import GridItemArpeggio from "../generators/grid-item-arpeggio";
 
