@@ -242,17 +242,6 @@ describe('Grid Processor Tests', () => {
         expect(store.state.grid[2].value[4].section.name).not.to.equals(newName)
     })
 
-    it('should extract arpeggio data', () => {
-        const gridProcessor = new GridProcessor(store.state.grid)
-        let result = gridProcessor.extractArpeggioData()
-
-        expect(result.getTimeline().length).to.equals(2)
-        expect(result.getTimeline()[0].arpeggio.chords[2]).to.equals('FM7')
-        expect(result.getTimeline()[0].colIndex).to.equals(1)
-        expect(result.getTimeline()[1].arpeggio.chords.length).to.equals(4)
-        expect(result.getTimeline()[1].colIndex).to.equals(3)
-    })
-
     it('should clear row', () => {
         store.state.grid[1].value[1].stem = {
             id: 'row_1_1'

@@ -5,35 +5,12 @@
       "name": "main.js",
       "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.js",
       "publicPath": "/static/dist/main.js"
-    },
-    "main.c2349fd6a5a265ddee48.hot-update.js": {
-      "name": "main.c2349fd6a5a265ddee48.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.c2349fd6a5a265ddee48.hot-update.js",
-      "publicPath": "/static/dist/main.c2349fd6a5a265ddee48.hot-update.js"
-    },
-    "main.c2349fd6a5a265ddee48.hot-update.json": {
-      "name": "main.c2349fd6a5a265ddee48.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.c2349fd6a5a265ddee48.hot-update.json",
-      "publicPath": "/static/dist/main.c2349fd6a5a265ddee48.hot-update.json"
-    },
-    "main.fed8f1835938ab9e57f2.hot-update.js": {
-      "name": "main.fed8f1835938ab9e57f2.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.fed8f1835938ab9e57f2.hot-update.js",
-      "publicPath": "/static/dist/main.fed8f1835938ab9e57f2.hot-update.js"
-    },
-    "main.fed8f1835938ab9e57f2.hot-update.json": {
-      "name": "main.fed8f1835938ab9e57f2.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.fed8f1835938ab9e57f2.hot-update.json",
-      "publicPath": "/static/dist/main.fed8f1835938ab9e57f2.hot-update.json"
     }
   },
   "chunks": {
     "main": [
-      "main.js",
-      "main.fed8f1835938ab9e57f2.hot-update.js"
+      "main.js"
     ]
   },
-  "publicPath": "/static/dist/",
-  "error": "ModuleNotFoundError",
-  "message": "Module not found: Error: Can't resolve '../components/arpeggiator/arpeggio-grid-data' in '/Users/stevehiehn/SignalsAndSorceryWeb/frontend/src/processors'"
+  "publicPath": "/static/dist/"
 }
