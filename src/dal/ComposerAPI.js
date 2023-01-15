@@ -76,6 +76,41 @@ export default class ComposerAPI {
         return undefined
     }
 
+    async getAssetAlternative(token, bpm, key, chords, type) {
+
+        try {
+            const url = BASE_API_URL + 'stats'
+
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Authorization': 'Token ' + token,
+                }
+            };
+
+            let res = await axios.get(url, axiosConfig)
+
+            // if (res['data']) {
+                return {
+                    "id": "empty",
+                    "bpm": 164,
+                    "chords": "F#M7:F#M7:BM7:BM7",
+                    "key": "F#",
+                    "type": "mid",
+                    "variationId": null,
+                    "source": "https://sas-user-data.s3.us-west-2.amazonaws.com/sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131/section_one-mid-1-e746d8ce-f36f-492b-b967-46e8436236ce.wav",
+                    "waveform": "https://sas-user-data.s3.us-west-2.amazonaws.com/sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131/section_one-mid-1-e746d8ce-f36f-492b-b967-46e8436236ce.png"
+                }
+            // } else {
+            //     console.log('Error', "Unable get an alternative asset : " + res['error'])
+            // }
+        } catch (e) {
+            console.log('Error', "Unable get an alternative asset : " + e)
+        }
+
+        return undefined
+    }
+
     async getSavedComposition(token, id) {
 
         try {

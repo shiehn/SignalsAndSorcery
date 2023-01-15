@@ -29,27 +29,50 @@
   </li>
 
   <li v-if="!isMobile"
-      class="drag-el list-none bg-cover h-16 p-1 relative rounded-lg overflow-hidden shadow-lg"
+      class="drag-el list-none bg-cover h-16 rounded-lg shadow-lg"
       :class="{ 'w-full': isGrid == true, 'w-16': isGrid == false }"
       draggable="true"
       @dragstart="startDrag($event, stem)"
       @dragend="endDrag($event)"
       v-on:mouseover="mouseOverGridItem(stem)"
       v-on:mouseleave="mouseLeaveGridItem(stem)"
-      @click="onPlayClip(stem)"
       v-bind:style="{ backgroundImage: 'url(' + stem.waveform + ')',  'background-size': '100% 100%' }">
 
-    <div class="w-full h-full absolute top-0 left-0 hover:shadow-lg hover:cursor-move"
+    <div class="w-full h-full hover:shadow-lg hover:cursor-move"
          v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.5) ' + progressBar + '%, rgba(255, 255, 255, 0) ' + progressBar + '%' }">
-      <div v-if="stem.type != 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">
-        {{ stem.chords }} <span v-if="isGrid"> - {{ stem.bpm }}</span>
+<!--      <div v-if="stem.type != 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">-->
+<!--        {{ stem.chords }} <span v-if="isGrid"> - {{ stem.bpm }}</span>-->
+<!--      </div>-->
+<!--      <div v-if="stem.type == 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">drum-->
+<!--      </div>-->
+
+      <div class="w-full h-full flex items-center">
+        <div class="w-1/3 h-full flex justify-start items-center" @click="onPlayClip(stem)">
+          <img :src=stem.previewPlayIconPath
+               class="h-6 w-6 ml-2 aspect-square bg-white border-2 border-black rounded-full">
+        </div>
+
+        <div class="w-1/3 h-full flex justify-center items-center">
+          <img :src="stem.refreshIconPath"
+               class="w-10 h-10 aspect-square bg-white border-2 border-black rounded-full">
+        </div>
+
+        <div class="w-1/3 h-full flex-col items-center">
+          <div class="w-full h-1/2 flex justify-end items-center">
+            <img :src="stem.deleteIconPath"
+                 @click="onRemoveClip"
+                 class="h-6 w-6 mr-2 aspect-square bg-white border-2 border-black rounded-full">
+          </div>
+          <div class="w-full h-1/2 flex justify-end items-center">
+            <img :src="stem.downloadIconPath"
+                 @click="downloadGridItem(stem)"
+                 class="h-6 w-6 p-1 mr-2 aspect-square bg-white border-2 border-black rounded-full">
+          </div>
+
+        </div>
       </div>
-      <div v-if="stem.type == 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">drum
-      </div>
-      <img :src=stem.previewPlayIconPath
-           class="w-4 h-4 absolute m-1 bg-white rounded-xl"
-           :class="{ 'bottom-2': isGrid == true, 'bottom-0': isGrid == false }">
-      <div v-if="!isGrid" class="absolute bottom-0 right-0 p-1 text-xs bg-red-200 bg-opacity-50">{{ stem.bpm }}</div>
+
+<!--      <div v-if="!isGrid" class="bottom-0 right-0 p-1 text-xs bg-red-200 bg-opacity-50">{{ stem.bpm }}</div>-->
       <audio :ref="el => { audioTag = el }" loop>
         <source v-bind:src=stem.source type="audio/mpeg"/>
         Your browser does not support the audio element.
@@ -66,12 +89,16 @@ import {v4} from "uuid";
 import store from "../store/store";
 import {ROW_TO_TYPE_MAP} from "../constants/constants";
 import Analytics from "../analytics/Analytics";
+import ComposerControlsLoopBar from "./ComposerControlsLoopBar.vue";
 
 export default {
   name: "Asset",
+  components: {ComposerControlsLoopBar},
   inheritAttrs: false,
   props: {
     stem: Object,
+    row: Number,
+    col: Number,
     grid: Boolean,
   },
   setup(props) {
@@ -91,6 +118,9 @@ export default {
 
     //by default the play button should be showing
     props.stem.previewPlayIconPath = store.state.staticUrl + 'icons/play-button.png' + "?x-request=html"
+    props.stem.refreshIconPath = store.state.staticUrl + 'icons/refresh-icon.png' + "?x-request=html"
+    props.stem.deleteIconPath = store.state.staticUrl + 'icons/delete-x.png' + "?x-request=html"
+    props.stem.downloadIconPath = store.state.staticUrl + 'icons/download-icon.svg' + "?x-request=html"
 
     // Make sure to reset the refs before each update.
     onBeforeUpdate(() => {
@@ -127,6 +157,16 @@ export default {
           && !audioTag.value.paused
           && !audioTag.value.ended
           && audioTag.value.readyState > 2;
+    }
+
+    const onRemoveClip = () => {
+      emit('removeGridItem', [props.row, props.col])
+    }
+
+    const downloadGridItem = (stem) => {
+      //const gridItem = store.state.grid[row].value[col]
+      new Analytics().trackDownloadSingleWAV(stem.source)
+      window.location.href = stem.source
     }
 
     const onPlayClip = (stem) => {
@@ -232,6 +272,7 @@ export default {
 
     return {
       audioTag,
+      downloadGridItem,
       endDrag,
       hostType,
       isGrid,
@@ -240,6 +281,7 @@ export default {
       mouseLeaveGridItem,
       onPlayClip,
       onPlayOrTransferClip,
+      onRemoveClip,
       progressBar,
       startDrag,
     }

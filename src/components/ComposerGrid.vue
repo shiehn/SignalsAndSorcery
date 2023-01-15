@@ -36,7 +36,7 @@
 
     <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
          class="flex flex-none justify-between mb-2">
-      <div v-for="gridRowItem in gridRow.value" class="w-1/4 h-16 pr-2 py-1">
+      <div v-for="gridRowItem in gridRow.value" class="w-1/4 h-16 pr-2">
         <div
             class="w-full h-full overflow-hidden relative rounded-lg shadow-lg opacity-40 hover:bg-gray-500 hover:cursor-pointer"
             :class="{
@@ -51,13 +51,18 @@
             v-on:mouseover="mouseOverGridItem(gridRowItem.row, gridRowItem.col)"
             v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
             @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
-          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :grid=true class=""></asset>
-          <img v-if="gridRowItem.showDeleteIcon" :src="imageUrls.deleteIconPath"
-               @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
-               class="w-4 h-4 absolute top-0 left-0 bg-white ml-1 mt-1 rounded-xl">
-          <img v-if="gridRowItem.stem" :src="imageUrls.downloadIconPath"
-               @click.stop="downloadGridItem(gridRowItem.row, gridRowItem.col)"
-               class="w-6 h-6 absolute top-4 right-0 bg-white mr-1 mt-1 border-2 border-gray-400 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+
+          <div class="w-1/3 h-full absolute left-1/3 flex z-50 bg-red-200">
+
+<!--            v-if="gridRowItem.stem"-->
+            <img :src="imageUrls.refreshIconPath"
+                 @click.stop="refreshGridItem(gridRowItem)"
+                 class="w-full h-full bg-white mr-1 mt-1 border-2 border-gray-400 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+
+          </div>
+          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :row="gridRowItem.row" :col="gridRowItem.col" :grid=true></asset>
+
+
         </div>
       </div>
     </div>
@@ -66,10 +71,22 @@
     <composer-controls-loop-bar></composer-controls-loop-bar>
     <composer-controls-scroll-bar></composer-controls-scroll-bar>
     <div class="w-full h-10 flex flex-none justify-between text-white">
-      <div class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer" @click="showAltInfo()">alt 1</div>
-      <div class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer" @click="showAltInfo()">alt 2</div>
-      <div class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer" @click="showAltInfo()">alt 3</div>
-      <div class="w-1/4 h-full flex justify-center items-center rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer" @click="showAltInfo()">alt 4</div>
+      <div
+          class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer"
+          @click="showAltInfo()">alt 1
+      </div>
+      <div
+          class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer"
+          @click="showAltInfo()">alt 2
+      </div>
+      <div
+          class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer"
+          @click="showAltInfo()">alt 3
+      </div>
+      <div
+          class="w-1/4 h-full flex justify-center items-center rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer"
+          @click="showAltInfo()">alt 4
+      </div>
     </div>
   </div>
 </template>
@@ -88,6 +105,7 @@ import ComposerControlsLoopBar from "./ComposerControlsLoopBar";
 import {v4} from "uuid";
 import store from "../store/store";
 import Analytics from "../analytics/Analytics";
+import ComposerAPI from "../dal/ComposerAPI";
 
 export default {
   name: 'ComposerGrid',
@@ -103,8 +121,9 @@ export default {
       editIcon: store.state.staticUrl + 'icons/edit.png',
       plusIcon: store.state.staticUrl + "icons/plus.png",
       minusIcon: store.state.staticUrl + "icons/minus.png",
-      deleteIconPath: store.state.staticUrl + 'icons/delete-x.png',
-      downloadIconPath: store.state.staticUrl + 'icons/download-icon.svg',
+      // deleteIconPath: store.state.staticUrl + 'icons/delete-x.png',
+      // downloadIconPath: store.state.staticUrl + 'icons/download-icon.svg',
+      refreshIconPath: store.state.staticUrl + 'icons/refresh-icon.png',
     }
     const isMobile = ref(store.isMobile ? true : false)
 
@@ -133,6 +152,12 @@ export default {
       const stem = JSON.parse(stemStr)
       stem.instanceId = v4() //each stem should have a unique instanceId but possible the same stem id
 
+      //update the stems row and col
+      // stem.row = row
+      // stem.col = col
+
+      console.log('on drop: ', row, col)
+
       const gridItem = store.state.grid[row].value[col]
       gridItem.stem = stem
       // gridItem['deleteIconPath'] = 'icons/delete-x.png'
@@ -151,13 +176,8 @@ export default {
       emit('saveProjectToLocalStorage')
     }
 
-    const downloadGridItem = (row, col) => {
-      const gridItem = store.state.grid[row].value[col]
-      new Analytics().trackDownloadSingleWAV(gridItem.stem.source)
-      window.location.href = gridItem.stem.source
-    }
-
     const removeGridItem = (row, col) => {
+
       const gridItem = store.state.grid[row].value[col]
 
       gridItem.sectionId = undefined
@@ -231,6 +251,30 @@ export default {
       }
     }
 
+    const refreshGridItem = async (gridItem) => {
+      //showLoadingSpinner.value = true
+
+      const token = store.state.token
+      const bpm = 120
+      const key = 'C'
+      const chords = 'GM7:GM7:GM7:GM7'
+      const type = 'drum'
+
+      const row = gridItem.row
+      const col = gridItem.col
+
+      removeGridItem(row, col)
+
+      const res = await new ComposerAPI().getAssetAlternative(token, bpm, key, chords, type)
+      //showLoadingSpinner.value = false
+
+
+
+
+
+      store.state.grid[row].value[col].stem = res
+    }
+
     const columnAdd = (sectionId) => {
       new GridProcessor(store.state.grid).addColumn(sectionId)
       emit('renderMixIfNeeded')
@@ -279,6 +323,12 @@ export default {
           }
         }
       }
+    })
+
+    watch(() => bus.value.get('removeGridItem'), (rowCol) => {
+      console.log('yo row', rowCol[0][0])
+      console.log('yo col', rowCol[0][1])
+      removeGridItem(rowCol[0][0], rowCol[0][1])
     })
 
     const resizeInnerGridContainer = () => {
@@ -425,7 +475,6 @@ export default {
       arpeggioToggled,
       columnAdd,
       columnRemove,
-      downloadGridItem,
       editSection,
       isMobile,
       getGridRows,
@@ -445,6 +494,7 @@ export default {
       playHeadCSS,
       showAltInfo,
       removeGridItem,
+      refreshGridItem,
     }
   },
 }
