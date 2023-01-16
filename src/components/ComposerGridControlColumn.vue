@@ -33,8 +33,8 @@
             @click="handleClearRow('hi')">Clr
         </div>
         <div
-            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:drop-shadow-m">
-          &nbsp;&nbsp;&nbsp;
+            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleRefreshRow('hi')">Ref
         </div>
         <div
             class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
@@ -65,8 +65,8 @@
             @click="handleClearRow('mid')">Clr
         </div>
         <div
-            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:drop-shadow-m">
-          &nbsp;&nbsp;&nbsp;
+            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleRefreshRow('mid')">Ref
         </div>
         <div
             class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
@@ -97,8 +97,8 @@
             @click="handleClearRow('low')">Clr
         </div>
         <div
-            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:drop-shadow-m">
-          &nbsp;&nbsp;&nbsp;
+            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleRefreshRow('low')">Ref
         </div>
         <div
             class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
@@ -129,8 +129,8 @@
             @click="handleClearRow('drum')">Clr
         </div>
         <div
-            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:drop-shadow-m">
-          &nbsp;&nbsp;&nbsp;
+            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleRefreshRow('drum')">Ref
         </div>
         <div
             class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
@@ -153,8 +153,8 @@
             @click="handleClearRow('fill')">Clr
         </div>
         <div
-            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:drop-shadow-m">
-          &nbsp;&nbsp;&nbsp;
+            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleRefreshRow('fill')">Ref
         </div>
         <div
             class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
@@ -177,8 +177,8 @@
             @click="handleClearRow('melodic')">Clr
         </div>
         <div
-            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:drop-shadow-m">
-          &nbsp;&nbsp;&nbsp;
+            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
+            @click="handleRefreshRow('melodic')">Ref
         </div>
         <div
             class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
@@ -200,7 +200,7 @@ import {v4} from "uuid";
 import useEventsBus from "../events/eventBus";
 import ModalOpenPayload from "./ModalOpenPayload";
 import {watch} from "vue";
-import {ROW_TO_TYPE_MAP} from "../constants/constants";
+import {ROW_TO_TYPE_MAP, TYPE_DRUM, TYPE_FILL, TYPE_HI, TYPE_LOW, TYPE_MELODIC, TYPE_MID} from "../constants/constants";
 
 export default {
   name: "ComposerGridControlColumn",
@@ -289,6 +289,11 @@ export default {
       emit('launchModal', modalClearRowConfirmPayload)
     }
 
+    const handleRefreshRow = (type) => {
+      clearRow(type)
+      emit('refreshRow', type)
+    }
+
     onMounted(() => {
       nextTick(() => {
         isMobile.value = store.isMobile ? true : false
@@ -316,6 +321,7 @@ export default {
       handleFX,
       handleVol,
       handleClearRow,
+      handleRefreshRow,
       imageUrls
     }
   }

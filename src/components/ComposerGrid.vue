@@ -52,12 +52,12 @@
             v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
             @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
 
-          <div class="w-1/3 h-full absolute left-1/3 flex z-50 bg-red-200">
+          <div class="w-1/3 h-full absolute left-1/3 flex">
 
 <!--            v-if="gridRowItem.stem"-->
             <img :src="imageUrls.refreshIconPath"
                  @click.stop="refreshGridItem(gridRowItem)"
-                 class="w-full h-full bg-white mr-1 mt-1 border-2 border-gray-400 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+                 class="w-full h-full rounded-full hover:bg-white hover:border-green-500 hover:border-2">
 
           </div>
           <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :row="gridRowItem.row" :col="gridRowItem.col" :grid=true></asset>
@@ -329,6 +329,20 @@ export default {
       console.log('yo row', rowCol[0][0])
       console.log('yo col', rowCol[0][1])
       removeGridItem(rowCol[0][0], rowCol[0][1])
+    })
+
+    watch(() => bus.value.get('refreshRow'), async (type) => {
+      const token = store.state.token
+      const bpm = store.state.getGlobalBpm()
+      const key = store.state.getGlobalKey()
+      const chords = store.state.getGlobalChords()
+
+      const res = await new ComposerAPI().getAssetRowAlternative(token, bpm, key, chords, type[0])
+      const rowIdx = ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === type[0])
+
+      for(let i=0; res.stems.length > i; i++){
+        store.state.grid[rowIdx].value[i].stem = res.stems[i]
+      }
     })
 
     const resizeInnerGridContainer = () => {

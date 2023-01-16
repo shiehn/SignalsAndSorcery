@@ -26,6 +26,17 @@ const state = reactive({
 
         return 'C'
     },
+    globalChords: undefined,
+    getGlobalChords: function () {
+        if (this.globalKey) {
+            return this.globalKey
+        }
+
+        return 'CM7:CM7:CM7:CM7'
+    },
+    setGlobalChords: function (chords) {
+        return this.globalChords = chords
+    },
     playBack: {
         loopStartPercent: 0,
         loopEndPercent: 100,
