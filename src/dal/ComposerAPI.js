@@ -78,7 +78,7 @@ export default class ComposerAPI {
 
     async getAssetRowAlternative(token, bpm, key, chords, type) {
         try {
-            const url = BASE_API_URL + 'stats'
+            const url = BASE_API_URL + 'compositions/asset/row/alternative/?chords=chords&bpm=120&key=c&role=dom'
 
             let axiosConfig = {
                 headers: {
@@ -89,45 +89,11 @@ export default class ComposerAPI {
 
             let res = await axios.get(url, axiosConfig)
 
-            // if (res['data']) {
-            return {
-                "type": type,
-                stems: [
-                    {
-                        "id": "empty",
-                        "bpm": 164,
-                        "chords": "F#M7:F#M7:BM7:BM7",
-                        "key": "F#",
-                        "type": "mid",
-                        "variationId": null,
-                        "source": "https://sas-user-data.s3.us-west-2.amazonaws.com/sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131/section_one-mid-0-c3f979db-3168-4f4b-b9f7-44b9ee80b2aa.wav",
-                        "waveform": "https://sas-user-data.s3.us-west-2.amazonaws.com/sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131/section_one-mid-0-c3f979db-3168-4f4b-b9f7-44b9ee80b2aa.png"
-                    }, {
-                        "id": "empty",
-                        "bpm": 164,
-                        "chords": "F#M7:F#M7:BM7:BM7",
-                        "key": "F#",
-                        "type": "mid",
-                        "variationId": null,
-                        "source": "https://sas-user-data.s3.us-west-2.amazonaws.com/sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131/section_one-mid-0-c3f979db-3168-4f4b-b9f7-44b9ee80b2aa.wav",
-                        "waveform": "https://sas-user-data.s3.us-west-2.amazonaws.com/sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131/section_one-mid-0-c3f979db-3168-4f4b-b9f7-44b9ee80b2aa.png"
-                    }, {},
-                    {
-                        "id": "empty",
-                        "bpm": 164,
-                        "chords": "F#M7:F#M7:BM7:BM7",
-                        "key": "F#",
-                        "type": "mid",
-                        "variationId": null,
-                        "source": "https://sas-user-data.s3.us-west-2.amazonaws.com/sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131/section_one-mid-0-c3f979db-3168-4f4b-b9f7-44b9ee80b2aa.wav",
-                        "waveform": "https://sas-user-data.s3.us-west-2.amazonaws.com/sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131/section_one-mid-0-c3f979db-3168-4f4b-b9f7-44b9ee80b2aa.png"
-                    }
-                ],
+            if (res['data']) {
+                return res['data']
+            } else {
+                console.log('Error', "Unable get an alternative asset : " + res['error'])
             }
-
-            // } else {
-            //     console.log('Error', "Unable get an alternative asset : " + res['error'])
-            // }
         } catch (e) {
             console.log('Error', "Unable get an alternative asset : " + e)
         }
@@ -138,7 +104,7 @@ export default class ComposerAPI {
     async getAssetAlternative(token, bpm, key, chords, type) {
 
         try {
-            const url = BASE_API_URL + 'stats'
+            const url = BASE_API_URL + `compositions/asset/alternative/?chords=${chords}&bpm=${bpm}&key=${key}&role=${type}`
 
             let axiosConfig = {
                 headers: {
@@ -149,20 +115,11 @@ export default class ComposerAPI {
 
             let res = await axios.get(url, axiosConfig)
 
-            // if (res['data']) {
-            return {
-                "id": "empty",
-                "bpm": 164,
-                "chords": "F#M7:F#M7:BM7:BM7",
-                "key": "F#",
-                "type": "mid",
-                "variationId": null,
-                "source": "https://sas-user-data.s3.us-west-2.amazonaws.com/sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131/section_one-mid-1-e746d8ce-f36f-492b-b967-46e8436236ce.wav",
-                "waveform": "https://sas-user-data.s3.us-west-2.amazonaws.com/sas-storage-v1-f44a888852ea9f0b25b453b6ee91e131/section_one-mid-1-e746d8ce-f36f-492b-b967-46e8436236ce.png"
+            if (res['data'] && res['data']['stems']) {
+                return res['data']['stems'][0]
+            } else {
+                console.log('Error', "Unable get an alternative asset : " + res['error'])
             }
-            // } else {
-            //     console.log('Error', "Unable get an alternative asset : " + res['error'])
-            // }
         } catch (e) {
             console.log('Error', "Unable get an alternative asset : " + e)
         }

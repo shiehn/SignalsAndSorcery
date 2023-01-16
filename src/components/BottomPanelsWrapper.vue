@@ -1,7 +1,7 @@
 <template>
   <div v-if="!isMobile" class="flex w-full justify-between py-4">
-    <leader-board></leader-board>
-    <project-board></project-board>
+<!--    <leader-board></leader-board>-->
+<!--    <project-board></project-board>-->
   </div>
 </template>
 
