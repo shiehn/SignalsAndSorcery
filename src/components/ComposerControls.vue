@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <div v-if="!isMobile" class="flex my-2 justify-center">
+  <div v-if="!isMobile" class="w-1/6 h-48 min-w-28 border-2 border-black rounded-lg flex justify-center bg-red-200">
     <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn"
                                                             class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
     </button>
@@ -28,7 +28,8 @@
     <button @click="stopButton()"><img :src="imageAssets.stopBtn"
                                        class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
   </div>
-  <div class="text-gray-300 text-xs text-center bg-white">build {{ buildNumber }}</div>
+
+<!--  <div class="text-gray-300 text-xs text-center bg-white">build {{ buildNumber }}</div>-->
 
 
   <div v-if="showInitAudio" class="modal w-full flex justify-center">

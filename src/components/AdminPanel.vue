@@ -26,20 +26,13 @@
     </div>
   </div>
 
-  <div v-if="!isMobile" class="w-1/6 h-48 min-w-28 border-2 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
+  <div v-if="!isMobile" class="w-1/3 h-48 min-w-28 border-2 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
        style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
 
     <div class="flex justify-between">
-      <!--      <div class="w-1/2 border-2 border-black p-1 rounded-md mr-2"><img-->
-      <!--          :src="imageAssets.refreshBtn"/></div>-->
-      <div class="w-1/2">
-        <button @click="newProjectDialog()"
-                class="h-16 w-16">
-          <img
-              :src="imageAssets.refreshBtn" class="rounded-full hover:ring-4 hover:ring-green-500"/>
-        </button>
-      </div>
+
+
 
 
       <div class="grid grid-cols-2 gap-1 w-1/2 h-18 justify-between">
@@ -101,7 +94,7 @@ export default {
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
       downloadMP3: store.state.staticUrl + 'icons/file-symbol-mp3.png',
       newProject: store.state.staticUrl + 'icons/new-icon.png',
-      refreshBtn: store.state.staticUrl + 'icons/refresh-icon.png',
+
     }
     const showProjectsBoard = ref(false)
 
@@ -134,60 +127,9 @@ export default {
       new Analytics().trackExportPackage()
     }
 
-    const createRandomProject = async () => {
-      await createEmptyProject() //THIS IS A HACK BE CLEAR THE GRID
 
-      showLoadingSpinner.value = true
-      const project = await new ComposerAPI().generateComposition()
-      showLoadingSpinner.value = false
 
-      emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
 
-      const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(project)
-
-      console.log('retrievedRestoredData', retrievedRestoredData)
-
-      store.state.projectId = retrievedRestoredData.projectId
-      store.state.projectVersionId = retrievedRestoredData.projectVersionId
-      store.state.projectName = retrievedRestoredData.projectName;
-      store.state.authorName = retrievedRestoredData.authorName;
-      store.state.globalBpm = retrievedRestoredData.globalBpm;
-      store.state.globalKey = retrievedRestoredData.globalKey;
-      store.state.grid = retrievedRestoredData.grid;
-
-      emit('renderMix')
-      emit('closeProjectsBoard')
-      emit('saveProjectToLocalStorage')
-      emit('resetCompatibility')
-
-      new Analytics().trackCreateRandom()
-    }
-
-    const createEmptyProject = async () => {
-      const numOfGridRows = 6
-      let numOfGridCols = 6
-      let numOfSections = 2
-
-      if (isMobile.value) {
-        numOfGridCols = 4
-        numOfSections = 1
-      }
-
-      store.state.projectId = undefined
-      store.state.projectVersionId = undefined
-      store.state.projectName = 'New Project'
-      store.state.authorName = 'New Author'
-      store.state.globalBpm = undefined
-      store.state.globalKey = undefined
-      store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
-
-      emit('renderMix')
-      emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
-      emit('disableAnimateSelector')
-      emit('resetCompatibility')
-
-      new Analytics().trackCreateEmpty()
-    }
 
 
     const saveProject = async () => {
@@ -242,37 +184,6 @@ export default {
       }
     }
 
-    const createNewProjectWarningDialogModalId = 'newProjectWarning'
-    const newProjectDialog = (projectId) => {
-      const modalPayload = new ModalOpenPayload(
-          createNewProjectWarningDialogModalId,
-          'Empty or Random',
-          'Would you like an empty or random project? WARNING: Either option will erase all current data.',
-          'Empty',
-          'Random',
-          'Cancel',
-          false,
-          projectId
-      )
-
-      emit('launchModal', modalPayload)
-    }
-
-    watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
-      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === createNewProjectWarningDialogModalId) {
-        if (modalResponsePayload[0].getResponse()) {
-          const projectType = modalResponsePayload[0].getRelayData().toLowerCase()
-          if (projectType === 'empty') {
-            createEmptyProject()
-          } else if (projectType === 'random') {
-            createRandomProject()
-            // createEmptyProject()
-          } else {
-            toast.error('Error creating new project')
-          }
-        }
-      }
-    })
 
     watch(() => bus.value.get('saveProjectToLocalStorage'), async () => {
       if (store.state.grid && store.state.grid.length > 0) {
@@ -311,7 +222,7 @@ export default {
       imageAssets,
       isMobile,
       logDebug,
-      newProjectDialog,
+
       saveProject,
       showProjectsBoard,
       showLoadingSpinner,

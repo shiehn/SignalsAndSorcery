@@ -28,18 +28,10 @@
         <!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
         <!--            @click="handleVol('hi')">Vol-->
         <!--        </div>-->
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleClearRow('hi')">Clr
-        </div>
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleRefreshRow('hi')">Ref
-        </div>
-        <div
-            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
-          &nbsp;&nbsp;&nbsp;
-        </div>
+
+        <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('hi')">
+        <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('hi')">
+        <img :src=imageUrls.unlockIcon class="w-4 h-4">
       </div>
     </div>
 
@@ -60,18 +52,9 @@
         <!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
         <!--            @click="handleVol('mid')">Vol-->
         <!--        </div>-->
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleClearRow('mid')">Clr
-        </div>
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleRefreshRow('mid')">Ref
-        </div>
-        <div
-            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
-          &nbsp;&nbsp;&nbsp;
-        </div>
+        <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('mid')">
+        <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('mid')">
+        <img :src=imageUrls.unlockIcon class="w-4 h-4">
       </div>
     </div>
 
@@ -92,18 +75,9 @@
         <!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
         <!--            @click="handleVol('low')">Vol-->
         <!--        </div>-->
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleClearRow('low')">Clr
-        </div>
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleRefreshRow('low')">Ref
-        </div>
-        <div
-            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
-          &nbsp;&nbsp;&nbsp;
-        </div>
+        <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('low')">
+        <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('low')">
+        <img :src=imageUrls.unlockIcon class="w-4 h-4">
       </div>
     </div>
 
@@ -124,18 +98,9 @@
         <!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
         <!--            @click="handleVol('drum')">Vol-->
         <!--        </div>-->
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleClearRow('drum')">Clr
-        </div>
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleRefreshRow('drum')">Ref
-        </div>
-        <div
-            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
-          &nbsp;&nbsp;&nbsp;
-        </div>
+        <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('drum')">
+        <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('drum')">
+        <img :src=imageUrls.unlockIcon class="w-4 h-4">
       </div>
     </div>
 
@@ -148,18 +113,9 @@
         </div>
       </div>
       <div class="flex flex-col justify-evenly h-16 pl-2">
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleClearRow('fill')">Clr
-        </div>
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleRefreshRow('fill')">Ref
-        </div>
-        <div
-            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
-          &nbsp;&nbsp;&nbsp;
-        </div>
+        <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('fill')">
+        <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('fill')">
+        <img :src=imageUrls.unlockIcon class="w-4 h-4">
       </div>
     </div>
 
@@ -172,22 +128,13 @@
         </div>
       </div>
       <div class="flex flex-col justify-evenly h-16 pl-2">
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleClearRow('melodic')">Clr
-        </div>
-        <div
-            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"
-            @click="handleRefreshRow('melodic')">Ref
-        </div>
-        <div
-            class="bg-gray-300 rounded-md text-white text-xs px-1 hover:text-black hover:drop-shadow-m">
-          &nbsp;&nbsp;&nbsp;
-        </div>
+        <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('melodic')">
+        <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('melodic')">
+        <img :src=imageUrls.unlockIcon class="w-4 h-4">
       </div>
     </div>
 
-    <composer-controls></composer-controls>
+
   </div>
 
 </template>
@@ -213,14 +160,18 @@ export default {
     const isMobile = ref(store.isMobile ? true : false)
     const toast = inject('toast');
     const imageUrls = {
-      arpIcon: store.state.staticUrl + "icons/eq-arp.png",
-      drumIcon: store.state.staticUrl + "icons/eq-drum.png",
-      fillIcon: store.state.staticUrl + "icons/eq-fill.png",
-      vocalIcon: store.state.staticUrl + "icons/eq-mic.png",
-      hiIcon: store.state.staticUrl + "icons/eq-hi.png",
-      lowIcon: store.state.staticUrl + "icons/eq-low.png",
-      midIcon: store.state.staticUrl + "icons/eq-mid.png",
-      plusIcon: store.state.staticUrl + "icons/plus.png",
+      arpIcon: store.state.staticUrl + "icons/eq-arp.png" + "?x-request=html",
+      drumIcon: store.state.staticUrl + "icons/eq-drum.png" + "?x-request=html",
+      fillIcon: store.state.staticUrl + "icons/eq-fill.png" + "?x-request=html",
+      vocalIcon: store.state.staticUrl + "icons/eq-mic.png" + "?x-request=html",
+      hiIcon: store.state.staticUrl + "icons/eq-hi.png" + "?x-request=html",
+      lowIcon: store.state.staticUrl + "icons/eq-low.png" + "?x-request=html",
+      midIcon: store.state.staticUrl + "icons/eq-mid.png" + "?x-request=html",
+      plusIcon: store.state.staticUrl + "icons/plus.png" + "?x-request=html",
+      lockIcon: store.state.staticUrl + "icons/lock.png" + "?x-request=html",
+      unlockIcon: store.state.staticUrl + "icons/unlock.png" + "?x-request=html",
+      refreshIcon: store.state.staticUrl + "icons/refresh-icon.png" + "?x-request=html",
+      removeIcon: store.state.staticUrl + "icons/remove.png" + "?x-request=html",
     }
 
     const addSection = (sectionName) => {

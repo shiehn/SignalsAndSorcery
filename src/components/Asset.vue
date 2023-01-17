@@ -36,9 +36,13 @@
       @dragend="endDrag($event)"
       v-on:mouseover="mouseOverGridItem(stem)"
       v-on:mouseleave="mouseLeaveGridItem(stem)"
-      v-bind:style="{ backgroundImage: 'url(' + stem.waveform + ')',  'background-size': '100% 100%' }">
+      >
 
-    <div class="w-full h-full hover:shadow-lg hover:cursor-move"
+    <div class="w-full h-full absolute z-0" v-bind:style="{ backgroundImage: 'url(' + stem.waveform + ')',  'background-size': '100% 100%', 'opacity': '0.8' }">
+      HELLOP
+    </div>
+
+    <div class="w-full h-full hover:shadow-lg hover:cursor-move absolute z-50"
          v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.5) ' + progressBar + '%, rgba(255, 255, 255, 0) ' + progressBar + '%' }">
 <!--      <div v-if="stem.type != 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">-->
 <!--        {{ stem.chords }} <span v-if="isGrid"> - {{ stem.bpm }}</span>-->
@@ -46,10 +50,15 @@
 <!--      <div v-if="stem.type == 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">drum-->
 <!--      </div>-->
 
+
+
       <div class="w-full h-full flex items-center">
-        <div class="w-1/3 h-full flex justify-start items-center" @click="onPlayClip(stem)">
+        <div class="w-1/3 h-full flex justify-start items-end" @click="onPlayClip(stem)">
           <img :src=stem.previewPlayIconPath
                class="h-6 w-6 ml-2 aspect-square bg-white border-2 border-black rounded-full">
+
+          <img :src=stem.unlockIconPath
+               class="h-6 w-6 ml-2 aspect-square">
         </div>
 
         <div class="w-1/3 h-full flex justify-center items-center">
@@ -119,8 +128,10 @@ export default {
     //by default the play button should be showing
     props.stem.previewPlayIconPath = store.state.staticUrl + 'icons/play-button.png' + "?x-request=html"
     props.stem.refreshIconPath = store.state.staticUrl + 'icons/refresh-icon.png' + "?x-request=html"
-    props.stem.deleteIconPath = store.state.staticUrl + 'icons/delete-x.png' + "?x-request=html"
+    props.stem.deleteIconPath = store.state.staticUrl + 'icons/remove.png' + "?x-request=html"
     props.stem.downloadIconPath = store.state.staticUrl + 'icons/download-icon.svg' + "?x-request=html"
+    props.stem.lockIconPath = store.state.staticUrl + 'icons/lock.png' + "?x-request=html"
+    props.stem.unlockIconPath = store.state.staticUrl + 'icons/unlock.png' + "?x-request=html"
 
     // Make sure to reset the refs before each update.
     onBeforeUpdate(() => {

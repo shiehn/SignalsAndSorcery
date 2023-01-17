@@ -5,8 +5,10 @@
   </div>
 
   <div v-if="!isMobile" class="flex w-full justify-between py-4">
-    <admin-panel></admin-panel>
+    <composer-controls></composer-controls>
     <asset-selector></asset-selector>
+    <admin-panel></admin-panel>
+
   </div>
 </template>
 
@@ -14,10 +16,14 @@
 import AssetSelector from "./AssetSelector";
 import AdminPanel from "./AdminPanel";
 import {inject, nextTick, onMounted, ref} from "vue";
+import PlayerControls from "./PlayerControls.vue";
+import ComposerControls from "./ComposerControls.vue";
 
 export default {
   name: "TopPanelsWrapper",
   components: {
+    ComposerControls,
+    PlayerControls,
     AdminPanel,
     AssetSelector,
   },

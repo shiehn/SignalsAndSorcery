@@ -1,7 +1,28 @@
 <template>
   <div v-if="!isMobile"
-      class="flex flex-col w-1/6 h-48 border-2 border-black rounded-lg justify-between font-bold p-2 m-2 nowrap overflow-hidden"
+      class="flex flex-col w-1/3 h-48 border-2 border-black rounded-lg justify-between font-bold p-2 m-2 nowrap overflow-hidden"
       style="background-color: rgba(255,255,255,0.9);">
+
+
+
+    <div class="w-1/2">
+      <button @click="newProjectDialog()"
+              class="h-16 w-16">
+        <img
+            :src="staticImages.refreshBtn" class="rounded-full hover:ring-4 hover:ring-green-500"/>
+      </button>
+
+      <button @click="newProjectDialog()"
+              class="h-6 w-6">
+        <img
+            :src="staticImages.unlockBtn" class="rounded-full hover:ring-4 hover:ring-green-500"/>
+      </button>
+    </div>
+
+
+
+
+
     <div class="flex w-full h-8 justify-between my-1">
       <label for="bpm-filter" class="w-1/3 my-2 text-sm">BPM</label>
       <select v-if="filterBpm != undefined" v-model="filterBpm" id="bpm-filter" class="w-2/3 text-xs rounded-lg">
@@ -36,47 +57,50 @@
     </div>
   </div>
 
-  <div v-if="!isMobile" class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"
-       style="background-color: rgba(255,255,255,0.9);">
-    <div
-        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
-        @click="pagePrev">
-      <img :src="staticImages.pageLeftImgSrc" class="w-8 h-8">
-    </div>
+<!--  <div v-if="!isMobile" class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"-->
+<!--       style="background-color: rgba(255,255,255,0.9);">-->
+<!--    <div-->
+<!--        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"-->
+<!--        @click="pagePrev">-->
+<!--      <img :src="staticImages.pageLeftImgSrc" class="w-8 h-8">-->
+<!--    </div>-->
 
-    <ul class="grid grid-cols-8 gap-2">
-      <asset v-for="stem in getFilteredStems" :stem=stem></asset>
-    </ul>
-    <div
-        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"
-        @click="pageNext">
-      <img :src="staticImages.pageRightImgSrc" class="w-8 h-8">
-    </div>
-  </div>
+<!--    <ul class="grid grid-cols-8 gap-2">-->
+<!--      <asset v-for="stem in getFilteredStems" :stem=stem></asset>-->
+<!--    </ul>-->
+<!--    <div-->
+<!--        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"-->
+<!--        @click="pageNext">-->
+<!--      <img :src="staticImages.pageRightImgSrc" class="w-8 h-8">-->
+<!--    </div>-->
+<!--  </div>-->
 
-  <div v-if="isMobile" class="flex w-full justify-center border-4 border-black my-2 py-4 rounded-lg"
-       :class="{
-        'border-4': animateSelector,
-        'init-pulse': animateSelector,
-        'border-pulsate': animateSelector,
-        }"
-       style="background-color: rgba(255,255,255,0.9);">
-    <div
-        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer opacity-25 hover:opacity-75"
-        @click="pagePrev">
-      <img :src="staticImages.pageLeftImgSrc" class="object-scale-down">
-    </div>
+<!--  <div v-if="isMobile" class="flex w-full justify-center border-4 border-black my-2 py-4 rounded-lg"-->
+<!--       :class="{-->
+<!--        'border-4': animateSelector,-->
+<!--        'init-pulse': animateSelector,-->
+<!--        'border-pulsate': animateSelector,-->
+<!--        }"-->
+<!--       style="background-color: rgba(255,255,255,0.9);">-->
+<!--    <div-->
+<!--        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer opacity-25 hover:opacity-75"-->
+<!--        @click="pagePrev">-->
+<!--      <img :src="staticImages.pageLeftImgSrc" class="object-scale-down">-->
+<!--    </div>-->
 
-    <ul class="grid grid-cols-4 gap-2">
-      <asset v-for="stem in getFilteredStems" :stem=stem></asset>
-    </ul>
+<!--    <ul class="grid grid-cols-4 gap-2">-->
+<!--      <asset v-for="stem in getFilteredStems" :stem=stem></asset>-->
+<!--    </ul>-->
 
-    <div
-        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer opacity-25 hover:opacity-75"
-        @click="pageNext">
-      <img :src="staticImages.pageRightImgSrc" class="object-scale-down">
-    </div>
-  </div>
+<!--    <div-->
+<!--        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer opacity-25 hover:opacity-75"-->
+<!--        @click="pageNext">-->
+<!--      <img :src="staticImages.pageRightImgSrc" class="object-scale-down">-->
+<!--    </div>-->
+<!--  </div>-->
+
+
+  <loading-spinner :showLoadingProp="showLoadingSpinner"></loading-spinner>
 
 </template>
 <script>
@@ -90,10 +114,16 @@ import store from "../store/store";
 import {ROW_TO_TYPE_MAP} from "../constants/constants";
 import AssetSelectionFilter from "../filters/AssetSelectionFilter";
 import GridProcessor from "../processors/grid-processor";
+import ModalOpenPayload from "./ModalOpenPayload";
+import ComposerAPI from "../dal/ComposerAPI";
+import SaveAndLoadAdapter from "../persistence/save-load-adapter";
+import Analytics from "../analytics/Analytics";
+import GridGenerator from "../generators/grid-generator";
+import LoadingSpinner from "./LoadingSpinner.vue";
 
 export default {
   name: "AssetSelector",
-  components: {Asset},
+  components: {LoadingSpinner, Asset},
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
@@ -117,9 +147,12 @@ export default {
     let prevFilterBpm = 0;
     let prevFilterType = 0;
 
+    const showLoadingSpinner = ref(false)
     const staticImages = {
       pageLeftImgSrc: store.state.staticUrl + 'icons/shuffle-left.png',
       pageRightImgSrc: store.state.staticUrl + 'icons/shuffle-right.png',
+      refreshBtn: store.state.staticUrl + 'icons/refresh-icon.png',
+      unlockBtn: store.state.staticUrl + 'icons/unlock.png',
     }
 
     const pageNext = () => {
@@ -160,6 +193,94 @@ export default {
 
       return pagedResults
     })
+
+    const createEmptyProject = async () => {
+      const numOfGridRows = 6
+      let numOfGridCols = 6
+      let numOfSections = 2
+
+      if (isMobile.value) {
+        numOfGridCols = 4
+        numOfSections = 1
+      }
+
+      store.state.projectId = undefined
+      store.state.projectVersionId = undefined
+      store.state.projectName = 'New Project'
+      store.state.authorName = 'New Author'
+      store.state.globalBpm = undefined
+      store.state.globalKey = undefined
+      store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
+
+      emit('renderMix')
+      emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
+      emit('disableAnimateSelector')
+      emit('resetCompatibility')
+
+      new Analytics().trackCreateEmpty()
+    }
+
+    const createRandomProject = async () => {
+      await createEmptyProject() //THIS IS A HACK BE CLEAR THE GRID
+
+      showLoadingSpinner.value = true
+      const project = await new ComposerAPI().generateComposition()
+      showLoadingSpinner.value = false
+
+      emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
+
+      const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(project)
+
+      console.log('retrievedRestoredData', retrievedRestoredData)
+
+      store.state.projectId = retrievedRestoredData.projectId
+      store.state.projectVersionId = retrievedRestoredData.projectVersionId
+      store.state.projectName = retrievedRestoredData.projectName;
+      store.state.authorName = retrievedRestoredData.authorName;
+      store.state.globalBpm = retrievedRestoredData.globalBpm;
+      store.state.globalKey = retrievedRestoredData.globalKey;
+      store.state.grid = retrievedRestoredData.grid;
+
+      emit('renderMix')
+      emit('closeProjectsBoard')
+      emit('saveProjectToLocalStorage')
+      emit('resetCompatibility')
+
+      new Analytics().trackCreateRandom()
+    }
+
+    const createNewProjectWarningDialogModalId = 'newProjectWarning'
+    const newProjectDialog = (projectId) => {
+      const modalPayload = new ModalOpenPayload(
+          createNewProjectWarningDialogModalId,
+          'Empty or Random',
+          'Would you like an empty or random project? WARNING: Either option will erase all current data.',
+          'Empty',
+          'Random',
+          'Cancel',
+          false,
+          projectId
+      )
+
+      emit('launchModal', modalPayload)
+    }
+
+    watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
+      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === createNewProjectWarningDialogModalId) {
+        if (modalResponsePayload[0].getResponse()) {
+          const projectType = modalResponsePayload[0].getRelayData().toLowerCase()
+          if (projectType === 'empty') {
+            createEmptyProject()
+          } else if (projectType === 'random') {
+            createRandomProject()
+            // createEmptyProject()
+          } else {
+            toast.error('Error creating new project')
+          }
+        }
+      }
+    })
+
 
     watch(() => bus.value.get('disableAnimateSelector'), () => {
       animateSelector.value = false
@@ -270,8 +391,10 @@ export default {
       filterChord,
       filterChordOptions,
       getFilteredStems,
+      newProjectDialog,
       pageNext,
       pagePrev,
+      showLoadingSpinner,
       staticImages,
       stemSelections,
       store,
