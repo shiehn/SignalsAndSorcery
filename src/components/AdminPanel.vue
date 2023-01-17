@@ -207,6 +207,7 @@ export default {
         store.state.globalBpm = retrievedRestoredData.globalBpm;
         store.state.globalKey = retrievedRestoredData.globalKey;
         store.state.grid = retrievedRestoredData.grid;
+        store.state.updateGlobalChords()
 
         emit('resetCompatibility')
       }

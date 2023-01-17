@@ -48,9 +48,9 @@ export class StemsAPI {
                         }
                     })
 
-                    options.keys.forEach((key) => {
-                        if (!stemsAndOptions.options.keys.includes(key.toLowerCase())) {
-                            stemsAndOptions.options.keys.push(key.toLowerCase());
+                    options.keys.forEach((key) => { 
+                        if (!stemsAndOptions.options.keys.includes(key.toUpperCase())) {
+                            stemsAndOptions.options.keys.push(key.toUpperCase());
                         }
                     })
 

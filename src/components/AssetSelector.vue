@@ -1,11 +1,9 @@
 <template>
   <div v-if="!isMobile"
-      class="flex flex-col w-1/3 h-48 border-2 border-black rounded-lg justify-between font-bold p-2 m-2 nowrap overflow-hidden"
-      style="background-color: rgba(255,255,255,0.9);">
+       class="flex w-1/3 h-48 border-2 border-black rounded-lg justify-between font-bold p-2 m-2 nowrap overflow-hidden"
+       style="background-color: rgba(255,255,255,0.9);">
 
-
-
-    <div class="w-1/2">
+    <div class="w-1/2 bg-green-400">
       <button @click="newProjectDialog()"
               class="h-16 w-16">
         <img
@@ -19,86 +17,33 @@
       </button>
     </div>
 
+    <div class="w-1/2 bg-orange-400">
+      <div class="flex w-full h-8 justify-between my-1">
+        <label for="bpm-filter" class="w-1/3 my-2 text-sm">BPM</label>
+        <select v-model="store.state.globalBpm" id="bpm-filter" class="w-2/3 text-xs rounded-lg">
+          <option :value="item" v-for="item in filterBpmOptions.arr">{{ item }}
+          </option>
+        </select>
+      </div>
 
+      <div class="flex w-full h-8 justify-between my-1">
+        <label for="key-filter" class="w-1/3 my-2 text-sm">KEY</label>
+        <select v-model="store.state.globalKey" id="key-filter" class="w-2/3 text-xs rounded-lg">
+          <option :value="item" v-for="item in filterKeyOptions.arr">{{ item }}
+          </option>
+        </select>
+      </div>
 
-
-
-    <div class="flex w-full h-8 justify-between my-1">
-      <label for="bpm-filter" class="w-1/3 my-2 text-sm">BPM</label>
-      <select v-if="filterBpm != undefined" v-model="filterBpm" id="bpm-filter" class="w-2/3 text-xs rounded-lg">
-        <option :value="item" v-for="item in filterBpmOptions.arr">{{ item }}
-        </option>
-      </select>
-    </div>
-
-    <div class="flex w-full h-8 justify-between my-1">
-      <label for="type-filter" class="w-1/3 my-2 text-sm">TYPE</label>
-      <select v-if="filterType != undefined" v-model="filterType" id="type-filter" class="w-2/3 text-xs rounded-lg">
-        <option :value="item" v-for="item in filterTypeOptions.arr">{{ item }}
-        </option>
-      </select>
-    </div>
-
-    <div class="flex w-full h-8 justify-between my-1">
-      <label for="key-filter" class="w-1/3 my-2 text-sm">KEY</label>
-      <select v-if="filterKey != undefined" v-model="filterKey" id="key-filter" class="w-2/3 text-xs rounded-lg">
-        <option :value="item" v-for="item in filterKeyOptions.arr">{{ item }}
-        </option>
-      </select>
-    </div>
-
-    <div class="flex w-full h-8 justify-between my-1">
-      <label for="chord-filter" class="w-1/3 my-2 text-sm">CHORD</label>
-      <select v-if="filterChord != undefined" v-model="filterChord" id="chord-filter"
-              class="w-2/3 text-xs rounded-lg">
-        <option :value="item" v-for="item in filterChordOptions.arr">{{ item }}
-        </option>
-      </select>
+      <div class="flex w-full h-8 justify-between my-1">
+        <label for="chord-filter" class="w-1/3 my-2 text-sm">CHORD</label>
+        <select v-model="store.state.globalChords" id="chord-filter"
+                class="w-2/3 text-xs rounded-lg">
+          <option :value="item" v-for="item in filterChordOptions.arr">{{ item }}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
-
-<!--  <div v-if="!isMobile" class="flex w-4/6 h-48 justify-center border-2 border-black my-2 pt-4 rounded-lg"-->
-<!--       style="background-color: rgba(255,255,255,0.9);">-->
-<!--    <div-->
-<!--        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"-->
-<!--        @click="pagePrev">-->
-<!--      <img :src="staticImages.pageLeftImgSrc" class="w-8 h-8">-->
-<!--    </div>-->
-
-<!--    <ul class="grid grid-cols-8 gap-2">-->
-<!--      <asset v-for="stem in getFilteredStems" :stem=stem></asset>-->
-<!--    </ul>-->
-<!--    <div-->
-<!--        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer text-4xl opacity-25 hover:opacity-75"-->
-<!--        @click="pageNext">-->
-<!--      <img :src="staticImages.pageRightImgSrc" class="w-8 h-8">-->
-<!--    </div>-->
-<!--  </div>-->
-
-<!--  <div v-if="isMobile" class="flex w-full justify-center border-4 border-black my-2 py-4 rounded-lg"-->
-<!--       :class="{-->
-<!--        'border-4': animateSelector,-->
-<!--        'init-pulse': animateSelector,-->
-<!--        'border-pulsate': animateSelector,-->
-<!--        }"-->
-<!--       style="background-color: rgba(255,255,255,0.9);">-->
-<!--    <div-->
-<!--        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer opacity-25 hover:opacity-75"-->
-<!--        @click="pagePrev">-->
-<!--      <img :src="staticImages.pageLeftImgSrc" class="object-scale-down">-->
-<!--    </div>-->
-
-<!--    <ul class="grid grid-cols-4 gap-2">-->
-<!--      <asset v-for="stem in getFilteredStems" :stem=stem></asset>-->
-<!--    </ul>-->
-
-<!--    <div-->
-<!--        class="flex flex-col justify-center text-center w-10 m-2 hover:cursor-pointer opacity-25 hover:opacity-75"-->
-<!--        @click="pageNext">-->
-<!--      <img :src="staticImages.pageRightImgSrc" class="object-scale-down">-->
-<!--    </div>-->
-<!--  </div>-->
-
 
   <loading-spinner :showLoadingProp="showLoadingSpinner"></loading-spinner>
 
@@ -131,12 +76,8 @@ export default {
     const isMobile = ref(store.isMobile ? true : false)
     const filterBpm = ref()
     const filterBpmOptions = reactive({arr: [0]})
-    const filterType = ref()
-    const filterTypeOptions = reactive({arr: ['all']})
-    const filterKey = ref()
-    const filterKeyOptions = reactive({arr: ['all']})
-    const filterChord = ref()
-    const filterChordOptions = reactive({arr: ['all']})
+    const filterKeyOptions = reactive({arr: ['C']})
+    const filterChordOptions = reactive({arr: []})
     const animateSelector = ref(false)
     const pageIndex = ref(0)
     const numOfResultsMobile = 4
@@ -145,7 +86,6 @@ export default {
 
     let totalResults = 0
     let prevFilterBpm = 0;
-    let prevFilterType = 0;
 
     const showLoadingSpinner = ref(false)
     const staticImages = {
@@ -170,29 +110,6 @@ export default {
     const stemSelections = reactive({
       arr: [],
     });
-
-    const getFilteredStems = computed(() => {
-
-      if (filterBpm.value != prevFilterBpm || filterType.value != prevFilterType) {
-        prevFilterBpm = filterBpm.value;
-        prevFilterType = filterType.value;
-        pageIndex.value = 0
-      }
-
-      const filteredStems = new AssetSelectionFilter(stemSelections.arr, filterBpm.value, filterType.value, filterKey.value, filterChord.value).filter()
-
-      if(isMobile.value){
-        filteredStems.forEach(stem => {
-          stem['host'] = 'selector'
-        })
-      }
-
-      totalResults = filteredStems.length
-
-      const pagedResults = filteredStems.slice(pageIndex.value, pageIndex.value + numOfResults)
-
-      return pagedResults
-    })
 
     const createEmptyProject = async () => {
       const numOfGridRows = 6
@@ -240,6 +157,7 @@ export default {
       store.state.globalBpm = retrievedRestoredData.globalBpm;
       store.state.globalKey = retrievedRestoredData.globalKey;
       store.state.grid = retrievedRestoredData.grid;
+      store.state.updateGlobalChords()
 
       emit('renderMix')
       emit('closeProjectsBoard')
@@ -289,41 +207,13 @@ export default {
 
     watch(() => bus.value.get('updateAssetSelection'), (assetFilter) => {
 
-      /*
-      For now, we are not going to filter by key.  But this might need to change when melodies are introduced.
-       */
-
-      // if (store.state.globalKey) {
-      //   filterKey.value = store.state.globalKey.toLowerCase()
-      // } else {
-        filterKey.value = 'all'
-      // }
-
       if (store.state.globalBpm) {
         filterBpm.value = store.state.globalBpm
       } else {
         filterBpm.value = 0
       }
 
-      if (assetFilter[0].filterKey) {
-        //IN THIS CASE WE EXPLICITLY OVERRIDE THE GLOBAL KEY
-        filterKey.value = assetFilter[0].filterKey
-      }
-
-      if (!assetFilter[0]) {
-        filterType.value = 'all'
-        return
-      }
-
-      if (assetFilter[0].clipType) {
-        filterType.value = assetFilter[0].clipType
-      }
-
-      if (assetFilter[0].chords) {
-        filterChord.value = assetFilter[0].chords //TODO DO NOT LOWERCASE
-      }
-
-      if(new GridProcessor(store.state.grid).isAcceptingMobileTransfers()){
+      if (new GridProcessor(store.state.grid).isAcceptingMobileTransfers()) {
         animateSelector.value = true
       }
     })
@@ -344,24 +234,14 @@ export default {
           stems.options.bpms.forEach(bpm => {
             filterBpmOptions.arr.push(Math.round(bpm))
           })
-          filterBpm.value = 0
-
-          stems.options.types.forEach(t => {
-            if (ROW_TO_TYPE_MAP.includes(t)) {
-              filterTypeOptions.arr.push(t)
-            }
-          })
-          filterType.value = 'all'
 
           stems.options.keys.forEach(t => {
             filterKeyOptions.arr.push(t)
           })
-          filterKey.value = 'all'
 
           stems.options.chords.forEach(t => {
             filterChordOptions.arr.push(t)
           })
-          filterChord.value = 'all'
 
           await nextTick(() => {
             isMobile.value = store.isMobile ? true : false
@@ -382,15 +262,9 @@ export default {
     return {
       animateSelector,
       isMobile,
-      filterBpm,
       filterBpmOptions,
-      filterType,
-      filterTypeOptions,
-      filterKey,
       filterKeyOptions,
-      filterChord,
       filterChordOptions,
-      getFilteredStems,
       newProjectDialog,
       pageNext,
       pagePrev,
@@ -407,9 +281,16 @@ export default {
 .init-pulse {
   animation: border-pulsate 2s infinite;
 }
+
 @keyframes border-pulsate {
-  0%   { border-color: rgba(34, 197, 94, 1); }
-  50% { border-color: rgba(34, 197, 94, 0); }
-  100%   { border-color: rgba(34, 197, 94, 1); }
+  0% {
+    border-color: rgba(34, 197, 94, 1);
+  }
+  50% {
+    border-color: rgba(34, 197, 94, 0);
+  }
+  100% {
+    border-color: rgba(34, 197, 94, 1);
+  }
 }
 </style>

@@ -39,7 +39,6 @@
       >
 
     <div class="w-full h-full absolute z-0" v-bind:style="{ backgroundImage: 'url(' + stem.waveform + ')',  'background-size': '100% 100%', 'opacity': '0.8' }">
-      HELLOP
     </div>
 
     <div class="w-full h-full hover:shadow-lg hover:cursor-move absolute z-50"

@@ -28,14 +28,38 @@ const state = reactive({
     },
     globalChords: undefined,
     getGlobalChords: function () {
-        if (this.globalKey) {
-            return this.globalKey
+        if (this.globalChords) {
+            return this.globalChords
+        }
+
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                if (this.grid[row].value[col].stem) {
+                    if (this.grid[row].value[col].stem.chords) {
+                        return this.grid[row].value[col].stem.chords
+                    }
+                }
+            }
         }
 
         return 'CM7:CM7:CM7:CM7'
     },
     setGlobalChords: function (chords) {
         return this.globalChords = chords
+    },
+    updateGlobalChords: function () { 
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                if (this.grid[row].value[col].stem) {
+                    if (this.grid[row].value[col].stem.chords) {
+                        this.globalChords = this.grid[row].value[col].stem.chords
+                        return this.grid[row].value[col].stem.chords
+                    }
+                }
+            }
+        }
+
+        return 'CM7:CM7:CM7:CM7'
     },
     playBack: {
         loopStartPercent: 0,

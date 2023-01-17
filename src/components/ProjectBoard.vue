@@ -137,11 +137,12 @@ export default {
 
       store.state.projectId = retrievedRestoredData.projectId
       store.state.projectVersionId = retrievedRestoredData.projectVersionId
-      store.state.projectName = retrievedRestoredData.projectName;
-      store.state.authorName = retrievedRestoredData.authorName;
-      store.state.globalBpm = retrievedRestoredData.globalBpm;
-      store.state.globalKey = retrievedRestoredData.globalKey;
-      store.state.grid = retrievedRestoredData.grid;
+      store.state.projectName = retrievedRestoredData.projectName
+      store.state.authorName = retrievedRestoredData.authorName
+      store.state.globalBpm = retrievedRestoredData.globalBpm
+      store.state.globalKey = retrievedRestoredData.globalKey
+      store.state.grid = retrievedRestoredData.grid
+      store.updateGlobalChords()
 
       emit('renderMix')
       emit('closeProjectsBoard')
