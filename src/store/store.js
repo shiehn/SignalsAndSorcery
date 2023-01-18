@@ -47,7 +47,7 @@ const state = reactive({
     setGlobalChords: function (chords) {
         return this.globalChords = chords
     },
-    updateGlobalChords: function () { 
+    updateGlobalChords: function () {
         for (let row = 0; row < this.grid.length; row++) {
             for (let col = 0; col < this.grid[row].value.length; col++) {
                 if (this.grid[row].value[col].stem) {

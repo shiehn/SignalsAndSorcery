@@ -76,9 +76,9 @@ export default class ComposerAPI {
         return undefined
     }
 
-    async getAssetRowAlternative(token, bpm, key, chords, type) {
+    async getAssetRowAlternative(token, bpm, key, chords, role) {
         try {
-            const url = BASE_API_URL + 'compositions/asset/row/alternative/?chords=chords&bpm=120&key=c&role=dom'
+            const url = `${BASE_API_URL}compositions/asset/row/alternative/?chords=${encodeURIComponent(chords)}&bpm=${encodeURIComponent(bpm)}&key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`
 
             let axiosConfig = {
                 headers: {
@@ -89,7 +89,7 @@ export default class ComposerAPI {
 
             let res = await axios.get(url, axiosConfig)
 
-            if (res['data']) {
+            if (res['data'] && res['data']['stems'] && res['data']['stems'].length == 4) {
                 return res['data']
             } else {
                 console.log('Error', "Unable get an alternative asset : " + res['error'])
@@ -101,10 +101,10 @@ export default class ComposerAPI {
         return undefined
     }
 
-    async getAssetAlternative(token, bpm, key, chords, type) {
+    async getAssetAlternative(token, bpm, key, chords, role) {
 
         try {
-            const url = BASE_API_URL + `compositions/asset/alternative/?chords=${chords}&bpm=${bpm}&key=${key}&role=${type}`
+            const url = `${BASE_API_URL}compositions/asset/alternative/?chords=${encodeURIComponent(chords)}&bpm=${encodeURIComponent(bpm)}&key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`
 
             let axiosConfig = {
                 headers: {
@@ -115,7 +115,7 @@ export default class ComposerAPI {
 
             let res = await axios.get(url, axiosConfig)
 
-            if (res['data'] && res['data']['stems']) {
+            if (res['data'] && res['data']['stems'] && res['data']['stems'].length > 0) {
                 return res['data']['stems'][0]
             } else {
                 console.log('Error', "Unable get an alternative asset : " + res['error'])

@@ -52,16 +52,12 @@
             v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
             @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
 
+          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :row="gridRowItem.row" :col="gridRowItem.col" :grid=true></asset>
           <div class="w-1/3 h-full absolute left-1/3 flex">
-
-<!--            v-if="gridRowItem.stem"-->
             <img :src="imageUrls.refreshIconPath"
                  @click.stop="refreshGridItem(gridRowItem)"
                  class="w-full h-full rounded-full hover:bg-white hover:border-green-500 hover:border-2">
-
           </div>
-          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :row="gridRowItem.row" :col="gridRowItem.col" :grid=true></asset>
-
 
         </div>
       </div>
@@ -255,10 +251,10 @@ export default {
       //showLoadingSpinner.value = true
 
       const token = store.state.token
-      const bpm = 120
-      const key = 'C'
-      const chords = 'GM7:GM7:GM7:GM7'
-      const type = 'drum'
+      const bpm = store.state.getGlobalBpm()
+      const key = store.state.getGlobalKey()
+      const chords = store.state.getGlobalChords()
+      const type = ROW_TO_TYPE_MAP[gridItem.row]
 
       const row = gridItem.row
       const col = gridItem.col
@@ -267,10 +263,6 @@ export default {
 
       const res = await new ComposerAPI().getAssetAlternative(token, bpm, key, chords, type)
       //showLoadingSpinner.value = false
-
-
-
-
 
       store.state.grid[row].value[col].stem = res
     }
@@ -326,9 +318,12 @@ export default {
     })
 
     watch(() => bus.value.get('removeGridItem'), (rowCol) => {
-      console.log('yo row', rowCol[0][0])
-      console.log('yo col', rowCol[0][1])
       removeGridItem(rowCol[0][0], rowCol[0][1])
+    })
+
+
+    watch(() => bus.value.get('refreshGridItem'), (rowCol) => {
+      refreshGridItem(rowCol[0])
     })
 
     watch(() => bus.value.get('refreshRow'), async (type) => {
@@ -341,7 +336,10 @@ export default {
       const rowIdx = ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === type[0])
 
       for(let i=0; res.stems.length > i; i++){
-        store.state.grid[rowIdx].value[i].stem = res.stems[i]
+        if(res.stems[i] && res.stems[i]['bpm']){
+          console.log('STEM', i, res.stems[i])
+          store.state.grid[rowIdx].value[i].stem = res.stems[i]
+        }
       }
     })
 

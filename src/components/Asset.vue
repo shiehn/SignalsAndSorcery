@@ -36,19 +36,19 @@
       @dragend="endDrag($event)"
       v-on:mouseover="mouseOverGridItem(stem)"
       v-on:mouseleave="mouseLeaveGridItem(stem)"
-      >
+  >
 
-    <div class="w-full h-full absolute z-0" v-bind:style="{ backgroundImage: 'url(' + stem.waveform + ')',  'background-size': '100% 100%', 'opacity': '0.8' }">
+    <div class="w-full h-full absolute z-0"
+         v-bind:style="{ backgroundImage: 'url(' + stem.waveform + ')',  'background-size': '100% 100%', 'opacity': '0.8' }">
     </div>
 
     <div class="w-full h-full hover:shadow-lg hover:cursor-move absolute z-50"
          v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.5) ' + progressBar + '%, rgba(255, 255, 255, 0) ' + progressBar + '%' }">
-<!--      <div v-if="stem.type != 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">-->
-<!--        {{ stem.chords }} <span v-if="isGrid"> - {{ stem.bpm }}</span>-->
-<!--      </div>-->
-<!--      <div v-if="stem.type == 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">drum-->
-<!--      </div>-->
-
+      <!--      <div v-if="stem.type != 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">-->
+      <!--        {{ stem.chords }} <span v-if="isGrid"> - {{ stem.bpm }}</span>-->
+      <!--      </div>-->
+      <!--      <div v-if="stem.type == 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">drum-->
+      <!--      </div>-->
 
 
       <div class="w-full h-full flex items-center">
@@ -62,6 +62,7 @@
 
         <div class="w-1/3 h-full flex justify-center items-center">
           <img :src="stem.refreshIconPath"
+               @click.stop="refreshGridItem()"
                class="w-10 h-10 aspect-square bg-white border-2 border-black rounded-full">
         </div>
 
@@ -80,7 +81,7 @@
         </div>
       </div>
 
-<!--      <div v-if="!isGrid" class="bottom-0 right-0 p-1 text-xs bg-red-200 bg-opacity-50">{{ stem.bpm }}</div>-->
+      <!--      <div v-if="!isGrid" class="bottom-0 right-0 p-1 text-xs bg-red-200 bg-opacity-50">{{ stem.bpm }}</div>-->
       <audio :ref="el => { audioTag = el }" loop>
         <source v-bind:src=stem.source type="audio/mpeg"/>
         Your browser does not support the audio element.
@@ -209,6 +210,13 @@ export default {
       return targetRow != ROW_TO_TYPE_MAP.indexOf(stemType);
     }
 
+    const refreshGridItem = () => {
+      emit('refreshGridItem', {
+        row: props.row,
+        col: props.col,
+      })
+    }
+
     const onPlayOrTransferClip = (stemInput) => {
       //CHECK IF A GRID ITEM IS SET TO ACCEPT MOBILE TRANSFER
       const mobileTransferEnabledGridItem = new GridProcessor(store.state.grid).getMobileTransferEnabledGridItem()
@@ -294,6 +302,7 @@ export default {
       onRemoveClip,
       progressBar,
       startDrag,
+      refreshGridItem,
     }
   }
 }
