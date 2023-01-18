@@ -52,36 +52,34 @@
 
 
       <div class="w-full h-full flex items-center">
-        <div class="w-1/3 h-full flex justify-start items-end" @click="onPlayClip(stem)">
+        <div class="w-1/3 h-full flex justify-evenly items-center" @click="onPlayClip(stem)">
           <img :src=stem.previewPlayIconPath
-               class="h-6 w-6 ml-2 aspect-square bg-white border-2 border-black rounded-full">
+               class="h-6 w-6 ml-2 aspect-square bg-white border-2 border-black rounded-full hover:cursor-pointer">
 
-          <img :src=stem.unlockIconPath
+          <img v-if="locked" :src=stem.lockIconPath
+               class="h-6 w-6 ml-2 aspect-square">
+
+          <img v-if="!locked" :src=stem.unlockIconPath
                class="h-6 w-6 ml-2 aspect-square">
         </div>
 
         <div class="w-1/3 h-full flex justify-center items-center">
           <img :src="stem.refreshIconPath"
                @click.stop="refreshGridItem()"
-               class="w-10 h-10 aspect-square bg-white border-2 border-black rounded-full">
+               class="w-10 h-10 aspect-square bg-white border-2 border-black rounded-full hover:cursor-pointer">
         </div>
 
-        <div class="w-1/3 h-full flex-col items-center">
-          <div class="w-full h-1/2 flex justify-end items-center">
-            <img :src="stem.deleteIconPath"
-                 @click="onRemoveClip"
-                 class="h-6 w-6 mr-2 aspect-square bg-white border-2 border-black rounded-full">
-          </div>
-          <div class="w-full h-1/2 flex justify-end items-center">
-            <img :src="stem.downloadIconPath"
-                 @click="downloadGridItem(stem)"
-                 class="h-6 w-6 p-1 mr-2 aspect-square bg-white border-2 border-black rounded-full">
-          </div>
+        <div class="w-1/3 h-full flex justify-evenly items-center">
+          <img :src="stem.downloadIconPath"
+               @click="downloadGridItem(stem)"
+               class="h-6 w-6 p-1 mr-2 aspect-square bg-white border-2 border-black rounded-full hover:cursor-pointer">
 
+          <img :src="stem.deleteIconPath"
+               @click="onRemoveClip"
+               class="h-6 w-6 mr-2 aspect-square bg-white border-2 border-black rounded-full hover:cursor-pointer">
         </div>
       </div>
 
-      <!--      <div v-if="!isGrid" class="bottom-0 right-0 p-1 text-xs bg-red-200 bg-opacity-50">{{ stem.bpm }}</div>-->
       <audio :ref="el => { audioTag = el }" loop>
         <source v-bind:src=stem.source type="audio/mpeg"/>
         Your browser does not support the audio element.
@@ -91,7 +89,7 @@
 </template>
 
 <script>
-import {inject, onBeforeUpdate, nextTick, onMounted, ref, watch} from "vue";
+import {inject, onBeforeUpdate, nextTick, onMounted, ref, watch, toRefs} from "vue";
 import useEventsBus from "../events/eventBus";
 import GridProcessor from "../processors/grid-processor";
 import {v4} from "uuid";
@@ -108,6 +106,7 @@ export default {
     stem: Object,
     row: Number,
     col: Number,
+    locked: Boolean,
     grid: Boolean,
   },
   setup(props) {
@@ -124,6 +123,8 @@ export default {
 
     let currentTime = 0
     let duration = 0
+
+    const { locked } = toRefs(props)
 
     //by default the play button should be showing
     props.stem.previewPlayIconPath = store.state.staticUrl + 'icons/play-button.png' + "?x-request=html"
@@ -295,6 +296,7 @@ export default {
       hostType,
       isGrid,
       isMobile,
+      locked,
       mouseOverGridItem,
       mouseLeaveGridItem,
       onPlayClip,

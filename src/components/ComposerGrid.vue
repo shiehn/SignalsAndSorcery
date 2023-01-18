@@ -38,7 +38,7 @@
          class="flex flex-none justify-between mb-2">
       <div v-for="gridRowItem in gridRow.value" class="w-1/4 h-16 pr-2">
         <div
-            class="w-full h-full overflow-hidden relative rounded-lg shadow-lg opacity-40 hover:bg-gray-500 hover:cursor-pointer"
+            class="w-full h-full overflow-hidden relative rounded-lg shadow-lg opacity-40 hover:bg-gray-500"
             :class="{
             'opacity-100': gridRowItem.stem,
             'bg-green-100': gridRowItem.compatibility === 2,
@@ -52,11 +52,13 @@
             v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
             @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
 
-          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :row="gridRowItem.row" :col="gridRowItem.col" :grid=true></asset>
-          <div class="w-1/3 h-full absolute left-1/3 flex">
+          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :locked="gridRowItem.locked" :row="gridRowItem.row" :col="gridRowItem.col"
+                 :grid=true></asset>
+          <div class="w-1/3 h-full absolute left-1/3 flex justify-center items-center">
             <img :src="imageUrls.refreshIconPath"
                  @click.stop="refreshGridItem(gridRowItem)"
-                 class="w-full h-full rounded-full hover:bg-white hover:border-green-500 hover:border-2">
+                 :class="[gridRowItem.refreshing ? 'animate-spin' : '']"
+                 class="w-10 h-10 aspect-square bg-white border-2 border-black rounded-full hover:cursor-pointer">
           </div>
 
         </div>
@@ -261,8 +263,15 @@ export default {
 
       removeGridItem(row, col)
 
+
+      console.log('BREAK', store.state.grid[row].value[col])
+      store.state.grid[row].value[col].refreshing = true
+
+
+
       const res = await new ComposerAPI().getAssetAlternative(token, bpm, key, chords, type)
-      //showLoadingSpinner.value = false
+      store.state.grid[row].value[col].refreshing = false
+
 
       store.state.grid[row].value[col].stem = res
     }
@@ -335,8 +344,8 @@ export default {
       const res = await new ComposerAPI().getAssetRowAlternative(token, bpm, key, chords, type[0])
       const rowIdx = ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === type[0])
 
-      for(let i=0; res.stems.length > i; i++){
-        if(res.stems[i] && res.stems[i]['bpm']){
+      for (let i = 0; res.stems.length > i; i++) {
+        if (res.stems[i] && res.stems[i]['bpm']) {
           console.log('STEM', i, res.stems[i])
           store.state.grid[rowIdx].value[i].stem = res.stems[i]
         }

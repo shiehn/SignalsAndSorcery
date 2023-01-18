@@ -52,7 +52,8 @@
               :src="imageAssets.downloadBtn" class="h-5"/>
         </button>
         <button
-            class="w-8 h-8 border-2 border-black p-1 rounded-md opacity-50">
+            @click="debugGrid()"
+            class="w-8 h-8 border-2 border-black p-1 rounded-md opacity-50 bg-red-400">
           <!--          <img :src="imageAssets.newProject" class="h-5"/>-->
         </button>
       </div>
@@ -184,6 +185,9 @@ export default {
       }
     }
 
+    const debugGrid = () => { 
+      console.log('GRID', store.state.grid)
+    }
 
     watch(() => bus.value.get('saveProjectToLocalStorage'), async () => {
       if (store.state.grid && store.state.grid.length > 0) {
@@ -223,7 +227,7 @@ export default {
       imageAssets,
       isMobile,
       logDebug,
-
+      debugGrid,
       saveProject,
       showProjectsBoard,
       showLoadingSpinner,
