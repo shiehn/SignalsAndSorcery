@@ -129,6 +129,7 @@ import ModalOpenPayload from "./ModalOpenPayload";
 import {watch} from "vue";
 import {ROW_TO_TYPE_MAP, TYPE_DRUM, TYPE_FILL, TYPE_HI, TYPE_LOW, TYPE_MELODIC, TYPE_MID} from "../constants/constants";
 import LockProcessor from "../processors/lock-processor";
+import store from "../store/store";
 
 export default {
   name: "ComposerGridControlColumn",
@@ -212,20 +213,21 @@ export default {
       emit('renderMixIfNeeded')
     }
 
-    const clearRowModalId = 'clearRowModalId'
+    // const clearRowModalId = 'clearRowModalId'
     const handleClearRow = (type) => {
-      const modalClearRowConfirmPayload = new ModalOpenPayload(
-          clearRowModalId,
-          'Clear Row?',
-          'Are you sure you want to clear the row?',
-          'Yes',
-          undefined,
-          'Cancel',
-          false,
-          type
-      )
-
-      emit('launchModal', modalClearRowConfirmPayload)
+      clearRow(type)
+      // const modalClearRowConfirmPayload = new ModalOpenPayload(
+      //     clearRowModalId,
+      //     'Clear Row?',
+      //     'Are you sure you want to clear the row?',
+      //     'Yes',
+      //     undefined,
+      //     'Cancel',
+      //     false,
+      //     type
+      // )
+      //
+      // emit('launchModal', modalClearRowConfirmPayload)
     }
 
     const handleRefreshRow = (type) => {
@@ -289,6 +291,47 @@ export default {
       })
     });
 
+    // for (let row = 0; row < store.state.grid.length; row++) {
+    //   for (let col = 0; col < store.state.grid[row].value.length; col++) {
+
+    watch(() => bus.value.get('updateColumnLocks'), (modalResponsePayload) => {
+      const lockProcessor = new LockProcessor(store.state.grid)
+
+      for(let row=0; store.state.grid.length > row; row++) {
+        if(lockProcessor.rowHasLockedItems(row)) {
+          if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_HI)) {
+            lockedRowHi.value = true
+          } else if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_MID)) {
+            lockedRowMid.value = true
+          } else if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_LOW)) {
+            lockedRowLow.value = true
+          } else if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_DRUM)) {
+            lockedRowDrum.value = true
+          } else if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_FILL)) {
+            lockedRowFill.value = true
+          } else if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_MELODIC)) {
+            lockedRowMelodic.value = true
+          }
+        }else{
+          if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_HI)) {
+            console.log('HI FALSE')
+            lockedRowHi.value = false
+          } else if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_MID)) {
+            lockedRowMid.value = false
+          } else if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_LOW)) {
+            lockedRowLow.value = false
+          } else if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_DRUM)) {
+            lockedRowDrum.value = false
+          } else if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_FILL)) {
+            lockedRowFill.value = false
+          } else if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_MELODIC)) {
+            lockedRowMelodic.value = false
+          }
+        }
+      }
+    })
+
+
     watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
       if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === addSectionModalId) {
         if (modalResponsePayload[0].getResponse()) {
@@ -296,11 +339,11 @@ export default {
         }
       }
 
-      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === clearRowModalId) {
-        if (modalResponsePayload[0].getResponse()) {
-          clearRow(modalResponsePayload[0].getRelayData())
-        }
-      }
+      // if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === clearRowModalId) {
+      //   if (modalResponsePayload[0].getResponse()) {
+      //     clearRow(modalResponsePayload[0].getRelayData())
+      //   }
+      // }
     })
 
     return {

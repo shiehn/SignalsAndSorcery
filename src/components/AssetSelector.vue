@@ -10,7 +10,7 @@
             :src="staticImages.refreshBtn" class="rounded-full hover:ring-4 hover:ring-green-500"/>
       </button>
 
-      <button @click="newProjectDialog()"
+      <button @click="unlockAll()"
               class="h-6 w-6">
         <img v-if="lockGlobal"
              :src="staticImages.lockBtn" class="rounded-full p-0.5 bg-white ring-2 ring-black hover:ring-green-500"/>
@@ -24,12 +24,17 @@
     <div class="w-2/5 flex justify-around items-center">
       <div class="w-full h-full p-1 flex flex-col justify-center items-center">
         <div class="flex w-full h-8 justify-around items-center my-1">
-          <img v-if="lockBpm"
-               :src="staticImages.lockBtn" class="w-1/5 h-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
-          <img v-if="!lockBpm"
-               :src="staticImages.unlockBtn" class="w-1/5 h-5 w-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
-          <div class="w-1/5 text-sm">BPM</div>
-          <select v-model="store.state.globalBpm" class="w-3/5 text-xs rounded-lg bg-gray-100">
+          <div class="w-1/6 flex justify-center items-center">
+            <img v-if="lockBpm"
+                 :src="staticImages.lockBtn" @click.stop="toggleBpmLock"
+                 class="w-5 h-5 p-0.5 rounded-full ring-2 ring-red-500"/>
+            <img v-if="!lockBpm"
+                 :src="staticImages.unlockBtn" @click.stop="toggleBpmLock"
+                 class="w-5 h-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
+          </div>
+          <div class="w-1/6 text-sm">BPM</div>
+          <select v-model="store.state.globalBpm" @input="onBpmInput"
+                  class="py-1 px-2 mr-4 w-4/6 text-black text-m font-bold rounded-lg bg-gray-100">
             <option :value="item" v-for="item in filterBpmOptions.arr">{{ item }}
             </option>
           </select>
@@ -37,12 +42,17 @@
         </div>
 
         <div class="flex w-full h-8 justify-around items-center my-1">
-          <img v-if="lockKey"
-               :src="staticImages.lockBtn" class="w-1/5 h-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
-          <img v-if="!lockKey"
-               :src="staticImages.unlockBtn" class="w-1/5 h-5 w-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
-          <label class="w-1/5 text-sm">KEY</label>
-          <select v-model="store.state.globalKey" id="key-filter" class="w-3/5 text-xs rounded-lg bg-gray-100">
+          <div class="w-1/6 flex justify-center items-center">
+            <img v-if="lockKey"
+                 :src="staticImages.lockBtn" @click.stop="toggleKeyLock"
+                 class="w-5 h-5 p-0.5 rounded-full ring-2 ring-red-500"/>
+            <img v-if="!lockKey"
+                 :src="staticImages.unlockBtn" @click.stop="toggleKeyLock"
+                 class="w-5 h-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
+          </div>
+          <label class="w-1/6 text-sm">KEY</label>
+          <select v-model="store.state.globalKey" @input="onKeyInput"
+                  class="w-4/6 py-1 px-2 mr-4 text-black text-m font-bold rounded-lg bg-gray-100">
             <option :value="item" v-for="item in filterKeyOptions.arr">{{ item }}
             </option>
           </select>
@@ -54,16 +64,16 @@
     <div class="w-2/5 flex flex-col justify-around items-center p-2">
       <div class="w-full h-full p-1 flex flex-col justify-center items-center">
         <div class="flex w-full h-8 justify-around items-center my-1">
-          <img v-if="lockChord"
-               :src="staticImages.lockBtn" class="w-1/5 h-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
-          <img v-if="!lockChord"
-               :src="staticImages.unlockBtn" class="w-1/5 h-5 w-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
+          <!--          <img v-if="lockChord"-->
+          <!--               :src="staticImages.lockBtn" class="w-1/5 h-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>-->
+          <!--          <img v-if="!lockChord"-->
+          <!--               :src="staticImages.unlockBtn" class="w-1/5 h-5 w-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>-->
           <label class="w-1/5 my-2 text-sm">CHORDS</label>
           <div class="w-3/5 h-full"></div>
         </div>
         <div class="flex w-full h-8 justify-around items-center my-1">
           <select v-model="store.state.globalChords" id="chord-filter"
-                  class="w-full text-xs rounded-lg bg-gray-100">
+                  class="w-full py-1 px-2 text-black text-m font-bold rounded-lg bg-gray-100" disabled>
             <option :value="item" v-for="item in filterChordOptions.arr">{{ item }}
             </option>
           </select>
@@ -92,6 +102,7 @@ import SaveAndLoadAdapter from "../persistence/save-load-adapter";
 import Analytics from "../analytics/Analytics";
 import GridGenerator from "../generators/grid-generator";
 import LoadingSpinner from "./LoadingSpinner.vue";
+import LockProcessor from "../processors/lock-processor";
 
 export default {
   name: "AssetSelector",
@@ -201,6 +212,15 @@ export default {
       new Analytics().trackCreateRandom()
     }
 
+    const unlockAll = () => {
+      lockKey.value = false
+      lockBpm.value = false
+
+      new LockProcessor(store.state.grid).unlockAll()
+      emit('updateAssetLocks')
+      emit('updateColumnLocks')
+    }
+
     const createNewProjectWarningDialogModalId = 'newProjectWarning'
     const newProjectDialog = (projectId) => {
       const modalPayload = new ModalOpenPayload(
@@ -217,6 +237,63 @@ export default {
       emit('launchModal', modalPayload)
     }
 
+    const bpmChangeWarningDialogModalId = 'bpmChangeWarningDialogModalId'
+    const bpmChangeDialog = (prevBpm) => {
+      const modalPayload = new ModalOpenPayload(
+          bpmChangeWarningDialogModalId,
+          'Force Refresh?',
+          'WARNING: Changing the BPM will force a full refresh!',
+          'Ok',
+          '',
+          'Cancel',
+          false,
+          prevBpm,
+      )
+
+      emit('launchModal', modalPayload)
+    }
+
+
+    const keyChangeWarningDialogModalId = 'keyChangeWarningDialogModalId'
+    const keyChangeDialog = (prevKey) => {
+      const modalPayload = new ModalOpenPayload(
+          keyChangeWarningDialogModalId,
+          'Force Refresh?',
+          'WARNING: Changing the KEY will force a full refresh!',
+          'Ok',
+          '',
+          'Cancel',
+          false,
+          prevKey,
+      )
+
+      emit('launchModal', modalPayload)
+    }
+
+    const onBpmInput = (e) => {
+      if (lockBpm.value) {
+        e.target.value = store.state.getGlobalBpm()
+      } else {
+        bpmChangeDialog(store.state.getGlobalBpm())
+      }
+    }
+
+    const onKeyInput = (e) => {
+      if (lockKey.value) {
+        alert(store.state.getGlobalKey())
+        e.target.value = store.state.getGlobalKey()
+      } else {
+        keyChangeDialog(store.state.getGlobalKey())
+      }
+    }
+
+    const toggleKeyLock = () => {
+      lockKey.value = !lockKey.value
+    }
+    const toggleBpmLock = () => {
+      lockBpm.value = !lockBpm.value
+    }
+
     watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
       if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === createNewProjectWarningDialogModalId) {
         if (modalResponsePayload[0].getResponse()) {
@@ -229,6 +306,22 @@ export default {
           } else {
             toast.error('Error creating new project')
           }
+        }
+      }
+
+      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === bpmChangeWarningDialogModalId) {
+        if (modalResponsePayload[0].getResponse()) {
+          createRandomProject()
+        } else {
+          store.state.globalBpm = modalResponsePayload[0].getRelayData()
+        }
+      }
+
+      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === keyChangeWarningDialogModalId) {
+        if (modalResponsePayload[0].getResponse()) {
+          createRandomProject()
+        } else {
+          store.state.globalKey = modalResponsePayload[0].getRelayData()
         }
       }
     })
@@ -304,12 +397,17 @@ export default {
       lockKey,
       lockChord,
       newProjectDialog,
+      onBpmInput,
+      onKeyInput,
       pageNext,
       pagePrev,
       showLoadingSpinner,
       staticImages,
       stemSelections,
       store,
+      toggleBpmLock,
+      toggleKeyLock,
+      unlockAll,
     }
   },
 }

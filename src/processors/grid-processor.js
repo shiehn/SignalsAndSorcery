@@ -149,7 +149,12 @@ export default class GridProcessor {
 
     clearRow = (rowIndex) => {
         for (let col = 0; col < this.grid[rowIndex].value.length; col++) {
+            if (this.grid[rowIndex].value[col].locked == true) {
+                continue
+            }
+
             if (this.grid[rowIndex].value[col]) {
+                this.grid[rowIndex].value[col].refreshing = false
                 this.grid[rowIndex].value[col].stem = undefined;
             }
         }

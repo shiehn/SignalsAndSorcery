@@ -58,11 +58,11 @@
 
           <img v-if="locked" :src="stem.lockIconPath"
                @click.stop="lockUnlock"
-               class="h-6 w-6 ml-2 bg-white p-0.5 border-black border-2 hover:border-2 hover:border-yellow-600 rounded-full aspect-square">
+               class="h-6 w-6 ml-2 bg-white p-0.5 border-red-500 border-2 hover:border-2 hover:border-yellow-600 rounded-full aspect-square">
 
           <img v-if="!locked" :src="stem.unlockIconPath"
                @click.stop="lockUnlock"
-               class="h-6 w-6 ml-2 bg-white p-0.5 border-black hover:border-2 hover:border-yellow-600 rounded-full aspect-square">
+               class="h-6 w-6 ml-2 bg-white p-0.5 border-black border-2 hover:border-yellow-600 rounded-full aspect-square">
         </div>
 
         <div class="w-1/3 h-full flex justify-center items-center">
@@ -134,6 +134,8 @@ export default {
 
       const lockProcessor = new LockProcessor(store.state.grid)
       lockProcessor.setLock(props.row, props.col, locked.value)
+
+      emit('updateColumnLocks')
     }
 
     //by default the play button should be showing
@@ -301,7 +303,6 @@ export default {
 
     watch(() => bus.value.get('updateAssetLocks'), () => {
       const lockProcessor = new LockProcessor(store.state.grid)
-
       locked.value = lockProcessor.getLockState(props.row, props.col)
     })
 

@@ -14,11 +14,12 @@ export default class LockProcessor {
     }
 
     lockRow = (targetRow) =>{
-        console.log('pre lock it', targetRow)
         for (let row = 0; row < this.grid.length; row++) {
             for (let col = 0; col < this.grid[row].value.length; col++) {
                 if(row == targetRow){
-                    this.grid[row].value[col]['locked'] = true
+                    if(this.grid[row].value[col].stem){
+                        this.grid[row].value[col]['locked'] = true
+                    }
                 }
             }
         }
@@ -27,6 +28,7 @@ export default class LockProcessor {
         for (let row = 0; row < this.grid.length; row++) {
             for (let col = 0; col < this.grid[row].value.length; col++) {
                 if(row == targetRow){
+                    console.log('row', row, 'targetRow', targetRow)
                     this.grid[row].value[col]['locked'] = false
                 }
             }
@@ -47,7 +49,7 @@ export default class LockProcessor {
             for (let col = 0; col < this.grid[row].value.length; col++) {
                 if(row == targetRow){
                     if(this.grid[row].value[col]['stem']) {
-                        if (this.grid[row].value[col]['locked'] || this.grid[row].value[col]['locked'] == undefined) {
+                        if (this.grid[row].value[col]['locked']) {
                             return true
                         }
                     }

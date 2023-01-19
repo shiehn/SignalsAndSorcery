@@ -59,7 +59,7 @@ export default {
     }
 
     const cancelClick = () => {
-      const modalResponsePayload = new ModalResponsePayload(id.value, false)
+      const modalResponsePayload = new ModalResponsePayload(id.value, false, relayData)
       emit('modalResponse', modalResponsePayload)
       closeModal()
     }

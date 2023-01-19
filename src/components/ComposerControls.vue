@@ -32,7 +32,6 @@
     <div class="absolute bottom-2 text-gray-300 text-xs text-center bg-white">build {{ buildNumber }}</div>
   </div>
 
-
   <div v-if="showInitAudio" class="modal w-full flex justify-center">
     <div class="bg-white border-2 border-black rounded-lg p-4 shadow-lg"
          :class="{'w-3/4': isMobile, 'w-1/3': !isMobile}">

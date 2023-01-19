@@ -336,18 +336,39 @@ export default {
     })
 
     watch(() => bus.value.get('refreshRow'), async (type) => {
+
       const token = store.state.token
       const bpm = store.state.getGlobalBpm()
       const key = store.state.getGlobalKey()
       const chords = store.state.getGlobalChords()
+      const rowIdx = ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === type[0])
+
+      //start refreshing items
+
+      for (let i = 0; store.state.grid[rowIdx].value.length > i; i++) {
+          if(!store.state.grid[rowIdx].value[i].locked) {
+            store.state.grid[rowIdx].value[i]['refreshing'] = true
+          }
+      }
 
       const res = await new ComposerAPI().getAssetRowAlternative(token, bpm, key, chords, type[0])
-      const rowIdx = ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === type[0])
+
+      //stop all refreshing items
+      for (let i = 0; store.state.grid[rowIdx].value.length > i; i++) {
+        if(store.state.grid[rowIdx].value[i]) {
+          store.state.grid[rowIdx].value[i]['refreshing'] = false
+        }
+      }
+
+      if(!res || !res.stems){
+        return
+      }
 
       for (let i = 0; res.stems.length > i; i++) {
         if (res.stems[i] && res.stems[i]['bpm']) {
-          console.log('STEM', i, res.stems[i])
-          store.state.grid[rowIdx].value[i].stem = res.stems[i]
+          if(!store.state.grid[rowIdx].value[i].locked) {
+            store.state.grid[rowIdx].value[i].stem = res.stems[i]
+          }
         }
       }
     })
