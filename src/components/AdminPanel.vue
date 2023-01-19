@@ -185,7 +185,7 @@ export default {
       }
     }
 
-    const debugGrid = () => { 
+    const debugGrid = () => {
       console.log('GRID', store.state.grid)
     }
 

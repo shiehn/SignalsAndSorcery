@@ -150,4 +150,26 @@ describe('Grid Processor Tests', () => {
             }
         }
     })
+
+    it('should lock grid item', () => {
+        const lockProcessor = new LockProcessor(state.grid)
+
+        const row = 2
+        const col = 3
+
+        lockProcessor.setLock(row, col, true)
+
+        expect(state.grid[row].value[col].locked).to.equals(true)
+    })
+
+    it('should unlock grid item', () => {
+        const lockProcessor = new LockProcessor(state.grid)
+
+        const row = 2
+        const col = 3
+
+        lockProcessor.setLock(row, col, false)
+
+        expect(state.grid[row].value[col].locked).to.equals(false)
+    })
 })

@@ -148,6 +148,7 @@ export default {
       emit('closeProjectsBoard')
       emit('saveProjectToLocalStorage')
       emit('resetCompatibility')
+      emit('updateLocks')
 
       new Analytics().trackLoad()
     }

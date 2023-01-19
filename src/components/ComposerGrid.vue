@@ -181,6 +181,8 @@ export default {
       gridItem.sectionId = undefined
       gridItem.stem = undefined //TODO IF YOU HAVE THE STEM WHY THE DUPLICATION
       gridItem['deleteIconPath'] = undefined
+      gridItem['locked'] = false
+      gridItem['refreshing'] = false
 
       store.state.updateGlobalBpm()
       store.state.updateGlobalKey()
@@ -263,8 +265,6 @@ export default {
 
       removeGridItem(row, col)
 
-
-      console.log('BREAK', store.state.grid[row].value[col])
       store.state.grid[row].value[col].refreshing = true
 
 

@@ -31,7 +31,11 @@
 
         <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('hi')">
         <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('hi')">
-        <img :src=imageUrls.unlockIcon class="w-4 h-4">
+
+
+        <img v-if="lockedRowHi" @click.stop="toggleRowLock('hi')" :src=imageUrls.lockIcon class="w-4 h-4">
+        <img v-if="!lockedRowHi" @click.stop="toggleRowLock('hi')" :src=imageUrls.unlockIcon class="w-4 h-4">
+
       </div>
     </div>
 
@@ -54,7 +58,10 @@
         <!--        </div>-->
         <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('mid')">
         <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('mid')">
-        <img :src=imageUrls.unlockIcon class="w-4 h-4">
+
+
+        <img v-if="lockedRowMid" @click.stop="toggleRowLock('mid')" :src=imageUrls.lockIcon class="w-4 h-4">
+        <img v-if="!lockedRowMid" @click.stop="toggleRowLock('mid')" :src=imageUrls.unlockIcon class="w-4 h-4">
       </div>
     </div>
 
@@ -77,7 +84,10 @@
         <!--        </div>-->
         <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('low')">
         <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('low')">
-        <img :src=imageUrls.unlockIcon class="w-4 h-4">
+
+
+        <img v-if="lockedRowLow" @click.stop="toggleRowLock('low')" :src=imageUrls.lockIcon class="w-4 h-4">
+        <img v-if="!lockedRowLow" @click.stop="toggleRowLock('low')" :src=imageUrls.unlockIcon class="w-4 h-4">
       </div>
     </div>
 
@@ -100,7 +110,10 @@
         <!--        </div>-->
         <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('drum')">
         <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('drum')">
-        <img :src=imageUrls.unlockIcon class="w-4 h-4">
+
+
+        <img v-if="lockedRowDrum" @click.stop="toggleRowLock('drum')" :src=imageUrls.lockIcon class="w-4 h-4">
+        <img v-if="!lockedRowDrum" @click.stop="toggleRowLock('drum')" :src=imageUrls.unlockIcon class="w-4 h-4">
       </div>
     </div>
 
@@ -115,7 +128,9 @@
       <div class="flex flex-col justify-evenly h-16 pl-2">
         <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('fill')">
         <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('fill')">
-        <img :src=imageUrls.unlockIcon class="w-4 h-4">
+
+        <img v-if="lockedRowFill" @click.stop="toggleRowLock('fill')" :src=imageUrls.lockIcon class="w-4 h-4">
+        <img v-if="!lockedRowFill" @click.stop="toggleRowLock('fill')" :src=imageUrls.unlockIcon class="w-4 h-4">
       </div>
     </div>
 
@@ -130,7 +145,9 @@
       <div class="flex flex-col justify-evenly h-16 pl-2">
         <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('melodic')">
         <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('melodic')">
-        <img :src=imageUrls.unlockIcon class="w-4 h-4">
+
+        <img v-if="lockedRowMelodic" @click.stop="toggleRowLock('melodic')" :src=imageUrls.lockIcon class="w-4 h-4">
+        <img v-if="!lockedRowMelodic" @click.stop="toggleRowLock('melodic')" :src=imageUrls.unlockIcon class="w-4 h-4">
       </div>
     </div>
 
@@ -148,6 +165,7 @@ import useEventsBus from "../events/eventBus";
 import ModalOpenPayload from "./ModalOpenPayload";
 import {watch} from "vue";
 import {ROW_TO_TYPE_MAP, TYPE_DRUM, TYPE_FILL, TYPE_HI, TYPE_LOW, TYPE_MELODIC, TYPE_MID} from "../constants/constants";
+import LockProcessor from "../processors/lock-processor";
 
 export default {
   name: "ComposerGridControlColumn",
@@ -173,6 +191,13 @@ export default {
       refreshIcon: store.state.staticUrl + "icons/refresh-icon.png" + "?x-request=html",
       removeIcon: store.state.staticUrl + "icons/remove.png" + "?x-request=html",
     }
+
+    const lockedRowHi = ref(false)
+    const lockedRowMid = ref(false)
+    const lockedRowLow = ref(false)
+    const lockedRowDrum = ref(false)
+    const lockedRowFill = ref(false)
+    const lockedRowMelodic = ref(false)
 
     const addSection = (sectionName) => {
       if (!sectionName) {
@@ -245,6 +270,56 @@ export default {
       emit('refreshRow', type)
     }
 
+    const toggleRowLock = (rowType) => {
+      const lockProcessor = new LockProcessor(store.state.grid)
+
+      if(rowType == TYPE_HI) {
+        lockedRowHi.value = !lockedRowHi.value
+        if(lockedRowHi.value) {
+          lockProcessor.lockRow(ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_HI))
+        } else {
+          lockProcessor.unlockRow(ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_HI))
+        }
+      } else if(rowType == TYPE_MID) {
+        lockedRowMid.value = !lockedRowMid.value
+        if(lockedRowMid.value){
+          lockProcessor.lockRow(ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_MID))
+        } else {
+          lockProcessor.unlockRow(ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_MID))
+        }
+      } else if(rowType == TYPE_LOW) {
+        lockedRowLow.value = !lockedRowLow.value
+        if(lockedRowLow.value){
+          lockProcessor.lockRow(ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_LOW))
+        } else {
+          lockProcessor.unlockRow(ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_LOW))
+        }
+      } else if(rowType == TYPE_DRUM) {
+        lockedRowDrum.value = !lockedRowDrum.value
+        if(lockedRowDrum.value){
+          lockProcessor.lockRow(ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_DRUM))
+        } else {
+          lockProcessor.unlockRow(ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_DRUM))
+        }
+      } else if(rowType == TYPE_FILL) {
+        lockedRowFill.value = !lockedRowFill.value
+        if(lockedRowFill.value){
+          lockProcessor.lockRow(ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_FILL))
+        } else {
+          lockProcessor.unlockRow(ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_FILL))
+        }
+      } else if(rowType == TYPE_MELODIC) {
+        lockedRowMelodic.value = !lockedRowMelodic.value
+        if(lockedRowMelodic.value){
+          lockProcessor.lockRow(ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_MELODIC))
+        } else {
+          lockProcessor.unlockRow(ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_MELODIC))
+        }
+      }
+
+      emit('updateAssetLocks')
+    }
+
     onMounted(() => {
       nextTick(() => {
         isMobile.value = store.isMobile ? true : false
@@ -266,6 +341,12 @@ export default {
     })
 
     return {
+      lockedRowHi,
+      lockedRowMid,
+      lockedRowLow,
+      lockedRowDrum,
+      lockedRowFill,
+      lockedRowMelodic,
       addSectionPrompt,
       isMobile: isMobile,
       handleClick,
@@ -273,6 +354,7 @@ export default {
       handleVol,
       handleClearRow,
       handleRefreshRow,
+      toggleRowLock,
       imageUrls
     }
   }

@@ -5,6 +5,14 @@ export default class LockProcessor {
         this.grid = grid
     }
 
+    getLockState(row, col) {
+        return this.grid[row].value[col]['locked'] ? true : false
+    }
+
+    setLock = (row, col, state) => {
+        this.grid[row].value[col]['locked'] = state
+    }
+
     lockRow = (targetRow) =>{
         console.log('pre lock it', targetRow)
         for (let row = 0; row < this.grid.length; row++) {
@@ -38,8 +46,10 @@ export default class LockProcessor {
         for (let row = 0; row < this.grid.length; row++) {
             for (let col = 0; col < this.grid[row].value.length; col++) {
                 if(row == targetRow){
-                    if(this.grid[row].value[col]['locked']){
-                        return true
+                    if(this.grid[row].value[col]['stem']) {
+                        if (this.grid[row].value[col]['locked'] || this.grid[row].value[col]['locked'] == undefined) {
+                            return true
+                        }
                     }
                 }
             }

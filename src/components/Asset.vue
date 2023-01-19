@@ -56,10 +56,12 @@
           <img :src=stem.previewPlayIconPath
                class="h-6 w-6 ml-2 aspect-square bg-white border-2 border-black rounded-full hover:cursor-pointer">
 
-          <img v-if="locked" :src=stem.lockIconPath
+          <img v-if="locked" :src="stem.lockIconPath"
+               @click.stop="lockUnlock"
                class="h-6 w-6 ml-2 aspect-square">
 
-          <img v-if="!locked" :src=stem.unlockIconPath
+          <img v-if="!locked" :src="stem.unlockIconPath"
+               @click.stop="lockUnlock"
                class="h-6 w-6 ml-2 aspect-square">
         </div>
 
@@ -97,6 +99,7 @@ import store from "../store/store";
 import {ROW_TO_TYPE_MAP} from "../constants/constants";
 import Analytics from "../analytics/Analytics";
 import ComposerControlsLoopBar from "./ComposerControlsLoopBar.vue";
+import LockProcessor from "../processors/lock-processor";
 
 export default {
   name: "Asset",
@@ -124,7 +127,14 @@ export default {
     let currentTime = 0
     let duration = 0
 
-    const { locked } = toRefs(props)
+    const locked  = ref(props.locked)
+
+    const lockUnlock = () => {
+      locked.value = !locked.value
+
+      const lockProcessor = new LockProcessor(store.state.grid)
+      lockProcessor.setLock(props.row, props.col, locked.value)
+    }
 
     //by default the play button should be showing
     props.stem.previewPlayIconPath = store.state.staticUrl + 'icons/play-button.png' + "?x-request=html"
@@ -218,6 +228,8 @@ export default {
       })
     }
 
+
+
     const onPlayOrTransferClip = (stemInput) => {
       //CHECK IF A GRID ITEM IS SET TO ACCEPT MOBILE TRANSFER
       const mobileTransferEnabledGridItem = new GridProcessor(store.state.grid).getMobileTransferEnabledGridItem()
@@ -287,6 +299,12 @@ export default {
       }
     })
 
+    watch(() => bus.value.get('updateAssetLocks'), () => {
+      const lockProcessor = new LockProcessor(store.state.grid)
+
+      locked.value = lockProcessor.getLockState(props.row, props.col)
+    })
+
     setInterval(updateDurations, 100)
 
     return {
@@ -297,6 +315,7 @@ export default {
       isGrid,
       isMobile,
       locked,
+      lockUnlock,
       mouseOverGridItem,
       mouseLeaveGridItem,
       onPlayClip,
