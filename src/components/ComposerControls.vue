@@ -18,18 +18,19 @@
     </div>
   </div>
 
-  <div v-if="!isMobile" class="w-1/12 h-32 px-2 mr-2 min-w-fit border-2 border-black rounded-lg flex justify-center bg-red-200">
-    <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn"
-                                                            class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
-    </button>
-    <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn"
-                                                            class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
-    </button>
-    <button @click="stopButton()"><img :src="imageAssets.stopBtn"
-                                       class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
+  <div v-if="!isMobile"
+       class="relative w-1/12 h-32 px-2 mr-2 min-w-fit border-2 border-black rounded-lg bg-white flex justify-center"
+       style="background-color: rgba(255,255,255,0.9);">
+      <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn"
+                                                              class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
+      </button>
+      <button v-if="isPlaying === true" @click="pause()"><img :src="imageAssets.pauseBtn"
+                                                              class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
+      </button>
+      <button @click="stopButton()"><img :src="imageAssets.stopBtn"
+                                         class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
+    <div class="absolute bottom-2 text-gray-300 text-xs text-center bg-white">build {{ buildNumber }}</div>
   </div>
-
-<!--  <div class="text-gray-300 text-xs text-center bg-white">build {{ buildNumber }}</div>-->
 
 
   <div v-if="showInitAudio" class="modal w-full flex justify-center">

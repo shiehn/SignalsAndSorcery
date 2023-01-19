@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <div v-if="!isMobile" class="flex w-5/12 h-32 p-2 border-2 border-black rounded-lg nowrap overflow-hidden"
+  <div v-if="!isMobile" class="flex w-4/12 h-32 p-2 border-2 border-black rounded-lg nowrap overflow-hidden"
        style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
 

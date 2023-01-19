@@ -20,21 +20,11 @@
         </div>
       </div>
       <div class="flex flex-col justify-evenly h-16 pl-2">
-        <!--        <div-->
-        <!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
-        <!--            @click="handleFX('hi')">FX-->
-        <!--        </div>-->
-        <!--        <div-->
-        <!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
-        <!--            @click="handleVol('hi')">Vol-->
-        <!--        </div>-->
+        <img :src=imageUrls.removeIcon class="w-4 h-4 hover:ring-2 hover:ring-red-500 rounded-full" @click="handleClearRow('hi')">
+        <img :src=imageUrls.refreshIcon class="w-4 h-4 hover:ring-2 hover:ring-green-500 rounded-full" @click="handleRefreshRow('hi')">
 
-        <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('hi')">
-        <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('hi')">
-
-
-        <img v-if="lockedRowHi" @click.stop="toggleRowLock('hi')" :src=imageUrls.lockIcon class="w-4 h-4">
-        <img v-if="!lockedRowHi" @click.stop="toggleRowLock('hi')" :src=imageUrls.unlockIcon class="w-4 h-4">
+        <img v-if="lockedRowHi" @click.stop="toggleRowLock('hi')" :src=imageUrls.lockIcon class="w-4 h-4 hover:ring-2 hover:ring-yellow-500 rounded-full">
+        <img v-if="!lockedRowHi" @click.stop="toggleRowLock('hi')" :src=imageUrls.unlockIcon class="w-4 h-4 hover:ring-2 hover:ring-yellow-500 rounded-full">
 
       </div>
     </div>
@@ -48,20 +38,11 @@
         </div>
       </div>
       <div class="flex flex-col justify-evenly h-16 pl-2">
-        <!--        <div-->
-        <!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
-        <!--            @click="handleFX('mid')">FX-->
-        <!--        </div>-->
-        <!--        <div-->
-        <!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
-        <!--            @click="handleVol('mid')">Vol-->
-        <!--        </div>-->
-        <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('mid')">
-        <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('mid')">
+        <img :src=imageUrls.removeIcon class="w-4 h-4 hover:ring-2 hover:ring-red-500 rounded-full" @click="handleClearRow('mid')">
+        <img :src=imageUrls.refreshIcon class="w-4 h-4 hover:ring-2 hover:ring-green-500 rounded-full" @click="handleRefreshRow('mid')">
 
-
-        <img v-if="lockedRowMid" @click.stop="toggleRowLock('mid')" :src=imageUrls.lockIcon class="w-4 h-4">
-        <img v-if="!lockedRowMid" @click.stop="toggleRowLock('mid')" :src=imageUrls.unlockIcon class="w-4 h-4">
+        <img v-if="lockedRowMid" @click.stop="toggleRowLock('mid')" :src=imageUrls.lockIcon class="w-4 h-4 hover:ring-2 hover:ring-yellow-500 rounded-full">
+        <img v-if="!lockedRowMid" @click.stop="toggleRowLock('mid')" :src=imageUrls.unlockIcon class="w-4 h-4 hover:ring-2 hover:ring-yellow-500 rounded-full">
       </div>
     </div>
 
@@ -74,20 +55,11 @@
         </div>
       </div>
       <div class="flex flex-col justify-evenly h-16 pl-2">
-        <!--        <div-->
-        <!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
-        <!--            @click="handleFX('low')">FX-->
-        <!--        </div>-->
-        <!--        <div-->
-        <!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
-        <!--            @click="handleVol('low')">Vol-->
-        <!--        </div>-->
-        <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('low')">
-        <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('low')">
+        <img :src=imageUrls.removeIcon class="w-4 h-4 hover:ring-2 hover:ring-red-500 rounded-full" @click="handleClearRow('low')">
+        <img :src=imageUrls.refreshIcon class="w-4 h-4 hover:ring-2 hover:ring-green-500 rounded-full" @click="handleRefreshRow('low')">
 
-
-        <img v-if="lockedRowLow" @click.stop="toggleRowLock('low')" :src=imageUrls.lockIcon class="w-4 h-4">
-        <img v-if="!lockedRowLow" @click.stop="toggleRowLock('low')" :src=imageUrls.unlockIcon class="w-4 h-4">
+        <img v-if="lockedRowLow" @click.stop="toggleRowLock('low')" :src=imageUrls.lockIcon class="w-4 h-4 hover:ring-2 hover:ring-yellow-500 rounded-full">
+        <img v-if="!lockedRowLow" @click.stop="toggleRowLock('low')" :src=imageUrls.unlockIcon class="w-4 h-4 hover:ring-2 hover:ring-yellow-500 rounded-full">
       </div>
     </div>
 
@@ -100,20 +72,11 @@
         </div>
       </div>
       <div class="flex flex-col justify-evenly h-16 pl-2">
-        <!--        <div-->
-        <!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
-        <!--            @click="handleFX('drum')">FX-->
-        <!--        </div>-->
-        <!--        <div-->
-        <!--            class="bg-black rounded-md text-white text-xs px-1 hover:cursor-pointer hover:bg-white hover:text-black hover:drop-shadow-lg"-->
-        <!--            @click="handleVol('drum')">Vol-->
-        <!--        </div>-->
-        <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('drum')">
-        <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('drum')">
+        <img :src=imageUrls.removeIcon class="w-4 h-4 hover:ring-2 hover:ring-red-500 rounded-full" @click="handleClearRow('drum')">
+        <img :src=imageUrls.refreshIcon class="w-4 h-4 hover:ring-2 hover:ring-green-500 rounded-full" @click="handleRefreshRow('drum')">
 
-
-        <img v-if="lockedRowDrum" @click.stop="toggleRowLock('drum')" :src=imageUrls.lockIcon class="w-4 h-4">
-        <img v-if="!lockedRowDrum" @click.stop="toggleRowLock('drum')" :src=imageUrls.unlockIcon class="w-4 h-4">
+        <img v-if="lockedRowDrum" @click.stop="toggleRowLock('drum')" :src=imageUrls.lockIcon class="w-4 h-4 hover:ring-2 hover:ring-yellow-500 rounded-full">
+        <img v-if="!lockedRowDrum" @click.stop="toggleRowLock('drum')" :src=imageUrls.unlockIcon class="w-4 h-4 hover:ring-2 hover:ring-yellow-500 rounded-full">
       </div>
     </div>
 
@@ -126,11 +89,11 @@
         </div>
       </div>
       <div class="flex flex-col justify-evenly h-16 pl-2">
-        <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('fill')">
-        <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('fill')">
+        <img :src=imageUrls.removeIcon class="w-4 h-4 hover:ring-2 hover:ring-red-500 rounded-full" @click="handleClearRow('fill')">
+        <img :src=imageUrls.refreshIcon class="w-4 h-4 hover:ring-2 hover:ring-green-500 rounded-full" @click="handleRefreshRow('fill')">
 
-        <img v-if="lockedRowFill" @click.stop="toggleRowLock('fill')" :src=imageUrls.lockIcon class="w-4 h-4">
-        <img v-if="!lockedRowFill" @click.stop="toggleRowLock('fill')" :src=imageUrls.unlockIcon class="w-4 h-4">
+        <img v-if="lockedRowFill" @click.stop="toggleRowLock('fill')" :src=imageUrls.lockIcon class="w-4 h-4 hover:ring-2 hover:ring-yellow-500 rounded-full">
+        <img v-if="!lockedRowFill" @click.stop="toggleRowLock('fill')" :src=imageUrls.unlockIcon class="w-4 h-4 hover:ring-2 hover:ring-yellow-500 rounded-full">
       </div>
     </div>
 
@@ -143,11 +106,11 @@
         </div>
       </div>
       <div class="flex flex-col justify-evenly h-16 pl-2">
-        <img :src=imageUrls.removeIcon class="w-4 h-4" @click="handleClearRow('melodic')">
-        <img :src=imageUrls.refreshIcon class="w-4 h-4" @click="handleRefreshRow('melodic')">
+        <img :src=imageUrls.removeIcon class="w-4 h-4 hover:ring-2 hover:ring-red-500 rounded-full" @click="handleClearRow('melodic')">
+        <img :src=imageUrls.refreshIcon class="w-4 h-4 hover:ring-2 hover:ring-green-500 rounded-full" @click="handleRefreshRow('melodic')">
 
-        <img v-if="lockedRowMelodic" @click.stop="toggleRowLock('melodic')" :src=imageUrls.lockIcon class="w-4 h-4">
-        <img v-if="!lockedRowMelodic" @click.stop="toggleRowLock('melodic')" :src=imageUrls.unlockIcon class="w-4 h-4">
+        <img v-if="lockedRowMelodic" @click.stop="toggleRowLock('melodic')" :src=imageUrls.lockIcon class="w-4 h-4 hover:ring-2 hover:ring-yellow-500 rounded-full">
+        <img v-if="!lockedRowMelodic" @click.stop="toggleRowLock('melodic')" :src=imageUrls.unlockIcon class="w-4 h-4 hover:ring-2 hover:ring-yellow-500 rounded-full">
       </div>
     </div>
 
