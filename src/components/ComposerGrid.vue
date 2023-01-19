@@ -58,7 +58,7 @@
             <img :src="imageUrls.refreshIconPath"
                  @click.stop="refreshGridItem(gridRowItem)"
                  :class="[gridRowItem.refreshing ? 'animate-spin' : '']"
-                 class="w-10 h-10 aspect-square bg-white border-2 border-black rounded-full hover:cursor-pointer">
+                 class="w-10 h-10 aspect-square hover:border-2 hover:border-green-400 rounded-full hover:cursor-pointer">
           </div>
 
         </div>

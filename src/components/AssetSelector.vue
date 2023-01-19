@@ -13,9 +13,9 @@
       <button @click="newProjectDialog()"
               class="h-6 w-6">
         <img v-if="lockGlobal"
-             :src="staticImages.lockBtn" class="rounded-full hover:ring-4 hover:ring-green-500"/>
+             :src="staticImages.lockBtn" class="rounded-full p-0.5 bg-white ring-2 ring-black hover:ring-green-500"/>
         <img v-if="!lockGlobal"
-             :src="staticImages.unlockBtn" class="rounded-full hover:ring-4 hover:ring-green-500"/>
+             :src="staticImages.unlockBtn" class="rounded-full p-0.5 bg-white ring-2 ring-black hover:ring-green-500"/>
       </button>
 
       <div class="w-0.5 h-4/5 bg-gray-600 py-2"></div>
@@ -25,11 +25,11 @@
       <div class="w-full h-full p-1 flex flex-col justify-center items-center">
         <div class="flex w-full h-8 justify-around items-center my-1">
           <img v-if="lockBpm"
-               :src="staticImages.lockBtn" class="w-1/5 h-5 rounded-full hover:ring-4 hover:ring-green-500"/>
+               :src="staticImages.lockBtn" class="w-1/5 h-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
           <img v-if="!lockBpm"
-               :src="staticImages.unlockBtn" class="w-1/5 h-5 w-5 rounded-full hover:ring-4 hover:ring-green-500"/>
+               :src="staticImages.unlockBtn" class="w-1/5 h-5 w-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
           <div class="w-1/5 text-sm">BPM</div>
-          <select v-model="store.state.globalBpm" class="w-3/5 text-xs rounded-lg">
+          <select v-model="store.state.globalBpm" class="w-3/5 text-xs rounded-lg bg-gray-100">
             <option :value="item" v-for="item in filterBpmOptions.arr">{{ item }}
             </option>
           </select>
@@ -38,11 +38,11 @@
 
         <div class="flex w-full h-8 justify-around items-center my-1">
           <img v-if="lockKey"
-               :src="staticImages.lockBtn" class="w-1/5 h-5 rounded-full hover:ring-4 hover:ring-green-500"/>
+               :src="staticImages.lockBtn" class="w-1/5 h-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
           <img v-if="!lockKey"
-               :src="staticImages.unlockBtn" class="w-1/5 h-5 w-5 rounded-full hover:ring-4 hover:ring-green-500"/>
+               :src="staticImages.unlockBtn" class="w-1/5 h-5 w-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
           <label class="w-1/5 text-sm">KEY</label>
-          <select v-model="store.state.globalKey" id="key-filter" class="w-3/5 text-xs rounded-lg">
+          <select v-model="store.state.globalKey" id="key-filter" class="w-3/5 text-xs rounded-lg bg-gray-100">
             <option :value="item" v-for="item in filterKeyOptions.arr">{{ item }}
             </option>
           </select>
@@ -55,15 +55,15 @@
       <div class="w-full h-full p-1 flex flex-col justify-center items-center">
         <div class="flex w-full h-8 justify-around items-center my-1">
           <img v-if="lockChord"
-               :src="staticImages.lockBtn" class="w-1/5 h-5 rounded-full hover:ring-4 hover:ring-green-500"/>
+               :src="staticImages.lockBtn" class="w-1/5 h-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
           <img v-if="!lockChord"
-               :src="staticImages.unlockBtn" class="w-1/5 h-5 w-5 rounded-full hover:ring-4 hover:ring-green-500"/>
+               :src="staticImages.unlockBtn" class="w-1/5 h-5 w-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>
           <label class="w-1/5 my-2 text-sm">CHORDS</label>
           <div class="w-3/5 h-full"></div>
         </div>
         <div class="flex w-full h-8 justify-around items-center my-1">
           <select v-model="store.state.globalChords" id="chord-filter"
-                  class="w-full text-xs rounded-lg">
+                  class="w-full text-xs rounded-lg bg-gray-100">
             <option :value="item" v-for="item in filterChordOptions.arr">{{ item }}
             </option>
           </select>

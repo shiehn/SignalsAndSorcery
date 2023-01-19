@@ -54,31 +54,31 @@
       <div class="w-full h-full flex items-center">
         <div class="w-1/3 h-full flex justify-evenly items-center" @click="onPlayClip(stem)">
           <img :src=stem.previewPlayIconPath
-               class="h-6 w-6 ml-2 aspect-square bg-white border-2 border-black rounded-full hover:cursor-pointer">
+               class="h-6 w-6 ml-2 aspect-square hover:border-2 hover:border-green-600 rounded-full hover:cursor-pointer">
 
           <img v-if="locked" :src="stem.lockIconPath"
                @click.stop="lockUnlock"
-               class="h-6 w-6 ml-2 aspect-square">
+               class="h-6 w-6 ml-2 bg-white p-0.5 border-black border-2 hover:border-2 hover:border-yellow-600 rounded-full aspect-square">
 
           <img v-if="!locked" :src="stem.unlockIconPath"
                @click.stop="lockUnlock"
-               class="h-6 w-6 ml-2 aspect-square">
+               class="h-6 w-6 ml-2 bg-white p-0.5 border-black hover:border-2 hover:border-yellow-600 rounded-full aspect-square">
         </div>
 
         <div class="w-1/3 h-full flex justify-center items-center">
           <img :src="stem.refreshIconPath"
                @click.stop="refreshGridItem()"
-               class="w-10 h-10 aspect-square bg-white border-2 border-black rounded-full hover:cursor-pointer">
+               class="w-10 h-10 aspect-square hover:border-2 hover:border-green-600 rounded-full hover:cursor-pointer">
         </div>
 
         <div class="w-1/3 h-full flex justify-evenly items-center">
           <img :src="stem.downloadIconPath"
                @click="downloadGridItem(stem)"
-               class="h-6 w-6 p-1 mr-2 aspect-square bg-white border-2 border-black rounded-full hover:cursor-pointer">
+               class="h-6 w-6 p-1 mr-2 aspect-square bg-white border-2 border-black hover:border-2 hover:border-yellow-600 rounded-full hover:cursor-pointer">
 
           <img :src="stem.deleteIconPath"
                @click="onRemoveClip"
-               class="h-6 w-6 mr-2 aspect-square bg-white border-2 border-black rounded-full hover:cursor-pointer">
+               class="h-6 w-6 mr-2 aspect-square hover:border-2 hover:border-red-600 rounded-full hover:cursor-pointer">
         </div>
       </div>
 
