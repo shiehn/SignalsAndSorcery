@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <div v-if="!isMobile" class="w-1/6 h-48 min-w-28 border-2 border-black rounded-lg flex justify-center bg-red-200">
+  <div v-if="!isMobile" class="w-1/12 h-32 px-2 mr-2 min-w-fit border-2 border-black rounded-lg flex justify-center bg-red-200">
     <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn"
                                                             class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
     </button>

@@ -1,9 +1,9 @@
 <template>
   <div v-if="!isMobile"
-       class="flex w-1/3 h-48 border-2 border-black rounded-lg justify-between font-bold p-2 m-2 nowrap overflow-hidden"
+       class="flex w-7/12 h-32 mr-2 p-2 border-2 border-black rounded-lg justify-between font-bold nowrap overflow-hidden"
        style="background-color: rgba(255,255,255,0.9);">
 
-    <div class="w-1/2 bg-green-400">
+    <div class="w-1/3">
       <button @click="newProjectDialog()"
               class="h-16 w-16">
         <img
@@ -17,7 +17,7 @@
       </button>
     </div>
 
-    <div class="w-1/2 bg-orange-400">
+    <div class="w-1/3">
       <div class="flex w-full h-8 justify-between my-1">
         <label for="bpm-filter" class="w-1/3 my-2 text-sm">BPM</label>
         <select v-model="store.state.globalBpm" id="bpm-filter" class="w-2/3 text-xs rounded-lg">
@@ -33,6 +33,10 @@
           </option>
         </select>
       </div>
+    </div>
+
+    <div class="w-1/3">
+
 
       <div class="flex w-full h-8 justify-between my-1">
         <label for="chord-filter" class="w-1/3 my-2 text-sm">CHORD</label>

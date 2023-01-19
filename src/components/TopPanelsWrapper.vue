@@ -4,7 +4,7 @@
     <asset-selector></asset-selector>
   </div>
 
-  <div v-if="!isMobile" class="flex w-full justify-between py-4">
+  <div v-if="!isMobile" class="flex w-full justify-between h-32 mb-2">
     <composer-controls></composer-controls>
     <asset-selector></asset-selector>
     <admin-panel></admin-panel>

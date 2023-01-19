@@ -26,16 +26,12 @@
     </div>
   </div>
 
-  <div v-if="!isMobile" class="w-1/3 h-48 min-w-28 border-2 border-black rounded-lg p-2 my-2 nowrap overflow-hidden"
+  <div v-if="!isMobile" class="flex w-5/12 h-32 p-2 border-2 border-black rounded-lg nowrap overflow-hidden"
        style="background-color: rgba(255,255,255,0.9);">
     <global-track-values></global-track-values>
 
-    <div class="flex justify-between">
+    <div class="flex flex-col 1/6 justify-evenly">
 
-
-
-
-      <div class="grid grid-cols-2 gap-1 w-1/2 h-18 justify-between">
         <button @click="saveProject()"
                 class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
           <img
@@ -46,17 +42,6 @@
           <img
               :src="imageAssets.downloadMP3" class="h-5"/>
         </button>
-        <button @click="exportProject()"
-                class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
-          <img
-              :src="imageAssets.downloadBtn" class="h-5"/>
-        </button>
-        <button
-            @click="debugGrid()"
-            class="w-8 h-8 border-2 border-black p-1 rounded-md opacity-50 bg-red-400">
-          <!--          <img :src="imageAssets.newProject" class="h-5"/>-->
-        </button>
-      </div>
     </div>
 
 
