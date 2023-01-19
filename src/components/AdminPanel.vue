@@ -174,15 +174,15 @@ export default {
       console.log('GRID', store.state.grid)
     }
 
+    const newProjectDialog = () => {
+      emit('newProjectDialog')
+    }
+
     watch(() => bus.value.get('saveProjectToLocalStorage'), async () => {
       if (store.state.grid && store.state.grid.length > 0) {
         let saveFormat = new SaveAndLoadAdapter().createSaveFormat(store.state)
         localStorage.setItem("sas-save", JSON.stringify(saveFormat));
       }
-    })
-
-    watch(() => bus.value.get('generateRandomProject'), async () => {
-      createRandomProject()
     })
 
     watch(() => bus.value.get('loadProjectFromLocalStorage'), async () => {
@@ -214,6 +214,7 @@ export default {
       logDebug,
       debugGrid,
       saveProject,
+      newProjectDialog,
       showProjectsBoard,
       showLoadingSpinner,
       toggleProjectsBoard

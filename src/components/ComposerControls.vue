@@ -448,28 +448,29 @@ export default {
 
     const randomizeNewProjectWarningDialogModalId = 'randomizeNewProjectWarningDialogModalId'
     const randomizeButton = async () => {
-      const modalPayload = new ModalOpenPayload(
-          randomizeNewProjectWarningDialogModalId,
-          'Warning',
-          'You are about to generate a new project. This will erase all current data. Are you sure?',
-          'Continue',
-          undefined,
-          'Cancel',
-          false,
-          undefined,
-      )
-
-      emit('launchModal', modalPayload)
+      emit('newProjectDialog')
+      // const modalPayload = new ModalOpenPayload(
+      //     randomizeNewProjectWarningDialogModalId,
+      //     'Warning',
+      //     'You are about to generate a new project. This will erase all current data. Are you sure?',
+      //     'Continue',
+      //     undefined,
+      //     'Cancel',
+      //     false,
+      //     undefined,
+      // )
+      //
+      // emit('launchModal', modalPayload)
     }
 
-    watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
-      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === randomizeNewProjectWarningDialogModalId) {
-        if (modalResponsePayload[0].getResponse()) {
-          //GENERATE RANDOM PROJECT
-          emit('generateRandomProject')
-        }
-      }
-    })
+    // watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
+    //   if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === randomizeNewProjectWarningDialogModalId) {
+    //     if (modalResponsePayload[0].getResponse()) {
+    //       //GENERATE RANDOM PROJECT
+    //       emit('generateRandomProject')
+    //     }
+    //   }
+    // })
 
     watch(() => bus.value.get('displayRenderBtn'), (payload) => {
       displayRenderBtn.value = payload[0]

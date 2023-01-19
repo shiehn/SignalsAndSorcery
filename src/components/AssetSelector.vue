@@ -294,6 +294,10 @@ export default {
       lockBpm.value = !lockBpm.value
     }
 
+    watch(() => bus.value.get('newProjectDialog'), () => {
+      newProjectDialog()
+    })
+
     watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
       if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === createNewProjectWarningDialogModalId) {
         if (modalResponsePayload[0].getResponse()) {
@@ -302,7 +306,6 @@ export default {
             createEmptyProject()
           } else if (projectType === 'random') {
             createRandomProject()
-            // createEmptyProject()
           } else {
             toast.error('Error creating new project')
           }
