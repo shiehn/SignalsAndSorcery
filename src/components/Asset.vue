@@ -5,22 +5,37 @@
         'w-16': hostType==='selector',
         'rounded-lg': hostType==='selector'
       }"
-      v-on:mouseover="mouseOverGridItem(stem)"
-      v-on:mouseleave="mouseLeaveGridItem(stem)"
-      @click="onPlayOrTransferClip(stem)"
       v-bind:style="{ backgroundImage: 'url(' + stem.waveform + ')',  }">
 
     <div class="w-full h-full hover:shadow-lg hover:cursor-move"
          v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.5) ' + progressBar + '%, rgba(255, 255, 255, 0) ' + progressBar + '%' }">
-      <div v-if="stem.type != 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">
-        {{ stem.chords }}
+      <div class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">
+        {{ stem.type }}
       </div>
-      <div v-if="stem.type == 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">drum
+
+
+      <div class="w-full h-full flex items-center">
+        <div class="w-1/3 h-full flex justify-evenly items-center" @click="onPlayClip(stem)">
+          <img :src=stem.previewPlayIconPath
+               class="h-6 w-6 ml-2 aspect-square hover:border-2 hover:border-green-600 rounded-full hover:cursor-pointer">
+        </div>
+
+        <div class="w-1/3 h-full flex justify-center items-center">
+          <img :src="stem.refreshIconPath"
+               @click.stop="refreshGridItem()"
+               class="w-10 h-10 aspect-square hover:border-2 hover:border-green-600 rounded-full hover:cursor-pointer">
+        </div>
+
+        <div class="w-1/3 h-full flex justify-evenly items-center">
+          <img :src="stem.deleteIconPath"
+               @click="onRemoveClip"
+               class="h-6 w-6 mr-2 aspect-square hover:border-2 hover:border-red-600 rounded-full hover:cursor-pointer">
+        </div>
       </div>
-      <img :src=stem.previewPlayIconPath class="w-4 h-4 absolute bottom-2 m-0.5" :class="{
-        'bottom-0': hostType==='selector',
-      }">
-      <div class="absolute bottom-0 right-0 p-1 text-xs bg-red-200 bg-opacity-50">{{ stem.bpm }}</div>
+
+<!--      <img :src=stem.previewPlayIconPath class="w-4 h-4 absolute bottom-2 m-0.5" :class="{-->
+<!--        'bottom-0': hostType==='selector',-->
+<!--      }"> -->
       <audio :ref="el => { audioTag = el }" loop>
         <source v-bind:src=stem.source type="audio/mpeg"/>
         Your browser does not support the audio element.

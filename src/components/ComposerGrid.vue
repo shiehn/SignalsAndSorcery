@@ -18,14 +18,15 @@
               'bg-green-100': gridRowItem.compatibility === 2,
               'bg-yellow-100': gridRowItem.compatibility === 1,
               'bg-red-100': gridRowItem.compatibility === 0
-        }"
-             v-on:mouseover="mouseOverGridItem(gridRowItem.row, gridRowItem.col)"
-             v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
-             @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
-          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem"></asset>
-          <img v-if="gridRowItem.showDeleteIcon" :src="imageUrls.deleteIconPath"
-               @click.stop="removeGridItem(gridRowItem.row, gridRowItem.col)"
-               class="w-8 h-8 absolute top-0 right-0 bg-white ml-1 mt-1 rounded-md">
+        }">
+          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :locked="false" :row="gridRowItem.row" :col="gridRowItem.col"
+                 :grid=true></asset>
+          <div class="w-1/3 h-full absolute left-1/3 flex justify-center items-center">
+            <img :src="imageUrls.refreshIconPath"
+                 @click.stop="refreshGridItem(gridRowItem)"
+                 :class="[gridRowItem.refreshing ? 'animate-spin' : '']"
+                 class="w-10 h-10 aspect-square hover:border-2 hover:border-green-400 rounded-full hover:cursor-pointer">
+          </div>
         </div>
       </div>
     </div>

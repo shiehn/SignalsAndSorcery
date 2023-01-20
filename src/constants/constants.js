@@ -1,5 +1,3 @@
-
-
 export const TYPE_HI = 'hi';
 export const TYPE_MID = 'mid';
 export const TYPE_LOW = 'low';
@@ -15,4 +13,4 @@ export const ROW_TO_TYPE_MAP = [TYPE_HI, TYPE_MID, TYPE_LOW, TYPE_DRUM, TYPE_FIL
 
 export const BASE_API_URL = 'https://signalsandsorcery.org/api/'
 
-export const BUILD_NUMBER = '0.9.4'
+export const BUILD_NUMBER = '0.9.6'
