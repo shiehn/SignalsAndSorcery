@@ -14,7 +14,6 @@ export const SectionPositions = {
 export default class GridGenerator {
 
     initGrid(numRows, numCols) {
-
         const defaultSectionName = 'part_0'
         const defaultId = v4()
 

@@ -103,7 +103,6 @@ export default {
     const buildNumber = ref(BUILD_NUMBER)
 
     onMounted(() => {
-      store.state.updateArpeggioStateHash()
       isMobile.value = store.isMobile ? true : false
       showInitAudio.value = isMobile.value
     })
@@ -251,10 +250,10 @@ export default {
 
           // TODO: BUFFER - THIS HAS BEEN COMMENTED OUT BECAUSE ITS NOT HANDLING THE NEW VOCAL ROW - jan12/23
           //CHECK IF THE ROW IS ALREADY CACHED
-          // if (!store.state.hasRowStateChanged(n) && BUFFER_ROW_CACHE[n]) {
-          //   listOfTrimmedRowBuffers[n] = BUFFER_ROW_CACHE[n]
-          //   continue
-          // }
+          if (!store.state.hasRowStateChanged(n) && BUFFER_ROW_CACHE[n]) {
+            listOfTrimmedRowBuffers[n] = BUFFER_ROW_CACHE[n]
+            continue
+          }
 
           //GET THE TRACKS IN ONE ROW
           let tracksInRow = getTrackListByRow(n)
@@ -309,7 +308,7 @@ export default {
 
           //UPDATE THE ROW CACHE
           // TODO: BUFFER - THIS HAS BEEN COMMENTED OUT BECAUSE ITS NOT HANDLING THE NEW VOCAL ROW - jan12/23
-          // BUFFER_ROW_CACHE[n] = finalRowBuffer
+          BUFFER_ROW_CACHE[n] = finalRowBuffer
           store.state.updateRowStateHash(n)
         }
 
@@ -322,15 +321,9 @@ export default {
       isRendering.value = false
 
       store.state.updateClipStateHash()
-      updateRenderedArpeggios()
-      store.state.updateArpeggioStateHash()
       emit('displayRenderBtn', false)
 
       return true
-    }
-
-    const updateRenderedArpeggios = () => {
-      new GridProcessor(store.state.grid).updateArpeggioRenderedInMix()
     }
 
     const initAudio = () => {
@@ -493,11 +486,14 @@ export default {
     })
 
     watch(() => bus.value.get('renderMixIfNeeded'), async () => {
-      if (store.state.hasClipStateChanged()) {
-        if (!isRendering.value) {
-          await renderMix()
+
+      setTimeout(async function () {
+        if (store.state.hasClipStateChanged()) {
+          if (!isRendering.value) {
+            await renderMix()
+          }
         }
-      }
+      }, 1000);
     })
 
     watch(() => bus.value.get('scrubTo'), async (scrubToPercent) => {

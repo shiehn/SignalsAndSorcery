@@ -120,15 +120,13 @@ export default {
       editIcon: store.state.staticUrl + 'icons/edit.png',
       plusIcon: store.state.staticUrl + "icons/plus.png",
       minusIcon: store.state.staticUrl + "icons/minus.png",
-      // deleteIconPath: store.state.staticUrl + 'icons/delete-x.png',
-      // downloadIconPath: store.state.staticUrl + 'icons/download-icon.svg',
       refreshIconPath: store.state.staticUrl + 'icons/refresh-icon.png',
     }
     const isMobile = ref(store.isMobile ? true : false)
 
     const numOfGridRows = 6
-    let numOfGridCols = 6
-    let numOfSections = 2
+    let numOfGridCols = 4
+    let numOfSections = 1
 
     store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
 
@@ -143,19 +141,12 @@ export default {
     const onDrop = (evt, row, col) => {
       if (store.state.grid[row].value[col].compatibility === 0 || store.state.grid[row].value[col].compatibility === -1) {
         //NOT COMPATIBLE/PREVENT DROP
-        //alert('NOT COMPATIBLE')
         return
       }
 
       const stemStr = evt.dataTransfer.getData('stem')
       const stem = JSON.parse(stemStr)
       stem.instanceId = v4() //each stem should have a unique instanceId but possible the same stem id
-
-      //update the stems row and col
-      // stem.row = row
-      // stem.col = col
-
-      console.log('on drop: ', row, col)
 
       const gridItem = store.state.grid[row].value[col]
       gridItem.stem = stem
@@ -267,14 +258,11 @@ export default {
       removeGridItem(row, col)
 
       store.state.grid[row].value[col].refreshing = true
-
-
-
       const res = await new ComposerAPI().getAssetAlternative(token, bpm, key, chords, type)
       store.state.grid[row].value[col].refreshing = false
-
-
       store.state.grid[row].value[col].stem = res
+
+      emit('renderMixIfNeeded')
     }
 
     const columnAdd = (sectionId) => {
@@ -345,7 +333,6 @@ export default {
       const rowIdx = ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === type[0])
 
       //start refreshing items
-
       for (let i = 0; store.state.grid[rowIdx].value.length > i; i++) {
           if(!store.state.grid[rowIdx].value[i].locked) {
             store.state.grid[rowIdx].value[i]['refreshing'] = true
@@ -496,22 +483,12 @@ export default {
       resizeInnerGridContainer()
 
       progressBar.value = Math.round(progressInt * 0.01 * gridContainer.value.scrollWidth)
-      //console.log('gridContainer.value.scrollWidth', gridContainer.value.scrollWidth)
-      // progressBarStart.value = progressInt - 5
       progressBarStart.value = progressBar.value > 60 ? progressBar.value - 60 : 0
       progressBarMidA.value = progressBar.value - 10
       progressBarMidB.value = progressBar.value - 9
 
 
       playHeadCSS['background-position'] = progressBar.value + 'px center'
-
-      // if(progressInt == 0){
-      //   //move the playhead to the startloop
-      //   gridContainer.value.style.marginLeft = (store.state.playBack.loopStartPercent * 0.01 * gridContainer.value.clientWidth) + 'px'
-      //   return
-      // }
-
-      //gridContainer.value.style.marginLeft = (progressInt * 0.01 * gridContainer.value.clientWidth) + 'px'
     })
 
     return {
@@ -556,29 +533,6 @@ export default {
   padding: 5px;
 }
 
-/*.pulse-effect {*/
-/*  transform: translateX(0.5rem);*/
-/*  -webkit-animation: pulse 200ms ease-in-out infinite alternate;*/
-/*  animation: pulse 200ms ease-in-out infinite alternate;*/
-/*}*/
-
-/*@-webkit-keyframes pulse {*/
-/*  from {*/
-/*    transform: translateX(0.5rem) scale(1);*/
-/*  }*/
-/*  to {*/
-/*    transform: translateX(0.5rem) scale(1.1);*/
-/*  }*/
-/*}*/
-
-/*@keyframes pulse {*/
-/*  from {*/
-/*    transform: translateX(0.5rem) scale(1);*/
-/*  }*/
-/*  to {*/
-/*    transform: translateX(0.5rem) scale(1.1);*/
-/*  }*/
-/*}*/
 
 .init-pulse {
   animation: border-pulsate 2s infinite;

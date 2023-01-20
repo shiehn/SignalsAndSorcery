@@ -3,9 +3,17 @@ import {BASE_API_URL} from "../constants/constants";
 
 export default class ComposerAPI {
 
-    async generateComposition() {
+    async generateComposition(bpm, key) {
         try {
-            const url = BASE_API_URL + `create/composition/`
+            let url = BASE_API_URL + `create/composition/`
+
+            if (bpm && key) {
+                url += `?bpm=${bpm}&key=${key}`
+            } else if (bpm) {
+                url += `?bpm=${bpm}`
+            } else if (key) {
+                url += `?key=${key}`
+            }
 
             let axiosConfig = {
                 headers: {

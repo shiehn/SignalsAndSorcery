@@ -7,13 +7,10 @@
 
   <div v-if="!isMobile" class="flex flex-col min-w-fit w-1/12 border-2 border-black rounded-lg mr-2 pt-2  px-2"
        style="background-color: rgba(255,255,255,0.9);">
-    <!--    <button @click="addSectionPrompt" class="flex mb-2 w-full justify-center hover:cursor-pointer">-->
-    <!--      <img :src=imageUrls.plusIcon class="w-6 h-6 hover:shadow-lg rounded-full hover:ring-4 hover:ring-green-500">-->
-    <!--    </button>-->
 
     <div class="flex justify-center">
       <div @click="handleClick('hi')"
-           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2">
         <div class="">
           <img :src=imageUrls.hiIcon class="w-8 h-8">
           <div class="w-full text-center text-white bg-black text-xs mt-1 rounded-bl rounded-br">Hi</div>
@@ -31,7 +28,7 @@
 
     <div class="flex justify-center">
       <div @click="handleClick('mid')"
-           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2">
         <div class="">
           <img :src=imageUrls.midIcon class="w-8 h-8">
           <div class="w-full text-center text-white bg-black text-xs mt-1 rounded-bl rounded-br">Mid</div>
@@ -48,7 +45,7 @@
 
     <div class="flex justify-center">
       <div @click="handleClick('low')"
-           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2">
         <div class="">
           <img :src=imageUrls.lowIcon class="w-8 h-8">
           <div class="w-full text-center text-white bg-black text-xs mt-1 rounded-bl rounded-br">Bass</div>
@@ -65,7 +62,7 @@
 
     <div class="flex justify-center">
       <div @click="handleClick('drum')"
-           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2">
         <div class="">
           <img :src=imageUrls.drumIcon class="w-8 h-8">
           <div class="w-full text-center text-white bg-black text-xs mt-1 rounded-bl rounded-br">Drum</div>
@@ -82,7 +79,7 @@
 
     <div class="flex justify-center">
       <div @click="handleClick('fill')"
-           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2">
         <div class="">
           <img :src=imageUrls.fillIcon class="w-8 h-8">
           <div class="w-full text-center text-white bg-black text-xs mt-1 rounded-bl rounded-br">Fill</div>
@@ -99,7 +96,7 @@
 
     <div class="flex justify-center">
       <div @click="handleClick('melodic')"
-           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2 hover:cursor-pointer hover:shadow-lg hover:border-green-500">
+           class="flex justify-center items-center w-12 h-16 bg-white border-2 border-black rounded-lg mb-2">
         <div class="">
           <img :src=imageUrls.vocalIcon class="w-8 h-8">
           <div class="w-full text-center text-white bg-black text-xs mt-1 rounded-bl rounded-br">Voc</div>
@@ -190,13 +187,13 @@ export default {
 
 
     const handleClick = (type) => {
-      let updateParam = {
-        clipType: type,
-        chords: 'all',
-        //TODO: is this a problem not passing row/col for arpeggiator?
-      }
-
-      emit('updateAssetSelection', updateParam)
+      // let updateParam = {
+      //   clipType: type,
+      //   chords: 'all',
+      //   //TODO: is this a problem not passing row/col for arpeggiator?
+      // }
+      //
+      // emit('updateAssetSelection', updateParam)
     }
 
     const handleFX = (type) => {
@@ -290,9 +287,6 @@ export default {
         isMobile.value = store.isMobile ? true : false
       })
     });
-
-    // for (let row = 0; row < store.state.grid.length; row++) {
-    //   for (let col = 0; col < store.state.grid[row].value.length; col++) {
 
     watch(() => bus.value.get('updateColumnLocks'), (modalResponsePayload) => {
       const lockProcessor = new LockProcessor(store.state.grid)

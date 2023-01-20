@@ -37,7 +37,8 @@
           <img
               :src="imageAssets.saveBtn" class="h-5"/>
         </button>
-        <button @click="downloadMix()"
+<!--        <button @click="downloadMix()"-->
+      <button @click="debugGrid()"
                 class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
           <img
               :src="imageAssets.downloadMP3" class="h-5"/>

@@ -64,10 +64,6 @@
     <div class="w-2/5 flex flex-col justify-around items-center p-2">
       <div class="w-full h-full p-1 flex flex-col justify-center items-center">
         <div class="flex w-full h-8 justify-around items-center my-1">
-          <!--          <img v-if="lockChord"-->
-          <!--               :src="staticImages.lockBtn" class="w-1/5 h-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>-->
-          <!--          <img v-if="!lockChord"-->
-          <!--               :src="staticImages.unlockBtn" class="w-1/5 h-5 w-5 p-0.5 rounded-full hover:ring-2 hover:ring-green-500"/>-->
           <label class="w-1/5 my-2 text-sm">CHORDS</label>
           <div class="w-3/5 h-full"></div>
         </div>
@@ -94,7 +90,6 @@ import {watch} from "vue";
 import useEventsBus from "../events/eventBus";
 import store from "../store/store";
 import {ROW_TO_TYPE_MAP} from "../constants/constants";
-import AssetSelectionFilter from "../filters/AssetSelectionFilter";
 import GridProcessor from "../processors/grid-processor";
 import ModalOpenPayload from "./ModalOpenPayload";
 import ComposerAPI from "../dal/ComposerAPI";
@@ -121,7 +116,6 @@ export default {
     const lockGlobal = ref(false)
     const lockBpm = ref(false)
     const lockKey = ref(false)
-    const lockChord = ref(false)
 
     const pageIndex = ref(0)
     const numOfResultsMobile = 4
@@ -158,8 +152,8 @@ export default {
 
     const createEmptyProject = async () => {
       const numOfGridRows = 6
-      let numOfGridCols = 6
-      let numOfSections = 2
+      let numOfGridCols = 4
+      let numOfSections = 1
 
       if (isMobile.value) {
         numOfGridCols = 4
@@ -185,15 +179,16 @@ export default {
     const createRandomProject = async () => {
       await createEmptyProject() //THIS IS A HACK BE CLEAR THE GRID
 
+      let bpm = lockBpm.value ? store.state.getGlobalBpm() : undefined
+      let key = lockKey.value ? store.state.getGlobalKey() : undefined
+
       showLoadingSpinner.value = true
-      const project = await new ComposerAPI().generateComposition()
+      const project = await new ComposerAPI().generateComposition(bpm, key)
       showLoadingSpinner.value = false
 
       emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
 
       const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(project)
-
-      console.log('retrievedRestoredData', retrievedRestoredData)
 
       store.state.projectId = retrievedRestoredData.projectId
       store.state.projectVersionId = retrievedRestoredData.projectVersionId
@@ -280,7 +275,6 @@ export default {
 
     const onKeyInput = (e) => {
       if (lockKey.value) {
-        alert(store.state.getGlobalKey())
         e.target.value = store.state.getGlobalKey()
       } else {
         keyChangeDialog(store.state.getGlobalKey())
@@ -314,6 +308,7 @@ export default {
 
       if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === bpmChangeWarningDialogModalId) {
         if (modalResponsePayload[0].getResponse()) {
+          lockBpm.value = true
           createRandomProject()
         } else {
           store.state.globalBpm = modalResponsePayload[0].getRelayData()
@@ -322,6 +317,7 @@ export default {
 
       if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === keyChangeWarningDialogModalId) {
         if (modalResponsePayload[0].getResponse()) {
+          lockKey.value = true
           createRandomProject()
         } else {
           store.state.globalKey = modalResponsePayload[0].getRelayData()
@@ -398,7 +394,6 @@ export default {
       lockGlobal,
       lockBpm,
       lockKey,
-      lockChord,
       newProjectDialog,
       onBpmInput,
       onKeyInput,

@@ -1,8 +1,5 @@
 import GridGenerator, {SectionPositions} from "../generators/grid-generator";
 import {beforeEach, describe, expect, it} from "vitest";
-import store from "../store/store";
-import GridItemArpeggio from "../generators/grid-item-arpeggio";
-import GridProcessor from "./grid-processor";
 import LockProcessor from "./lock-processor";
 
 
@@ -15,81 +12,76 @@ describe('Grid Processor Tests', () => {
     const defaultCols = 6
 
     beforeEach(() => {
-        state = store.state
         state.globalBpm = 120
 
         //RESET THE STATE
         state.grid = gridGenerator.initGrid(defaultRows, defaultCols)
 
         /* TEMP FORCE SECTIONS TO TEST */
-        for (let row = 0; row < store.state.grid.length; row++) {
-            for (let col = 0; col < store.state.grid[row].value.length; col++) {
+        for (let row = 0; row < state.grid.length; row++) {
+            for (let col = 0; col < state.grid[row].value.length; col++) {
                 if (col > 0 && col < 3) {
-                    store.state.grid[row].value[col].section.id = 'id_a'
-                    store.state.grid[row].value[col].section.name = 'part_a'
+                    state.grid[row].value[col].section.id = 'id_a'
+                    state.grid[row].value[col].section.name = 'part_a'
                 }
 
-                if (col == 0) {
-                    store.state.grid[row].value[col].section.id = 'id_a'
-                    store.state.grid[row].value[col].section.name = 'part_a'
+                if (col === 0) {
+                    state.grid[row].value[col].section.id = 'id_a'
+                    state.grid[row].value[col].section.name = 'part_a'
                 }
 
-                if (col == 3) {
-                    store.state.grid[row].value[col].section.id = 'id_a'
-                    store.state.grid[row].value[col].section.name = 'part_a'
-                    store.state.grid[row].value[col].stem = {
+                if (col === 3) {
+                    console.log('WTF')
+                    state.grid[row].value[col].section.id = 'id_a'
+                    state.grid[row].value[col].section.name = 'part_a'
+                    state.grid[row].value[col]['stem'] = {
                         id: 'stem_id_a'
                     }
                 }
 
                 if (col > 4) {
-                    store.state.grid[row].value[col].section.id = 'id_b'
-                    store.state.grid[row].value[col].section.name = 'part_b'
+                    state.grid[row].value[col].section.id = 'id_b'
+                    state.grid[row].value[col].section.name = 'part_b'
                 }
 
-                if (col == 4) {
-                    store.state.grid[row].value[col].section.id = 'id_b'
-                    store.state.grid[row].value[col].section.name = 'part_b'
+                if (col === 4) {
+                    state.grid[row].value[col].section.id = 'id_b'
+                    state.grid[row].value[col].section.name = 'part_b'
                 }
 
-                if (col == 5) {
-                    store.state.grid[row].value[col].section.id = 'id_b'
-                    store.state.grid[row].value[col].section.name = 'part_b'
-                    store.state.grid[row].value[col].stem = {
+                if (col === 5) {
+                    state.grid[row].value[col].section.id = 'id_b'
+                    state.grid[row].value[col].section.name = 'part_b'
+                    state.grid[row].value[col].stem = {
                         id: 'stem_id_b'
                     }
                 }
-
-                if (row == 0 && col == 1) {
-                    store.state.grid[row].value[col].section.id = 'id_a'
-                    store.state.grid[row].value[col].section.name = 'part_a'
-                    store.state.grid[row].value[col].stem = undefined
-                }
-
-                if (row == 0 && col == 3) {
-                    store.state.grid[row].value[col].section.id = 'id_a'
-                    store.state.grid[row].value[col].section.name = 'part_a'
-                    store.state.grid[row].value[col].stem = undefined
-                }
             }
         }
+
+        console.log('0-3', state.grid[0].value[3])
     })
 
-    it('should lock row', async () => {
+    it('should not lock empty stems in row', async () => {
         const lockProcessor = new LockProcessor(state.grid)
 
         lockProcessor.lockRow(0)
 
         let row = 0
-        for (let col = 0; col < state.grid[row].value.length; col++) {
-            expect(state.grid[row].value[col].locked).to.equals(true)
-        }
+        expect(state.grid[row].value[0].locked).to.equals(undefined)
+        expect(state.grid[row].value[1].locked).to.equals(undefined)
+        expect(state.grid[row].value[2].locked).to.equals(undefined)
+        expect(state.grid[row].value[3].locked).to.equals(true)
+        expect(state.grid[row].value[4].locked).to.equals(undefined)
+        expect(state.grid[row].value[5].locked).to.equals(true)
 
         row = 1
-        for (let col = 0; col < state.grid[row].value.length; col++) {
-            console.log('row1', state.grid[row].value[col])
-            expect(state.grid[row].value[col].locked).to.equals(undefined)
-        }
+        expect(state.grid[row].value[0].locked).to.equals(undefined)
+        expect(state.grid[row].value[1].locked).to.equals(undefined)
+        expect(state.grid[row].value[2].locked).to.equals(undefined)
+        expect(state.grid[row].value[3].locked).to.equals(undefined)
+        expect(state.grid[row].value[4].locked).to.equals(undefined)
+        expect(state.grid[row].value[5].locked).to.equals(undefined)
     })
 
     it('should unlock row', async () => {
@@ -98,9 +90,12 @@ describe('Grid Processor Tests', () => {
         lockProcessor.lockRow(2)
 
         let row = 2
-        for (let col = 0; col < state.grid[row].value.length; col++) {
-            expect(state.grid[row].value[col].locked).to.equals(true)
-        }
+        expect(state.grid[row].value[0].locked).to.equals(undefined)
+        expect(state.grid[row].value[1].locked).to.equals(undefined)
+        expect(state.grid[row].value[2].locked).to.equals(undefined)
+        expect(state.grid[row].value[3].locked).to.equals(true)
+        expect(state.grid[row].value[4].locked).to.equals(undefined)
+        expect(state.grid[row].value[5].locked).to.equals(true)
 
         lockProcessor.unlockRow(2)
 
@@ -134,7 +129,9 @@ describe('Grid Processor Tests', () => {
 
         for (let row = 0; row < state.grid.length; row++) {
             for (let col = 0; col < state.grid[row].value.length; col++) {
-                expect(state.grid[row].value[col].locked).to.equals(true)
+                if(state.grid[row].value[col].stem) {
+                    expect(state.grid[row].value[col].locked).to.equals(true)
+                }
             }
         }
     })

@@ -10,7 +10,7 @@
     <div class="w-full h-full hover:shadow-lg hover:cursor-move"
          v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.5) ' + progressBar + '%, rgba(255, 255, 255, 0) ' + progressBar + '%' }">
       <div class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">
-        {{ stem.type }}
+        {{ stem.type }} - {{ stem.bpm }} bpm
       </div>
 
 

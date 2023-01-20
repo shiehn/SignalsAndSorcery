@@ -40,7 +40,6 @@ export default class CompatibilityProcessor {
                     && this.state.grid[row].value[col].stem.type != 'riser') {
                     if (!chords) {
                         chords = this.state.grid[row].value[col].stem.chords
-                        console.log('CHORDS FOR COLUMN', chords)
                     }
                 }
             }

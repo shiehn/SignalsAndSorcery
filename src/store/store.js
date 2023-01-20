@@ -131,55 +131,6 @@ const state = reactive({
 
         return arpeggioChanged
     },
-    updateArpeggioStateHash: function () {
-        this.currentArpeggioStateHash = this.calculateArpeggioStateHash()
-    },
-    calculateArpeggioStateHash: function () {
-
-        /*
-        id: 'aaaa',
-                chords: ['a', 'a', 'a', 'a'],
-                bufferRendered: false,
-                renderedInMix: true,
-                on: true,
-                pattern: 1,
-                rate: 1,
-                synth: 'synth_a',
-         */
-
-        let newHash = ''
-        let rowIndex = 0
-        for (let col = 0; col < this.grid[rowIndex].value.length; col++) {
-            const arp = this.grid[rowIndex].value[col].arpeggio
-            if (arp) {
-                newHash += col + '_'
-                    + arp.id + '_'
-                    + arp.chords + '_'
-                    + arp.bufferRendered + '_'
-                    + arp.on + '_'
-                    + arp.pattern + '_'
-                    + arp.rate + '_'
-                    + arp.synth
-            } else {
-                newHash += col + '_'
-                    + 'null' + '_'
-                    + 'null' + '_'
-                    + 'null' + '_'
-                    + 'null' + '_'
-                    + 'null' + '_'
-                    + 'null' + '_'
-                    + 'null'
-            }
-
-            if(col < this.grid[rowIndex].value.length - 1){
-                newHash += ':'
-            }
-        }
-
-        return newHash
-    },
-
-
     currentRowHash: ['', '', '', '', '', ''],
     calculateRowHash: function (rowIndex) {
         let newHash = ''
@@ -233,7 +184,7 @@ const state = reactive({
         for (let row = 0; row < this.grid.length; row++) {
             for (let col = 0; col < this.grid[row].value.length; col++) {
                 if (this.grid[row].value[col].stem) {
-                    newHash = newHash + row + col + this.grid[row].value[col].stem.id.substring(0, 4)
+                    newHash = newHash + row + col + this.grid[row].value[col].stem.id.substring(0, 5)
                 } else {
                     newHash = newHash + row + col + 'undef'
                 }
