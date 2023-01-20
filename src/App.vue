@@ -3,7 +3,7 @@
 <template>
   <top-panels-wrapper></top-panels-wrapper>
   <composer-grid-wrapper></composer-grid-wrapper>
-  <bottom-panels-wrapper></bottom-panels-wrapper>
+<!--  <bottom-panels-wrapper></bottom-panels-wrapper>-->
 
   <modal></modal>
 </template>

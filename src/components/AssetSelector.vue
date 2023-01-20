@@ -177,10 +177,19 @@ export default {
     }
 
     const createRandomProject = async () => {
-      await createEmptyProject() //THIS IS A HACK BE CLEAR THE GRID
 
-      let bpm = lockBpm.value ? store.state.getGlobalBpm() : undefined
-      let key = lockKey.value ? store.state.getGlobalKey() : undefined
+      let bpm = lockBpm.value ?  store.state.globalBpm : undefined
+      let key = lockKey.value ?  store.state.globalKey : undefined
+
+      console.log('bpm', bpm)
+      console.log('lockBpm.value', lockBpm.value)
+      console.log('store.state.globalBpm', store.state.globalBpm)
+
+      console.log('key', key)
+      console.log('lockKey.value', lockKey.value)
+      console.log('store.state.globalKey', store.state.globalKey)
+
+      await createEmptyProject() //THIS IS A HACK BE CLEAR THE GRID
 
       showLoadingSpinner.value = true
       const project = await new ComposerAPI().generateComposition(bpm, key)
@@ -269,7 +278,9 @@ export default {
       if (lockBpm.value) {
         e.target.value = store.state.getGlobalBpm()
       } else {
-        bpmChangeDialog(store.state.getGlobalBpm())
+        let prevBpm = JSON.parse(JSON.stringify(store.state.getGlobalBpm()))
+        store.state.globalBpm = JSON.parse(JSON.stringify(e.target.value))
+        bpmChangeDialog(prevBpm)
       }
     }
 
@@ -277,7 +288,9 @@ export default {
       if (lockKey.value) {
         e.target.value = store.state.getGlobalKey()
       } else {
-        keyChangeDialog(store.state.getGlobalKey())
+        let prevKey = JSON.parse(JSON.stringify(store.state.getGlobalKey()))
+        store.state.globalKey = JSON.parse(JSON.stringify(e.target.value))
+        keyChangeDialog(prevKey)
       }
     }
 

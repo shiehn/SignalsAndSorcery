@@ -103,7 +103,6 @@ import ModalOpenPayload from "./ModalOpenPayload";
 import ComposerControlsLoopBar from "./ComposerControlsLoopBar";
 import {v4} from "uuid";
 import store from "../store/store";
-import Analytics from "../analytics/Analytics";
 import ComposerAPI from "../dal/ComposerAPI";
 
 export default {
