@@ -1,10 +1,12 @@
 <!-- frontend/src/App.vue -->
 
 <template>
+
+
   <top-panels-wrapper></top-panels-wrapper>
   <composer-grid-wrapper></composer-grid-wrapper>
-<!--  <bottom-panels-wrapper></bottom-panels-wrapper>-->
-
+  <bottom-panels-wrapper></bottom-panels-wrapper>
+  <loading-spinner></loading-spinner>
   <modal></modal>
 </template>
 
@@ -18,6 +20,7 @@ import BottomPanelsWrapper from "./components/BottomPanelsWrapper";
 import Modal from "./components/Modal";
 import {onMounted} from "vue";
 import SASApi from "./dal/sas-api";
+import LoadingSpinner from "./components/LoadingSpinner.vue";
 
 let url;
 const root = document.querySelector('#app')
@@ -46,6 +49,7 @@ export default defineComponent({
     return {}
   },
   components: {
+    LoadingSpinner,
     BottomPanelsWrapper,
     ComposerGridWrapper,
     GlobalTrackValues,

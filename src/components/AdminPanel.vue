@@ -49,8 +49,6 @@
   </div>
 
   <project-board v-if="showProjectsBoard"></project-board>
-
-  <loading-spinner :showLoadingProp="showLoadingSpinner"></loading-spinner>
 </template>
 
 <script>
@@ -73,7 +71,6 @@ export default {
     const store = inject('store')
     const toast = inject('toast');
     const isMobile = ref(store.isMobile ? true : false)
-    const showLoadingSpinner = ref(false)
     const imageAssets = {
       closeBtn: store.state.staticUrl + "icons/delete-x.png",
       loadBtn: store.state.staticUrl + 'icons/open-icon.png',
@@ -99,9 +96,9 @@ export default {
     const exportProject = async () => {
       await saveProject()
 
-      showLoadingSpinner.value = true
+      emit('showLoadingSpinner')
       const res = await new ComposerAPI().exportComposition(store.token, store.state.projectId)
-      showLoadingSpinner.value = false
+      emit('hideLoadingSpinner')
 
       if (res) {
         window.location.href = res;
@@ -129,9 +126,9 @@ export default {
         let saveFormat = new SaveAndLoadAdapter().createSaveFormat(store.state)
 
         if (store.token) {
-          showLoadingSpinner.value = true
+          emit('showLoadingSpinner')
           const res = await new ComposerAPI().save(store.token, saveFormat)
-          showLoadingSpinner.value = false
+          emit('hideLoadingSpinner')
 
           if (res) {
             store.state.projectId = res['projectId']
@@ -217,7 +214,6 @@ export default {
       saveProject,
       newProjectDialog,
       showProjectsBoard,
-      showLoadingSpinner,
       toggleProjectsBoard
     }
   },

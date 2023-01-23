@@ -65,8 +65,6 @@
       </div>
     </div>
   </div>
-
-  <loading-spinner :showLoadingProp="showLoadingSpinner"></loading-spinner>
 </template>
 
 <script>
@@ -118,18 +116,18 @@ export default {
     });
 
     const deleteProject = async (projectId) => {
-      showLoadingSpinner.value = true
+      emit('showLoadingSpinner')
       const res = await new ComposerAPI().deleteComposition(store.token, projectId)
-      showLoadingSpinner.value = false
+      emit('hideLoadingSpinner')
 
       emit('stopAllAudio')
       emit('refreshProjects', currentPage)
     }
 
     const loadProject = async (projectId) => {
-      showLoadingSpinner.value = true
+      emit('showLoadingSpinner')
       const project = await new ComposerAPI().getSavedComposition(store.token, projectId)
-      showLoadingSpinner.value = false
+      emit('hideLoadingSpinner')
 
       emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
 
@@ -216,9 +214,9 @@ export default {
         page[0] = 0
       }
 
-      showLoadingSpinner.value = true
+      emit('showLoadingSpinner')
       const response = await new ComposerAPI().getSavedCompositions(store.token, page[0])
-      showLoadingSpinner.value = false
+      emit('hideLoadingSpinner')
 
       savedProjects.value = []
       if (response['compositions']) {
@@ -242,7 +240,6 @@ export default {
       openProjectDialog,
       pageResults,
       savedProjects,
-      showLoadingSpinner
     }
   }
 }

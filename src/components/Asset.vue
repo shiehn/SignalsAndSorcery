@@ -57,7 +57,8 @@
          v-bind:style="{ backgroundImage: 'url(' + stem.waveform + ')',  'background-size': '100% 100%', 'opacity': '0.8' }">
     </div>
 
-    <div class="w-full h-full hover:shadow-lg hover:cursor-move absolute z-50"
+    <div class="w-full h-full hover:shadow-lg hover:cursor-move absolute
+    z-12"
          v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(200, 247, 197,0.5) ' + progressBar + '%, rgba(255, 255, 255, 0) ' + progressBar + '%' }">
       <!--      <div v-if="stem.type != 'drum'" class="absolute w-full text-2xs top-0 bg-gray-500 text-white text-center">-->
       <!--        {{ stem.chords }} <span v-if="isGrid"> - {{ stem.bpm }}</span>-->

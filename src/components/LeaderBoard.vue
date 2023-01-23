@@ -88,8 +88,6 @@
       </div>
     </div>
   </div>
-
-  <loading-spinner :showLoadingProp="showLoadingSpinner"></loading-spinner>
 </template>
 
 <script>
@@ -110,7 +108,6 @@ export default {
     const leaderBoardRows = ref([])
     const leaderBoardAudio = ref(null)
     let showRateProject = ref(false)
-    const showLoadingSpinner = ref(false)
     let projectToRate = undefined
     let currentPage = 0
     const hasNextPage = ref(false)
@@ -166,9 +163,9 @@ export default {
     }
 
     const rateProject = async (rating) => {
-      showLoadingSpinner.value = true
+      emit('showLoadingSpinner')
       const res = await new ComposerAPI().rateComposition(store.token, projectToRate, rating)
-      showLoadingSpinner.value = false
+      emit('hideLoadingSpinner')
 
       if (!res) {
         toast.error('Login Required')
@@ -209,9 +206,9 @@ export default {
         page[0] = 0
       }
 
-      showLoadingSpinner.value = true
+      emit('showLoadingSpinner')
       const leaderBoardResponse = await new LeaderBoardAAPI().getLeaderBoard(store.token, page[0])
-      showLoadingSpinner.value = false
+      emit('hideLoadingSpinner')
 
       leaderBoardRows.value = []
 
@@ -245,7 +242,6 @@ export default {
       openRateProject,
       pageResults,
       rateProject,
-      showLoadingSpinner,
       showRateProject,
       stopAllLeaderBoardAudio,
     }

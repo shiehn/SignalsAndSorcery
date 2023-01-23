@@ -29,7 +29,7 @@
       </button>
       <button @click="stopButton()"><img :src="imageAssets.stopBtn"
                                          class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
-    <div class="absolute bottom-2 text-gray-300 text-xs text-center bg-white">build {{ buildNumber }}</div>
+    <div class="absolute bottom-2 text-gray-400 text-xs text-center">build {{ buildNumber }}</div>
   </div>
 
   <div v-if="showInitAudio" class="modal w-full flex justify-center">
@@ -47,8 +47,6 @@
       </div>
     </div>
   </div>
-
-  <loading-spinner :showLoadingProp="showLoadingSpinner"></loading-spinner>
 </template>
 
 <script>

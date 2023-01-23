@@ -78,8 +78,6 @@
     </div>
   </div>
 
-  <loading-spinner :showLoadingProp="showLoadingSpinner"></loading-spinner>
-
 </template>
 <script>
 
@@ -125,7 +123,6 @@ export default {
     let totalResults = 0
     let prevFilterBpm = 0;
 
-    const showLoadingSpinner = ref(false)
     const staticImages = {
       pageLeftImgSrc: store.state.staticUrl + 'icons/shuffle-left.png',
       pageRightImgSrc: store.state.staticUrl + 'icons/shuffle-right.png',
@@ -191,9 +188,9 @@ export default {
 
       await createEmptyProject() //THIS IS A HACK BE CLEAR THE GRID
 
-      showLoadingSpinner.value = true
+      emit('showLoadingSpinner')
       const project = await new ComposerAPI().generateComposition(bpm, key)
-      showLoadingSpinner.value = false
+      emit('hideLoadingSpinner')
 
       emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
 
@@ -412,7 +409,6 @@ export default {
       onKeyInput,
       pageNext,
       pagePrev,
-      showLoadingSpinner,
       staticImages,
       stemSelections,
       store,
