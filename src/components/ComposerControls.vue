@@ -97,7 +97,6 @@ export default {
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
     }
 
-    const showLoadingSpinner = ref(false)
     const buildNumber = ref(BUILD_NUMBER)
 
     onMounted(() => {
@@ -220,6 +219,7 @@ export default {
     }
 
     const renderMix = async () => {
+      emit('showLoadingSpinner')
       await stop()
 
       buffer = undefined
@@ -312,6 +312,7 @@ export default {
 
         buffer = mixDown(store.context, listOfTrimmedRowBuffers, listOfTrimmedRowBuffers[0].length);
       } catch (e) {
+        emit('hideLoadingSpinner')
         console.log('ERROR', e)
         return
       }
@@ -319,24 +320,25 @@ export default {
       isRendering.value = false
 
       store.state.updateClipStateHash()
+      emit('hideLoadingSpinner')
       emit('displayRenderBtn', false)
 
       return true
     }
 
     const initAudio = () => {
-      showLoadingSpinner.value = true
+      emit('showLoadingSpinner')
       initAudioTag.value.load()
       initAudioTag.value.play()
       setTimeout(() => {
         initAudioTag.value.pause()
         showInitAudio.value = false
-        showLoadingSpinner.value = false
+        emit('hideLoadingSpinner')
       }, 2000);
     }
 
     const play = async (offsetStartPercentage) => {
-      showLoadingSpinner.value = true
+      emit('showLoadingSpinner')
       if (store.state.clipCount() < 1) {
         toast.warning('Add clips to the arranger!');
       }
@@ -380,7 +382,7 @@ export default {
       }
 
       emit('disableAnimateSelector')
-      showLoadingSpinner.value = false
+      emit('hideLoadingSpinner')
 
       new Analytics().trackPlay()
     }
@@ -566,7 +568,6 @@ export default {
       pause,
       progressBarStart,
       progressBar,
-      showLoadingSpinner,
       stopButton,
       randomizeButton,
       renderMix,

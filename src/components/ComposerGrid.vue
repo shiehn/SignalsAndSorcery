@@ -243,8 +243,6 @@ export default {
     }
 
     const refreshGridItem = async (gridItem) => {
-      //showLoadingSpinner.value = true
-
       const token = store.state.token
       const bpm = store.state.getGlobalBpm()
       const key = store.state.getGlobalKey()
