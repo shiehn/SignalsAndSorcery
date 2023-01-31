@@ -83,6 +83,7 @@ export default {
     let buffer = undefined;
     let startedAt = 0
     let pausedAt = 0
+    // let playBtnEnabled = false
     const isPlaying = ref(false)
     const isRendering = ref(false)
 
@@ -220,6 +221,7 @@ export default {
 
     const renderMix = async () => {
       emit('showLoadingSpinner')
+      // playBtnEnabled = false
       await stop()
 
       buffer = undefined
@@ -313,6 +315,7 @@ export default {
         buffer = mixDown(store.context, listOfTrimmedRowBuffers, listOfTrimmedRowBuffers[0].length);
       } catch (e) {
         emit('hideLoadingSpinner')
+        // playBtnEnabled = true
         console.log('ERROR', e)
         return
       }
@@ -321,6 +324,7 @@ export default {
 
       store.state.updateClipStateHash()
       emit('hideLoadingSpinner')
+      // playBtnEnabled = true
       emit('displayRenderBtn', false)
 
       return true
@@ -334,14 +338,29 @@ export default {
         initAudioTag.value.pause()
         showInitAudio.value = false
         emit('hideLoadingSpinner')
+        // playBtnEnabled = true
       }, 2000);
     }
 
     const play = async (offsetStartPercentage) => {
-      emit('showLoadingSpinner')
+
+      if(showInitAudio.value) {
+        return
+      }
+
+      // console.log('play', playBtnEnabled)
+      //
+      // if(!playBtnEnabled) {
+      //   return
+      // }
+
       if (store.state.clipCount() < 1) {
         toast.warning('Add clips to the arranger!');
+        return
       }
+
+      emit('showLoadingSpinner')
+      // playBtnEnabled = false
 
       emit('stopAllAudio', 'composer-controls')
 
@@ -383,11 +402,16 @@ export default {
 
       emit('disableAnimateSelector')
       emit('hideLoadingSpinner')
+      // playBtnEnabled = true
 
       new Analytics().trackPlay()
     }
 
     const stopButton = () => {
+      if(showInitAudio.value) {
+        return
+      }
+
       emit('stopAllAudio')
       emit('disableAnimateSelector')
     }
@@ -404,6 +428,10 @@ export default {
     }
 
     const pause = async () => {
+      if(showInitAudio.value) {
+        return
+      }
+
       let elapsed = store.context.currentTime - startedAt;
       stop();
       pausedAt = elapsed;
@@ -441,29 +469,12 @@ export default {
 
     const randomizeNewProjectWarningDialogModalId = 'randomizeNewProjectWarningDialogModalId'
     const randomizeButton = async () => {
-      emit('newProjectDialog')
-      // const modalPayload = new ModalOpenPayload(
-      //     randomizeNewProjectWarningDialogModalId,
-      //     'Warning',
-      //     'You are about to generate a new project. This will erase all current data. Are you sure?',
-      //     'Continue',
-      //     undefined,
-      //     'Cancel',
-      //     false,
-      //     undefined,
-      // )
-      //
-      // emit('launchModal', modalPayload)
-    }
+      if(showInitAudio.value) {
+        return
+      }
 
-    // watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {
-    //   if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === randomizeNewProjectWarningDialogModalId) {
-    //     if (modalResponsePayload[0].getResponse()) {
-    //       //GENERATE RANDOM PROJECT
-    //       emit('generateRandomProject')
-    //     }
-    //   }
-    // })
+      emit('newProjectDialog')
+    }
 
     watch(() => bus.value.get('displayRenderBtn'), (payload) => {
       displayRenderBtn.value = payload[0]

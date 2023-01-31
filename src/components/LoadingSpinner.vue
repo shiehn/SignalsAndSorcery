@@ -1,6 +1,6 @@
 <template>
   <!-- LOADING SPINNER | START -->
-  <div class="flex justify-center items-center w-full h-full z-100 fixed inset-0 bg-gradient-to-b from-gray-500"
+  <div class="flex justify-center items-center w-full h-full fixed inset-0 bg-gradient-to-b from-gray-500"
        v-show="showLoading"
        ref="loading-modal">
 

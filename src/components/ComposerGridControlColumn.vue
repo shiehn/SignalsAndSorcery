@@ -1,6 +1,6 @@
 <template>
 
-  <div v-if="isMobile" class="fixed bottom-0 left-0 z-20 flex flex-col w-full border-2 border-black rounded-lg"
+  <div v-if="isMobile" class="fixed bottom-0 left-0 flex flex-col w-full border-2 border-black rounded-lg"
        style="background-color: rgba(255,255,255,0.9);">
     <composer-controls></composer-controls>
   </div>

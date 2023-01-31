@@ -178,14 +178,6 @@ export default {
       let bpm = lockBpm.value ?  store.state.globalBpm : undefined
       let key = lockKey.value ?  store.state.globalKey : undefined
 
-      console.log('bpm', bpm)
-      console.log('lockBpm.value', lockBpm.value)
-      console.log('store.state.globalBpm', store.state.globalBpm)
-
-      console.log('key', key)
-      console.log('lockKey.value', lockKey.value)
-      console.log('store.state.globalKey', store.state.globalKey)
-
       await createEmptyProject() //THIS IS A HACK BE CLEAR THE GRID
 
       emit('showLoadingSpinner')
