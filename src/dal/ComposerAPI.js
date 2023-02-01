@@ -109,10 +109,10 @@ export default class ComposerAPI {
         return undefined
     }
 
-    async getAssetAlternative(token, bpm, key, chords, role) {
+    async getAssetAlternative(token, bpm, key, chords, role, prevStemId) {
 
         try {
-            const url = `${BASE_API_URL}compositions/asset/alternative/?chords=${encodeURIComponent(chords)}&bpm=${encodeURIComponent(bpm)}&key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`
+            const url = `${BASE_API_URL}compositions/asset/alternative/?chords=${encodeURIComponent(chords)}&bpm=${encodeURIComponent(bpm)}&key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}&prev=${encodeURIComponent(prevStemId)}`
 
             let axiosConfig = {
                 headers: {

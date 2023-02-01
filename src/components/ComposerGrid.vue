@@ -252,10 +252,12 @@ export default {
       const row = gridItem.row
       const col = gridItem.col
 
+      const prevStemId = store.state.grid[row].value[col].stem ? store.state.grid[row].value[col].stem.id : undefined
+
       removeGridItem(row, col)
 
       store.state.grid[row].value[col].refreshing = true
-      const res = await new ComposerAPI().getAssetAlternative(token, bpm, key, chords, type)
+      const res = await new ComposerAPI().getAssetAlternative(token, bpm, key, chords, type, prevStemId)
       store.state.grid[row].value[col].refreshing = false
       store.state.grid[row].value[col].stem = res
 
