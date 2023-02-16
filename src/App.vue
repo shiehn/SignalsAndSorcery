@@ -42,6 +42,10 @@ export default defineComponent({
         store.isMobile = true
       }
 
+      const urlParams = new URLSearchParams(window.location.search);
+      const excludemode = urlParams.get('excludemode');
+      store.state.excludemode = !!(excludemode && excludemode === 'true');
+
       store.state.authorName = await new SASApi().getLoggedInUser(token)
       store.token = token
     })

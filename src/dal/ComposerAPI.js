@@ -135,6 +135,32 @@ export default class ComposerAPI {
         return undefined
     }
 
+    async excludeAsset(token, assetId, assetName) {
+
+        try {
+            const url = `${BASE_API_URL}assets/exclude?id=${encodeURIComponent(assetId)}&name=${encodeURIComponent(assetName)}`
+
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Authorization': 'Token ' + token,
+                }
+            };
+
+            let res = await axios.get(url, axiosConfig)
+
+            if (res['data']) {
+                return 'EXCLUDED: ' + res['data']['excluded_assets']
+            } else {
+                console.log('Error', "Unable get an alternative asset : " + res['error'])
+            }
+        } catch (e) {
+            console.log('Error', "Unable get an alternative asset : " + e)
+        }
+
+        return false
+    }
+
     async getSavedComposition(token, id) {
 
         try {

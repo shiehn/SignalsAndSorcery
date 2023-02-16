@@ -13,7 +13,6 @@
         {{ stem.type }} - {{ stem.bpm }} bpm
       </div>
 
-
       <div class="w-full h-full flex items-center">
         <div class="w-1/3 h-full flex justify-evenly items-center" @click="onPlayClip(stem)">
           <img :src=stem.previewPlayIconPath
@@ -92,9 +91,17 @@
                @click="downloadGridItem(stem)"
                class="h-6 w-6 p-1 mr-2 aspect-square bg-white border-2 border-black hover:border-2 hover:border-yellow-600 rounded-full hover:cursor-pointer">
 
-          <img :src="stem.deleteIconPath"
+          <img v-if="!excludeMode" :src="stem.deleteIconPath"
                @click="onRemoveClip"
                class="h-6 w-6 mr-2 aspect-square hover:border-2 hover:border-red-600 rounded-full hover:cursor-pointer">
+
+          <img v-if="excludeMode" :src="stem.deleteIconPath"
+               @click="showDebugInfo"
+               class="h-6 w-6 mr-2 aspect-square border-2 border-green-600 rounded-full hover:cursor-pointer">
+
+          <img v-if="excludeMode" :src="stem.deleteIconPath"
+               @click="onExcludeClip"
+               class="h-6 w-6 mr-2 aspect-square border-2 border-red-600 rounded-full hover:cursor-pointer">
         </div>
       </div>
 
@@ -116,6 +123,7 @@ import {ROW_TO_TYPE_MAP} from "../constants/constants";
 import Analytics from "../analytics/Analytics";
 import ComposerControlsLoopBar from "./ComposerControlsLoopBar.vue";
 import LockProcessor from "../processors/lock-processor";
+import ComposerAPI from "../dal/ComposerAPI";
 
 export default {
   name: "Asset",
@@ -133,6 +141,7 @@ export default {
     const store = inject('store')
     const isMobile = ref(store.isMobile ? true : false)
     const isGrid = ref(props.grid ? true : false)
+    const excludeMode = ref(store.state.excludemode ? true : false)
     const {bus, emit} = useEventsBus()
 
     const audioTag = ref({})
@@ -202,6 +211,18 @@ export default {
     const onRemoveClip = () => {
       emit('removeGridItem', [props.row, props.col])
     }
+
+    const onExcludeClip = () => {
+      emit('excludeGridItem', [props.row, props.col])
+    }
+
+    const showDebugInfo = () => {
+      console.log('STEM', props.stem)
+      const debugInfo = JSON.stringify(props.stem);
+      alert(debugInfo)
+    }
+
+
 
     const downloadGridItem = (stem) => {
       //const gridItem = store.state.grid[row].value[col]
@@ -328,6 +349,8 @@ export default {
       audioTag,
       downloadGridItem,
       endDrag,
+      excludeMode,
+      onExcludeClip,
       hostType,
       isGrid,
       isMobile,
@@ -339,6 +362,7 @@ export default {
       onPlayOrTransferClip,
       onRemoveClip,
       progressBar,
+      showDebugInfo,
       startDrag,
       refreshGridItem,
     }

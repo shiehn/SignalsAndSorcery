@@ -1,7 +1,7 @@
 <template>
   <div v-if="isMobile" class="w-full border-2 border-white rounded-lg mb-4 p-2">
     <div class="flex justify-between">
-      <h4 class="text-white m-4">Popular</h4>
+      <h4 class="text-white m-4">Arrangements</h4>
       <div class="flex text-white mr-4">
         <button v-if="hasPrevPage" @click="pageResults('prev')" class="mr-2"><img class="h-6 w-6"
                                                                                   :src="imageAssets.pagePrev"/></button>
@@ -40,7 +40,7 @@
 
   <div v-if="!isMobile" class="w-2/3 border-2 border-white rounded-lg p-2">
     <div class="flex justify-between">
-      <h4 class="text-white m-4">Popular</h4>
+      <h4 class="text-white m-4">Arrangements</h4>
       <div class="flex text-white mr-4">
         <button v-if="hasPrevPage" @click="pageResults('prev')" class="mr-2"><img class="h-6 w-6"
                                                                                   :src="imageAssets.pagePrev"/></button>

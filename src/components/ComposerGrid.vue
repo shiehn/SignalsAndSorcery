@@ -186,6 +186,18 @@ export default {
       emit('disableAnimateSelector')
     }
 
+    const excludeGridItem = async (row, col) => {
+
+      const gridItem = store.state.grid[row].value[col]
+
+      const assetId = gridItem.stem.id
+      const assetName = gridItem.stem.source.replace(/^.*[\\\/]/, '')
+
+      const res = await new ComposerAPI().excludeAsset(store.token, assetId, assetName)
+
+      alert(res)
+    }
+
     const mouseOverGridItem = (row, col) => {
       const gridItem = store.state.grid[row].value[col]
       if (gridItem && !gridItem.showDeleteIcon && gridItem.stem) {
@@ -318,6 +330,9 @@ export default {
       removeGridItem(rowCol[0][0], rowCol[0][1])
     })
 
+    watch(() => bus.value.get('excludeGridItem'), (rowCol) => {
+      excludeGridItem(rowCol[0][0], rowCol[0][1])
+    })
 
     watch(() => bus.value.get('refreshGridItem'), (rowCol) => {
       refreshGridItem(rowCol[0])
