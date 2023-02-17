@@ -4,15 +4,15 @@ import {BASE_API_URL} from "../constants/constants";
 export default class ComposerAPI {
 
     async generateComposition(bpm, key) {
-        try {
+        try { 
             let url = BASE_API_URL + `create/composition/`
 
             if (bpm && key) {
-                url += `?bpm=${bpm}&key=${key}`
+                url += `?bpm=${bpm}&key=${encodeURIComponent(key)}`
             } else if (bpm) {
                 url += `?bpm=${bpm}`
             } else if (key) {
-                url += `?key=${key}`
+                url += `?key=${encodeURIComponent(key)}`
             }
 
             let axiosConfig = {

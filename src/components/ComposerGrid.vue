@@ -8,13 +8,14 @@
            class="flex flex-none justify-between">
 
         <div v-for="gridRowItem in gridRow.value"
-             class="overflow-auto mr-1 mb-2 w-32 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg bg-white opacity-40 border-4 border-gray-500 hover:cursor-pointer"
+             class="overflow-auto mr-1 mb-2 w-32 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg bg-white border-4 border-gray-500 hover:cursor-pointer"
              :class="{
               'init-pulse': gridRowItem.acceptMobileTransfer,
               'border-pulsate': gridRowItem.acceptMobileTransfer,
               'opacity-95': gridRowItem.acceptMobileTransfer,
               'border-4': gridRowItem.acceptMobileTransfer,
               'opacity-100': gridRowItem.stem,
+              'opacity-40': !gridRowItem.stem,
               'bg-green-100': gridRowItem.compatibility === 2,
               'bg-yellow-100': gridRowItem.compatibility === 1,
               'bg-red-100': gridRowItem.compatibility === 0
@@ -39,9 +40,10 @@
          class="flex flex-none justify-between mb-2">
       <div v-for="gridRowItem in gridRow.value" class="w-1/4 h-16 pr-2">
         <div
-            class="w-full h-full overflow-hidden relative rounded-lg shadow-lg opacity-40 hover:bg-gray-500"
+            class="w-full h-full overflow-hidden relative rounded-lg shadow-lg hover:bg-gray-500"
             :class="{
             'opacity-100': gridRowItem.stem,
+            'opacity-40': !gridRowItem.stem,
             'bg-green-100': gridRowItem.compatibility === 2,
             'bg-yellow-100': gridRowItem.compatibility === 1,
             'bg-red-100': gridRowItem.compatibility === 0
