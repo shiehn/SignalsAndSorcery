@@ -4,7 +4,7 @@ import {BASE_API_URL} from "../constants/constants";
 export default class ComposerAPI {
 
     async generateComposition(bpm, key) {
-        try { 
+        try {
             let url = BASE_API_URL + `create/composition/`
 
             if (bpm && key) {
