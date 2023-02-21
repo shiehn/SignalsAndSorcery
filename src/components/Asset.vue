@@ -35,7 +35,7 @@
                class="h-6 w-6 mr-2 aspect-square border-2 border-red-600 rounded-full hover:cursor-pointer">
         </div>
       </div>
- 
+
       <audio :ref="el => { audioTag = el }" loop>
         <source v-bind:src=stem.source type="audio/mpeg"/>
         Your browser does not support the audio element.

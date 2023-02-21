@@ -187,7 +187,7 @@ export default {
       emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
 
       const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(project)
-
+ 
       store.state.projectId = retrievedRestoredData.projectId
       store.state.projectVersionId = retrievedRestoredData.projectVersionId
       store.state.projectName = retrievedRestoredData.projectName;
