@@ -140,7 +140,7 @@ export default {
       store.state.globalBpm = retrievedRestoredData.globalBpm
       store.state.globalKey = retrievedRestoredData.globalKey
       store.state.grid = retrievedRestoredData.grid
-      store.updateGlobalChords()
+      store.state.updateGlobalChords()
 
       emit('renderMix')
       emit('closeProjectsBoard')

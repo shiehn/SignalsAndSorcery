@@ -6,7 +6,6 @@
          :style="playHeadCSS">
       <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
            class="flex flex-none justify-between">
-
         <div v-for="gridRowItem in gridRow.value"
              class="overflow-auto mr-1 mb-2 w-32 h-16 flex-none overflow-hidden relative rounded-lg shadow-lg bg-white border-4 border-gray-500 hover:cursor-pointer"
              :class="{
@@ -126,10 +125,12 @@ export default {
     const isMobile = ref(store.isMobile ? true : false)
 
     const numOfGridRows = 6
-    let numOfGridCols = 4
-    let numOfSections = 1
+    const numOfGridCols = 4
+    const numOfSections = 1
 
     store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
+
+    console.log('INIT WITH COLS: ', store.state.grid)
 
     const getGridRows = () => {
       return store.state.grid
@@ -403,17 +404,12 @@ export default {
       nextTick(() => {
         isMobile.value = store.isMobile ? true : false
 
-        if (isMobile.value) {
-          numOfGridCols = 4
-          numOfSections = 1
-        }
-
         store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
 
         //add a 2nd section by default
-        if (!isMobile.value) {
-          new GridProcessor(store.state.grid).addSection('part_2', 6)
-        }
+        // if (!isMobile.value) {
+        //   new GridProcessor(store.state.grid).addSection('part_2', 6)
+        // }
 
         if (localStorage.getItem("sas-save")) {
           emit('loadProjectFromLocalStorage')
