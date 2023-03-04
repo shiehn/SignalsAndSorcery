@@ -161,6 +161,35 @@ export default class ComposerAPI {
         return false
     }
 
+    async evaluateGeneratedAsset(token, assetId, evaluation) {
+
+        const binaryBool = (evaluation === true) ? 1 : 0
+
+        try {
+            //api/assets/evaluate/<int:id>/<int:approve>/
+            const url = `${BASE_API_URL}assets/evaluate/${encodeURIComponent(assetId)}/${encodeURIComponent(binaryBool)}/`
+
+            let axiosConfig = {
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Authorization': 'Token ' + token,
+                }
+            };
+
+            let res = await axios.get(url, axiosConfig)
+
+            if (res['data']) {
+                return 'Successfully Evaluated AssetId: ' + assetId
+            } else {
+                console.log('Error', "Unable evaluate asset : " + res['error'])
+            }
+        } catch (e) {
+            console.log('Error', "Unable evaluate asset : " + e)
+        }
+
+        return false
+    }
+
     async getSavedComposition(token, id) {
 
         try {

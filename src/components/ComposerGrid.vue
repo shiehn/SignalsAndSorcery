@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <div v-if="!isMobile" ref="gridContainer" class="rounded-lg w-11/12"
+  <div v-if="!isMobile" ref="gridContainer" class="rounded-lg w-11/12 border-t-2 border-white pt-2"
        :style="playHeadCSS">
 
     <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
@@ -200,6 +200,8 @@ export default {
 
       alert(res)
     }
+
+
 
     const mouseOverGridItem = (row, col) => {
       const gridItem = store.state.grid[row].value[col]

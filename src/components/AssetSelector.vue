@@ -413,6 +413,7 @@ export default {
 </script>
 
 <style scoped>
+
 .init-pulse {
   animation: border-pulsate 2s infinite;
 }

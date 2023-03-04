@@ -52,7 +52,6 @@
       v-on:mouseover="mouseOverGridItem(stem)"
       v-on:mouseleave="mouseLeaveGridItem(stem)"
   >
-
     <div class="w-full h-full absolute z-0"
          v-bind:style="{ backgroundImage: 'url(' + stem.waveform + ')',  'background-size': '100% 100%', 'opacity': '0.8' }">
     </div>
@@ -66,11 +65,20 @@
           <img :src=stem.previewPlayIconPath
                class="h-6 w-6 ml-2 aspect-square hover:border-2 hover:border-green-600 rounded-full hover:cursor-pointer">
 
-          <img v-if="locked" :src="stem.lockIconPath"
+          <img v-if="excludeMode && evaluateGenAssetMode" :src="stem.lockIconPath"
+               @click.stop="onEvaluateGenAsset(true)"
+               class="h-6 w-6 ml-2 bg-white p-0.5 border-green-500 border-2 border-2 rounded-full aspect-square">
+
+          <img v-if="excludeMode && evaluateGenAssetMode" :src="stem.lockIconPath"
+               @click.stop="onEvaluateGenAsset(false)"
+               class="h-6 w-6 ml-2 bg-white p-0.5 border-red-500 border-2 border-2 rounded-full aspect-square">
+
+
+          <img v-if="locked && !excludeMode && !evaluateGenAssetMode" :src="stem.lockIconPath"
                @click.stop="lockUnlock"
                class="h-6 w-6 ml-2 bg-white p-0.5 border-red-500 border-2 hover:border-2 hover:border-yellow-600 rounded-full aspect-square">
 
-          <img v-if="!locked" :src="stem.unlockIconPath"
+          <img v-if="!locked && !excludeMode && !evaluateGenAssetMode" :src="stem.unlockIconPath"
                @click.stop="lockUnlock"
                class="h-6 w-6 ml-2 bg-white p-0.5 border-black border-2 hover:border-yellow-600 rounded-full aspect-square">
         </div>
@@ -137,6 +145,7 @@ export default {
     const isMobile = ref(store.isMobile ? true : false)
     const isGrid = ref(props.grid ? true : false)
     const excludeMode = ref(store.state.excludemode ? true : false)
+    const evaluateGenAssetMode = ref(props.stem.asset_class === 'asset_generated' && excludeMode.value == true)
     const {bus, emit} = useEventsBus()
 
     const audioTag = ref({})
@@ -209,6 +218,14 @@ export default {
 
     const onExcludeClip = () => {
       emit('excludeGridItem', [props.row, props.col])
+    }
+
+    const onEvaluateGenAsset = async (evaluation) => {
+      console.log('EVAL ASSET', evaluation)
+      const gridItem = store.state.grid[props.row].value[props.col]
+      const assetId = gridItem.stem.id
+      const res = await new ComposerAPI().evaluateGeneratedAsset(store.token, assetId, evaluation)
+      alert(res)
     }
 
     const showDebugInfo = () => {
@@ -345,6 +362,8 @@ export default {
       downloadGridItem,
       endDrag,
       excludeMode,
+      evaluateGenAssetMode,
+      onEvaluateGenAsset,
       onExcludeClip,
       hostType,
       isGrid,
