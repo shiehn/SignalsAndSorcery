@@ -111,6 +111,8 @@
       </div>
     </div>
 
+    <button @click="onClearLoops">CLEAR</button>
+
 
   </div>
 
@@ -225,6 +227,10 @@ export default {
       // )
       //
       // emit('launchModal', modalClearRowConfirmPayload)
+    }
+
+    const onClearLoops = () => {
+      emit('clearLoops')
     }
 
     const handleRefreshRow = (type) => {
@@ -354,6 +360,7 @@ export default {
       handleVol,
       handleClearRow,
       handleRefreshRow,
+      onClearLoops,
       toggleRowLock,
       imageUrls
     }

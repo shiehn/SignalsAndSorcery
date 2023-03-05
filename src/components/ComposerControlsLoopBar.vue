@@ -1,19 +1,34 @@
 <template>
-  <div v-if="!isMobile" ref="loopBar" id="loopBar" class="relative w-auto h-6 rounded hover:cursor-pointer"
+  <div v-if="!isMobile" ref="loopBar" id="loopBar" class="flex relative w-auto h-6 rounded hover:cursor-pointer"
        v-bind:style="{backgroundSize: bgGridWidth + 'px ' + bgGridHeight + 'px' }"
        :class="{ 'h-24': isMobile, 'h-6': !isMobile }"
        @click="clickedLoopBar($event)">
     <!--    <label v-for="item in bgGridLabels">{{item}}</label>-->
-    <img ref="startLoop"
-         :src="imageAssets.loopStartMarker"
-         draggable="true"
-         @drag="finishStartLoopDrag($event)"
-         class="absolute w-8 h-6"/>
-    <img ref="endLoop"
-         :src="imageAssets.loopEndMarker"
-         draggable="true"
-         @drag="finishEndLoopDrag($event)"
-         class="absolute w-8 h-6"/>
+
+    <!--    <button type="button" class="w-1/4 h-8">Click Me!</button>-->
+    <div class="w-1/4 h-6 text-black text-base"
+         :class="{ 'bg-green-500': loopOneActive, 'border-l-4 border-red-500': loopOneStart, 'border-r-4 border-red-500': loopOneEnd}"
+         @click="onLoopBarClicked(0)"></div>
+    <div class="w-1/4 h-6 text-black text-base"
+         :class="{ 'bg-green-500': loopTwoActive, 'border-l-4 border-red-500': loopTwoStart, 'border-r-4 border-red-500': loopTwoEnd }"
+         @click="onLoopBarClicked(1)"></div>
+    <div class="w-1/4 h-6 text-black text-base"
+         :class="{ 'bg-green-500': loopThreeActive, 'border-l-4 border-red-500': loopThreeStart, 'border-r-4 border-red-500': loopThreeEnd }"
+         @click="onLoopBarClicked(2)"></div>
+    <div class="w-1/4 h-6 text-black text-base"
+         :class="{ 'bg-green-500': loopFourActive, 'border-l-4 border-red-500': loopFourStart, 'border-r-4 border-red-500': loopFourEnd }"
+         @click="onLoopBarClicked(3)"></div>
+
+    <!--    <img ref="startLoop"-->
+    <!--         :src="imageAssets.loopStartMarker"-->
+    <!--         draggable="true"-->
+    <!--         @drag="finishStartLoopDrag($event)"-->
+    <!--         class="absolute w-8 h-6"/>-->
+    <!--    <img ref="endLoop"-->
+    <!--         :src="imageAssets.loopEndMarker"-->
+    <!--         draggable="true"-->
+    <!--         @drag="finishEndLoopDrag($event)"-->
+    <!--         class="absolute w-8 h-6"/>-->
   </div>
 </template>
 
@@ -34,25 +49,199 @@ export default {
     const bgGridHeight = ref(20)
     const isMobile = ref(store.isMobile ? true : false)
 
-    const imageAssets = {
-      loopStartMarker: store.state.staticUrl + 'icons/loop-start-marker.png',
-      loopEndMarker: store.state.staticUrl + 'icons/loop-end-marker.png',
-    }
+    // const imageAssets = {
+    //   loopStartMarker: store.state.staticUrl + 'icons/loop-start-marker.png',
+    //   loopEndMarker: store.state.staticUrl + 'icons/loop-end-marker.png',
+    // }
 
-    const getMouseXPosPercentage = (event) => {
-      let clickXPosPercentage = Math.round((event.clientX - event.target.getBoundingClientRect().x) / event.target.getBoundingClientRect().width * 100)
+    const loopOneActive = ref(false)
+    const loopTwoActive = ref(false)
+    const loopThreeActive = ref(false)
+    const loopFourActive = ref(false)
 
-      const isInt = (value) => {
-        let x = parseFloat(value);
-        return !isNaN(value) && (x | 0) === x;
+    const loopOneStart = ref(false)
+    const loopOneEnd = ref(false)
+
+    const loopTwoStart = ref(false)
+    const loopTwoEnd = ref(false)
+
+    const loopThreeStart = ref(false)
+    const loopThreeEnd = ref(false)
+
+    const loopFourStart = ref(false)
+    const loopFourEnd = ref(false)
+
+
+
+    const getLeftActive = (bars) => {
+      for (let i = 0; i < bars.length; i++) {
+        if (bars[i].value) {
+          return i
+        }
       }
 
-      if (!clickXPosPercentage || !isInt(clickXPosPercentage)) {
-        clickXPosPercentage = 0
+      return -1
+    }
+
+    const getRightActive = (bars) => {
+      for (let i = bars.length - 1; i >= 0; i--) {
+        if (bars[i].value) {
+          return i
+        }
       }
 
-      return clickXPosPercentage
+      return -1
     }
+
+    const fillLoopBarGaps = (left, right) => {
+      let bars = [loopOneActive, loopTwoActive, loopThreeActive, loopFourActive]
+
+      for (let i = left; i < right + 1; i++) {
+        bars[i].value = true
+      }
+    }
+
+    const setMarkers = (left, right) => {
+      switch (left) {
+        case 0:
+          loopOneStart.value = true
+          break
+        case 1:
+          loopTwoStart.value = true
+          break
+        case 2:
+          loopThreeStart.value = true
+          break
+        case 3:
+          loopFourStart.value = true
+          break
+      }
+
+      switch (right) {
+        case 0:
+          loopOneEnd.value = true
+          break
+        case 1:
+          loopTwoEnd.value = true
+          break
+        case 2:
+          loopThreeEnd.value = true
+          break
+        case 3:
+          loopFourEnd.value = true
+          break
+      }
+    }
+
+    const clearMarkers = () => {
+      loopOneStart.value = false
+      loopOneEnd.value = false
+
+      loopTwoStart.value = false
+      loopTwoEnd.value = false
+
+      loopThreeStart.value = false
+      loopThreeEnd.value = false
+
+      loopFourStart.value = false
+      loopFourEnd.value = false
+    }
+
+    const clearLoops = () => {
+      loopOneActive.value = false
+      loopTwoActive.value = false
+      loopThreeActive.value = false
+      loopFourActive.value = false
+    }
+
+    const handleLoopBars = () => {
+      let bars = [loopOneActive, loopTwoActive, loopThreeActive, loopFourActive]
+
+      const leftActive = getLeftActive(bars)
+      console.log('leftActive', leftActive)
+      const rightActive = getRightActive(bars)
+      console.log('rightActive', rightActive)
+
+      if (leftActive != -1 && rightActive != -1) {
+        fillLoopBarGaps(leftActive, rightActive)
+
+        store.state.playBack.loopStartPercent = leftActive * 25
+        store.state.playBack.loopEndPercent = (rightActive + 1) * 25
+
+        //SET MARKERS
+        clearMarkers()
+        setMarkers(leftActive, rightActive)
+      } else {
+        store.state.playBack.loopStartPercent = 0
+        store.state.playBack.loopEndPercent = 100
+      }
+    }
+
+    const getNumberOfLoopedBars = () => {
+      let bars = [loopOneActive, loopTwoActive, loopThreeActive, loopFourActive]
+      let count = 0
+
+      for (let i = 0; i < bars.length; i++) {
+        if (bars[i].value) {
+          count++
+        }
+      }
+
+      return count
+    }
+
+    const isCurrentBarLooped = (barNumber) => {
+      let bars = [loopOneActive, loopTwoActive, loopThreeActive, loopFourActive]
+      return bars[barNumber].value
+    }
+
+    const onLoopBarClicked = (loopNumber) => {
+
+      if (isCurrentBarLooped(loopNumber)) {
+        if(getNumberOfLoopedBars() === 1) {
+          clearLoops()
+          clearMarkers()
+          store.state.playBack.loopStartPercent = 0
+          store.state.playBack.loopEndPercent = 100
+          return
+        }
+
+        clearLoops()
+        clearMarkers()
+      }
+
+      switch (loopNumber) {
+        case 0:
+          loopOneActive.value = !loopOneActive.value
+          break
+        case 1:
+          loopTwoActive.value = !loopTwoActive.value
+          break
+        case 2:
+          loopThreeActive.value = !loopThreeActive.value
+          break
+        case 3:
+          loopFourActive.value = !loopFourActive.value
+          break
+      }
+
+      handleLoopBars()
+    }
+
+    // const getMouseXPosPercentage = (event) => {
+    //   let clickXPosPercentage = Math.round((event.clientX - event.target.getBoundingClientRect().x) / event.target.getBoundingClientRect().width * 100)
+    //
+    //   const isInt = (value) => {
+    //     let x = parseFloat(value);
+    //     return !isNaN(value) && (x | 0) === x;
+    //   }
+    //
+    //   if (!clickXPosPercentage || !isInt(clickXPosPercentage)) {
+    //     clickXPosPercentage = 0
+    //   }
+    //
+    //   return clickXPosPercentage
+    // }
 
     onMounted(() => {
       nextTick(() => {
@@ -61,12 +250,17 @@ export default {
           bgGridHeight.value = bgGridHeight.value * 4
         }
 
-        if (!startLoop.value) {
-          return
-        }
+        // if (!startLoop.value) {
+        //   return
+        // }
 
-        startLoop.value.style.marginLeft = (store.state.playBack.loopStartPercent * 0.01 * loopBar.value.clientWidth) + 'px'
-        endLoop.value.style.marginLeft = (store.state.playBack.loopEndPercent * 0.01 * loopBar.value.clientWidth) + 'px'
+        handleLoopBars()
+
+        // store.state.playBack.loopStartPercent = 0
+        // store.state.playBack.loopEndPercent = 100
+
+        // startLoop.value.style.marginLeft = (store.state.playBack.loopStartPercent * 0.01 * loopBar.value.clientWidth) + 'px'
+        // endLoop.value.style.marginLeft = (store.state.playBack.loopEndPercent * 0.01 * loopBar.value.clientWidth) + 'px'
       })
     })
 
@@ -77,60 +271,60 @@ export default {
       return (end - start) / 2
     }
 
-    const moveStartOrEndMarker = (event) => {
-      const start = parseInt(startLoop.value.style.marginLeft.replace('px', ''))
+    // const moveStartOrEndMarker = (event) => {
+    //   const start = parseInt(startLoop.value.style.marginLeft.replace('px', ''))
+    //
+    //   const mousePosX = event.clientX - event.target.getBoundingClientRect().x
+    //
+    //   if (mousePosX < (getPointBetweenStartAndEnd() + start)) {
+    //     return 'start'
+    //   }
+    //
+    //   return 'end'
+    // }
 
-      const mousePosX = event.clientX - event.target.getBoundingClientRect().x
+    // const getXPosOfCurrentColStart = (currentCol) => {
+    //   const numOfCol = store.state.grid[0].value.length
+    //   const widthOfCol = loopBar.value.getBoundingClientRect().width / numOfCol
+    //   // const currentCol = Math.round(numOfCol * mousePosPer * 0.01)
+    //   const xPosOfCurrentCol = (currentCol) * widthOfCol
+    //   return xPosOfCurrentCol
+    // }
+    //
+    // const getXPosOfCurrentColEnd = (currentCol) => {
+    //   const numOfCol = store.state.grid[0].value.length
+    //   const widthOfCol = loopBar.value.getBoundingClientRect().width / numOfCol
+    //   // const currentCol = Math.round(numOfCol * mousePosPer * 0.01)
+    //   const xPosOfCurrentCol = (currentCol) * widthOfCol
+    //   return xPosOfCurrentCol
+    // }
 
-      if (mousePosX < (getPointBetweenStartAndEnd() + start)) {
-        return 'start'
-      }
-
-      return 'end'
-    }
-
-    const getXPosOfCurrentColStart = (mousePosPer) => {
-      const numOfCol = store.state.grid[0].value.length
-      const widthOfCol = loopBar.value.getBoundingClientRect().width / numOfCol
-      const currentCol = Math.round(numOfCol * mousePosPer * 0.01)
-      const xPosOfCurrentCol = (currentCol) * widthOfCol
-      return xPosOfCurrentCol
-    }
-
-    const getXPosOfCurrentColEnd = (mousePosPer) => {
-      const numOfCol = store.state.grid[0].value.length
-      const widthOfCol = loopBar.value.getBoundingClientRect().width / numOfCol
-      const currentCol = Math.round(numOfCol * mousePosPer * 0.01)
-      const xPosOfCurrentCol = (currentCol) * widthOfCol
-      return xPosOfCurrentCol
-    }
-
-    let loopMarketStartXPercentCache = 0
-    let loopMarketEndXPercentCache = 50
+    // let loopMarketStartXPercentCache = 0
+    // let loopMarketEndXPercentCache = 50
 
     const clickedLoopBar = (event) => {
       event.preventDefault()
-      const mouseXPosPercentage = getMouseXPosPercentage(event)
+      // const mouseXPosPercentage = getMouseXPosPercentage(event)
 
-      if (moveStartOrEndMarker(event) === 'start') {
-        const marginLeft = getXPosOfCurrentColStart(mouseXPosPercentage)
-        //set the visual start loop marker
-        startLoop.value.style.marginLeft = marginLeft + 'px'
-        //set the playback start loop point
-
-        const loopStartPos = marginLeft / loopBar.value.clientWidth * 100
-        store.state.playBack.loopStartPercent = loopStartPos
-        //CACHE THE PERCENT FOR RESIZE PURPOSES
-        loopMarketStartXPercentCache = loopStartPos
-      } else { //move end marker
-        //set the visual end loop marker
-        const marginLeft = getXPosOfCurrentColEnd(mouseXPosPercentage) + endLoop.value.getBoundingClientRect().width
-        endLoop.value.style.marginLeft = marginLeft + 'px'
-        //set the playback end loop point
-        store.state.playBack.loopEndPercent = getXPosOfCurrentColEnd(mouseXPosPercentage) / loopBar.value.clientWidth * 100
-        //CACHE THE PERCENT FOR RESIZE PURPOSES
-        loopMarketEndXPercentCache = marginLeft / loopBar.value.clientWidth * 100
-      }
+      // if (moveStartOrEndMarker(event) === 'start') {
+      //   const marginLeft = getXPosOfCurrentColStart(mouseXPosPercentage)
+      //   //set the visual start loop marker
+      //   startLoop.value.style.marginLeft = marginLeft + 'px'
+      //   //set the playback start loop point
+      //
+      //   const loopStartPos = marginLeft / loopBar.value.clientWidth * 100
+      //   store.state.playBack.loopStartPercent = loopStartPos
+      //   //CACHE THE PERCENT FOR RESIZE PURPOSES
+      //   loopMarketStartXPercentCache = loopStartPos
+      // } else { //move end marker
+      //   //set the visual end loop marker
+      //   const marginLeft = getXPosOfCurrentColEnd(mouseXPosPercentage) + endLoop.value.getBoundingClientRect().width
+      //   endLoop.value.style.marginLeft = marginLeft + 'px'
+      //   //set the playback end loop point
+      //   store.state.playBack.loopEndPercent = getXPosOfCurrentColEnd(mouseXPosPercentage) / loopBar.value.clientWidth * 100
+      //   //CACHE THE PERCENT FOR RESIZE PURPOSES
+      //   loopMarketEndXPercentCache = marginLeft / loopBar.value.clientWidth * 100
+      // }
 
 
       emit('stopAllAudio', 'loopBar')
@@ -158,6 +352,14 @@ export default {
       return gridLabels
     }
 
+    watch(() => bus.value.get('clearLoops'), () => {
+      clearMarkers()
+      clearLoops()
+
+      store.state.playBack.loopStartPercent = 0
+      store.state.playBack.loopEndPercent = 100
+    })
+
     watch(() => bus.value.get('gridDrawCompleted'), (gridDrawCompletedParams) => {
       if (!loopBar.value) {
         return
@@ -174,8 +376,8 @@ export default {
       }
 
       //SET START/END LOOP MARKER POSITIONS
-      startLoop.value.style.marginLeft = getXPosOfCurrentColStart(loopMarketStartXPercentCache) + 'px'
-      endLoop.value.style.marginLeft = getXPosOfCurrentColEnd(loopMarketEndXPercentCache) - endLoop.value.getBoundingClientRect().width + 'px'
+      // startLoop.value.style.marginLeft = getXPosOfCurrentColStart(loopMarketStartXPercentCache) + 'px'
+      // endLoop.value.style.marginLeft = getXPosOfCurrentColEnd(loopMarketEndXPercentCache) - endLoop.value.getBoundingClientRect().width + 'px'
 
       //SET THE GRID RULER COLUMN WIDTH
       bgGridWidth.value = getRelativeWidthOfCol()
@@ -189,41 +391,41 @@ export default {
       endLoop.value.style.marginLeft = loopBar.value.getBoundingClientRect().width - endLoop.value.getBoundingClientRect().width + 'px'
     })
 
-    const finishStartLoopDrag = ($event) => {
-      const mousePosRelativeToBar = $event.clientX - loopBar.value.getBoundingClientRect().x
-      const scrollBarWidth = loopBar.value.getBoundingClientRect().width
-      const endLoopXRelativeToBar = endLoop.value.getBoundingClientRect().x - endLoop.value.getBoundingClientRect().width - loopBar.value.getBoundingClientRect().x
-      if (mousePosRelativeToBar > 0 && mousePosRelativeToBar < scrollBarWidth && mousePosRelativeToBar < endLoopXRelativeToBar) {
-        const mouseXPosPercentage = Math.round(mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100)
-        const marginLeft = getXPosOfCurrentColStart(mouseXPosPercentage)
-        startLoop.value.style.marginLeft = marginLeft + 'px'
+    // const finishStartLoopDrag = ($event) => {
+    //   const mousePosRelativeToBar = $event.clientX - loopBar.value.getBoundingClientRect().x
+    //   const scrollBarWidth = loopBar.value.getBoundingClientRect().width
+    //   const endLoopXRelativeToBar = endLoop.value.getBoundingClientRect().x - endLoop.value.getBoundingClientRect().width - loopBar.value.getBoundingClientRect().x
+    //   if (mousePosRelativeToBar > 0 && mousePosRelativeToBar < scrollBarWidth && mousePosRelativeToBar < endLoopXRelativeToBar) {
+    //     const mouseXPosPercentage = Math.round(mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100)
+    //     const marginLeft = getXPosOfCurrentColStart(mouseXPosPercentage)
+    //     startLoop.value.style.marginLeft = marginLeft + 'px'
+    //
+    //     const loopStartPos = marginLeft / loopBar.value.clientWidth * 100
+    //     store.state.playBack.loopStartPercent = loopStartPos
+    //
+    //     //cache da shit
+    //     loopMarketStartXPercentCache = loopStartPos
+    //   }
+    //
+    //   emit('stopAllAudio', 'loopBar')
+    // }
 
-        const loopStartPos = marginLeft / loopBar.value.clientWidth * 100
-        store.state.playBack.loopStartPercent = loopStartPos
-
-        //cache da shit
-        loopMarketStartXPercentCache = loopStartPos
-      }
-
-      emit('stopAllAudio', 'loopBar')
-    }
-
-    const finishEndLoopDrag = ($event) => {
-      const mousePosRelativeToBar = $event.clientX - loopBar.value.getBoundingClientRect().x
-      const scrollBarWidth = loopBar.value.getBoundingClientRect().width
-      const startLoopXRelativeToBar = startLoop.value.getBoundingClientRect().x - loopBar.value.getBoundingClientRect().x
-      if (mousePosRelativeToBar > 0 && mousePosRelativeToBar < scrollBarWidth && mousePosRelativeToBar > startLoopXRelativeToBar + startLoop.value.getBoundingClientRect().width + endLoop.value.getBoundingClientRect().width) {
-        const mouseXPosPercentage = Math.round(mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100)
-        const marginLeft = getXPosOfCurrentColEnd(mouseXPosPercentage) - endLoop.value.getBoundingClientRect().width
-        endLoop.value.style.marginLeft = marginLeft + 'px'
-        store.state.playBack.loopEndPercent = getXPosOfCurrentColEnd(mouseXPosPercentage) / loopBar.value.clientWidth * 100
-
-        //cache da shit
-        loopMarketEndXPercentCache = Math.round(marginLeft / loopBar.value.clientWidth * 100)
-      }
-
-      emit('stopAllAudio', 'loopBar')
-    }
+    // const finishEndLoopDrag = ($event) => {
+    //   const mousePosRelativeToBar = $event.clientX - loopBar.value.getBoundingClientRect().x
+    //   const scrollBarWidth = loopBar.value.getBoundingClientRect().width
+    //   const startLoopXRelativeToBar = startLoop.value.getBoundingClientRect().x - loopBar.value.getBoundingClientRect().x
+    //   if (mousePosRelativeToBar > 0 && mousePosRelativeToBar < scrollBarWidth && mousePosRelativeToBar > startLoopXRelativeToBar + startLoop.value.getBoundingClientRect().width + endLoop.value.getBoundingClientRect().width) {
+    //     const mouseXPosPercentage = Math.round(mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100)
+    //     const marginLeft = getXPosOfCurrentColEnd(mouseXPosPercentage) - endLoop.value.getBoundingClientRect().width
+    //     endLoop.value.style.marginLeft = marginLeft + 'px'
+    //     store.state.playBack.loopEndPercent = getXPosOfCurrentColEnd(mouseXPosPercentage) / loopBar.value.clientWidth * 100
+    //
+    //     //cache da shit
+    //     loopMarketEndXPercentCache = Math.round(marginLeft / loopBar.value.clientWidth * 100)
+    //   }
+    //
+    //   emit('stopAllAudio', 'loopBar')
+    // }
 
     return {
       // bgGridLabels,
@@ -231,9 +433,22 @@ export default {
       bgGridHeight,
       clickedLoopBar,
       endLoop,
-      finishEndLoopDrag,
-      finishStartLoopDrag,
-      imageAssets,
+      // finishEndLoopDrag,
+      // finishStartLoopDrag,
+      loopOneActive,
+      loopTwoActive,
+      loopThreeActive,
+      loopFourActive,
+      loopOneStart,
+      loopOneEnd,
+      loopTwoStart,
+      loopTwoEnd,
+      loopThreeStart,
+      loopThreeEnd,
+      loopFourStart,
+      loopFourEnd,
+      onLoopBarClicked,
+      // imageAssets,
       isMobile,
       loopBar,
       startLoop
