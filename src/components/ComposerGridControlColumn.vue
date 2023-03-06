@@ -111,7 +111,7 @@
       </div>
     </div>
 
-    <button @click="onClearLoops">CLEAR</button>
+    <div class="w-full text-center text-white bg-black text-xs mt-1 rounded hover:bg-green-800" @click="onClearLoops">LOOP ALL</div>
 
 
   </div>

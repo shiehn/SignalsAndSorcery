@@ -30,6 +30,7 @@
       <button @click="stopButton()"><img :src="imageAssets.stopBtn"
                                          class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
     <div class="absolute bottom-2 text-gray-400 text-xs text-center">build {{ buildNumber }}</div>
+
   </div>
 
   <div v-if="showInitAudio" class="modal w-full flex justify-center">
@@ -55,12 +56,11 @@ import {watch} from "vue";
 import useEventsBus from "../events/eventBus";
 import axios from "axios";
 import Crunker from "crunker";
-import GridProcessor from "../processors/grid-processor";
 import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
 import {BUILD_NUMBER} from "../constants/constants";
 import LoadingSpinner from "./LoadingSpinner";
-import ModalOpenPayload from "./ModalOpenPayload";
 import Analytics from "../analytics/Analytics";
+import { useKeypress } from 'vue3-keypress';
 
 export default {
   name: "ComposerControls",
@@ -475,6 +475,28 @@ export default {
 
       emit('newProjectDialog')
     }
+
+
+
+    const onSpaceBarDown = ({ keyCode }) => {
+      if(!isPlaying.value && !isRendering.value){
+        play()
+      } else {
+        stop()
+      }
+    }
+
+    useKeypress({
+      keyEvent: "keydown",
+      keyBinds: [
+        {
+          keyCode: 'space', // or keyCode as integer, e.g. 40
+          success: onSpaceBarDown,
+        },
+      ]
+    })
+
+
 
     watch(() => bus.value.get('displayRenderBtn'), (payload) => {
       displayRenderBtn.value = payload[0]
