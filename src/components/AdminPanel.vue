@@ -177,24 +177,44 @@ export default {
 
     watch(() => bus.value.get('saveProjectToLocalStorage'), async () => {
       if (store.state.grid && store.state.grid.length > 0) {
+        const currentSaveData = JSON.parse(localStorage.getItem("sas-save"))
+        if(currentSaveData){
+          //SET THE CURRENT SAVED DATA TO BACKUP
+          localStorage.setItem("sas-save-n-1", JSON.stringify(currentSaveData));
+        }
+
         let saveFormat = new SaveAndLoadAdapter().createSaveFormat(store.state)
         localStorage.setItem("sas-save", JSON.stringify(saveFormat));
+      }
+    })
+
+    const loadSavedProject = (retrievedData) => {
+      const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(retrievedData)
+      store.state.projectId = retrievedRestoredData.projectId;
+      store.state.projectVersionId = retrievedRestoredData.projectId;
+      store.state.projectName = retrievedRestoredData.projectName;
+      store.state.authorName = retrievedRestoredData.authorName;
+      store.state.globalBpm = retrievedRestoredData.globalBpm;
+      store.state.globalKey = retrievedRestoredData.globalKey;
+      store.state.grid = retrievedRestoredData.grid;
+      store.state.updateGlobalChords()
+
+      emit('renderMixIfNeeded')
+    }
+
+    watch(() => bus.value.get('loadProjectBackupFromLocalStorage'), async () => {
+      if (localStorage.getItem("sas-save-n-1")) {
+        const retrievedData = JSON.parse(localStorage.getItem("sas-save-n-1"))
+        loadSavedProject(retrievedData);
+
+        emit('resetCompatibility')
       }
     })
 
     watch(() => bus.value.get('loadProjectFromLocalStorage'), async () => {
       if (localStorage.getItem("sas-save")) {
         const retrievedData = JSON.parse(localStorage.getItem("sas-save"))
-        const retrievedRestoredData = new SaveAndLoadAdapter().loadFromSaveFormat(retrievedData)
-        store.state.projectId = retrievedRestoredData.projectId;
-        store.state.projectVersionId = retrievedRestoredData.projectId;
-        store.state.projectName = retrievedRestoredData.projectName;
-        store.state.authorName = retrievedRestoredData.authorName;
-        store.state.globalBpm = retrievedRestoredData.globalBpm;
-        store.state.globalKey = retrievedRestoredData.globalKey;
-        store.state.grid = retrievedRestoredData.grid;
-        store.state.updateGlobalChords()
-
+        loadSavedProject(retrievedData);
         emit('resetCompatibility')
       }
     })

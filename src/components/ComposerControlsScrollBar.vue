@@ -1,5 +1,7 @@
 <template>
-  <div ref="clickBar" class="w-auto h-6 rounded bg-gray-500 bg-opacity-20 noisy hover:cursor-pointer"
+<!--  <div ref="clickBar" class="w-auto h-6 rounded bg-gray-500 bg-opacity-20 noisy hover:cursor-pointer"-->
+  <div ref="clickBar" class="w-auto h-6 hover:cursor-pointer"
+       v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.9) ' + progressBarStart + '%, rgba(200, 247, 197,0.9) ' + progressBar + '%,  rgba(255,255,255,0.9) ' + progressBar + '%' }"
        @click="scrubToPosition($event)" :class="{'h-6': !isMobile, 'h-24': isMobile}">
 <!--    <div ref="playHead" class="w-2 h-full bg-black"></div>-->
   </div>
@@ -16,6 +18,7 @@ export default {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
     const progressBar = ref(0)
+    const progressBarStart = ref(0)
     const clickBar = ref(null)
     // const playHead = ref(null)
     const isMobile = ref(store.isMobile ? true : false)
@@ -43,15 +46,19 @@ export default {
       emit('scrubTo', horizontalPercentage)
     }
 
-    // watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
-    //   if (progressInt == 0) {
-    //     //move the playhead to the startloop
-    //     playHead.value.style.marginLeft = (store.state.playBack.loopStartPercent * 0.01 * clickBar.value.clientWidth) + 'px'
-    //     return
-    //   }
-    //
-    //   playHead.value.style.marginLeft = (progressInt * 0.01 * clickBar.value.clientWidth) + 'px'
-    // })
+    watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
+      console.log('progressInt', progressInt[0])
+
+      progressBar.value = progressInt[0]
+
+      // if (progressInt == 0) {
+      //   //move the playhead to the startloop
+      //   playHead.value.style.marginLeft = (store.state.playBack.loopStartPercent * 0.01 * clickBar.value.clientWidth) + 'px'
+      //   return
+      // }
+      //
+      // playHead.value.style.marginLeft = (progressInt * 0.01 * clickBar.value.clientWidth) + 'px'
+    })
 
     const convertRemToPixels = (rem) => {
       return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
@@ -79,6 +86,7 @@ export default {
       isMobile,
       // playHead,
       progressBar,
+      progressBarStart,
       scrubToPosition
     }
   }

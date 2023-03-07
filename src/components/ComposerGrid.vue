@@ -130,8 +130,6 @@ export default {
 
     store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
 
-    console.log('INIT WITH COLS: ', store.state.grid)
-
     const getGridRows = () => {
       return store.state.grid
     }
@@ -163,9 +161,6 @@ export default {
         col: col,
       })
       emit('renderMixIfNeeded')
-
-      //NOT SURE IF THIS NEEDS TO HAPPEN ON EVERY DROP
-      emit('saveProjectToLocalStorage')
     }
 
     const removeGridItem = (row, col) => {
@@ -481,7 +476,6 @@ export default {
     const progressBar = ref(0)
 
     const playHeadCSS = reactive({
-      // 'background-image': 'linear-gradient(rgba(255,255,255,1),rgba(255,255,255,1))',
       'background-image': 'linear-gradient(red,red)',
       'background-size': '2px 100%',
       'background-repeat': 'no-repeat',

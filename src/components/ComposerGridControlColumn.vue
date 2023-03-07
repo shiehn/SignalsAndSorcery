@@ -111,9 +111,9 @@
       </div>
     </div>
 
-    <div class="w-full text-center text-white bg-black text-xs mt-1 rounded hover:bg-green-800" @click="onClearLoops">LOOP ALL</div>
+    <div class="w-full text-center text-white bg-black text-xs mt-1 rounded hover:ring-4 hover:ring-green-500" @click="onClearLoops">LOOP ALL</div>
 
-
+    <div class="text-gray-400 mt-10 text-xs text-center">build {{ buildNumber }}</div>
   </div>
 
 </template>
@@ -126,7 +126,16 @@ import {v4} from "uuid";
 import useEventsBus from "../events/eventBus";
 import ModalOpenPayload from "./ModalOpenPayload";
 import {watch} from "vue";
-import {ROW_TO_TYPE_MAP, TYPE_DRUM, TYPE_FILL, TYPE_HI, TYPE_LOW, TYPE_MELODIC, TYPE_MID} from "../constants/constants";
+import {
+  BUILD_NUMBER,
+  ROW_TO_TYPE_MAP,
+  TYPE_DRUM,
+  TYPE_FILL,
+  TYPE_HI,
+  TYPE_LOW,
+  TYPE_MELODIC,
+  TYPE_MID
+} from "../constants/constants";
 import LockProcessor from "../processors/lock-processor";
 import store from "../store/store";
 
@@ -161,6 +170,8 @@ export default {
     const lockedRowDrum = ref(false)
     const lockedRowFill = ref(false)
     const lockedRowMelodic = ref(false)
+
+    const buildNumber = ref(BUILD_NUMBER)
 
     const addSection = (sectionName) => {
       if (!sectionName) {
@@ -347,6 +358,7 @@ export default {
     })
 
     return {
+      buildNumber,
       lockedRowHi,
       lockedRowMid,
       lockedRowLow,

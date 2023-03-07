@@ -19,8 +19,12 @@
   </div>
 
   <div v-if="!isMobile"
-       class="relative w-1/12 h-32 px-2 mr-2 min-w-fit border-2 border-black rounded-lg bg-white flex justify-center"
+       class="relative w-1/12 h-32 px-2 mr-2 min-w-fit border-2 border-black rounded-lg bg-white"
        style="background-color: rgba(255,255,255,0.9);">
+
+    <div class="w-full mt-7"></div>
+
+    <div class="w-full flex justify-center">
       <button v-if="isPlaying === false" @click="play()"><img :src="imageAssets.playBtn"
                                                               class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
       </button>
@@ -29,8 +33,11 @@
       </button>
       <button @click="stopButton()"><img :src="imageAssets.stopBtn"
                                          class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
-    <div class="absolute bottom-2 text-gray-400 text-xs text-center">build {{ buildNumber }}</div>
+    </div>
 
+    <div class="w-full mt-2">
+      <button class="w-full text-center text-white bg-black text-xs mt-1 rounded hover:ring-4 hover:ring-yellow-500" @click="onUndoClicked">UNDO</button>
+    </div>
   </div>
 
   <div v-if="showInitAudio" class="modal w-full flex justify-center">
@@ -60,7 +67,7 @@ import ComposerControlsScrollBar from "./ComposerControlsScrollBar";
 import {BUILD_NUMBER} from "../constants/constants";
 import LoadingSpinner from "./LoadingSpinner";
 import Analytics from "../analytics/Analytics";
-import { useKeypress } from 'vue3-keypress';
+import {useKeypress} from 'vue3-keypress';
 
 export default {
   name: "ComposerControls",
@@ -97,8 +104,6 @@ export default {
       randomizeBtn: store.state.staticUrl + 'icons/refresh-icon.png',
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
     }
-
-    const buildNumber = ref(BUILD_NUMBER)
 
     onMounted(() => {
       isMobile.value = store.isMobile ? true : false
@@ -324,8 +329,8 @@ export default {
 
       store.state.updateClipStateHash()
       emit('hideLoadingSpinner')
-      // playBtnEnabled = true
       emit('displayRenderBtn', false)
+      emit('saveProjectToLocalStorage')
 
       return true
     }
@@ -344,7 +349,7 @@ export default {
 
     const play = async (offsetStartPercentage) => {
 
-      if(showInitAudio.value) {
+      if (showInitAudio.value) {
         return
       }
 
@@ -408,7 +413,7 @@ export default {
     }
 
     const stopButton = () => {
-      if(showInitAudio.value) {
+      if (showInitAudio.value) {
         return
       }
 
@@ -428,7 +433,7 @@ export default {
     }
 
     const pause = async () => {
-      if(showInitAudio.value) {
+      if (showInitAudio.value) {
         return
       }
 
@@ -469,7 +474,7 @@ export default {
 
     const randomizeNewProjectWarningDialogModalId = 'randomizeNewProjectWarningDialogModalId'
     const randomizeButton = async () => {
-      if(showInitAudio.value) {
+      if (showInitAudio.value) {
         return
       }
 
@@ -477,9 +482,8 @@ export default {
     }
 
 
-
-    const onSpaceBarDown = ({ keyCode }) => {
-      if(!isPlaying.value && !isRendering.value){
+    const onSpaceBarDown = ({keyCode}) => {
+      if (!isPlaying.value && !isRendering.value) {
         play()
       } else {
         stop()
@@ -496,6 +500,10 @@ export default {
       ]
     })
 
+
+    const onUndoClicked = () => {
+      emit('loadProjectBackupFromLocalStorage')
+    }
 
 
     watch(() => bus.value.get('displayRenderBtn'), (payload) => {
@@ -559,18 +567,14 @@ export default {
       let markerPositionInLoop = 0
 
       let progress = 0
-
       positionInLoopSection = (displayCurrentTime - startTime) % loopDuration
 
       markerPositionInLoop = startTime + positionInLoopSection
+
       progress = Math.round(markerPositionInLoop / displayDuration * 100)
 
-      if (Number.isInteger(progress)) {
+      if (Number.isInteger(progress) && progress > 0) {
         emit('updateProgressBar', progress)
-      }
-
-      if (displayCurrentTime > displayDuration) {
-        // await stop()
       }
     }
 
@@ -586,7 +590,6 @@ export default {
     })
 
     return {
-      buildNumber,
       initAudio,
       initAudioSrc,
       initAudioTag,
@@ -597,6 +600,7 @@ export default {
       isMobile,
       isPlaying,
       isRendering,
+      onUndoClicked,
       play,
       pause,
       progressBarStart,

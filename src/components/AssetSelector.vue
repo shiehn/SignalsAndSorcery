@@ -334,7 +334,6 @@ export default {
     })
 
     watch(() => bus.value.get('updateAssetSelection'), (assetFilter) => {
-
       if (store.state.globalBpm) {
         filterBpm.value = store.state.globalBpm
       } else {
