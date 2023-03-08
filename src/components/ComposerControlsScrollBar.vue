@@ -1,9 +1,22 @@
 <template>
-<!--  <div ref="clickBar" class="w-auto h-6 rounded bg-gray-500 bg-opacity-20 noisy hover:cursor-pointer"-->
-  <div ref="clickBar" class="w-auto h-6 hover:cursor-pointer"
-       v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.9) ' + progressBarStart + '%, rgba(200, 247, 197,0.9) ' + progressBar + '%,  rgba(255,255,255,0.9) ' + progressBar + '%' }"
+
+
+<!--  -->
+<!--  -->
+  <div ref="clickBar" class="w-auto h-6 relative hover:cursor-pointer"
+
        @click="scrubToPosition($event)" :class="{'h-6': !isMobile, 'h-24': isMobile}">
+
+    <div class="w-full h-1 absolute mt-3"
+        v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.9) ' + progressBarStart + '%, rgba(200, 247, 197,0.9) ' + progressBar + '%,  rgba(100,100,100,0.9) ' + progressBar + '%' }"
+    ></div>
+
+
+<!--  <div ref="clickBar" class="w-auto h-6 hover:cursor-pointer"-->
+<!--       v-bind:style="{backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.9) ' + progressBarStart + '%, rgba(200, 247, 197,0.9) ' + progressBar + '%,  rgba(255,255,255,0.9) ' + progressBar + '%' }"-->
 <!--    <div ref="playHead" class="w-2 h-full bg-black"></div>-->
+    <div ref="playHead" class="h-3 w-3 absolute bg-white rounded-full mt-2 -ml-2"></div>
+
   </div>
 </template>
 
@@ -20,7 +33,7 @@ export default {
     const progressBar = ref(0)
     const progressBarStart = ref(0)
     const clickBar = ref(null)
-    // const playHead = ref(null)
+    const playHead = ref(null)
     const isMobile = ref(store.isMobile ? true : false)
 
     onMounted(() => {
@@ -48,8 +61,11 @@ export default {
 
     watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
       console.log('progressInt', progressInt[0])
+      console.log('store.state.playBack.loopStartPercent', store.state.playBack.loopStartPercent)
 
       progressBar.value = progressInt[0]
+
+      playHead.value.style.marginLeft = (clickBar.value.clientWidth * (.01 * progressInt[0]) - (playHead.value.clientWidth/2)) + 'px'
 
       // if (progressInt == 0) {
       //   //move the playhead to the startloop
@@ -84,7 +100,7 @@ export default {
     return {
       clickBar,
       isMobile,
-      // playHead,
+      playHead,
       progressBar,
       progressBarStart,
       scrubToPosition

@@ -1,5 +1,4 @@
 <template>
-
   <div class="w-1/4 h-full bg-green-400">
     PLAY | STOP
   </div>

@@ -27,6 +27,12 @@ export default {
 
     watch(() => bus.value.get('showLoadingSpinner'), () => {
       showLoading.value = true
+      setTimeout(() => {
+        //AUTOMATICALLY HIDE THE LOADING SPINNER AFTER 12 SECONDS
+        if(showLoading.value){
+          showLoading.value = false
+        }
+      }, 12000);
     })
 
     watch(() => bus.value.get('hideLoadingSpinner'), () => {
