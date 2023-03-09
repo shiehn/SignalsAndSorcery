@@ -6,50 +6,50 @@
 
     <!-- ONE ONE ONE -->
     <div class="w-1/8 h-6 grid justify-items-start"
-         :class="{ 'bg-gradient-to-r from-green-700': loopOneStart }"
+         :class="{ 'bg-gradient-to-r from-black': loopOneStart }"
          @click="onLoopBarClicked(0, true)">
           <img v-show="loopOneStart" :src="imageAssets.loopStartMarker" class="w-6 h-6" />
     </div>
     <div class="w-1/8 h-6 grid justify-items-end"
-         :class="{ 'bg-gradient-to-l from-green-700': loopOneEnd }"
+         :class="{ 'bg-gradient-to-l from-black': loopOneEnd }"
          @click="onLoopBarClicked(0, false)">
       <img v-show="loopOneEnd" :src="imageAssets.loopEndMarker" class="w-6 h-6" />
     </div>
 
     <!-- TWO TWO TWO -->
     <div class="w-1/8 h-6 grid justify-items-start"
-         :class="{ 'bg-gradient-to-r from-green-500': loopTwoStart }"
+         :class="{ 'bg-gradient-to-r from-black': loopTwoStart, 'border-l-2 border-black': loopOneEnd }"
          @click="onLoopBarClicked(1, true)">
       <img v-show="loopTwoStart" :src="imageAssets.loopStartMarker" class="w-6 h-6" />
     </div>
     <div class="w-1/8 h-6 grid justify-items-end"
-         :class="{ 'bg-gradient-to-l from-green-500': loopTwoEnd }"
+         :class="{ 'bg-gradient-to-l from-black': loopTwoEnd }"
          @click="onLoopBarClicked(1, false)">
       <img v-show="loopTwoEnd" :src="imageAssets.loopEndMarker" class="w-6 h-6" />
     </div>
 
     <!-- THREE THREE THREE -->
     <div class="w-1/8 h-6 grid justify-items-start"
-         :class="{ 'bg-gradient-to-r from-green-500': loopThreeStart }"
+         :class="{ 'bg-gradient-to-r from-black': loopThreeStart, 'border-l-2 border-black': loopTwoEnd }"
          @click="onLoopBarClicked(2, true)">
       <img v-show="loopThreeStart" :src="imageAssets.loopStartMarker" class="w-6 h-6" />
     </div>
     <div class="w-1/8 h-6 grid justify-items-end"
-         :class="{ 'bg-gradient-to-l from-green-500': loopThreeEnd }"
+         :class="{ 'bg-gradient-to-l from-black': loopThreeEnd }"
          @click="onLoopBarClicked(2, false)">
       <img v-show="loopThreeEnd" :src="imageAssets.loopEndMarker" class="w-6 h-6" />
     </div>
 
     <!-- FOUR FOUR FOUR -->
     <div class="w-1/8 h-6 grid justify-items-start"
-         :class="{ 'bg-gradient-to-r from-green-500': loopFourStart }"
+         :class="{ 'bg-gradient-to-r from-black': loopFourStart, 'border-l-2 border-black': loopThreeEnd}"
          @click="onLoopBarClicked(3, true)">
       <img v-show="loopFourStart" :src="imageAssets.loopStartMarker" class="w-6 h-6" />
     </div>
     <div class="w-1/8 h-6 grid justify-items-end"
-               :class="{ 'bg-gradient-to-l from-green-500': loopFourEnd }"
+               :class="{ 'bg-gradient-to-l from-black': loopFourEnd }"
                @click="onLoopBarClicked(3, false)">
-      <img v-show="loopFourEnd" :src="imageAssets.loopEndMarker" class="w-6 h-6" />
+      <img v-show="loopFourEnd" :src="imageAssets.loopFarEndMarker" class="w-6 h-6" />
     </div>
 
 
@@ -72,8 +72,9 @@ export default {
     const isMobile = ref(store.isMobile ? true : false)
 
     const imageAssets = {
-      loopStartMarker: store.state.staticUrl + 'icons/loop-bar-left.png',
-      loopEndMarker: store.state.staticUrl + 'icons/loop-bar-right.png',
+      loopStartMarker: store.state.staticUrl + 'icons/loop-bar-left-white.png',
+      loopEndMarker: store.state.staticUrl + 'icons/loop-bar-right-white.png',
+      loopFarEndMarker: store.state.staticUrl + 'icons/loop-bar-right-white-end.png',
     }
 
     const loopOneActive = ref(false)
