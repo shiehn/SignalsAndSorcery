@@ -73,19 +73,19 @@
     <div class="w-full h-10 flex flex-none justify-between text-white">
       <div
           class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer"
-          @click="showAltInfo()">alt 1
+          @click="showAltInfo()"> alt 1 <img :src="imageUrls.infoIconPath" class="h-4 w-4 ml-2 bg-white rounded-full border-2 border-white opacity-50"/>
       </div>
       <div
           class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer"
-          @click="showAltInfo()">alt 2
+          @click="showAltInfo()">alt 2 <img :src="imageUrls.infoIconPath" class="h-4 w-4 ml-2 bg-white rounded-full border-2 border-white opacity-50"/>
       </div>
       <div
           class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer"
-          @click="showAltInfo()">alt 3
+          @click="showAltInfo()">alt 3 <img :src="imageUrls.infoIconPath" class="h-4 w-4 ml-2 bg-white rounded-full border-2 border-white opacity-50"/>
       </div>
       <div
           class="w-1/4 h-full flex justify-center items-center rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer"
-          @click="showAltInfo()">alt 4
+          @click="showAltInfo()">alt 4 <img :src="imageUrls.infoIconPath" class="h-4 w-4 ml-2 bg-white rounded-full border-2 border-white opacity-50"/>
       </div>
     </div>
   </div>
@@ -121,6 +121,7 @@ export default {
       plusIcon: store.state.staticUrl + "icons/plus.png",
       minusIcon: store.state.staticUrl + "icons/minus.png",
       refreshIconPath: store.state.staticUrl + 'icons/refresh-icon.png',
+      infoIconPath: store.state.staticUrl + 'icons/info.png',
     }
     const isMobile = ref(store.isMobile ? true : false)
 
@@ -441,7 +442,7 @@ export default {
       const modalOpenPayload = new ModalOpenPayload(
           'altInfoModal',
           'Alternative Versions',
-          'Each project can have up to 4 versions.  All 4 versions are available when the project is loaded from within the DAW Plugin.',
+          'Each project can have up to 4 alternative stacks of loops.  If the project is loaded from the DAW Plugin the alternatives can be toggled.',
           undefined,
           undefined,
           'Close',
