@@ -327,6 +327,9 @@ export default {
       }
     })
 
+    watch(() => bus.value.get('generateRandomProject'), () => {
+      createRandomProject()
+    })
 
     watch(() => bus.value.get('disableAnimateSelector'), () => {
       animateSelector.value = false
