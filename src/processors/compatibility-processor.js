@@ -92,6 +92,7 @@ export default class CompatibilityProcessor {
                     //TODO: if stem is a hit, match on first chord
                     //TODO: if stem is a riser, match on last chord
 
+
                     //CHECK CHORD COMPATIBILITY
                     const chordCompatibility = this.getChordCompatibilityForColumn(col)
                     if (chordCompatibility === RATING.RED) {
@@ -108,6 +109,7 @@ export default class CompatibilityProcessor {
                         stemType = 'fill'
                     }
 
+                    //IF NOT SET THEN MAKE IT GREEN
                     if (ROW_TO_TYPE_MAP[row] !== stemType) {
                         this.state.grid[row].value[col].compatibility = RATING.RED
                         continue
@@ -120,8 +122,8 @@ export default class CompatibilityProcessor {
                     }
 
 
-                    //IF NOT SET THEN MAKE IT GREEN
-                    if (this.state.grid[row].value[col].compatibility === undefined) {
+
+                    if (this.state.grid[row].value[col].compatibility === undefined || this.state.grid[row].value[col].compatibility === RATING.GRAY) {
                         this.state.grid[row].value[col].compatibility = RATING.GREEN
                     }
                 }

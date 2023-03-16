@@ -60,9 +60,6 @@ export default {
     }
 
     watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
-      console.log('progressInt', progressInt[0])
-      console.log('store.state.playBack.loopStartPercent', store.state.playBack.loopStartPercent)
-
       progressBar.value = progressInt[0]
 
       playHead.value.style.marginLeft = (clickBar.value.clientWidth * (.01 * progressInt[0]) - (playHead.value.clientWidth/2)) + 'px'

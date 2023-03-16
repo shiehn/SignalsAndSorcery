@@ -68,6 +68,7 @@
     </div>
 
 
+
     <composer-controls-loop-bar></composer-controls-loop-bar>
     <composer-controls-scroll-bar></composer-controls-scroll-bar>
     <div class="w-full h-10 flex flex-none justify-between text-white">
@@ -147,7 +148,7 @@ export default {
 
       const stemStr = evt.dataTransfer.getData('stem')
       const stem = JSON.parse(stemStr)
-      stem.instanceId = v4() //each stem should have a unique instanceId but possible the same stem id
+      stem['instanceId'] = v4() //each stem should have a unique instanceId but possible the same stem id
 
       const gridItem = store.state.grid[row].value[col]
       gridItem.stem = stem
@@ -370,6 +371,9 @@ export default {
       for (let i = 0; res.stems.length > i; i++) {
         if (res.stems[i] && res.stems[i]['bpm']) {
           if(!store.state.grid[rowIdx].value[i].locked) {
+            //generate random instance id
+            res.stems[i]['instanceId'] = v4()
+
             store.state.grid[rowIdx].value[i].stem = res.stems[i]
           }
         }

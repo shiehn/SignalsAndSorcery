@@ -249,9 +249,11 @@ export default {
       emit('stopAllAudio', stem.instanceId)
 
       if (isPlaying()) {
+        console.log('IsPlaying')
         audioTag.value.pause()
         stem.previewPlayIconPath = store.state.staticUrl + 'icons/play-button.png'
       } else {
+        console.log('NotPlaying')
         audioTag.value.load()
         audioTag.value.play()
         audioTag.value.onloadedmetadata = function () {
@@ -341,10 +343,10 @@ export default {
     }
 
     watch(() => bus.value.get('stopAllAudio'), (callerId) => {
-      if (callerId != props.stem.instanceId) {
+      if (callerId[0] != props.stem.instanceId) {
         if (isPlaying()) {
           audioTag.value.pause()
-          props.stem.previewPlayIconPath = props.stem.previewPlayIconPath + "?x-request=html" //s3 hack to prevent request from 2 origins
+          props.stem.previewPlayIconPath = store.state.staticUrl + 'icons/play-button.png' + "?x-request=html" //s3 hack to prevent request from 2 origins
           progressBar.value = 0
         }
       }

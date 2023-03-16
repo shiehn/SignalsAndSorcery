@@ -1,5 +1,6 @@
 import GridGenerator from "../generators/grid-generator";
 import {RATING} from "../processors/compatibility-processor";
+import {v4} from "uuid";
 
 export default class SaveAndLoadAdapter {
 
@@ -46,6 +47,11 @@ export default class SaveAndLoadAdapter {
 
         for (let row = 0; row < saveFormat.grid.length; row++) {
             for (let col = 0; col < newGrid[row].value.length; col++) {
+                if(saveFormat.grid[row][col] && saveFormat.grid[row][col].stem) {
+                    //generate an instanceId for each stem
+                    saveFormat.grid[row][col].stem['instanceId'] = v4()
+                }
+
                 newGrid[row].value[col] = saveFormat.grid[row][col]
             }
         }

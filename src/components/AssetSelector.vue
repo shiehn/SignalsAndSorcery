@@ -178,7 +178,7 @@ export default {
       let bpm = lockBpm.value ?  store.state.globalBpm : undefined
       let key = lockKey.value ?  store.state.globalKey : undefined
 
-      await createEmptyProject() //THIS IS A HACK BE CLEAR THE GRID
+      await createEmptyProject() //THIS IS A HACK TO CLEAR THE GRID BEFORE LOAD
 
       emit('showLoadingSpinner')
       const project = await new ComposerAPI().generateComposition(bpm, key)
