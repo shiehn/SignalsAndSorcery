@@ -204,6 +204,10 @@ export default {
     }
 
     const unlockingAudioContext = (audioCtx) => {
+      if(!window.AudioContext || !window.webkitAudioContext){
+        return false;
+      }
+
       if (audioCtx.state !== 'suspended') return false;
 
       isPlaying.value = false
@@ -233,7 +237,7 @@ export default {
 
       isRendering.value = true
       try {
-        if (!store.context || store.context.state === 'closed') {
+        if (!store.context || !window.AudioContext || !window.webkitAudioContext) {
           let AudioContext = window.AudioContext || window.webkitAudioContext;
           store.context = new AudioContext();
         }
@@ -353,23 +357,16 @@ export default {
         return
       }
 
-      // console.log('play', playBtnEnabled)
-      //
-      // if(!playBtnEnabled) {
-      //   return
-      // }
-
       if (store.state.clipCount() < 1) {
         toast.warning('Add clips to the arranger!');
         return
       }
 
       emit('showLoadingSpinner')
-      // playBtnEnabled = false
 
       emit('stopAllAudio', 'composer-controls')
 
-      if (buffer) {
+      if (buffer && store.context) {
         let offset = pausedAt;
 
         const loopStart = buffer.duration * (store.state.playBack.loopStartPercent * 0.01)
@@ -387,6 +384,7 @@ export default {
           }
         }
 
+        stop();
         sourceNode = store.context.createBufferSource();
         sourceNode.buffer = buffer
         sourceNode.connect(store.context.destination);
@@ -548,7 +546,7 @@ export default {
         await play(scrubToPercent)
       } else {
         // it is currently not playing, so start now
-        await play()
+        await play() //this allows the user to scrub to a position and then first play but is buggy causing multiple playbacks
         await pause()
         await play(scrubToPercent)
       }

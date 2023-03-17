@@ -221,7 +221,6 @@ export default {
     }
 
     const onEvaluateGenAsset = async (evaluation) => {
-      console.log('EVAL ASSET', evaluation)
       const gridItem = store.state.grid[props.row].value[props.col]
       const assetId = gridItem.stem.id
       const res = await new ComposerAPI().evaluateGeneratedAsset(store.token, assetId, evaluation)
@@ -249,11 +248,9 @@ export default {
       emit('stopAllAudio', stem.instanceId)
 
       if (isPlaying()) {
-        console.log('IsPlaying')
         audioTag.value.pause()
         stem.previewPlayIconPath = store.state.staticUrl + 'icons/play-button.png'
       } else {
-        console.log('NotPlaying')
         audioTag.value.load()
         audioTag.value.play()
         audioTag.value.onloadedmetadata = function () {

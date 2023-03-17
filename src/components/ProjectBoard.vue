@@ -126,7 +126,7 @@ export default {
 
     const loadProject = async (projectId) => {
       emit('stopAllAudio', undefined)
-      
+
       emit('showLoadingSpinner')
       const project = await new ComposerAPI().getSavedComposition(store.token, projectId)
       emit('hideLoadingSpinner')

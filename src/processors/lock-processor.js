@@ -18,7 +18,6 @@ export default class LockProcessor {
             for (let col = 0; col < this.grid[row].value.length; col++) {
                 if(row == targetRow){
                     if(this.grid[row].value[col].stem){
-                        console.log('col', col)
                         this.grid[row].value[col]['locked'] = true
                     }
                 }

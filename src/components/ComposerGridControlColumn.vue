@@ -325,7 +325,6 @@ export default {
           }
         }else{
           if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_HI)) {
-            console.log('HI FALSE')
             lockedRowHi.value = false
           } else if(row == ROW_TO_TYPE_MAP.findIndex((rowType) => rowType === TYPE_MID)) {
             lockedRowMid.value = false

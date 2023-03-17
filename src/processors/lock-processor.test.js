@@ -31,7 +31,6 @@ describe('Grid Processor Tests', () => {
                 }
 
                 if (col === 3) {
-                    console.log('WTF')
                     state.grid[row].value[col].section.id = 'id_a'
                     state.grid[row].value[col].section.name = 'part_a'
                     state.grid[row].value[col]['stem'] = {
@@ -58,8 +57,6 @@ describe('Grid Processor Tests', () => {
                 }
             }
         }
-
-        console.log('0-3', state.grid[0].value[3])
     })
 
     it('should not lock empty stems in row', async () => {
