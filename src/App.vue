@@ -5,6 +5,7 @@
 
   <top-panels-wrapper></top-panels-wrapper>
   <composer-grid-wrapper></composer-grid-wrapper>
+  <c-sound></c-sound>
   <bottom-panels-wrapper></bottom-panels-wrapper>
   <loading-spinner></loading-spinner>
   <modal></modal>
@@ -21,6 +22,7 @@ import Modal from "./components/Modal";
 import {onMounted} from "vue";
 import SASApi from "./dal/sas-api";
 import LoadingSpinner from "./components/LoadingSpinner.vue";
+import CSound from "./components/CSound.vue";
 
 let url;
 const root = document.querySelector('#app')
@@ -53,6 +55,7 @@ export default defineComponent({
     return {}
   },
   components: {
+    CSound,
     LoadingSpinner,
     BottomPanelsWrapper,
     ComposerGridWrapper,

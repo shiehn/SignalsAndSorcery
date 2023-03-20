@@ -36,7 +36,9 @@
     </div>
 
     <div class="w-full mt-2">
-      <button class="w-full text-center text-white bg-black text-xs mt-1 rounded hover:ring-4 hover:ring-yellow-500" @click="onUndoClicked">UNDO</button>
+      <button class="w-full text-center text-white bg-black text-xs mt-1 rounded hover:ring-4 hover:ring-yellow-500"
+              @click="onUndoClicked">UNDO
+      </button>
     </div>
   </div>
 
@@ -68,6 +70,71 @@ import {BUILD_NUMBER} from "../constants/constants";
 import LoadingSpinner from "./LoadingSpinner";
 import Analytics from "../analytics/Analytics";
 import {useKeypress} from 'vue3-keypress';
+import Tuna from 'tunajs';
+
+async function applyFXToBuffer(bufferSizePerLoop, bufferSampleRate, inputBuffer) {
+  const offlineCtx = new OfflineAudioContext(2, bufferSizePerLoop, bufferSampleRate);
+  const tuna = new Tuna(offlineCtx)
+
+  //FX -START
+  var delay = new tuna.Delay({
+    feedback: 0.45,    //0 to 1+
+    delayTime: 100,    //1 to 10000 milliseconds
+    wetLevel: 1,     //0 to 1+
+    dryLevel: 0,       //0 to 1+
+    cutoff: 20000,      //cutoff frequency of the built in lowpass-filter. 20 to 22050
+    bypass: 0
+  });
+
+
+  var filter = new tuna.Filter({
+    frequency: 1000,         //20 to 22050
+    Q: 1,                   //0.001 to 100
+    gain: 0,                //-40 to 40 (in decibels)
+    filterType: "lowpass",  //lowpass, highpass, bandpass, lowshelf, highshelf, peaking, notch, allpass
+    bypass: 0
+  });
+  //FX -END
+
+
+  var overdrive = new tuna.Overdrive({
+    outputGain: -9.154,           //-42 to 0 in dB
+    drive: 0.5,                 //0 to 1
+    curveAmount: 0.979,           //0 to 1
+    algorithmIndex: 0,            //0 to 5, selects one of the drive algorithms
+    bypass: 0
+  });
+
+
+  console.log('RENDING OFFLINE BEESH - STARTED')
+  console.log('trimmedBufferListRow LENGTH', inputBuffer.length)
+
+  //let response = await axios.get('http://localhost:8000/static/audioworklets/smoothingWorklet.js')
+  //console.log('RESPONSE', response)
+  await offlineCtx.audioWorklet.addModule('http://localhost:8000/static/audioworklets/firstOrderFilter.js')
+  console.log('RESPONSE - AAA')
+  let smoothingFilter = new AudioWorkletNode(offlineCtx, 'first-order-filter',
+      {processorOptions:{type:'lowpass'}}
+  )
+  console.log('RESPONSE - BBB')
+  smoothingFilter.parameters.get('frequency').value=100
+  console.log('RESPONSE - CCC')
+
+  let offlineSource = offlineCtx.createBufferSource();
+  offlineSource.buffer = inputBuffer;
+  offlineSource.connect(smoothingFilter)
+
+  smoothingFilter.connect(offlineCtx.destination);
+
+  // filter.connect(overdrive)
+  // overdrive.connect(delay)
+  //delay.connect(offlineCtx.destination);
+  offlineSource.start();
+  let renderedBuffer = await offlineCtx.startRendering()
+  console.log('RENDING OFFLINE BEESH - COMPLETE')
+
+  return renderedBuffer
+}
 
 export default {
   name: "ComposerControls",
@@ -204,7 +271,7 @@ export default {
     }
 
     const unlockingAudioContext = (audioCtx) => {
-      if(!window.AudioContext || !window.webkitAudioContext){
+      if (!window.AudioContext || !window.webkitAudioContext) {
         return false;
       }
 
@@ -257,7 +324,6 @@ export default {
         //ALL THIS ROW STUFF COULD BE A FUNC
         for (let n = 0; n < numOfRows; n++) {
 
-          // TODO: BUFFER - THIS HAS BEEN COMMENTED OUT BECAUSE ITS NOT HANDLING THE NEW VOCAL ROW - jan12/23
           //CHECK IF THE ROW IS ALREADY CACHED
           if (!store.state.hasRowStateChanged(n) && BUFFER_ROW_CACHE[n]) {
             listOfTrimmedRowBuffers[n] = BUFFER_ROW_CACHE[n]
@@ -269,6 +335,38 @@ export default {
 
           //GET THE BUFFERS FOR ONE ROW
           let buffer_list_row = await getBufferInRow(store.context, tracksInRow, emptyBuffer);
+
+
+          //APPLY OFFLINE FX TO THE THIRD COLUM
+          //APPLY OFFLINE FX TO THE THIRD COLUM
+          //APPLY OFFLINE FX TO THE THIRD COLUM
+          //APPLY OFFLINE FX TO THE THIRD COLUM
+
+          // if (i == 1) {
+
+          const columnIdx = 1
+
+          let processedAudio = await applyFXToBuffer(bufferSizePerLoop, store.context.sampleRate, buffer_list_row[columnIdx]);
+
+          console.log('buffer_list_row[columnIdx]', buffer_list_row[columnIdx])
+          console.log('processedAudio', processedAudio)
+
+          buffer_list_row[columnIdx] = processedAudio
+
+          // for(let i=0; i<trimmedBufferListRow[2]; i++){
+          //   let oldBufferLeft = trimmedBufferListRow[2].getChannelData(leftChannel)
+          //   let oldBufferRight = trimmedBufferListRow[2].getChannelData(rightChannel)
+          //   for(let j=0; j<oldBufferLeft.length; j++){
+          //     oldBufferLeft[j] = oldBufferLeft[j] * 0.5
+          //     oldBufferRight[j] = oldBufferRight[j] * 0.5
+          //   }
+          // }
+          //APPLY OFFLINE FX TO THE THIRD COLUM
+          //APPLY OFFLINE FX TO THE THIRD COLUM
+          //APPLY OFFLINE FX TO THE THIRD COLUM
+          //APPLY OFFLINE FX TO THE THIRD COLUM
+          // }
+
 
           //TRIM THE BUFFERS IN EACH ROW
           //TRIM THE BUFFERS IN EACH ROW
@@ -294,7 +392,11 @@ export default {
             // }
 
             trimmedBufferListRow[i] = newBuffer
+
+
           }
+
+
           //MERGE ALL THE BUFFERS FOR A ROW
           //MERGE ALL THE BUFFERS FOR A ROW
           // MERGE ALL THE BUFFERS FOR A ROW
