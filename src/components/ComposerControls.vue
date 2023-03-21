@@ -72,66 +72,88 @@ import Analytics from "../analytics/Analytics";
 import {useKeypress} from 'vue3-keypress';
 import Tuna from 'tunajs';
 
+function cloneAudioBuffer(fromAudioBuffer) {
+  const audioBuffer = new AudioBuffer({
+    length: fromAudioBuffer.length,
+    numberOfChannels: fromAudioBuffer.numberOfChannels,
+    sampleRate: fromAudioBuffer.sampleRate
+  });
+  for (let channelI = 0; channelI < audioBuffer.numberOfChannels; ++channelI) {
+    const samples = fromAudioBuffer.getChannelData(channelI);
+    audioBuffer.copyToChannel(samples, channelI);
+  }
+  return audioBuffer;
+}
+
 async function applyFXToBuffer(bufferSizePerLoop, bufferSampleRate, inputBuffer) {
   const offlineCtx = new OfflineAudioContext(2, bufferSizePerLoop, bufferSampleRate);
-  const tuna = new Tuna(offlineCtx)
-
-  //FX -START
-  var delay = new tuna.Delay({
-    feedback: 0.45,    //0 to 1+
-    delayTime: 100,    //1 to 10000 milliseconds
-    wetLevel: 1,     //0 to 1+
-    dryLevel: 0,       //0 to 1+
-    cutoff: 20000,      //cutoff frequency of the built in lowpass-filter. 20 to 22050
-    bypass: 0
-  });
-
-
-  var filter = new tuna.Filter({
-    frequency: 1000,         //20 to 22050
-    Q: 1,                   //0.001 to 100
-    gain: 0,                //-40 to 40 (in decibels)
-    filterType: "lowpass",  //lowpass, highpass, bandpass, lowshelf, highshelf, peaking, notch, allpass
-    bypass: 0
-  });
-  //FX -END
-
-
-  var overdrive = new tuna.Overdrive({
-    outputGain: -9.154,           //-42 to 0 in dB
-    drive: 0.5,                 //0 to 1
-    curveAmount: 0.979,           //0 to 1
-    algorithmIndex: 0,            //0 to 5, selects one of the drive algorithms
-    bypass: 0
-  });
-
-
-  console.log('RENDING OFFLINE BEESH - STARTED')
-  console.log('trimmedBufferListRow LENGTH', inputBuffer.length)
+  // const tuna = new Tuna(offlineCtx)
+  //
+  // //FX -START
+  // var delay = new tuna.Delay({
+  //   feedback: 0.45,    //0 to 1+
+  //   delayTime: 100,    //1 to 10000 milliseconds
+  //   wetLevel: 1,     //0 to 1+
+  //   dryLevel: 0,       //0 to 1+
+  //   cutoff: 20000,      //cutoff frequency of the built in lowpass-filter. 20 to 22050
+  //   bypass: 0
+  // });
+  //
+  //
+  // var filter = new tuna.Filter({
+  //   frequency: 1000,         //20 to 22050
+  //   Q: 1,                   //0.001 to 100
+  //   gain: 0,                //-40 to 40 (in decibels)
+  //   filterType: "lowpass",  //lowpass, highpass, bandpass, lowshelf, highshelf, peaking, notch, allpass
+  //   bypass: 0
+  // });
+  // //FX -END
+  //
+  //
+  // var overdrive = new tuna.Overdrive({
+  //   outputGain: -9.154,           //-42 to 0 in dB
+  //   drive: 0.5,                 //0 to 1
+  //   curveAmount: 0.979,           //0 to 1
+  //   algorithmIndex: 0,            //0 to 5, selects one of the drive algorithms
+  //   bypass: 0
+  // });
+  //
+  //
+  // console.log('RENDING OFFLINE BEESH - STARTED')
+  // console.log('trimmedBufferListRow LENGTH', inputBuffer.length)
 
   //let response = await axios.get('http://localhost:8000/static/audioworklets/smoothingWorklet.js')
   //console.log('RESPONSE', response)
   await offlineCtx.audioWorklet.addModule('http://localhost:8000/static/audioworklets/firstOrderFilter.js')
-  console.log('RESPONSE - AAA')
   let smoothingFilter = new AudioWorkletNode(offlineCtx, 'first-order-filter',
-      {processorOptions:{type:'lowpass'}}
+      {processorOptions: {type: 'lowpass'}}
   )
-  console.log('RESPONSE - BBB')
-  smoothingFilter.parameters.get('frequency').value=100
-  console.log('RESPONSE - CCC')
+  smoothingFilter.parameters.get('frequency').value = 10
+
+  await offlineCtx.audioWorklet.addModule('http://localhost:8000/static/audioworklets/gainProcessor.js')
+  let gainProcessor = new AudioWorkletNode(offlineCtx, 'gain-processor')
+  gainProcessor.parameters.get('gain').value = 0.75
+
+
+  var delay = new DelayNode(offlineCtx, {delayTime: 0.08})
+  var feedback = new GainNode(offlineCtx, {gain: 0.8})
+  // let LFOgain= new GainNode(offlineCtx,{gain:0})
+  // let LFO = new OscillatorNode(offlineCtx,{frequency:2})
+  // LFO.start()
+  // LFO.connect(LFOgain).connect(delay.delayTime)
+  // delay.connect(context.destination)
+
 
   let offlineSource = offlineCtx.createBufferSource();
   offlineSource.buffer = inputBuffer;
-  offlineSource.connect(smoothingFilter)
-
-  smoothingFilter.connect(offlineCtx.destination);
+  offlineSource.connect(delay).connect(feedback).connect(delay).connect(gainProcessor).connect(offlineCtx.destination);
 
   // filter.connect(overdrive)
   // overdrive.connect(delay)
   //delay.connect(offlineCtx.destination);
-  offlineSource.start();
+  offlineSource.start(0);
   let renderedBuffer = await offlineCtx.startRendering()
-  console.log('RENDING OFFLINE BEESH - COMPLETE')
+  //console.log('RENDING OFFLINE BEESH - COMPLETE')
 
   return renderedBuffer
 }
@@ -195,13 +217,19 @@ export default {
 
 
     const getBufferInRow = async (actx, trackSourceUrls, emptyBuffer) => {
+      console.log('ROW DOWNLOAD - START')
+
+      let downloadTasks = []
       let buffer_list = new Array();
       for (let x = 0; x < trackSourceUrls.length; x++) {
         if (trackSourceUrls[x]) {
           // if (BUFFER_CACHE[trackSourceUrls[x]]) {
           //   buffer_list[x] = BUFFER_CACHE[trackSourceUrls[x]]
           // } else {
-          await new Promise(function (resolve) {
+
+          console.log('DOWNLOAD AUDIO: ', trackSourceUrls[x])
+
+          downloadTasks.push(new Promise(function (resolve) {
             axios.get(trackSourceUrls[x] + "?x-request=js" /*s3 hack to prevent request from 2 origins */, {
               responseType: 'arraybuffer'
             }).then(function (response) {
@@ -221,7 +249,7 @@ export default {
                 .catch(function (error) {
                   console.error("problem!! downloading " + error);
                 })
-          })
+          }))
 
           // BUFFER_CACHE[trackSourceUrls[x]] = buffer
           // }
@@ -230,6 +258,8 @@ export default {
         }
       }
 
+      await Promise.all(downloadTasks)
+      console.log('ROW DOWNLOAD - END')
       return buffer_list;
     }
 
@@ -295,12 +325,57 @@ export default {
       return true;
     }
 
+    const trimBuffer = async (i, bufferSizePerLoop, buffer) => {
+      const leftChannel = 0
+      const rightChannel = 1
+      // Create an empty buffer at the target length
+      let newBuffer = store.context.createBuffer(2, bufferSizePerLoop, store.context.sampleRate);
+
+      // for (let channel = 0; channel < 2; channel++) {
+      // This gives us the actual array that contains the data
+      let oldBufferLeft = buffer.getChannelData(leftChannel)
+      let oldBufferRight = buffer.getChannelData(rightChannel)
+
+      let nowBufferingLeft = newBuffer.getChannelData(leftChannel);
+      let nowBufferingRight = newBuffer.getChannelData(rightChannel);
+
+      for (let j = 0; j < newBuffer.length; j++) {
+        nowBufferingLeft[j] = oldBufferLeft[j];
+        nowBufferingRight[j] = oldBufferRight[j];
+      }
+
+      return {
+        'index': i,
+        'buffer': newBuffer,
+      }
+    }
+
+    const trimBuffers = async (buffer_list_row, bufferSizePerLoop) => {
+
+      let trimBufferTasks = []
+      for (let i = 0; i < buffer_list_row.length; i++) {
+        trimBufferTasks.push(trimBuffer(i, bufferSizePerLoop, buffer_list_row[i]))
+      }
+
+      let trimmedBufferListRow = new Array(buffer_list_row.length)
+
+      let taskResults = await Promise.all(trimBufferTasks)
+      for(let i = 0; i < taskResults.length; i++) {
+        trimmedBufferListRow[taskResults[i].index] = taskResults[i].buffer
+      }
+
+      return trimmedBufferListRow
+    }
+
     const renderMix = async () => {
       emit('showLoadingSpinner')
       // playBtnEnabled = false
       await stop()
 
       buffer = undefined
+
+      const leftChannel = 0
+      const rightChannel = 1
 
       isRendering.value = true
       try {
@@ -315,8 +390,7 @@ export default {
 
         let secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
         const bufferSizePerLoop = secondsInLoop * store.context.sampleRate;
-        const leftChannel = 0
-        const rightChannel = 1
+
         const numOfRows = store.state.grid.length;
         let listOfTrimmedRowBuffers = new Array(numOfRows);
 
@@ -344,14 +418,21 @@ export default {
 
           // if (i == 1) {
 
-          const columnIdx = 1
+          // const columnIdx = 1
+          //
+          // const inputBuffer = cloneAudioBuffer(buffer_list_row[columnIdx])
+          //
+          // // console.log('bufferSizePerLoop', bufferSizePerLoop)
+          // // console.log('inputBuffer SIZE', buffer_list_row[columnIdx].length)
+          //
+          // let processedAudio = await applyFXToBuffer(bufferSizePerLoop, store.context.sampleRate, inputBuffer);
+          //
+          // buffer_list_row[columnIdx] = cloneAudioBuffer(processedAudio)
+          // for(let channelI = 0; channelI < processedAudio.numberOfChannels; ++channelI) {
+          //   const samples = processedAudio.getChannelData(channelI);
+          //   buffer_list_row[columnIdx].copyToChannel(samples, channelI);
+          // }
 
-          let processedAudio = await applyFXToBuffer(bufferSizePerLoop, store.context.sampleRate, buffer_list_row[columnIdx]);
-
-          console.log('buffer_list_row[columnIdx]', buffer_list_row[columnIdx])
-          console.log('processedAudio', processedAudio)
-
-          buffer_list_row[columnIdx] = processedAudio
 
           // for(let i=0; i<trimmedBufferListRow[2]; i++){
           //   let oldBufferLeft = trimmedBufferListRow[2].getChannelData(leftChannel)
@@ -367,34 +448,12 @@ export default {
           //APPLY OFFLINE FX TO THE THIRD COLUM
           // }
 
-
           //TRIM THE BUFFERS IN EACH ROW
           //TRIM THE BUFFERS IN EACH ROW
           //TRIM THE BUFFERS IN EACH ROW
-          //TODO IF YOU PRE-TRIM THESE YOU CAN SAVE RENDER TIME
-          let trimmedBufferListRow = new Array(buffer_list_row.length)
-          for (let i = 0; i < buffer_list_row.length; i++) {
-            // Create an empty buffer at the target length
-            let newBuffer = store.context.createBuffer(2, bufferSizePerLoop, store.context.sampleRate);
 
-            // for (let channel = 0; channel < 2; channel++) {
-            // This gives us the actual array that contains the data
-            let oldBufferLeft = buffer_list_row[i].getChannelData(leftChannel)
-            let oldBufferRight = buffer_list_row[i].getChannelData(rightChannel)
-
-            let nowBufferingLeft = newBuffer.getChannelData(leftChannel);
-            let nowBufferingRight = newBuffer.getChannelData(rightChannel);
-
-            for (let j = 0; j < newBuffer.length; j++) {
-              nowBufferingLeft[j] = oldBufferLeft[j];
-              nowBufferingRight[j] = oldBufferRight[j];
-            }
-            // }
-
-            trimmedBufferListRow[i] = newBuffer
-
-
-          }
+          
+          let trimmedBufferListRow = await trimBuffers(buffer_list_row, bufferSizePerLoop)
 
 
           //MERGE ALL THE BUFFERS FOR A ROW
