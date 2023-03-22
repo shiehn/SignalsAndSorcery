@@ -87,20 +87,20 @@ function cloneAudioBuffer(fromAudioBuffer) {
 
 async function applyFXToBuffer(bufferSizePerLoop, bufferSampleRate, inputBuffer) {
   const offlineCtx = new OfflineAudioContext(2, bufferSizePerLoop, bufferSampleRate);
-  // const tuna = new Tuna(offlineCtx)
+  const tuna = new Tuna(offlineCtx)
   //
   // //FX -START
-  // var delay = new tuna.Delay({
-  //   feedback: 0.45,    //0 to 1+
-  //   delayTime: 100,    //1 to 10000 milliseconds
-  //   wetLevel: 1,     //0 to 1+
-  //   dryLevel: 0,       //0 to 1+
-  //   cutoff: 20000,      //cutoff frequency of the built in lowpass-filter. 20 to 22050
-  //   bypass: 0
-  // });
+  let delayNode = new tuna.Delay({
+    feedback: 0.8,    //0 to 1+
+    delayTime: 200,    //1 to 10000 milliseconds
+    wetLevel: 1,     //0 to 1+
+    dryLevel: 0,       //0 to 1+
+    cutoff: 800,      //cutoff frequency of the built in lowpass-filter. 20 to 22050
+    bypass: 0
+  });
   //
   //
-  // var filter = new tuna.Filter({
+  // let filterNode = new tuna.Filter({
   //   frequency: 1000,         //20 to 22050
   //   Q: 1,                   //0.001 to 100
   //   gain: 0,                //-40 to 40 (in decibels)
@@ -110,13 +110,13 @@ async function applyFXToBuffer(bufferSizePerLoop, bufferSampleRate, inputBuffer)
   // //FX -END
   //
   //
-  // var overdrive = new tuna.Overdrive({
-  //   outputGain: -9.154,           //-42 to 0 in dB
-  //   drive: 0.5,                 //0 to 1
-  //   curveAmount: 0.979,           //0 to 1
-  //   algorithmIndex: 0,            //0 to 5, selects one of the drive algorithms
-  //   bypass: 0
-  // });
+  let overdriveNode = new tuna.Overdrive({
+    outputGain: -9.154,           //-42 to 0 in dB
+    drive: 0.2,                 //0 to 1
+    curveAmount: 0.979,           //0 to 1
+    algorithmIndex: 0,            //0 to 5, selects one of the drive algorithms
+    bypass: 0
+  });
   //
   //
   // console.log('RENDING OFFLINE BEESH - STARTED')
@@ -124,19 +124,19 @@ async function applyFXToBuffer(bufferSizePerLoop, bufferSampleRate, inputBuffer)
 
   //let response = await axios.get('http://localhost:8000/static/audioworklets/smoothingWorklet.js')
   //console.log('RESPONSE', response)
-  await offlineCtx.audioWorklet.addModule('http://localhost:8000/static/audioworklets/firstOrderFilter.js')
-  let smoothingFilter = new AudioWorkletNode(offlineCtx, 'first-order-filter',
-      {processorOptions: {type: 'lowpass'}}
-  )
-  smoothingFilter.parameters.get('frequency').value = 10
+  // await offlineCtx.audioWorklet.addModule('http://localhost:8000/static/audioworklets/firstOrderFilter.js')
+  // let smoothingFilter = new AudioWorkletNode(offlineCtx, 'first-order-filter',
+  //     {processorOptions: {type: 'lowpass'}}
+  // )
+  // smoothingFilter.parameters.get('frequency').value = 10
+  //
+  // await offlineCtx.audioWorklet.addModule('http://localhost:8000/static/audioworklets/gainProcessor.js')
+  // let gainProcessor = new AudioWorkletNode(offlineCtx, 'gain-processor')
+  // gainProcessor.parameters.get('gain').value = 0.75
 
-  await offlineCtx.audioWorklet.addModule('http://localhost:8000/static/audioworklets/gainProcessor.js')
-  let gainProcessor = new AudioWorkletNode(offlineCtx, 'gain-processor')
-  gainProcessor.parameters.get('gain').value = 0.75
 
-
-  var delay = new DelayNode(offlineCtx, {delayTime: 0.08})
-  var feedback = new GainNode(offlineCtx, {gain: 0.8})
+  // var delay = new DelayNode(offlineCtx, {delayTime: 0.08})
+  // var feedback = new GainNode(offlineCtx, {gain: 0.8})
   // let LFOgain= new GainNode(offlineCtx,{gain:0})
   // let LFO = new OscillatorNode(offlineCtx,{frequency:2})
   // LFO.start()
@@ -146,7 +146,8 @@ async function applyFXToBuffer(bufferSizePerLoop, bufferSampleRate, inputBuffer)
 
   let offlineSource = offlineCtx.createBufferSource();
   offlineSource.buffer = inputBuffer;
-  offlineSource.connect(delay).connect(feedback).connect(delay).connect(gainProcessor).connect(offlineCtx.destination);
+  offlineSource.connect(delayNode)
+  delayNode.connect(offlineCtx.destination);
 
   // filter.connect(overdrive)
   // overdrive.connect(delay)
@@ -217,18 +218,10 @@ export default {
 
 
     const getBufferInRow = async (actx, trackSourceUrls, emptyBuffer) => {
-      console.log('ROW DOWNLOAD - START')
-
       let downloadTasks = []
       let buffer_list = new Array();
       for (let x = 0; x < trackSourceUrls.length; x++) {
         if (trackSourceUrls[x]) {
-          // if (BUFFER_CACHE[trackSourceUrls[x]]) {
-          //   buffer_list[x] = BUFFER_CACHE[trackSourceUrls[x]]
-          // } else {
-
-          console.log('DOWNLOAD AUDIO: ', trackSourceUrls[x])
-
           downloadTasks.push(new Promise(function (resolve) {
             axios.get(trackSourceUrls[x] + "?x-request=js" /*s3 hack to prevent request from 2 origins */, {
               responseType: 'arraybuffer'
@@ -250,16 +243,12 @@ export default {
                   console.error("problem!! downloading " + error);
                 })
           }))
-
-          // BUFFER_CACHE[trackSourceUrls[x]] = buffer
-          // }
         } else {
           buffer_list[x] = emptyBuffer;
         }
       }
 
       await Promise.all(downloadTasks)
-      console.log('ROW DOWNLOAD - END')
       return buffer_list;
     }
 
@@ -360,11 +349,33 @@ export default {
       let trimmedBufferListRow = new Array(buffer_list_row.length)
 
       let taskResults = await Promise.all(trimBufferTasks)
-      for(let i = 0; i < taskResults.length; i++) {
+      for (let i = 0; i < taskResults.length; i++) {
         trimmedBufferListRow[taskResults[i].index] = taskResults[i].buffer
       }
 
       return trimmedBufferListRow
+    }
+
+    const createRowBuffer = async (bufferSizePerLoop, trimmedBufferListRow) => {
+      const leftChannel = 0
+      const rightChannel = 1
+
+      let finalRowBuffer = store.context.createBuffer(2, bufferSizePerLoop * trimmedBufferListRow.length, store.context.sampleRate);
+
+      let nowBufferingFinalRowLeft = finalRowBuffer.getChannelData(leftChannel);
+      let nowBufferingFinalRowRight = finalRowBuffer.getChannelData(rightChannel);
+      let finalRowBufferIdx = 0;
+      for (let i = 0; i < trimmedBufferListRow.length; i++) {
+        let oldBufferLeft = trimmedBufferListRow[i].getChannelData(leftChannel)
+        let oldBufferRight = trimmedBufferListRow[i].getChannelData(rightChannel)
+        for (let j = 0; j < oldBufferLeft.length; j++) {
+          nowBufferingFinalRowLeft[finalRowBufferIdx] = oldBufferLeft[j];
+          nowBufferingFinalRowRight[finalRowBufferIdx] = oldBufferRight[j];
+          finalRowBufferIdx = finalRowBufferIdx + 1
+        }
+      }
+
+      return finalRowBuffer
     }
 
     const renderMix = async () => {
@@ -373,9 +384,6 @@ export default {
       await stop()
 
       buffer = undefined
-
-      const leftChannel = 0
-      const rightChannel = 1
 
       isRendering.value = true
       try {
@@ -404,80 +412,31 @@ export default {
             continue
           }
 
-          //GET THE TRACKS IN ONE ROW
+          //GET THE LOOP SOURCE FOR ONE ROW
           let tracksInRow = getTrackListByRow(n)
 
-          //GET THE BUFFERS FOR ONE ROW
+          //DOWNLOAD AND GET BUFFER FOR EACH LOOP IN ROW
           let buffer_list_row = await getBufferInRow(store.context, tracksInRow, emptyBuffer);
 
 
-          //APPLY OFFLINE FX TO THE THIRD COLUM
-          //APPLY OFFLINE FX TO THE THIRD COLUM
-          //APPLY OFFLINE FX TO THE THIRD COLUM
-          //APPLY OFFLINE FX TO THE THIRD COLUM
+          //APPLY FX TO EACH BUFFER
+          // if (n == 1) {
+          // for(let i = 0; i < buffer_list_row.length; i++){
+          //   let processedAudio = await applyFXToBuffer(bufferSizePerLoop, store.context.sampleRate, buffer_list_row[i]);
+          //   buffer_list_row[i] = processedAudio
+          // }
 
-          // if (i == 1) {
-
-          // const columnIdx = 1
-          //
-          // const inputBuffer = cloneAudioBuffer(buffer_list_row[columnIdx])
-          //
-          // // console.log('bufferSizePerLoop', bufferSizePerLoop)
-          // // console.log('inputBuffer SIZE', buffer_list_row[columnIdx].length)
-          //
-          // let processedAudio = await applyFXToBuffer(bufferSizePerLoop, store.context.sampleRate, inputBuffer);
-          //
-          // buffer_list_row[columnIdx] = cloneAudioBuffer(processedAudio)
-          // for(let channelI = 0; channelI < processedAudio.numberOfChannels; ++channelI) {
-          //   const samples = processedAudio.getChannelData(channelI);
-          //   buffer_list_row[columnIdx].copyToChannel(samples, channelI);
           // }
 
 
-          // for(let i=0; i<trimmedBufferListRow[2]; i++){
-          //   let oldBufferLeft = trimmedBufferListRow[2].getChannelData(leftChannel)
-          //   let oldBufferRight = trimmedBufferListRow[2].getChannelData(rightChannel)
-          //   for(let j=0; j<oldBufferLeft.length; j++){
-          //     oldBufferLeft[j] = oldBufferLeft[j] * 0.5
-          //     oldBufferRight[j] = oldBufferRight[j] * 0.5
-          //   }
-          // }
-          //APPLY OFFLINE FX TO THE THIRD COLUM
-          //APPLY OFFLINE FX TO THE THIRD COLUM
-          //APPLY OFFLINE FX TO THE THIRD COLUM
-          //APPLY OFFLINE FX TO THE THIRD COLUM
-          // }
-
-          //TRIM THE BUFFERS IN EACH ROW
-          //TRIM THE BUFFERS IN EACH ROW
-          //TRIM THE BUFFERS IN EACH ROW
-
-          
+          //TRIM LOOPS IN EACH ROW
           let trimmedBufferListRow = await trimBuffers(buffer_list_row, bufferSizePerLoop)
 
-
-          //MERGE ALL THE BUFFERS FOR A ROW
-          //MERGE ALL THE BUFFERS FOR A ROW
           // MERGE ALL THE BUFFERS FOR A ROW
-          let finalRowBuffer = store.context.createBuffer(2, bufferSizePerLoop * trimmedBufferListRow.length, store.context.sampleRate);
-
-          let nowBufferingFinalRowLeft = finalRowBuffer.getChannelData(leftChannel);
-          let nowBufferingFinalRowRight = finalRowBuffer.getChannelData(rightChannel);
-          let finalRowBufferIdx = 0;
-          for (let i = 0; i < trimmedBufferListRow.length; i++) {
-            let oldBufferLeft = trimmedBufferListRow[i].getChannelData(leftChannel)
-            let oldBufferRight = trimmedBufferListRow[i].getChannelData(rightChannel)
-            for (let j = 0; j < oldBufferLeft.length; j++) {
-              nowBufferingFinalRowLeft[finalRowBufferIdx] = oldBufferLeft[j];
-              nowBufferingFinalRowRight[finalRowBufferIdx] = oldBufferRight[j];
-              finalRowBufferIdx = finalRowBufferIdx + 1
-            }
-          }
-
+          const finalRowBuffer = await createRowBuffer(bufferSizePerLoop, trimmedBufferListRow)
           listOfTrimmedRowBuffers[n] = finalRowBuffer
 
           //UPDATE THE ROW CACHE
-          // TODO: BUFFER - THIS HAS BEEN COMMENTED OUT BECAUSE ITS NOT HANDLING THE NEW VOCAL ROW - jan12/23
           BUFFER_ROW_CACHE[n] = finalRowBuffer
           store.state.updateRowStateHash(n)
         }
@@ -641,23 +600,23 @@ export default {
     }
 
 
-    const onSpaceBarDown = ({keyCode}) => {
-      if (!isPlaying.value && !isRendering.value) {
-        play()
-      } else {
-        stop()
-      }
-    }
-
-    useKeypress({
-      keyEvent: "keydown",
-      keyBinds: [
-        {
-          keyCode: 'space', // or keyCode as integer, e.g. 40
-          success: onSpaceBarDown,
-        },
-      ]
-    })
+    // const onSpaceBarDown = ({keyCode}) => {
+    //   if (!isPlaying.value && !isRendering.value) {
+    //     play()
+    //   } else {
+    //     stop()
+    //   }
+    // }
+    //
+    // useKeypress({
+    //   keyEvent: "keydown",
+    //   keyBinds: [
+    //     {
+    //       keyCode: 'space', // or keyCode as integer, e.g. 40
+    //       success: onSpaceBarDown,
+    //     },
+    //   ]
+    // })
 
 
     const onUndoClicked = () => {
