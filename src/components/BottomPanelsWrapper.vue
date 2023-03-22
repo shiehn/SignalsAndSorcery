@@ -1,7 +1,8 @@
 <template>
   <div v-if="!isMobile" class="flex w-full justify-between py-4">
-    <leader-board></leader-board>
-    <project-board></project-board>
+    <code-editor></code-editor>
+<!--    <leader-board></leader-board>-->
+<!--    <project-board></project-board>-->
   </div>
 </template>
 
@@ -9,10 +10,11 @@
 import {inject, nextTick, onMounted, ref} from "vue";
 import LeaderBoard from "./LeaderBoard";
 import ProjectBoard from "./ProjectBoard";
+import CodeEditor from "./CodeEditor.vue";
 
 export default {
   name: "BottomPanelsWrapper",
-  components: {ProjectBoard, LeaderBoard},
+  components: {CodeEditor, ProjectBoard, LeaderBoard},
   setup(){
     const store = inject('store')
     const isMobile = ref(store.isMobile ? true : false)

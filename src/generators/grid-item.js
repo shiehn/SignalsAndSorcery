@@ -13,6 +13,7 @@ export default class GridItem
         this.stem = undefined
         this.showDeleteIcon = false
         this.arpeggio = undefined
+        this.fxnodes = []
         this.acceptMobileTransfer = false //this is a flag to indicate the next asset selection will be transferred to this grid item
     }
 

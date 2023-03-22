@@ -57,6 +57,7 @@
           <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :locked="gridRowItem.locked" :row="gridRowItem.row" :col="gridRowItem.col"
                  :grid=true></asset>
           <div class="w-1/3 h-full absolute left-1/3 flex justify-center items-center">
+            <span class="text-white" v-if="gridRowItem.fxnodes">{{gridRowItem.fxnodes.length}}</span>
             <img :src="imageUrls.refreshIconPath"
                  @click.stop="refreshGridItem(gridRowItem)"
                  :class="[gridRowItem.refreshing ? 'animate-spin' : '']"
@@ -66,8 +67,6 @@
         </div>
       </div>
     </div>
-
-
 
     <composer-controls-loop-bar></composer-controls-loop-bar>
     <composer-controls-scroll-bar></composer-controls-scroll-bar>

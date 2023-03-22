@@ -197,4 +197,32 @@ export default class GridProcessor {
             }
         }
     }
+
+    addGridItemFX = (row, col, fxId) => {
+        if (this.grid[row].value[col]) {
+            if (this.grid[row].value[col].fxnodes == undefined) {
+                this.grid[row].value[col].fxnodes = []
+            }
+
+            this.grid[row].value[col]['fxnodes'].push(fxId)
+        }
+    }
+
+    removeGridItemFxById = (row, col, fxId) => {
+        if (this.grid[row].value[col].fxnodes) {
+            this.grid[row].value[col]['fxnodes'] = this.grid[row].value[col]['fxnodes'].filter((id) => id != fxId)
+            return true
+        }
+
+        return false
+    }
+
+    removeGridItemFxByIndex = (row, col, index) => {
+        if (this.grid[row].value[col].fxnodes) {
+            this.grid[row].value[col].fxnodes.splice(index, 1);
+            return true
+        }
+
+        return false
+    }
 }
