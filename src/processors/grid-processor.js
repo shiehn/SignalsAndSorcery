@@ -198,19 +198,29 @@ export default class GridProcessor {
         }
     }
 
-    addGridItemFX = (row, col, fxId) => {
+    getGridItemFX = (row, col) => {
         if (this.grid[row].value[col]) {
-            if (this.grid[row].value[col].fxnodes == undefined) {
-                this.grid[row].value[col].fxnodes = []
+            if (this.grid[row].value[col].fxs == undefined) {
+                return []
             }
 
-            this.grid[row].value[col]['fxnodes'].push(fxId)
+            return this.grid[row].value[col]['fxs']
+        }
+    }
+
+    addGridItemFX = (row, col, fxId) => {
+        if (this.grid[row].value[col]) {
+            if (this.grid[row].value[col].fxs == undefined) {
+                this.grid[row].value[col].fxs = []
+            }
+
+            this.grid[row].value[col]['fxs'].push(fxId)
         }
     }
 
     removeGridItemFxById = (row, col, fxId) => {
-        if (this.grid[row].value[col].fxnodes) {
-            this.grid[row].value[col]['fxnodes'] = this.grid[row].value[col]['fxnodes'].filter((id) => id != fxId)
+        if (this.grid[row].value[col].fxs) {
+            this.grid[row].value[col]['fxs'] = this.grid[row].value[col]['fxs'].filter((id) => id != fxId)
             return true
         }
 
@@ -218,8 +228,8 @@ export default class GridProcessor {
     }
 
     removeGridItemFxByIndex = (row, col, index) => {
-        if (this.grid[row].value[col].fxnodes) {
-            this.grid[row].value[col].fxnodes.splice(index, 1);
+        if (this.grid[row].value[col].fxs) {
+            this.grid[row].value[col].fxs.splice(index, 1);
             return true
         }
 

@@ -87,41 +87,57 @@ describe('Grid Processor Tests', () => {
         }
     })
 
-    it('should add fxnodes to grid item', async () => {
+    it('should add fx to grid item', async () => {
         const gridProcessor = new GridProcessor(store.state.grid)
 
-        expect(store.state.grid[1].value[1].fxnodes.length).to.equals(0)
+        expect(store.state.grid[1].value[1].fxs.length).to.equals(0)
 
-        gridProcessor.addGridItemFX(1,1,'mock_fxnode_id')
+        gridProcessor.addGridItemFX(1, 1, 'mock_fxnode_id')
 
-        expect(store.state.grid[1].value[1].fxnodes).to.contain('mock_fxnode_id')
-        expect(store.state.grid[1].value[1].fxnodes).to.not.contain('bs_mock_fxnode_id')
+        expect(store.state.grid[1].value[1].fxs).to.contain('mock_fxnode_id')
+        expect(store.state.grid[1].value[1].fxs).to.not.contain('bs_mock_fxnode_id')
 
     })
 
-    it('should remove fxnodes by fxId', async () => {
+    it('should remove fx by fxId', async () => {
         const gridProcessor = new GridProcessor(store.state.grid)
 
         //SETUP THE TEST
-        expect(store.state.grid[1].value[1].fxnodes.length).to.equals(0)
-        gridProcessor.addGridItemFX(1,1,'mock_fxnode_id')
-        expect(store.state.grid[1].value[1].fxnodes).to.contain('mock_fxnode_id')
+        expect(store.state.grid[1].value[1].fxs.length).to.equals(0)
+        gridProcessor.addGridItemFX(1, 1, 'mock_fxnode_id')
+        expect(store.state.grid[1].value[1].fxs).to.contain('mock_fxnode_id')
 
         //REMOVE THE FXNODE
-        gridProcessor.removeGridItemFxById(1,1,'mock_fxnode_id')
-        expect(store.state.grid[1].value[1].fxnodes).to.not.contain('mock_fxnode_id')
+        gridProcessor.removeGridItemFxById(1, 1, 'mock_fxnode_id')
+        expect(store.state.grid[1].value[1].fxs).to.not.contain('mock_fxnode_id')
     })
 
-    it('should remove fxnodes by FX Index', async () => {
+    it('should remove fx by FX Index', async () => {
         const gridProcessor = new GridProcessor(store.state.grid)
 
         //SETUP THE TEST
-        expect(store.state.grid[1].value[1].fxnodes.length).to.equals(0)
-        gridProcessor.addGridItemFX(1,1,'mock_fxnode_id')
-        expect(store.state.grid[1].value[1].fxnodes).to.contain('mock_fxnode_id')
+        expect(store.state.grid[1].value[1].fxs.length).to.equals(0)
+        gridProcessor.addGridItemFX(1, 1, 'mock_fxnode_id')
+        expect(store.state.grid[1].value[1].fxs).to.contain('mock_fxnode_id')
 
         //REMOVE THE FXNODE
-        gridProcessor.removeGridItemFxByIndex(1,1,0)
-        expect(store.state.grid[1].value[1].fxnodes).to.not.contain('mock_fxnode_id')
+        gridProcessor.removeGridItemFxByIndex(1, 1, 0)
+        expect(store.state.grid[1].value[1].fxs).to.not.contain('mock_fxnode_id')
+    })
+
+    it('should get FX for grid item', async () => {
+        const gridProcessor = new GridProcessor(store.state.grid)
+
+        //SETUP THE TEST
+        expect(store.state.grid[1].value[1].fxs.length).to.equals(0)
+        gridProcessor.addGridItemFX(1, 1, 'mock_fxnode_1')
+        gridProcessor.addGridItemFX(1, 1, 'mock_fxnode_2')
+        expect(store.state.grid[1].value[1].fxs.length).to.equal(2)
+
+        //GET THE FXNODE
+        const fxs = gridProcessor.getGridItemFX(1, 1)
+
+        expect(fxs[0]).to.equal('mock_fxnode_1')
+        expect(fxs[1]).to.equal('mock_fxnode_2')
     })
 })

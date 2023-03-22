@@ -19,7 +19,8 @@
               'bg-yellow-100': gridRowItem.compatibility === 1,
               'bg-red-100': gridRowItem.compatibility === 0
         }">
-          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :locked="false" :row="gridRowItem.row" :col="gridRowItem.col"
+          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :locked="false" :row="gridRowItem.row"
+                 :col="gridRowItem.col"
                  :grid=true></asset>
           <div class="w-1/3 h-full absolute left-1/3 flex justify-center items-center">
             <img :src="imageUrls.refreshIconPath"
@@ -37,9 +38,12 @@
 
     <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
          class="flex flex-none justify-between mb-2">
-      <div v-for="gridRowItem in gridRow.value" class="w-1/4 h-16 pr-2">
+      <div v-for="gridRowItem in gridRow.value" class="w-1/4 h-16 pr-2 flex">
+        <div class="w-1/12 h-full flex flex-col">
+          <div v-for="fx in gridRowItem.fxs" class="h-full w-full bg-pink-200 overflow-hidden">fx</div>
+        </div>
         <div
-            class="w-full h-full overflow-hidden relative rounded-lg shadow-lg hover:bg-gray-500"
+            class="w-11/12 h-full overflow-hidden relative rounded-lg shadow-lg hover:bg-gray-500"
             :class="{
             'opacity-100': gridRowItem.stem,
             'opacity-40': !gridRowItem.stem,
@@ -54,10 +58,11 @@
             v-on:mouseleave="mouseLeaveGridItem(gridRowItem.row, gridRowItem.col)"
             @click.stop="handleGridItemClick(gridRowItem.row, gridRowItem.col)">
 
-          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :locked="gridRowItem.locked" :row="gridRowItem.row" :col="gridRowItem.col"
+          <asset v-if="gridRowItem.stem" :stem="gridRowItem.stem" :locked="gridRowItem.locked" :row="gridRowItem.row"
+                 :col="gridRowItem.col"
                  :grid=true></asset>
+
           <div class="w-1/3 h-full absolute left-1/3 flex justify-center items-center">
-            <span class="text-white" v-if="gridRowItem.fxnodes">{{gridRowItem.fxnodes.length}}</span>
             <img :src="imageUrls.refreshIconPath"
                  @click.stop="refreshGridItem(gridRowItem)"
                  :class="[gridRowItem.refreshing ? 'animate-spin' : '']"
@@ -65,7 +70,9 @@
           </div>
 
         </div>
+
       </div>
+
     </div>
 
     <composer-controls-loop-bar></composer-controls-loop-bar>
@@ -73,19 +80,23 @@
     <div class="w-full h-10 flex flex-none justify-between text-white">
       <div
           class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer"
-          @click="showAltInfo()"> alt 1 <img :src="imageUrls.infoIconPath" class="h-4 w-4 ml-2 bg-white rounded-full border-2 border-white opacity-50"/>
+          @click="showAltInfo()"> alt 1 <img :src="imageUrls.infoIconPath"
+                                             class="h-4 w-4 ml-2 bg-white rounded-full border-2 border-white opacity-50"/>
       </div>
       <div
           class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer"
-          @click="showAltInfo()">alt 2 <img :src="imageUrls.infoIconPath" class="h-4 w-4 ml-2 bg-white rounded-full border-2 border-white opacity-50"/>
+          @click="showAltInfo()">alt 2 <img :src="imageUrls.infoIconPath"
+                                            class="h-4 w-4 ml-2 bg-white rounded-full border-2 border-white opacity-50"/>
       </div>
       <div
           class="w-1/4 h-full flex justify-center items-center mr-2 rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer"
-          @click="showAltInfo()">alt 3 <img :src="imageUrls.infoIconPath" class="h-4 w-4 ml-2 bg-white rounded-full border-2 border-white opacity-50"/>
+          @click="showAltInfo()">alt 3 <img :src="imageUrls.infoIconPath"
+                                            class="h-4 w-4 ml-2 bg-white rounded-full border-2 border-white opacity-50"/>
       </div>
       <div
           class="w-1/4 h-full flex justify-center items-center rounded-b-lg border-b-2 border-white rounded-lg hover:cursor-pointer"
-          @click="showAltInfo()">alt 4 <img :src="imageUrls.infoIconPath" class="h-4 w-4 ml-2 bg-white rounded-full border-2 border-white opacity-50"/>
+          @click="showAltInfo()">alt 4 <img :src="imageUrls.infoIconPath"
+                                            class="h-4 w-4 ml-2 bg-white rounded-full border-2 border-white opacity-50"/>
       </div>
     </div>
   </div>
@@ -196,7 +207,6 @@ export default {
 
       alert(res)
     }
-
 
 
     const mouseOverGridItem = (row, col) => {
@@ -349,27 +359,27 @@ export default {
 
       //start refreshing items
       for (let i = 0; store.state.grid[rowIdx].value.length > i; i++) {
-          if(!store.state.grid[rowIdx].value[i].locked) {
-            store.state.grid[rowIdx].value[i]['refreshing'] = true
-          }
+        if (!store.state.grid[rowIdx].value[i].locked) {
+          store.state.grid[rowIdx].value[i]['refreshing'] = true
+        }
       }
 
       const res = await new ComposerAPI().getAssetRowAlternative(token, bpm, key, chords, type[0])
 
       //stop all refreshing items
       for (let i = 0; store.state.grid[rowIdx].value.length > i; i++) {
-        if(store.state.grid[rowIdx].value[i]) {
+        if (store.state.grid[rowIdx].value[i]) {
           store.state.grid[rowIdx].value[i]['refreshing'] = false
         }
       }
 
-      if(!res || !res.stems){
+      if (!res || !res.stems) {
         return
       }
 
       for (let i = 0; res.stems.length > i; i++) {
         if (res.stems[i] && res.stems[i]['bpm']) {
-          if(!store.state.grid[rowIdx].value[i].locked) {
+          if (!store.state.grid[rowIdx].value[i].locked) {
             //generate random instance id
             res.stems[i]['instanceId'] = v4()
 

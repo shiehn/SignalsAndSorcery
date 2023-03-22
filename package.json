@@ -7,6 +7,7 @@
     "@codemirror/lang-json": "^6.0.1",
     "@codemirror/theme-one-dark": "^6.1.1",
     "@tonaljs/tonal": "^4.6.5",
+    "@uiw/codemirror-theme-dracula": "^4.19.9",
     "@vitejs/plugin-vue": "^3.0.0-alpha.1",
     "@vue/test-utils": "^2.0.0-rc.18",
     "axios": "^0.27.2",

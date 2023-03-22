@@ -36,9 +36,30 @@ export default defineComponent({
   components: {
     Codemirror
   },
-  name: "CodeEditor",
+  name: "CodeWorkletEditor",
   setup() {
-    const code = ref(`addFX(0,0,'test')`)
+    const code = ref(`
+    registerProcessor('gain-processor',class extends AudioWorkletProcessor {
+    static get parameterDescriptors() { return [{name:'gain',defaultValue:0.2}] }
+    process(inputs, outputs, parameters) {
+        const input = inputs[0],output = outputs[0]
+        if (parameters.gain.length === 1) {
+            for (let i=0;i<inputs[0].length;++i) {
+                for (let j=0;j<inputs[0][i].length;++j) {
+                    outputs[0][i][j] = inputs[0][i][j] * parameters.gain[0]
+                }
+            }
+        } else {
+            for (let i=0;i<inputs[0].length;++i) {
+                for (let j=0;j<inputs[0][i].length;++j) {
+                    outputs[0][i][j] = inputs[0][i][j] * parameters.gain[j]
+                }
+            }
+        }
+        return true
+    }
+})
+    `)
     const extensions = [javascript(), oneDark]
     const {bus, emit} = useEventsBus()
 
@@ -72,14 +93,6 @@ export default defineComponent({
     }
 
     const addFX = (row, col, fxId) => {
-
-      //DO FX LOOK UP & VALIDATION HERE ....
-      if(fxId != 'gain-processor') {
-        alert('FX note found: ' + fxId)
-        return
-      }
-
-
       new GridProcessor(store.state.grid).addGridItemFX(row, col, fxId)
     }
 

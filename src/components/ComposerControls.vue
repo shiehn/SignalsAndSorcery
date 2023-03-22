@@ -71,6 +71,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import Analytics from "../analytics/Analytics";
 import {useKeypress} from 'vue3-keypress';
 import Tuna from 'tunajs';
+import GridProcessor from "../processors/grid-processor";
 
 function cloneAudioBuffer(fromAudioBuffer) {
   const audioBuffer = new AudioBuffer({
@@ -86,68 +87,17 @@ function cloneAudioBuffer(fromAudioBuffer) {
 }
 
 async function applyFXToBuffer(bufferSizePerLoop, bufferSampleRate, inputBuffer) {
+
   const offlineCtx = new OfflineAudioContext(2, bufferSizePerLoop, bufferSampleRate);
-  const tuna = new Tuna(offlineCtx)
-  //
-  // //FX -START
-  let delayNode = new tuna.Delay({
-    feedback: 0.8,    //0 to 1+
-    delayTime: 200,    //1 to 10000 milliseconds
-    wetLevel: 1,     //0 to 1+
-    dryLevel: 0,       //0 to 1+
-    cutoff: 800,      //cutoff frequency of the built in lowpass-filter. 20 to 22050
-    bypass: 0
-  });
-  //
-  //
-  // let filterNode = new tuna.Filter({
-  //   frequency: 1000,         //20 to 22050
-  //   Q: 1,                   //0.001 to 100
-  //   gain: 0,                //-40 to 40 (in decibels)
-  //   filterType: "lowpass",  //lowpass, highpass, bandpass, lowshelf, highshelf, peaking, notch, allpass
-  //   bypass: 0
-  // });
-  // //FX -END
-  //
-  //
-  let overdriveNode = new tuna.Overdrive({
-    outputGain: -9.154,           //-42 to 0 in dB
-    drive: 0.2,                 //0 to 1
-    curveAmount: 0.979,           //0 to 1
-    algorithmIndex: 0,            //0 to 5, selects one of the drive algorithms
-    bypass: 0
-  });
-  //
-  //
-  // console.log('RENDING OFFLINE BEESH - STARTED')
-  // console.log('trimmedBufferListRow LENGTH', inputBuffer.length)
 
-  //let response = await axios.get('http://localhost:8000/static/audioworklets/smoothingWorklet.js')
-  //console.log('RESPONSE', response)
-  // await offlineCtx.audioWorklet.addModule('http://localhost:8000/static/audioworklets/firstOrderFilter.js')
-  // let smoothingFilter = new AudioWorkletNode(offlineCtx, 'first-order-filter',
-  //     {processorOptions: {type: 'lowpass'}}
-  // )
-  // smoothingFilter.parameters.get('frequency').value = 10
-  //
-  // await offlineCtx.audioWorklet.addModule('http://localhost:8000/static/audioworklets/gainProcessor.js')
-  // let gainProcessor = new AudioWorkletNode(offlineCtx, 'gain-processor')
-  // gainProcessor.parameters.get('gain').value = 0.75
-
-
-  // var delay = new DelayNode(offlineCtx, {delayTime: 0.08})
-  // var feedback = new GainNode(offlineCtx, {gain: 0.8})
-  // let LFOgain= new GainNode(offlineCtx,{gain:0})
-  // let LFO = new OscillatorNode(offlineCtx,{frequency:2})
-  // LFO.start()
-  // LFO.connect(LFOgain).connect(delay.delayTime)
-  // delay.connect(context.destination)
-
+  const now = new Date()
+  await offlineCtx.audioWorklet.addModule('http://localhost:8000/api/worklet?cachebuster=' + now.getTime())
+  let workletNode = await new AudioWorkletNode(offlineCtx, 'gain-processor')
 
   let offlineSource = offlineCtx.createBufferSource();
   offlineSource.buffer = inputBuffer;
-  offlineSource.connect(delayNode)
-  delayNode.connect(offlineCtx.destination);
+  offlineSource.connect(workletNode)
+  workletNode.connect(offlineCtx.destination);
 
   // filter.connect(overdrive)
   // overdrive.connect(delay)
@@ -420,13 +370,21 @@ export default {
 
 
           //APPLY FX TO EACH BUFFER
-          // if (n == 1) {
-          // for(let i = 0; i < buffer_list_row.length; i++){
-          //   let processedAudio = await applyFXToBuffer(bufferSizePerLoop, store.context.sampleRate, buffer_list_row[i]);
-          //   buffer_list_row[i] = processedAudio
-          // }
+          for(let c = 0; c < buffer_list_row.length; c++){
+            const row = n
+            const col = c
+            const gridProcessor = new GridProcessor(store.state.grid)
 
-          // }
+            const fxs = gridProcessor.getGridItemFX(row, col)
+            if(!fxs || fxs.length < 1){
+              continue
+            }
+
+            for(let fx of fxs){
+              let processedAudio = await applyFXToBuffer(bufferSizePerLoop, store.context.sampleRate, buffer_list_row[c]);
+              buffer_list_row[c] = processedAudio
+            }
+          }
 
 
           //TRIM LOOPS IN EACH ROW
