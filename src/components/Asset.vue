@@ -44,7 +44,7 @@
   </li>
 
   <li v-if="!isMobile"
-      class="drag-el list-none bg-cover h-16 rounded-lg shadow-lg"
+      class="drag-el list-none bg-cover h-16 rounded-r-lg shadow-lg"
       :class="{ 'w-full': isGrid == true, 'w-16': isGrid == false }"
       draggable="true"
       @dragstart="startDrag($event, stem)"

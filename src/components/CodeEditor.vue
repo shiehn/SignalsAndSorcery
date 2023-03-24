@@ -71,7 +71,7 @@ export default defineComponent({
       emit('scrubTo', 0)
     }
 
-    const addFX = (row, col, fxId) => {
+    const addFX = (row, col, fxId, params) => {
 
       //DO FX LOOK UP & VALIDATION HERE ....
       if(fxId != 'gain-processor') {
@@ -79,12 +79,20 @@ export default defineComponent({
         return
       }
 
+      const fxObj = {
+        id: fxId,
+        params: params
+      }
 
-      new GridProcessor(store.state.grid).addGridItemFX(row, col, fxId)
+      new GridProcessor(store.state.grid).addGridItemFX(row, col, fxObj)
     }
 
     const removeFX = (row, col, fxId) => {
       new GridProcessor(store.state.grid).removeGridItemFxById(row, col, fxId)
+    }
+
+    const removeAllFX = () => {
+      new GridProcessor(store.state.grid).removeAllGridItemFx()
     }
 
     const stageCode = (e) => {

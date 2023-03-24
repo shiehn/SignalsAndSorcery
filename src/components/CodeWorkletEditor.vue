@@ -1,6 +1,10 @@
 <template>
   <div class="w-1/2">
   <button class="w-60 h-10 mb-2 bg-white" @click="evalCode">RUN DAT SHIT</button>
+  <select v-model="selectedFX" @change="onSelectChange($event)"
+          class="py-1 px-2 mr-4 w-4/6 text-black text-m font-bold rounded-lg bg-gray-100">
+    <option :value="item.value" v-for="item in sfxOptions">{{ item.label }}</option>
+  </select>
   <codemirror
       v-model="code"
       placeholder="Code goes here..."
@@ -24,13 +28,14 @@
 </template>
 
 <script>
-import {defineComponent, ref, shallowRef} from 'vue'
+import {defineComponent, nextTick, onMounted, ref, shallowRef} from 'vue'
 import { Codemirror } from 'vue-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import { oneDark } from '@codemirror/theme-one-dark'
 import useEventsBus from "../events/eventBus";
 import GridProcessor from "../processors/grid-processor";
 import store from "../store/store";
+import SFXApi from "../dal/sfx-api";
 
 export default defineComponent({
   components: {
@@ -63,12 +68,27 @@ export default defineComponent({
     const extensions = [javascript(), oneDark]
     const {bus, emit} = useEventsBus()
 
+    const sfxOptions = ref([])
+
+    onMounted(async () => {
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      const sfxApi = new SFXApi()
+      const data = await sfxApi.getSFX(store.token)
+
+      sfxOptions.value = data.flatMap(sfx => ({value: sfx.sfx_id, label: sfx.name}))
+
+
+    });
+
     // Codemirror EditorView instance ref
     const view = shallowRef()
     const handleReady = (payload) => {
       view.value = payload.view
     }
 
+    let selectedFX = ref(null)
 
     let stagedCode = ''
 
@@ -108,12 +128,19 @@ export default defineComponent({
       eval(stagedCode)
     }
 
+    const onSelectChange = (e) => {
+      alert('selectedFX : ' + selectedFX.value)
+    }
+
     return {
       code,
       extensions,
-      handleReady,
-      stageCode,
       evalCode,
+      handleReady,
+      onSelectChange,
+      selectedFX,
+      stageCode,
+      sfxOptions,
     }
   }
 })

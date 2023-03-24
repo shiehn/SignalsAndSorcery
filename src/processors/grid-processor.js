@@ -208,19 +208,28 @@ export default class GridProcessor {
         }
     }
 
-    addGridItemFX = (row, col, fxId) => {
+    addGridItemFX = (row, col, fx) => {
+        if(!fx || !fx.id) return
         if (this.grid[row].value[col]) {
             if (this.grid[row].value[col].fxs == undefined) {
                 this.grid[row].value[col].fxs = []
             }
 
-            this.grid[row].value[col]['fxs'].push(fxId)
+            this.grid[row].value[col]['fxs'].push(fx)
+        }
+    }
+
+    removeAllGridItemFx = () => {
+        for (let row = 0; row < this.grid.length; row++) {
+            for (let col = 0; col < this.grid[row].value.length; col++) {
+                this.grid[row].value[col].fxs = []
+            }
         }
     }
 
     removeGridItemFxById = (row, col, fxId) => {
         if (this.grid[row].value[col].fxs) {
-            this.grid[row].value[col]['fxs'] = this.grid[row].value[col]['fxs'].filter((id) => id != fxId)
+            this.grid[row].value[col]['fxs'] = this.grid[row].value[col]['fxs'].filter((f) => f.id != fxId)
             return true
         }
 
