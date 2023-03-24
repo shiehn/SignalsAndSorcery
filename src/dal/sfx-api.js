@@ -17,6 +17,20 @@ export default class SFXApi {
         return response.data
     }
 
+    getSFXById = async (token, id) => {
+        const url = BASE_API_URL + 'sfx?id=' + id
+
+        let axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'Authorization': 'Token ' + token,
+            }
+        };
+
+        const response = await axios.get(url, axiosConfig);
+        return response.data
+    }
+
     saveSFX = async (token, saveData) => {
 
         try {

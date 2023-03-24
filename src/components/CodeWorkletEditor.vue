@@ -1,27 +1,33 @@
 <template>
   <div class="w-1/2">
-  <button class="w-60 h-10 mb-2 bg-white" @click="evalCode">RUN DAT SHIT</button>
-  <select v-model="selectedFX" @change="onSelectChange($event)"
-          class="py-1 px-2 mr-4 w-4/6 text-black text-m font-bold rounded-lg bg-gray-100">
-    <option :value="item.value" v-for="item in sfxOptions">{{ item.label }}</option>
-  </select>
-  <codemirror
-      v-model="code"
-      placeholder="Code goes here..."
-      :style="{
+    <button class="w-60 h-8 mb-2 bg-white" @click="evalCode">RUN DAT SHIT</button>
+    <button @click="saveCode" class="w-60 h-8 mb-2 bg-green-500">SAVE</button>
+    <button @click="initSFX" class="w-40 h-8 mb-2 bg-orange-600">New FX</button>
+
+
+    initSFX
+    <input v-model="currentSFX.name" />
+    <select v-model="selectedFX" @change="onSelectChange($event)"
+            class="py-1 px-2 mr-4 w-4/6 text-black text-m font-bold rounded-lg bg-gray-100">
+      <option :value="item.value" v-for="item in sfxOptions">{{ item.label }}</option>
+    </select>
+    <codemirror
+        v-model="currentSFX.code"
+        placeholder="Code goes here..."
+        :style="{
         'height': '400px',
         'width': '100%',
         'border-radius': '25px',
         'border': '2px solid #fff',
         'padding': '20px',
       }"
-      :autofocus="true"
-      :indent-with-tab="true"
-      :tab-size="2"
-      :extensions="extensions"
-      @ready="handleReady"
-      @change="stageCode"
-  />
+        :autofocus="true"
+        :indent-with-tab="true"
+        :tab-size="2"
+        :extensions="extensions"
+        @ready="handleReady"
+        @change="stageCode"
+    />
   </div>
   <!--      @focus="log('focus', $event)"-->
   <!--      @blur="log('blur', $event)"-->
@@ -29,9 +35,9 @@
 
 <script>
 import {defineComponent, nextTick, onMounted, ref, shallowRef} from 'vue'
-import { Codemirror } from 'vue-codemirror'
-import { javascript } from '@codemirror/lang-javascript'
-import { oneDark } from '@codemirror/theme-one-dark'
+import {Codemirror} from 'vue-codemirror'
+import {javascript} from '@codemirror/lang-javascript'
+import {oneDark} from '@codemirror/theme-one-dark'
 import useEventsBus from "../events/eventBus";
 import GridProcessor from "../processors/grid-processor";
 import store from "../store/store";
@@ -43,28 +49,13 @@ export default defineComponent({
   },
   name: "CodeWorkletEditor",
   setup() {
-    const code = ref(`
-    registerProcessor('gain-processor',class extends AudioWorkletProcessor {
-    static get parameterDescriptors() { return [{name:'gain',defaultValue:0.2}] }
-    process(inputs, outputs, parameters) {
-        const input = inputs[0],output = outputs[0]
-        if (parameters.gain.length === 1) {
-            for (let i=0;i<inputs[0].length;++i) {
-                for (let j=0;j<inputs[0][i].length;++j) {
-                    outputs[0][i][j] = inputs[0][i][j] * parameters.gain[0]
-                }
-            }
-        } else {
-            for (let i=0;i<inputs[0].length;++i) {
-                for (let j=0;j<inputs[0][i].length;++j) {
-                    outputs[0][i][j] = inputs[0][i][j] * parameters.gain[j]
-                }
-            }
-        }
-        return true
-    }
-})
-    `)
+    const currentSFX = ref({
+      name: ref('untitled-sfx'),
+      id: ref(-1),
+      description: ref(''),
+      code: ref('')
+    })
+
     const extensions = [javascript(), oneDark]
     const {bus, emit} = useEventsBus()
 
@@ -105,7 +96,7 @@ export default defineComponent({
     }
 
     const broadCastCode = (value) => {
-      alert(value)
+      //alert(value)
     }
 
     const play = () => {
@@ -120,7 +111,12 @@ export default defineComponent({
       new GridProcessor(store.state.grid).removeGridItemFxById(row, col, fxId)
     }
 
+    const extractSFXName = () => {
+      registerProcessor
+    }
+
     const stageCode = (e) => {
+      //alert(e)
       stagedCode = e
     }
 
@@ -128,16 +124,68 @@ export default defineComponent({
       eval(stagedCode)
     }
 
-    const onSelectChange = (e) => {
-      alert('selectedFX : ' + selectedFX.value)
+    const saveCode = async () => {
+
+      let errMsg = ''
+      if (!currentSFX.value.name || currentSFX.value.name === ''){
+        errMsg += 'Please enter a name for your SFX'
+      }
+
+      if (!currentSFX.value.code || currentSFX.value.code === ''){
+        errMsg += '\nPlease enter some code for your SFX'
+      }
+
+      if (errMsg !== ''){
+        alert(errMsg)
+        return
+      }
+
+      const payload = {
+        'sfx_id': currentSFX.value.id,
+        'name': currentSFX.value.name,
+        'description': currentSFX.value.description,
+        'source_code': currentSFX.value.code,
+        'fx_type': 'JS',
+        'public': true,
+      }
+
+
+      const sfxApi = new SFXApi()
+      const response = await sfxApi.saveSFX(store.token, payload)
+
+
+      currentSFX.value.id = response.sfx_id
+
+      console.log('SAVE RESPONSE', response)
+      alert(response)
+    }
+
+
+    const initSFX = async () => {
+      currentSFX.value.name = 'untitled-sfx'
+      currentSFX.value.id = -1
+      currentSFX.value.description = 'add a description here'
+      currentSFX.value.code = ''
+    }
+
+    const onSelectChange = async (e) => {
+      const sfxApi = new SFXApi()
+      const response = await sfxApi.getSFXById(store.token, selectedFX.value)
+      //alert('selectedFX : ' + response[0].description)
+      currentSFX.value.name = response[0].name
+      currentSFX.value.id = response[0].sfx_id
+      currentSFX.value.description = response[0].description
+      currentSFX.value.code = response[0].source_code
     }
 
     return {
-      code,
+      currentSFX,
       extensions,
       evalCode,
       handleReady,
+      initSFX,
       onSelectChange,
+      saveCode,
       selectedFX,
       stageCode,
       sfxOptions,
