@@ -1,16 +1,16 @@
 <template>
   <div class="w-1/2">
-    <button class="w-60 h-8 mb-2 bg-white" @click="evalCode">RUN DAT SHIT</button>
-    <button @click="saveCode" class="w-60 h-8 mb-2 bg-green-500">SAVE</button>
-    <button @click="initSFX" class="w-40 h-8 mb-2 bg-orange-600">New FX</button>
-
-
-    initSFX
-    <input v-model="currentSFX.name" />
-    <select v-model="selectedFX" @change="onSelectChange($event)"
-            class="py-1 px-2 mr-4 w-4/6 text-black text-m font-bold rounded-lg bg-gray-100">
+    <label for="loadFX" class="text-white mr-4">LOAD SFX:</label>
+    <select id="loadFX" v-model="selectedFX" @change="onSelectChange($event)"
+            class="py-1 px-2 mr-4 mb-4 w-4/6 text-black text-m font-bold rounded-lg bg-gray-100">
       <option :value="item.value" v-for="item in sfxOptions">{{ item.label }}</option>
     </select>
+    <button class="w-60 h-8 mb-2 bg-white" @click="evalCode">RUN DAT SHIT</button>
+    <button @click="saveCode" class="w-60 h-8 mb-2 bg-green-500">SAVE</button>
+    <button @click="newSFXDialog" class="w-40 h-8 mb-2 bg-orange-600">New FX</button>
+
+<!--    <input v-model="currentSFX.name" />-->
+
     <codemirror
         v-model="currentSFX.code"
         placeholder="Code goes here..."
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import {defineComponent, nextTick, onMounted, ref, shallowRef} from 'vue'
+import {defineComponent, nextTick, onMounted, ref, shallowRef, watch} from 'vue'
 import {Codemirror} from 'vue-codemirror'
 import {javascript} from '@codemirror/lang-javascript'
 import {oneDark} from '@codemirror/theme-one-dark'
@@ -42,6 +42,9 @@ import useEventsBus from "../events/eventBus";
 import GridProcessor from "../processors/grid-processor";
 import store from "../store/store";
 import SFXApi from "../dal/sfx-api";
+import ModalOpenPayload from "./ModalOpenPayload";
+import {StemsAPI} from "../dal/StemsAPI";
+import {ROW_TO_TYPE_MAP} from "../constants/constants";
 
 export default defineComponent({
   components: {
@@ -67,10 +70,8 @@ export default defineComponent({
 
       const sfxApi = new SFXApi()
       const data = await sfxApi.getSFX(store.token)
-
-      sfxOptions.value = data.flatMap(sfx => ({value: sfx.sfx_id, label: sfx.name}))
-
-
+      const options = data.flatMap(sfx => ({value: sfx.sfx_id, label: sfx.name}))
+      sfxOptions.value = options
     });
 
     // Codemirror EditorView instance ref
@@ -149,16 +150,15 @@ export default defineComponent({
         'public': true,
       }
 
-
       const sfxApi = new SFXApi()
       const response = await sfxApi.saveSFX(store.token, payload)
-
-
       currentSFX.value.id = response.sfx_id
-
-      console.log('SAVE RESPONSE', response)
-      alert(response)
+      currentSFX.value.name = response.name
+      currentSFX.value.description = response.description
+      currentSFX.value.code = response.source_code
     }
+
+
 
 
     const initSFX = async () => {
@@ -178,6 +178,55 @@ export default defineComponent({
       currentSFX.value.code = response[0].source_code
     }
 
+    const createNewSFXDialogModalId = 'newSFXDialog'
+    const newSFXDialog = () => {
+      const modalPayload = new ModalOpenPayload(
+          createNewSFXDialogModalId,
+          'New Audio Worklet FX',
+          'Enter a name for your new SFX.',
+          'Create',
+          '',
+          '',
+          true
+      )
+
+      emit('launchModal', modalPayload)
+    }
+
+    watch(() => bus.value.get('modalResponse'), async (modalResponsePayload) => {
+      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === createNewSFXDialogModalId) {
+        console.log('MODAL RESPONSE', modalResponsePayload[0].getResponse())
+
+        if (modalResponsePayload[0].getResponse() && modalResponsePayload[0].getResponse() != '') {
+
+          const stripWhiteSpace = modalResponsePayload[0].getResponse().toLowerCase().replace(/\s/g, '')
+
+          const payload = {
+            'name': stripWhiteSpace,
+            'description': '',
+            'source_code': '',
+            'fx_type': 'JS',
+            'public': true,
+          }
+
+          const sfxApi = new SFXApi()
+          const response = await sfxApi.saveSFX(store.token, payload)
+          currentSFX.value.id = response.sfx_id
+          currentSFX.value.name = response.name
+          currentSFX.value.description = response.description
+          currentSFX.value.code = response.source_code
+
+          //LOAD OPTIONS
+          const data = await sfxApi.getSFX(store.token)
+          const options = data.flatMap(sfx => ({value: sfx.sfx_id, label: sfx.name}))
+          sfxOptions.value = options
+
+          //SET SELECTED
+          selectedFX.value = response.sfx_id
+        }
+      }
+    })
+
     return {
       currentSFX,
       extensions,
@@ -189,6 +238,7 @@ export default defineComponent({
       selectedFX,
       stageCode,
       sfxOptions,
+      newSFXDialog,
     }
   }
 })
