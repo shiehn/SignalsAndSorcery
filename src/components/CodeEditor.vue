@@ -24,13 +24,14 @@
 </template>
 
 <script>
-import {defineComponent, ref, shallowRef} from 'vue'
+import {defineComponent, inject, ref, shallowRef} from 'vue'
 import { Codemirror } from 'vue-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import { oneDark } from '@codemirror/theme-one-dark'
 import useEventsBus from "../events/eventBus";
 import GridProcessor from "../processors/grid-processor";
 import store from "../store/store";
+import SFXApi from "../dal/sfx-api";
 
 export default defineComponent({
   components: {
@@ -54,11 +55,9 @@ export default defineComponent({
       view.value = payload.view
     }
 
-
-
-
-
     let stagedCode = ''
+
+    const toast = inject('toast');
 
     // Status is available at all times via Codemirror EditorView
     const getCodemirrorStates = () => {
@@ -80,20 +79,38 @@ export default defineComponent({
       emit('scrubTo', 0)
     }
 
-    const addFX = (row, col, fxId, params) => {
+    const addFX = async (row, col, fxName, params) => {
 
-      //DO FX LOOK UP & VALIDATION HERE ....
-      if(fxId != 'gain-processor') {
-        alert('FX note found: ' + fxId)
+      const fxList = await new SFXApi().getSFX(store.token)
+
+      const fx = fxList.find(fx => fx.name === fxName)
+
+      if (!fx) {
+        toast.error('Unable to find FX: ' + fxName)
         return
       }
 
+
+
+      //VALID FX IS WORKING
+      //VALID FX IS WORKING
+      //VALID FX IS WORKING
+      if(!fx.source_code || fx.source_code === '') {
+        toast.error('FX INVALID: ' + fxName + ' has no source code')
+        return
+      }
+      //VALID FX IS WORKING
+      //VALID FX IS WORKING
+      //VALID FX IS WORKING
+
       const fxObj = {
-        id: fxId,
-        params: params
+        id: fx.sfx_id,
+        params: fx.name,
       }
 
       new GridProcessor(store.state.grid).addGridItemFX(row, col, fxObj)
+
+      toast.success('FX: ' + fxName + ' has been added to grid')
     }
 
     const removeFX = (row, col, fxId) => {

@@ -171,7 +171,6 @@ export default defineComponent({
     const onSelectChange = async (e) => {
       const sfxApi = new SFXApi()
       const response = await sfxApi.getSFXById(store.token, selectedFX.value)
-      //alert('selectedFX : ' + response[0].description)
       currentSFX.value.name = response[0].name
       currentSFX.value.id = response[0].sfx_id
       currentSFX.value.description = response[0].description
@@ -193,6 +192,28 @@ export default defineComponent({
       )
 
       emit('launchModal', modalPayload)
+    }
+
+    watch(() => bus.value.get('focusSFX'), async (sfxId) => {
+      await focusSFX(sfxId[0])
+    })
+
+    const focusSFX = async (sfxId) => {
+
+      const sfxApi = new SFXApi()
+      const response = await sfxApi.getSFXById(store.token, sfxId)
+      currentSFX.value.name = response[0].name
+      currentSFX.value.id = response[0].sfx_id
+      currentSFX.value.description = response[0].description
+      currentSFX.value.code = response[0].source_code 
+
+      //LOAD OPTIONS
+      const data = await sfxApi.getSFX(store.token)
+      const options = data.flatMap(sfx => ({value: sfx.sfx_id, label: sfx.name}))
+      sfxOptions.value = options
+
+      //SET SELECTED
+      selectedFX.value = sfxId
     }
 
     watch(() => bus.value.get('modalResponse'), async (modalResponsePayload) => {

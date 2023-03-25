@@ -40,7 +40,8 @@
          class="flex flex-none justify-between mb-2">
       <div v-for="gridRowItem in gridRow.value" class="w-1/4 h-16 pr-2 flex">
         <div class="w-1/12 h-full flex flex-col rounded-l-lg bg-gray-500 overflow-hidden border-r border-black">
-          <div v-for="fx in gridRowItem.fxs" class="h-full w-full bg-pink-200 overflow-hidden border-b border-black" @click="fxClick(fx.id)"></div>
+          <asset-f-x-bar v-for="fx in gridRowItem.fxs" :sfx_id="fx.id"></asset-f-x-bar>
+<!--          <div v-for="fx in gridRowItem.fxs" class="h-full w-full bg-pink-200 overflow-hidden border-b border-black" @click="fxClick(fx.id)"></div>-->
         </div>
         <div
             class="w-11/12 h-full overflow-hidden relative rounded-r-lg shadow-lg hover:bg-gray-500"
@@ -116,10 +117,11 @@ import ComposerControlsLoopBar from "./ComposerControlsLoopBar";
 import {v4} from "uuid";
 import store from "../store/store";
 import ComposerAPI from "../dal/ComposerAPI";
+import AssetFXBar from "./AssetFXBar.vue";
 
 export default {
   name: 'ComposerGrid',
-  components: {Asset, ComposerControlsLoopBar, ComposerControlsScrollBar},
+  components: {AssetFXBar, Asset, ComposerControlsLoopBar, ComposerControlsScrollBar},
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
@@ -315,9 +317,7 @@ export default {
       emit('launchModal', modalOpenPayload)
     }
 
-    const fxClick = (fxId) => {
-      alert(fxId)
-    }
+
 
     const arpeggioToggled = (arpId) => {
       if (arpId) {
@@ -522,7 +522,6 @@ export default {
       columnAdd,
       columnRemove,
       editSection,
-      fxClick,
       isMobile,
       getGridRows,
       getGridByRow,
