@@ -186,8 +186,10 @@ export default defineComponent({
           'Enter a name for your new SFX.',
           'Create',
           '',
-          '',
-          true
+          'Cancel',
+          true,
+          undefined,
+          true,
       )
 
       emit('launchModal', modalPayload)
@@ -195,14 +197,11 @@ export default defineComponent({
 
     watch(() => bus.value.get('modalResponse'), async (modalResponsePayload) => {
       if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === createNewSFXDialogModalId) {
-        console.log('MODAL RESPONSE', modalResponsePayload[0].getResponse())
 
         if (modalResponsePayload[0].getResponse() && modalResponsePayload[0].getResponse() != '') {
 
-          const stripWhiteSpace = modalResponsePayload[0].getResponse().toLowerCase().replace(/\s/g, '')
-
           const payload = {
-            'name': stripWhiteSpace,
+            'name': modalResponsePayload[0].getResponse(),
             'description': '',
             'source_code': '',
             'fx_type': 'JS',

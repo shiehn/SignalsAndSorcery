@@ -38,7 +38,13 @@ export default defineComponent({
   },
   name: "CodeEditor",
   setup() {
-    const code = ref(`addFX(0,0,'test')`)
+    const code = ref(`
+    // play()
+
+    // addFX(0,0,'test')
+    // removeFX(row, col, fxId)
+    // removeAllFX()
+    `)
     const extensions = [javascript(), oneDark]
     const {bus, emit} = useEventsBus()
 
@@ -47,6 +53,9 @@ export default defineComponent({
     const handleReady = (payload) => {
       view.value = payload.view
     }
+
+
+
 
 
     let stagedCode = ''

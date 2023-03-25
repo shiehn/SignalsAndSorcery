@@ -3,7 +3,7 @@
     <div class="bg-gray-100 rounded-lg p-2 mb-2">
       <h4 v-if="title" class="w-full border-b-2 border-gray-600">{{ title }}</h4>
       <p v-if="body" class="my-2">{{ body }}</p>
-      <input v-if="isTextInput" class="w-full h-10 p-2" v-model="textInput">
+      <input v-if="isTextInput" class="w-full h-10 p-2" v-model="textInput" @input="sanitizeInput()">
     </div>
     <div class="flex justify-end">
       <button v-if="cancelBtnText" @click="cancelClick()"
@@ -44,6 +44,7 @@ export default {
     const open = ref(false)
     const textInput = ref(undefined)
     let relayData = undefined
+    let restrictChars = false
 
     const closeModal = () => {
       id.value = undefined
@@ -94,6 +95,12 @@ export default {
       closeModal()
     }
 
+    const sanitizeInput = () => {
+      if (restrictChars) {
+        textInput.value = textInput.value.replace(/[^A-Z0-9]/ig, "-").toLowerCase();
+      }
+    }
+
     onMounted(() => {
       nextTick(() => {
         isMobile.value = store.isMobile ? true : false
@@ -115,6 +122,7 @@ export default {
         cancelBtnText.value = modalPayload[0].getCancelText()
         open.value = true
         relayData = modalPayload[0].getRelayData()
+        restrictChars = modalPayload[0].getRestrictChars()
       }
     })
 
@@ -130,6 +138,7 @@ export default {
       isTextInput,
       isMobile,
       open,
+      sanitizeInput,
       textInput,
     }
   }
