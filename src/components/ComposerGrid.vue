@@ -40,7 +40,7 @@
          class="flex flex-none justify-between mb-2">
       <div v-for="gridRowItem in gridRow.value" class="w-1/4 h-16 pr-2 flex">
         <div class="w-1/12 h-full flex flex-col rounded-l-lg bg-gray-500 overflow-hidden border-r border-black">
-          <asset-f-x-bar v-for="fx in gridRowItem.fxs" :sfx_id="fx.id"></asset-f-x-bar>
+          <asset-f-x-tab v-for="fx in gridRowItem.fxs" :sfx_id="fx.id"></asset-f-x-tab>
 <!--          <div v-for="fx in gridRowItem.fxs" class="h-full w-full bg-pink-200 overflow-hidden border-b border-black" @click="fxClick(fx.id)"></div>-->
         </div>
         <div
@@ -117,11 +117,11 @@ import ComposerControlsLoopBar from "./ComposerControlsLoopBar";
 import {v4} from "uuid";
 import store from "../store/store";
 import ComposerAPI from "../dal/ComposerAPI";
-import AssetFXBar from "./AssetFXBar.vue";
+import AssetFXTab from "./AssetFXTab.vue";
 
 export default {
   name: 'ComposerGrid',
-  components: {AssetFXBar, Asset, ComposerControlsLoopBar, ComposerControlsScrollBar},
+  components: {AssetFXTab, Asset, ComposerControlsLoopBar, ComposerControlsScrollBar},
   setup() {
     const store = inject('store')
     const {bus, emit} = useEventsBus()

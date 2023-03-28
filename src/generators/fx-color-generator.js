@@ -30,6 +30,12 @@ export default class FXColorGenerator {
             return color
         }
 
+        if(!fxId || fxId === -1 ){
+            const defaultColor = 'bg-gray-500'
+            this.fxToColorMap[fxId] = defaultColor
+            return defaultColor
+        }
+
         const newColor = `bg-${this.generateColorName()}-${this.generateColorNumber()}`
         this.fxToColorMap[fxId] = newColor
 

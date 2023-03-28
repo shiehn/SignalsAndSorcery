@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full hover:cursor-pointer" :class="fxColor" @click="fxClick">
+  <div class="w-full h-full hover:cursor-pointer" :class="fxColorId" @click="fxClick">
   </div>
 </template>
 
@@ -8,7 +8,7 @@ import {inject, ref} from "vue";
 import useEventsBus from "../events/eventBus";
 
 export default {
-  name: "AssetFXBar",
+  name: "AssetFXTab",
   props: {
     sfx_id: Number,
   },
@@ -16,12 +16,12 @@ export default {
     const store = inject('store')
     const {bus, emit} = useEventsBus()
     const sfx_id = ref(props.sfx_id)
-    const fxColor = ref(store.fxColorGenerator.getFxColor(sfx_id.value))
+    const fxColorId = ref(store.fxColorGenerator.getFxColor(sfx_id.value))
     const fxClick = () => {
       emit('focusSFX', sfx_id.value)
     }
     return {
-      fxColor,
+      fxColorId,
       fxClick
     }
   }

@@ -17,6 +17,7 @@
     <button class="w-60 h-8 mb-2 bg-white" @click="evalCode">RUN DAT SHIT</button>
     <button @click="saveCode" class="w-60 h-8 mb-2 bg-green-500">SAVE</button>
     <button @click="newSFXDialog" class="w-40 h-8 mb-2 bg-orange-600">New FX</button>
+    <div class="w-8 h-8 p-2" :class="fxColorId">ID</div>
 
     <!--    <input v-model="currentSFX.name" />-->
 
@@ -78,6 +79,11 @@ export default defineComponent({
     const sfxFilterOptions = ref(['all', 'public', 'yours'])
     const placeholderText = ref('Code goes here...')
 
+    const fxColorId = ref('bg-gray-500')
+    const setFXColor = () => {
+      fxColorId.value = store.fxColorGenerator.getFxColor(currentSFX.value.id)
+    }
+
     const loadSFXOptions = async () => {
       const sfxApi = new SFXApi()
       const data = await sfxApi.getSFX(store.token, selectedFXFilter.value)
@@ -90,6 +96,7 @@ export default defineComponent({
       currentSFX.value.id = -1
       currentSFX.value.description = ''
       currentSFX.value.code = placeholderText.value
+      setFXColor()
     }
 
     onMounted(async () => {
@@ -104,6 +111,7 @@ export default defineComponent({
         currentSFX.value.id = response[0].sfx_id
         currentSFX.value.description = response[0].description
         currentSFX.value.code = response[0].source_code
+        setFXColor()
       } else {
         clearSFXConsole()
       }
@@ -199,6 +207,7 @@ export default defineComponent({
       currentSFX.value.name = response.name
       currentSFX.value.description = response.description
       currentSFX.value.code = response.source_code
+      setFXColor()
     }
 
 
@@ -207,6 +216,7 @@ export default defineComponent({
       currentSFX.value.id = -1
       currentSFX.value.description = 'add a description here'
       currentSFX.value.code = ''
+      setFXColor()
     }
 
     const onSelectChange = async (e) => {
@@ -224,6 +234,7 @@ export default defineComponent({
           currentSFX.value.id = response[0].sfx_id
           currentSFX.value.description = response[0].description
           currentSFX.value.code = response[0].source_code
+          setFXColor()
         } else {
           clearSFXConsole()
         }
@@ -245,6 +256,7 @@ export default defineComponent({
         currentSFX.value.id = response[0].sfx_id
         currentSFX.value.description = response[0].description
         currentSFX.value.code = response[0].source_code
+        setFXColor()
       }
 
 
@@ -279,6 +291,7 @@ export default defineComponent({
       currentSFX.value.id = response[0].sfx_id
       currentSFX.value.description = response[0].description
       currentSFX.value.code = response[0].source_code
+      setFXColor()
 
       //LOAD OPTIONS
       const data = await sfxApi.getSFX(store.token, selectedFXFilter.value)
@@ -315,6 +328,7 @@ export default defineComponent({
           currentSFX.value.name = response.name
           currentSFX.value.description = response.description
           currentSFX.value.code = response.source_code
+          setFXColor()
 
           //LOAD OPTIONS
           const data = await sfxApi.getSFX(store.token, selectedFXFilter.value)
@@ -331,6 +345,7 @@ export default defineComponent({
       currentSFX,
       extensions,
       evalCode,
+      fxColorId,
       handleReady,
       initSFX,
       onSelectChange,
