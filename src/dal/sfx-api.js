@@ -3,8 +3,15 @@ import {BASE_API_URL} from "../constants/constants";
 
 export default class SFXApi {
 
-    getSFX = async (token) => {
-        const url = BASE_API_URL + 'sfx'
+    getSFX = async (token, filter) => {
+        console.log('FILTER')
+        let url = BASE_API_URL + 'sfx'
+
+        if(filter) {
+            url = url + '?filter=' + filter
+        }
+
+        console.log('SFX URL: ' + url)
 
         let axiosConfig = {
             headers: {

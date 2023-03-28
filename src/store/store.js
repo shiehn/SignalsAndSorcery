@@ -1,9 +1,11 @@
 import {reactive} from "vue";
+import FXColorGenerator from "../generators/fx-color-generator";
 
 let debugMode = true
 let context = undefined
 let isMobile = false
 let token = undefined
+const fxColorGenerator = new FXColorGenerator()
 
 const state = reactive({
     projectId: undefined,
@@ -222,5 +224,5 @@ const state = reactive({
 })
 
 export default {
-    isMobile, state, token
+    isMobile, state, token, fxColorGenerator
 }

@@ -1,19 +1,30 @@
 <template>
   <div class="w-1/2">
-    <label for="loadFX" class="text-white mr-4">LOAD SFX:</label>
-    <select id="loadFX" v-model="selectedFX" @change="onSelectChange($event)"
-            class="py-1 px-2 mr-4 mb-4 w-4/6 text-black text-m font-bold rounded-lg bg-gray-100">
-      <option :value="item.value" v-for="item in sfxOptions">{{ item.label }}</option>
-    </select>
+    <div class="w-full flex">
+      <label for="loadFX" class="text-white mr-2">FX:</label>
+      <select id="loadFX" v-model="selectedFX" @change="onSelectChange($event)"
+              class="py-1 px-2 mr-4 mb-4 w-4/6 text-black text-m font-bold rounded-lg bg-gray-100">
+        <option :value="item.value" v-for="item in sfxOptions">{{ item.label }}</option>
+      </select>
+
+      <label for="filterFX" class="text-white mr-2">FILTER:</label>
+      <select id="filterFX" v-model="selectedFXFilter" @change="onSelectChange($event)"
+              class="py-1 px-2 mr-4 mb-4 w-4/6 text-black text-m font-bold rounded-lg bg-gray-100">
+        <option :value="item" v-for="item in sfxFilterOptions">{{ item }}</option>
+      </select>
+    </div>
+
     <button class="w-60 h-8 mb-2 bg-white" @click="evalCode">RUN DAT SHIT</button>
     <button @click="saveCode" class="w-60 h-8 mb-2 bg-green-500">SAVE</button>
     <button @click="newSFXDialog" class="w-40 h-8 mb-2 bg-orange-600">New FX</button>
 
-<!--    <input v-model="currentSFX.name" />-->
+    <!--    <input v-model="currentSFX.name" />-->
+
+
 
     <codemirror
         v-model="currentSFX.code"
-        placeholder="Code goes here..."
+        :placeholder="placeholderText"
         :style="{
         'height': '400px',
         'width': '100%',
@@ -34,13 +45,12 @@
 </template>
 
 <script>
-import {defineComponent, nextTick, onMounted, ref, shallowRef, watch} from 'vue'
+import {defineComponent, inject, nextTick, onMounted, ref, shallowRef, watch} from 'vue'
 import {Codemirror} from 'vue-codemirror'
 import {javascript} from '@codemirror/lang-javascript'
 import {oneDark} from '@codemirror/theme-one-dark'
 import useEventsBus from "../events/eventBus";
 import GridProcessor from "../processors/grid-processor";
-import store from "../store/store";
 import SFXApi from "../dal/sfx-api";
 import ModalOpenPayload from "./ModalOpenPayload";
 import {StemsAPI} from "../dal/StemsAPI";
@@ -61,17 +71,42 @@ export default defineComponent({
 
     const extensions = [javascript(), oneDark]
     const {bus, emit} = useEventsBus()
+    const store = inject('store')
+    const toast = inject('toast')
 
     const sfxOptions = ref([])
+    const sfxFilterOptions = ref(['all', 'public', 'yours'])
+    const placeholderText = ref('Code goes here...')
 
-    onMounted(async () => {
-
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
+    const loadSFXOptions = async () => {
       const sfxApi = new SFXApi()
-      const data = await sfxApi.getSFX(store.token)
+      const data = await sfxApi.getSFX(store.token, selectedFXFilter.value)
       const options = data.flatMap(sfx => ({value: sfx.sfx_id, label: sfx.name}))
       sfxOptions.value = options
+    }
+
+    const clearSFXConsole = () => {
+      currentSFX.value.name = undefined
+      currentSFX.value.id = -1
+      currentSFX.value.description = ''
+      currentSFX.value.code = placeholderText.value
+    }
+
+    onMounted(async () => {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await loadSFXOptions()
+      if(sfxOptions.value && sfxOptions.value.length > 0){
+        console.log('THERE ARE OPTIONS', sfxOptions.value[0].value)
+        selectedFX.value = sfxOptions.value[0].value
+        const sfxApi = new SFXApi()
+        const response = await sfxApi.getSFXById(store.token, sfxOptions.value[0].value)
+        currentSFX.value.name = response[0].name
+        currentSFX.value.id = response[0].sfx_id
+        currentSFX.value.description = response[0].description
+        currentSFX.value.code = response[0].source_code
+      } else {
+        clearSFXConsole()
+      }
     });
 
     // Codemirror EditorView instance ref
@@ -81,6 +116,7 @@ export default defineComponent({
     }
 
     let selectedFX = ref(null)
+    let selectedFXFilter = ref('all')
 
     let stagedCode = ''
 
@@ -128,15 +164,15 @@ export default defineComponent({
     const saveCode = async () => {
 
       let errMsg = ''
-      if (!currentSFX.value.name || currentSFX.value.name === ''){
+      if (!currentSFX.value.name || currentSFX.value.name === '') {
         errMsg += 'Please enter a name for your SFX'
       }
 
-      if (!currentSFX.value.code || currentSFX.value.code === ''){
+      if (!currentSFX.value.code || currentSFX.value.code === '') {
         errMsg += '\nPlease enter some code for your SFX'
       }
 
-      if (errMsg !== ''){
+      if (errMsg !== '') {
         alert(errMsg)
         return
       }
@@ -152,13 +188,18 @@ export default defineComponent({
 
       const sfxApi = new SFXApi()
       const response = await sfxApi.saveSFX(store.token, payload)
+      if(response){
+        toast.success('SFX Saved!')
+      } else {
+        toast.error('Error! Are you logged in & the FX owner?')
+        return
+      }
+
       currentSFX.value.id = response.sfx_id
       currentSFX.value.name = response.name
       currentSFX.value.description = response.description
       currentSFX.value.code = response.source_code
     }
-
-
 
 
     const initSFX = async () => {
@@ -169,12 +210,44 @@ export default defineComponent({
     }
 
     const onSelectChange = async (e) => {
-      const sfxApi = new SFXApi()
-      const response = await sfxApi.getSFXById(store.token, selectedFX.value)
-      currentSFX.value.name = response[0].name
-      currentSFX.value.id = response[0].sfx_id
-      currentSFX.value.description = response[0].description
-      currentSFX.value.code = response[0].source_code
+      console.log('onSelectChange', e.target.id)
+      if (e.target.id === 'filterFX') {
+        await loadSFXOptions()
+
+        //IF THERE ARE OPTIONS IN THE SELECT, THEN SELECT THE FIRST ONE
+        if(sfxOptions.value && sfxOptions.value.length > 0){
+          console.log('THERE ARE OPTIONS', sfxOptions.value[0].value)
+          selectedFX.value = sfxOptions.value[0].value
+          const sfxApi = new SFXApi()
+          const response = await sfxApi.getSFXById(store.token, sfxOptions.value[0].value)
+          currentSFX.value.name = response[0].name
+          currentSFX.value.id = response[0].sfx_id
+          currentSFX.value.description = response[0].description
+          currentSFX.value.code = response[0].source_code
+        } else {
+          clearSFXConsole()
+        }
+
+        return
+      }
+
+      // console.log('currentSFX.value', currentSFX.value)
+      // if (!currentSFX.value || !currentSFX.value.id || currentSFX.value.id === -1) {
+      //   //IF NOTHING IS SELECTED, THEN DO NOTHING
+      //   return
+      // }
+
+      if(e.target.id === 'loadFX'){
+        console.log('sfxOptions', 'WTC')
+        const sfxApi = new SFXApi()
+        const response = await sfxApi.getSFXById(store.token, selectedFX.value)
+        currentSFX.value.name = response[0].name
+        currentSFX.value.id = response[0].sfx_id
+        currentSFX.value.description = response[0].description
+        currentSFX.value.code = response[0].source_code
+      }
+
+
     }
 
     const createNewSFXDialogModalId = 'newSFXDialog'
@@ -205,10 +278,10 @@ export default defineComponent({
       currentSFX.value.name = response[0].name
       currentSFX.value.id = response[0].sfx_id
       currentSFX.value.description = response[0].description
-      currentSFX.value.code = response[0].source_code 
+      currentSFX.value.code = response[0].source_code
 
       //LOAD OPTIONS
-      const data = await sfxApi.getSFX(store.token)
+      const data = await sfxApi.getSFX(store.token, selectedFXFilter.value)
       const options = data.flatMap(sfx => ({value: sfx.sfx_id, label: sfx.name}))
       sfxOptions.value = options
 
@@ -231,13 +304,20 @@ export default defineComponent({
 
           const sfxApi = new SFXApi()
           const response = await sfxApi.saveSFX(store.token, payload)
+          if(response){
+            toast.success('SFX Saved!')
+          } else {
+            toast.error('Error! Are you logged in & the FX owner?')
+            return
+          }
+
           currentSFX.value.id = response.sfx_id
           currentSFX.value.name = response.name
           currentSFX.value.description = response.description
           currentSFX.value.code = response.source_code
 
           //LOAD OPTIONS
-          const data = await sfxApi.getSFX(store.token)
+          const data = await sfxApi.getSFX(store.token, selectedFXFilter.value)
           const options = data.flatMap(sfx => ({value: sfx.sfx_id, label: sfx.name}))
           sfxOptions.value = options
 
@@ -254,9 +334,12 @@ export default defineComponent({
       handleReady,
       initSFX,
       onSelectChange,
+      placeholderText,
       saveCode,
       selectedFX,
+      selectedFXFilter,
       stageCode,
+      sfxFilterOptions,
       sfxOptions,
       newSFXDialog,
     }
