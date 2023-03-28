@@ -19,6 +19,24 @@
     <button @click="newSFXDialog" class="w-40 h-8 mb-2 bg-orange-600">New FX</button>
     <div class="w-8 h-8 p-2" :class="fxColorId">ID</div>
 
+    <div class="border-white border-2">
+      <label for="wetOption" class="text-white">WET</label>
+      <input type="radio"
+             id="wetOption"
+             value="wet"
+             @change="wetDryChecked"
+             v-model="wetDrySelected"/>
+      <label for="dryOption" class="text-white">DRY</label>
+      <input type="radio"
+             id="dryOption"
+             value="dry"
+             @change="wetDryChecked"
+             v-model="wetDrySelected"/>
+
+      <button class="w-8- h-8 bg-yellow-500" @click="previewFX">PREVIEW</button>
+
+    </div>
+
     <!--    <input v-model="currentSFX.name" />-->
 
 
@@ -78,6 +96,8 @@ export default defineComponent({
     const sfxOptions = ref([])
     const sfxFilterOptions = ref(['all', 'public', 'yours'])
     const placeholderText = ref('Code goes here...')
+
+    const wetDrySelected = ref(['wet'])
 
     const fxColorId = ref('bg-gray-500')
     const setFXColor = () => {
@@ -302,6 +322,14 @@ export default defineComponent({
       selectedFX.value = sfxId
     }
 
+    const wetDryChecked = () => {
+      console.log('checked', wetDrySelected.value)
+    }
+
+    const previewFX= () => {
+      console.log('previewFX CLICKED')
+    }
+
     watch(() => bus.value.get('modalResponse'), async (modalResponsePayload) => {
       if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === createNewSFXDialogModalId) {
 
@@ -341,6 +369,9 @@ export default defineComponent({
       }
     })
 
+
+
+
     return {
       currentSFX,
       extensions,
@@ -350,6 +381,7 @@ export default defineComponent({
       initSFX,
       onSelectChange,
       placeholderText,
+      previewFX,
       saveCode,
       selectedFX,
       selectedFXFilter,
@@ -357,6 +389,8 @@ export default defineComponent({
       sfxFilterOptions,
       sfxOptions,
       newSFXDialog,
+      wetDrySelected,
+      wetDryChecked
     }
   }
 })
