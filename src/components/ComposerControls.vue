@@ -36,7 +36,9 @@
     </div>
 
     <div class="w-full mt-2">
-      <button class="w-full text-center text-white bg-black text-xs mt-1 rounded hover:ring-4 hover:ring-yellow-500" @click="onUndoClicked">UNDO</button>
+      <button class="w-full text-center text-white bg-black text-xs mt-1 rounded hover:ring-4 hover:ring-yellow-500"
+              @click="onUndoClicked">UNDO
+      </button>
     </div>
   </div>
 
@@ -68,6 +70,44 @@ import {BUILD_NUMBER} from "../constants/constants";
 import LoadingSpinner from "./LoadingSpinner";
 import Analytics from "../analytics/Analytics";
 import {useKeypress} from 'vue3-keypress';
+import Tuna from 'tunajs';
+import GridProcessor from "../processors/grid-processor";
+
+function cloneAudioBuffer(fromAudioBuffer) {
+  const audioBuffer = new AudioBuffer({
+    length: fromAudioBuffer.length,
+    numberOfChannels: fromAudioBuffer.numberOfChannels,
+    sampleRate: fromAudioBuffer.sampleRate
+  });
+  for (let channelI = 0; channelI < audioBuffer.numberOfChannels; ++channelI) {
+    const samples = fromAudioBuffer.getChannelData(channelI);
+    audioBuffer.copyToChannel(samples, channelI);
+  }
+  return audioBuffer;
+}
+
+async function applyFXToBuffer(bufferSizePerLoop, bufferSampleRate, inputBuffer) {
+
+  const offlineCtx = new OfflineAudioContext(2, bufferSizePerLoop, bufferSampleRate);
+
+  const now = new Date()
+  await offlineCtx.audioWorklet.addModule('http://localhost:8000/api/worklet?cachebuster=' + now.getTime())
+  let workletNode = await new AudioWorkletNode(offlineCtx, 'gain-processor')
+
+  let offlineSource = offlineCtx.createBufferSource();
+  offlineSource.buffer = inputBuffer;
+  offlineSource.connect(workletNode)
+  workletNode.connect(offlineCtx.destination);
+
+  // filter.connect(overdrive)
+  // overdrive.connect(delay)
+  //delay.connect(offlineCtx.destination);
+  offlineSource.start(0);
+  let renderedBuffer = await offlineCtx.startRendering()
+  //console.log('RENDING OFFLINE BEESH - COMPLETE')
+
+  return renderedBuffer
+}
 
 export default {
   name: "ComposerControls",
@@ -128,13 +168,11 @@ export default {
 
 
     const getBufferInRow = async (actx, trackSourceUrls, emptyBuffer) => {
+      let downloadTasks = []
       let buffer_list = new Array();
       for (let x = 0; x < trackSourceUrls.length; x++) {
         if (trackSourceUrls[x]) {
-          // if (BUFFER_CACHE[trackSourceUrls[x]]) {
-          //   buffer_list[x] = BUFFER_CACHE[trackSourceUrls[x]]
-          // } else {
-          await new Promise(function (resolve) {
+          downloadTasks.push(new Promise(function (resolve) {
             axios.get(trackSourceUrls[x] + "?x-request=js" /*s3 hack to prevent request from 2 origins */, {
               responseType: 'arraybuffer'
             }).then(function (response) {
@@ -154,15 +192,13 @@ export default {
                 .catch(function (error) {
                   console.error("problem!! downloading " + error);
                 })
-          })
-
-          // BUFFER_CACHE[trackSourceUrls[x]] = buffer
-          // }
+          }))
         } else {
           buffer_list[x] = emptyBuffer;
         }
       }
 
+      await Promise.all(downloadTasks)
       return buffer_list;
     }
 
@@ -204,7 +240,7 @@ export default {
     }
 
     const unlockingAudioContext = (audioCtx) => {
-      if(!window.AudioContext || !window.webkitAudioContext){
+      if (!window.AudioContext || !window.webkitAudioContext) {
         return false;
       }
 
@@ -228,6 +264,70 @@ export default {
       return true;
     }
 
+    const trimBuffer = async (i, bufferSizePerLoop, buffer) => {
+      const leftChannel = 0
+      const rightChannel = 1
+      // Create an empty buffer at the target length
+      let newBuffer = store.context.createBuffer(2, bufferSizePerLoop, store.context.sampleRate);
+
+      // for (let channel = 0; channel < 2; channel++) {
+      // This gives us the actual array that contains the data
+      let oldBufferLeft = buffer.getChannelData(leftChannel)
+      let oldBufferRight = buffer.getChannelData(rightChannel)
+
+      let nowBufferingLeft = newBuffer.getChannelData(leftChannel);
+      let nowBufferingRight = newBuffer.getChannelData(rightChannel);
+
+      for (let j = 0; j < newBuffer.length; j++) {
+        nowBufferingLeft[j] = oldBufferLeft[j];
+        nowBufferingRight[j] = oldBufferRight[j];
+      }
+
+      return {
+        'index': i,
+        'buffer': newBuffer,
+      }
+    }
+
+    const trimBuffers = async (buffer_list_row, bufferSizePerLoop) => {
+
+      let trimBufferTasks = []
+      for (let i = 0; i < buffer_list_row.length; i++) {
+        trimBufferTasks.push(trimBuffer(i, bufferSizePerLoop, buffer_list_row[i]))
+      }
+
+      let trimmedBufferListRow = new Array(buffer_list_row.length)
+
+      let taskResults = await Promise.all(trimBufferTasks)
+      for (let i = 0; i < taskResults.length; i++) {
+        trimmedBufferListRow[taskResults[i].index] = taskResults[i].buffer
+      }
+
+      return trimmedBufferListRow
+    }
+
+    const createRowBuffer = async (bufferSizePerLoop, trimmedBufferListRow) => {
+      const leftChannel = 0
+      const rightChannel = 1
+
+      let finalRowBuffer = store.context.createBuffer(2, bufferSizePerLoop * trimmedBufferListRow.length, store.context.sampleRate);
+
+      let nowBufferingFinalRowLeft = finalRowBuffer.getChannelData(leftChannel);
+      let nowBufferingFinalRowRight = finalRowBuffer.getChannelData(rightChannel);
+      let finalRowBufferIdx = 0;
+      for (let i = 0; i < trimmedBufferListRow.length; i++) {
+        let oldBufferLeft = trimmedBufferListRow[i].getChannelData(leftChannel)
+        let oldBufferRight = trimmedBufferListRow[i].getChannelData(rightChannel)
+        for (let j = 0; j < oldBufferLeft.length; j++) {
+          nowBufferingFinalRowLeft[finalRowBufferIdx] = oldBufferLeft[j];
+          nowBufferingFinalRowRight[finalRowBufferIdx] = oldBufferRight[j];
+          finalRowBufferIdx = finalRowBufferIdx + 1
+        }
+      }
+
+      return finalRowBuffer
+    }
+
     const renderMix = async () => {
       emit('showLoadingSpinner')
       // playBtnEnabled = false
@@ -248,8 +348,7 @@ export default {
 
         let secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
         const bufferSizePerLoop = secondsInLoop * store.context.sampleRate;
-        const leftChannel = 0
-        const rightChannel = 1
+
         const numOfRows = store.state.grid.length;
         let listOfTrimmedRowBuffers = new Array(numOfRows);
 
@@ -257,66 +356,45 @@ export default {
         //ALL THIS ROW STUFF COULD BE A FUNC
         for (let n = 0; n < numOfRows; n++) {
 
-          // TODO: BUFFER - THIS HAS BEEN COMMENTED OUT BECAUSE ITS NOT HANDLING THE NEW VOCAL ROW - jan12/23
           //CHECK IF THE ROW IS ALREADY CACHED
           if (!store.state.hasRowStateChanged(n) && BUFFER_ROW_CACHE[n]) {
             listOfTrimmedRowBuffers[n] = BUFFER_ROW_CACHE[n]
             continue
           }
 
-          //GET THE TRACKS IN ONE ROW
+          //GET THE LOOP SOURCE FOR ONE ROW
           let tracksInRow = getTrackListByRow(n)
 
-          //GET THE BUFFERS FOR ONE ROW
+          //DOWNLOAD AND GET BUFFER FOR EACH LOOP IN ROW
           let buffer_list_row = await getBufferInRow(store.context, tracksInRow, emptyBuffer);
 
-          //TRIM THE BUFFERS IN EACH ROW
-          //TRIM THE BUFFERS IN EACH ROW
-          //TRIM THE BUFFERS IN EACH ROW
-          //TODO IF YOU PRE-TRIM THESE YOU CAN SAVE RENDER TIME
-          let trimmedBufferListRow = new Array(buffer_list_row.length)
-          for (let i = 0; i < buffer_list_row.length; i++) {
-            // Create an empty buffer at the target length
-            let newBuffer = store.context.createBuffer(2, bufferSizePerLoop, store.context.sampleRate);
 
-            // for (let channel = 0; channel < 2; channel++) {
-            // This gives us the actual array that contains the data
-            let oldBufferLeft = buffer_list_row[i].getChannelData(leftChannel)
-            let oldBufferRight = buffer_list_row[i].getChannelData(rightChannel)
+          // //APPLY FX TO EACH BUFFER
+          // for(let c = 0; c < buffer_list_row.length; c++){
+          //   const row = n
+          //   const col = c
+          //   const gridProcessor = new GridProcessor(store.state.grid)
+          //
+          //   const fxs = gridProcessor.getGridItemFX(row, col)
+          //   if(!fxs || fxs.length < 1){
+          //     continue
+          //   }
+          //
+          //   for(let fx of fxs){
+          //     let processedAudio = await applyFXToBuffer(bufferSizePerLoop, store.context.sampleRate, buffer_list_row[c]);
+          //     buffer_list_row[c] = processedAudio
+          //   }
+          // }
 
-            let nowBufferingLeft = newBuffer.getChannelData(leftChannel);
-            let nowBufferingRight = newBuffer.getChannelData(rightChannel);
 
-            for (let j = 0; j < newBuffer.length; j++) {
-              nowBufferingLeft[j] = oldBufferLeft[j];
-              nowBufferingRight[j] = oldBufferRight[j];
-            }
-            // }
+          //TRIM LOOPS IN EACH ROW
+          let trimmedBufferListRow = await trimBuffers(buffer_list_row, bufferSizePerLoop)
 
-            trimmedBufferListRow[i] = newBuffer
-          }
-          //MERGE ALL THE BUFFERS FOR A ROW
-          //MERGE ALL THE BUFFERS FOR A ROW
           // MERGE ALL THE BUFFERS FOR A ROW
-          let finalRowBuffer = store.context.createBuffer(2, bufferSizePerLoop * trimmedBufferListRow.length, store.context.sampleRate);
-
-          let nowBufferingFinalRowLeft = finalRowBuffer.getChannelData(leftChannel);
-          let nowBufferingFinalRowRight = finalRowBuffer.getChannelData(rightChannel);
-          let finalRowBufferIdx = 0;
-          for (let i = 0; i < trimmedBufferListRow.length; i++) {
-            let oldBufferLeft = trimmedBufferListRow[i].getChannelData(leftChannel)
-            let oldBufferRight = trimmedBufferListRow[i].getChannelData(rightChannel)
-            for (let j = 0; j < oldBufferLeft.length; j++) {
-              nowBufferingFinalRowLeft[finalRowBufferIdx] = oldBufferLeft[j];
-              nowBufferingFinalRowRight[finalRowBufferIdx] = oldBufferRight[j];
-              finalRowBufferIdx = finalRowBufferIdx + 1
-            }
-          }
-
+          const finalRowBuffer = await createRowBuffer(bufferSizePerLoop, trimmedBufferListRow)
           listOfTrimmedRowBuffers[n] = finalRowBuffer
 
           //UPDATE THE ROW CACHE
-          // TODO: BUFFER - THIS HAS BEEN COMMENTED OUT BECAUSE ITS NOT HANDLING THE NEW VOCAL ROW - jan12/23
           BUFFER_ROW_CACHE[n] = finalRowBuffer
           store.state.updateRowStateHash(n)
         }
@@ -480,23 +558,23 @@ export default {
     }
 
 
-    const onSpaceBarDown = ({keyCode}) => {
-      if (!isPlaying.value && !isRendering.value) {
-        play()
-      } else {
-        stop()
-      }
-    }
-
-    useKeypress({
-      keyEvent: "keydown",
-      keyBinds: [
-        {
-          keyCode: 'space', // or keyCode as integer, e.g. 40
-          success: onSpaceBarDown,
-        },
-      ]
-    })
+    // const onSpaceBarDown = ({keyCode}) => {
+    //   if (!isPlaying.value && !isRendering.value) {
+    //     play()
+    //   } else {
+    //     stop()
+    //   }
+    // }
+    //
+    // useKeypress({
+    //   keyEvent: "keydown",
+    //   keyBinds: [
+    //     {
+    //       keyCode: 'space', // or keyCode as integer, e.g. 40
+    //       success: onSpaceBarDown,
+    //     },
+    //   ]
+    // })
 
 
     const onUndoClicked = () => {
