@@ -267,7 +267,7 @@ export default {
     const trimBuffer = async (i, bufferSizePerLoop, buffer) => {
       const leftChannel = 0
       const rightChannel = 1
-      // Create an empty buffer at the target length
+
       let newBuffer = store.context.createBuffer(2, bufferSizePerLoop, store.context.sampleRate);
 
       // for (let channel = 0; channel < 2; channel++) {
@@ -275,17 +275,59 @@ export default {
       let oldBufferLeft = buffer.getChannelData(leftChannel)
       let oldBufferRight = buffer.getChannelData(rightChannel)
 
-      let nowBufferingLeft = newBuffer.getChannelData(leftChannel);
-      let nowBufferingRight = newBuffer.getChannelData(rightChannel);
+      let newBufferingLeft = newBuffer.getChannelData(leftChannel);
+      let newBufferingRight = newBuffer.getChannelData(rightChannel);
 
-      for (let j = 0; j < newBuffer.length; j++) {
-        nowBufferingLeft[j] = oldBufferLeft[j];
-        nowBufferingRight[j] = oldBufferRight[j];
+
+      const fullBufferLength = oldBufferLeft.length
+
+      // Calcuate the tail size
+      let tailSize = fullBufferLength - bufferSizePerLoop
+      if(tailSize <= 0 ){
+        //SHOULD THE TAIL JUST BE UNDEFINED ????? IF EMPTY
+        tailSize = 2
       }
+
+      // Create an empty buffer at the target length
+
+
+      let newBufferTail = store.context.createBuffer(2, tailSize, store.context.sampleRate);
+
+      let newBufferingTailLeft = newBufferTail.getChannelData(leftChannel);
+      let newBufferingTailRight = newBufferTail.getChannelData(rightChannel);
+
+
+      // const tailSize = oldBufferLeft.length - bufferSizePerLoop
+      //
+      // console.log('oldBufferLeft.length', oldBufferLeft.length)
+      // console.log('bufferSizePerLoop', bufferSizePerLoop)
+      // console.log('tailSize', tailSize)
+
+      for (let j = 0; j < fullBufferLength; j++) {
+        if(j < newBuffer.length) {
+          newBufferingLeft[j] = oldBufferLeft[j];
+          newBufferingRight[j] = oldBufferRight[j];
+        }
+
+        if(j >= newBuffer.length && j < newBufferTail.length + newBuffer.length) {
+          newBufferingTailLeft[j - newBuffer.length] = oldBufferLeft[j];
+          newBufferingTailRight[j - newBuffer.length] = oldBufferRight[j];
+
+          //console.log('newBufferTail[j - newBuffer.length]', newBufferTail[j - newBuffer.length])
+        }
+      }
+
+      // console.log('-----------------------')
+      // console.log('original length', fullBufferLength)
+      // console.log('target length', bufferSizePerLoop)
+      // console.log('newBuffer length', newBufferingLeft.length)
+      // console.log('newBufferTail length', newBufferTail.length)
+      // console.log('-----------------------')
 
       return {
         'index': i,
         'buffer': newBuffer,
+        'bufferTail': newBufferTail,
       }
     }
 
@@ -300,7 +342,7 @@ export default {
 
       let taskResults = await Promise.all(trimBufferTasks)
       for (let i = 0; i < taskResults.length; i++) {
-        trimmedBufferListRow[taskResults[i].index] = taskResults[i].buffer
+        trimmedBufferListRow[taskResults[i].index] = {'buffer': taskResults[i].buffer, 'bufferTail': taskResults[i].bufferTail}
       }
 
       return trimmedBufferListRow
@@ -309,22 +351,42 @@ export default {
     const createRowBuffer = async (bufferSizePerLoop, trimmedBufferListRow) => {
       const leftChannel = 0
       const rightChannel = 1
-
       let finalRowBuffer = store.context.createBuffer(2, bufferSizePerLoop * trimmedBufferListRow.length, store.context.sampleRate);
-
       let nowBufferingFinalRowLeft = finalRowBuffer.getChannelData(leftChannel);
       let nowBufferingFinalRowRight = finalRowBuffer.getChannelData(rightChannel);
       let finalRowBufferIdx = 0;
+
+      //console.log('bufferSizePerLoop', bufferSizePerLoop)
+      // console.log('trimmedBufferListRow.length', trimmedBufferListRow.length)
+      //
+
       for (let i = 0; i < trimmedBufferListRow.length; i++) {
-        let oldBufferLeft = trimmedBufferListRow[i].getChannelData(leftChannel)
-        let oldBufferRight = trimmedBufferListRow[i].getChannelData(rightChannel)
-        for (let j = 0; j < oldBufferLeft.length; j++) {
-          nowBufferingFinalRowLeft[finalRowBufferIdx] = oldBufferLeft[j];
-          nowBufferingFinalRowRight[finalRowBufferIdx] = oldBufferRight[j];
+        let oldBufferLeft = trimmedBufferListRow[i].buffer.getChannelData(leftChannel)
+        let oldBufferRight = trimmedBufferListRow[i].buffer.getChannelData(rightChannel)
+
+        let oldBufferLeftTail = undefined
+        let oldBufferRightTail = undefined
+
+        if(i>0){
+          oldBufferLeftTail = trimmedBufferListRow[i-1].bufferTail.getChannelData(leftChannel)
+          oldBufferRightTail = trimmedBufferListRow[i-1].bufferTail.getChannelData(rightChannel)
+        }
+
+        for (let j = 0; j < bufferSizePerLoop; j++) {
+
+          //APPEND TAILS
+          if(oldBufferLeftTail && j<oldBufferLeftTail.length){
+
+            nowBufferingFinalRowLeft[finalRowBufferIdx] = oldBufferLeft[j] + oldBufferLeftTail[j];
+            nowBufferingFinalRowRight[finalRowBufferIdx] = oldBufferRight[j] + oldBufferRightTail[j];
+          }else{
+            nowBufferingFinalRowLeft[finalRowBufferIdx] = oldBufferLeft[j];
+            nowBufferingFinalRowRight[finalRowBufferIdx] = oldBufferRight[j];
+          }
+
           finalRowBufferIdx = finalRowBufferIdx + 1
         }
       }
-
       return finalRowBuffer
     }
 
