@@ -392,8 +392,9 @@ export default {
 
     const renderMix = async () => {
       emit('showLoadingSpinner')
-      // playBtnEnabled = false
-      await stop()
+
+      //await stop()
+      await pause()
 
       buffer = undefined
 
@@ -535,7 +536,7 @@ export default {
         sourceNode.start(0, offset)
 
         startedAt = store.context.currentTime - offset;
-        pausedAt = 0;
+        //pausedAt = 0;
         isPlaying.value = true;
       } else {
         if (await renderMix()) {
@@ -565,6 +566,7 @@ export default {
         sourceNode.stop(0);
         sourceNode = null;
       }
+
       pausedAt = 0;
       startedAt = 0;
       isPlaying.value = false;
@@ -575,7 +577,8 @@ export default {
         return
       }
 
-      let elapsed = store.context.currentTime - startedAt;
+      let currentTime = store.context ? store.context.currentTime : 0
+      let elapsed = currentTime - startedAt;
       stop();
       pausedAt = elapsed;
     }
@@ -620,23 +623,23 @@ export default {
     }
 
 
-    // const onSpaceBarDown = ({keyCode}) => {
-    //   if (!isPlaying.value && !isRendering.value) {
-    //     play()
-    //   } else {
-    //     stop()
-    //   }
-    // }
-    //
-    // useKeypress({
-    //   keyEvent: "keydown",
-    //   keyBinds: [
-    //     {
-    //       keyCode: 'space', // or keyCode as integer, e.g. 40
-    //       success: onSpaceBarDown,
-    //     },
-    //   ]
-    // })
+    const onSpaceBarDown = ({keyCode}) => {
+      if (!isPlaying.value && !isRendering.value) {
+        play()
+      } else {
+        pause()
+      }
+    }
+
+    useKeypress({
+      keyEvent: "keydown",
+      keyBinds: [
+        {
+          keyCode: 'space', // or keyCode as integer, e.g. 40
+          success: onSpaceBarDown,
+        },
+      ]
+    })
 
 
     const onUndoClicked = () => {
