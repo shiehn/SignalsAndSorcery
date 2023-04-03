@@ -267,7 +267,7 @@ export default {
     const trimBuffer = async (i, bufferSizePerLoop, buffer) => {
       const leftChannel = 0
       const rightChannel = 1
-      // Create an empty buffer at the target length
+
       let newBuffer = store.context.createBuffer(2, bufferSizePerLoop, store.context.sampleRate);
 
       // for (let channel = 0; channel < 2; channel++) {
@@ -275,17 +275,59 @@ export default {
       let oldBufferLeft = buffer.getChannelData(leftChannel)
       let oldBufferRight = buffer.getChannelData(rightChannel)
 
-      let nowBufferingLeft = newBuffer.getChannelData(leftChannel);
-      let nowBufferingRight = newBuffer.getChannelData(rightChannel);
+      let newBufferingLeft = newBuffer.getChannelData(leftChannel);
+      let newBufferingRight = newBuffer.getChannelData(rightChannel);
 
-      for (let j = 0; j < newBuffer.length; j++) {
-        nowBufferingLeft[j] = oldBufferLeft[j];
-        nowBufferingRight[j] = oldBufferRight[j];
+
+      const fullBufferLength = oldBufferLeft.length
+
+      // Calcuate the tail size
+      let tailSize = fullBufferLength - bufferSizePerLoop
+      if(tailSize <= 0 ){
+        //SHOULD THE TAIL JUST BE UNDEFINED ????? IF EMPTY
+        tailSize = 2
       }
+
+      // Create an empty buffer at the target length
+
+
+      let newBufferTail = store.context.createBuffer(2, tailSize, store.context.sampleRate);
+
+      let newBufferingTailLeft = newBufferTail.getChannelData(leftChannel);
+      let newBufferingTailRight = newBufferTail.getChannelData(rightChannel);
+
+
+      // const tailSize = oldBufferLeft.length - bufferSizePerLoop
+      //
+      // console.log('oldBufferLeft.length', oldBufferLeft.length)
+      // console.log('bufferSizePerLoop', bufferSizePerLoop)
+      // console.log('tailSize', tailSize)
+
+      for (let j = 0; j < fullBufferLength; j++) {
+        if(j < newBuffer.length) {
+          newBufferingLeft[j] = oldBufferLeft[j];
+          newBufferingRight[j] = oldBufferRight[j];
+        }
+
+        if(j >= newBuffer.length && j < newBufferTail.length + newBuffer.length) {
+          newBufferingTailLeft[j - newBuffer.length] = oldBufferLeft[j];
+          newBufferingTailRight[j - newBuffer.length] = oldBufferRight[j];
+
+          //console.log('newBufferTail[j - newBuffer.length]', newBufferTail[j - newBuffer.length])
+        }
+      }
+
+      // console.log('-----------------------')
+      // console.log('original length', fullBufferLength)
+      // console.log('target length', bufferSizePerLoop)
+      // console.log('newBuffer length', newBufferingLeft.length)
+      // console.log('newBufferTail length', newBufferTail.length)
+      // console.log('-----------------------')
 
       return {
         'index': i,
         'buffer': newBuffer,
+        'bufferTail': newBufferTail,
       }
     }
 
@@ -300,7 +342,7 @@ export default {
 
       let taskResults = await Promise.all(trimBufferTasks)
       for (let i = 0; i < taskResults.length; i++) {
-        trimmedBufferListRow[taskResults[i].index] = taskResults[i].buffer
+        trimmedBufferListRow[taskResults[i].index] = {'buffer': taskResults[i].buffer, 'bufferTail': taskResults[i].bufferTail}
       }
 
       return trimmedBufferListRow
@@ -311,16 +353,38 @@ export default {
       const rightChannel = 1
 
       let finalRowBuffer = store.context.createBuffer(2, bufferSizePerLoop * trimmedBufferListRow.length, store.context.sampleRate);
-
       let nowBufferingFinalRowLeft = finalRowBuffer.getChannelData(leftChannel);
       let nowBufferingFinalRowRight = finalRowBuffer.getChannelData(rightChannel);
       let finalRowBufferIdx = 0;
+
+      //console.log('bufferSizePerLoop', bufferSizePerLoop)
+      // console.log('trimmedBufferListRow.length', trimmedBufferListRow.length)
+      //
+
       for (let i = 0; i < trimmedBufferListRow.length; i++) {
-        let oldBufferLeft = trimmedBufferListRow[i].getChannelData(leftChannel)
-        let oldBufferRight = trimmedBufferListRow[i].getChannelData(rightChannel)
-        for (let j = 0; j < oldBufferLeft.length; j++) {
-          nowBufferingFinalRowLeft[finalRowBufferIdx] = oldBufferLeft[j];
-          nowBufferingFinalRowRight[finalRowBufferIdx] = oldBufferRight[j];
+        let oldBufferLeft = trimmedBufferListRow[i].buffer.getChannelData(leftChannel)
+        let oldBufferRight = trimmedBufferListRow[i].buffer.getChannelData(rightChannel)
+
+        let oldBufferLeftTail = undefined
+        let oldBufferRightTail = undefined
+
+        if(i>0){
+          oldBufferLeftTail = trimmedBufferListRow[i-1].bufferTail.getChannelData(leftChannel)
+          oldBufferRightTail = trimmedBufferListRow[i-1].bufferTail.getChannelData(rightChannel)
+        }
+
+        for (let j = 0; j < bufferSizePerLoop; j++) {
+
+          //APPEND TAILS
+          if(oldBufferLeftTail && j<oldBufferLeftTail.length){
+
+            nowBufferingFinalRowLeft[finalRowBufferIdx] = oldBufferLeft[j] + oldBufferLeftTail[j];
+            nowBufferingFinalRowRight[finalRowBufferIdx] = oldBufferRight[j] + oldBufferRightTail[j];
+          }else{
+            nowBufferingFinalRowLeft[finalRowBufferIdx] = oldBufferLeft[j];
+            nowBufferingFinalRowRight[finalRowBufferIdx] = oldBufferRight[j];
+          }
+
           finalRowBufferIdx = finalRowBufferIdx + 1
         }
       }
@@ -330,8 +394,9 @@ export default {
 
     const renderMix = async () => {
       emit('showLoadingSpinner')
-      // playBtnEnabled = false
-      await stop()
+
+      //await stop()
+      await pause()
 
       buffer = undefined
 
@@ -369,22 +434,23 @@ export default {
           let buffer_list_row = await getBufferInRow(store.context, tracksInRow, emptyBuffer);
 
 
-          //APPLY FX TO EACH BUFFER
-          for(let c = 0; c < buffer_list_row.length; c++){
-            const row = n
-            const col = c
-            const gridProcessor = new GridProcessor(store.state.grid)
 
-            const fxs = gridProcessor.getGridItemFX(row, col)
-            if(!fxs || fxs.length < 1){
-              continue
-            }
-
-            for(let fx of fxs){
-              let processedAudio = await applyFXToBuffer(bufferSizePerLoop, store.context.sampleRate, buffer_list_row[c]);
-              buffer_list_row[c] = processedAudio
-            }
-          }
+          // //APPLY FX TO EACH BUFFER
+          // for(let c = 0; c < buffer_list_row.length; c++){
+          //   const row = n
+          //   const col = c
+          //   const gridProcessor = new GridProcessor(store.state.grid)
+          //
+          //   const fxs = gridProcessor.getGridItemFX(row, col)
+          //   if(!fxs || fxs.length < 1){
+          //     continue
+          //   }
+          //
+          //   for(let fx of fxs){
+          //     let processedAudio = await applyFXToBuffer(bufferSizePerLoop, store.context.sampleRate, buffer_list_row[c]);
+          //     buffer_list_row[c] = processedAudio
+          //   }
+          // }
 
 
           //TRIM LOOPS IN EACH ROW
@@ -473,7 +539,7 @@ export default {
         sourceNode.start(0, offset)
 
         startedAt = store.context.currentTime - offset;
-        pausedAt = 0;
+        //pausedAt = 0;
         isPlaying.value = true;
       } else {
         if (await renderMix()) {
@@ -493,6 +559,9 @@ export default {
         return
       }
 
+      //FORCE BAR TO 0
+      emit('updateProgressBar', 0)
+
       emit('stopAllAudio')
       emit('disableAnimateSelector')
     }
@@ -503,6 +572,7 @@ export default {
         sourceNode.stop(0);
         sourceNode = null;
       }
+
       pausedAt = 0;
       startedAt = 0;
       isPlaying.value = false;
@@ -513,7 +583,8 @@ export default {
         return
       }
 
-      let elapsed = store.context.currentTime - startedAt;
+      let currentTime = store.context ? store.context.currentTime : 0
+      let elapsed = currentTime - startedAt;
       stop();
       pausedAt = elapsed;
     }
@@ -525,6 +596,7 @@ export default {
       if (startedAt) {
         return store.context.currentTime - startedAt;
       }
+
       return 0;
     };
 
@@ -557,25 +629,23 @@ export default {
       emit('newProjectDialog')
     }
 
+    const onSpaceBarDown = ({keyCode}) => {
+      if (!isPlaying.value && !isRendering.value) {
+        play()
+      } else {
+        pause()
+      }
+    }
 
-    // const onSpaceBarDown = ({keyCode}) => {
-    //   if (!isPlaying.value && !isRendering.value) {
-    //     play()
-    //   } else {
-    //     stop()
-    //   }
-    // }
-    //
-    // useKeypress({
-    //   keyEvent: "keydown",
-    //   keyBinds: [
-    //     {
-    //       keyCode: 'space', // or keyCode as integer, e.g. 40
-    //       success: onSpaceBarDown,
-    //     },
-    //   ]
-    // })
-
+    useKeypress({
+      keyEvent: "keydown",
+      keyBinds: [
+        {
+          keyCode: 'space', // or keyCode as integer, e.g. 40
+          success: onSpaceBarDown,
+        },
+      ]
+    })
 
     const onUndoClicked = () => {
       emit('loadProjectBackupFromLocalStorage')

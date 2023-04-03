@@ -5,12 +5,25 @@
       "name": "main.js",
       "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.js",
       "publicPath": "/static/dist/main.js"
+    },
+    "main.f34b0da1a658f80aed5c.hot-update.js": {
+      "name": "main.f34b0da1a658f80aed5c.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.f34b0da1a658f80aed5c.hot-update.js",
+      "publicPath": "/static/dist/main.f34b0da1a658f80aed5c.hot-update.js"
+    },
+    "main.f34b0da1a658f80aed5c.hot-update.json": {
+      "name": "main.f34b0da1a658f80aed5c.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.f34b0da1a658f80aed5c.hot-update.json",
+      "publicPath": "/static/dist/main.f34b0da1a658f80aed5c.hot-update.json"
     }
   },
   "chunks": {
     "main": [
-      "main.js"
+      "main.js",
+      "main.f34b0da1a658f80aed5c.hot-update.js"
     ]
   },
-  "publicPath": "/static/dist/"
+  "publicPath": "/static/dist/",
+  "error": "ModuleParseError",
+  "message": "Module parse failed: Unexpected token (16:2)\nYou may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders\n| // export const BASE_API_URL = 'https://signalsandsorcery.ai/api/'\n| \n> <<<<<<< HEAD\n| export const BUILD_NUMBER = '0.9.1'\n| ======="
 }
