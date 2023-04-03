@@ -121,20 +121,20 @@ export default defineComponent({
 
     onMounted(async () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      await loadSFXOptions()
-      if(sfxOptions.value && sfxOptions.value.length > 0){
-        console.log('THERE ARE OPTIONS', sfxOptions.value[0].value)
-        selectedFX.value = sfxOptions.value[0].value
-        const sfxApi = new SFXApi()
-        const response = await sfxApi.getSFXById(store.token, sfxOptions.value[0].value)
-        currentSFX.value.name = response[0].name
-        currentSFX.value.id = response[0].sfx_id
-        currentSFX.value.description = response[0].description
-        currentSFX.value.code = response[0].source_code
-        setFXColor()
-      } else {
-        clearSFXConsole()
-      }
+      // await loadSFXOptions()
+      // if(sfxOptions.value && sfxOptions.value.length > 0){
+      //   console.log('THERE ARE OPTIONS', sfxOptions.value[0].value)
+      //   selectedFX.value = sfxOptions.value[0].value
+      //   const sfxApi = new SFXApi()
+      //   const response = await sfxApi.getSFXById(store.token, sfxOptions.value[0].value)
+      //   currentSFX.value.name = response[0].name
+      //   currentSFX.value.id = response[0].sfx_id
+      //   currentSFX.value.description = response[0].description
+      //   currentSFX.value.code = response[0].source_code
+      //   setFXColor()
+      // } else {
+      //   clearSFXConsole()
+      // }
     });
 
     // Codemirror EditorView instance ref
