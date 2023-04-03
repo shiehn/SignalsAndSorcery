@@ -22,12 +22,16 @@
        class="relative w-1/12 h-32 px-2 mr-2 min-w-fit border-2 border-black rounded-lg bg-white"
        style="background-color: rgba(255,255,255,0.9);">
 
+
+
+
     <div class="w-full mt-7"></div>
 
     <div class="w-full flex justify-center">
 
+      <div id="pedalboard" ref="pedalBoard"></div>
 
-      <div v-html="renderHTMLTest">
+      <div v-html="renderHTMLTest" >
       </div>
 
 
@@ -80,6 +84,9 @@ import Tuna from 'tunajs';
 import GridProcessor from "../processors/grid-processor";
 import OperableAudioBuffer from "../audioengine/operable-audio-buffer";
 import AudioPlayerNode from "../audioengine/audio-player-node";
+import {initializeWamHost} from "@webaudiomodules/sdk";
+import MyWam from "../audioengine/my-wam";
+import BigMuffPlugin from "../wam/BigMuff/index";
 
 // function cloneAudioBuffer(fromAudioBuffer) {
 //   const audioBuffer = new AudioBuffer({
@@ -159,9 +166,11 @@ export default {
     //NEW CODE
     // index.js
     const audioUrl = "https://sas-assets-bpm-138.s3.us-west-2.amazonaws.com/aeb462c7-c953-43b0-8994-5b78248a5315.wav";
+    const plugin1Url = "https://mainline.i3s.unice.fr/wam2/packages/StonePhaserStereo/index.js";
+    const plugin2Url = "https://mainline.i3s.unice.fr/wam2/packages/BigMuff/index.js";
 
 // Initialize the Audio Context
-    const audioCtx = new AudioContext();
+    store.audioCtx = new AudioContext();
     //const btnStart = document.getElementById("btn-start");
 
 
@@ -172,35 +181,87 @@ export default {
     let operableAudioBuffer = undefined
     let node = undefined
 
+
+    let pluginDomElement1 = ''
+    let pluginDomElement2 = ''
+
     onMounted(async () => {
       isMobile.value = store.isMobile ? true : false
       showInitAudio.value = isMobile.value
 
 
-      //NEW CODE
-      await audioCtx.audioWorklet.addModule("/static/worklets/audio-player-processor.js");
+
+
+      await store.audioCtx.suspend();
+      /* Import from the Web Audio Modules 2.0 SDK to initialize Wam Host.
+          It initializes a unique ID for the current AudioContext. */
+      //const {default: initializeWamHost} = await import("../lib/sdk/initializeWamHost.js");
+      const [hostGroupId] = await initializeWamHost(store.audioCtx);
+
+
+      // Import our custom WAM Processor and the plugins.
+
+      const {default: WAM1} = await import(/* webpackIgnore: true */ plugin1Url);
+      const {default: WAM2} = await import(/* webpackIgnore: true */ plugin2Url);
+
+
+
+      //const {default: OperableAudioBuffer} = await import("../lib/utils/operable-audio-buffer.js");
+
+
+      // Create an instance of our Processor. We can get from the instance the audio node.
+      let wamInstance = await MyWam.createInstance(hostGroupId, store.audioCtx);
+      /** @type {import("./audio-player-node.js").default} */
+      node = wamInstance.audioNode;
+
       const response = await fetch(audioUrl);
-      console.log('response.status', response.status)
-      audioArrayBuffer = await response.arrayBuffer();
-      audioBuffer = await audioCtx.decodeAudioData(audioArrayBuffer);
-      console.log('audioBuffer', audioBuffer.length)
+      const audioArrayBuffer = await response.arrayBuffer();
+      const audioBuffer = await store.audioCtx.decodeAudioData(audioArrayBuffer);
 
       // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      operableAudioBuffer = Object.setPrototypeOf(audioBuffer, OperableAudioBuffer.prototype);
-      node = new AudioPlayerNode(audioCtx, 2);
+      const operableAudioBuffer = Object.setPrototypeOf(audioBuffer, OperableAudioBuffer.prototype);
 
-      //Sending audio to the processor and connecting the node to the output destination.
+
+      // Creating the Instance of the WAM plugins.
+      let pluginInstance1 = await WAM1.createInstance(hostGroupId, store.audioCtx);
+      pluginDomElement1 = await pluginInstance1.createGui();
+      let pluginInstance2 = await WAM2.createInstance(hostGroupId, store.audioCtx);
+      //pluginDomElement2 = await pluginInstance2.createGui();
+
+      // Sending audio to the processor and connecting the node to the output destination.
       node.setAudio(operableAudioBuffer.toArray());
-      node.connect(audioCtx.destination);
+      node.connect(pluginInstance1._audioNode).connect(pluginInstance2._audioNode).connect(store.audioCtx.destination);
+      //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
+
+      //node.connect(store.audioCtx.destination);
       node.parameters.get("playing").value = 0;
       node.parameters.get("loop").value = 1;
 
-      //Sending audio to the processor and connecting the node to the output destination.
-      node.port.postMessage(operableAudioBuffer.toArray());
 
-      node.connect(audioCtx.destination);
-      node.parameters.get("playing").value = 0;
-      node.parameters.get("loop").value = 1;
+      // //NEW CODE
+      // await audioCtx.audioWorklet.addModule("/static/worklets/audio-player-processor.js");
+      // const response = await fetch(audioUrl);
+      // console.log('response.status', response.status)
+      // audioArrayBuffer = await response.arrayBuffer();
+      // audioBuffer = await audioCtx.decodeAudioData(audioArrayBuffer);
+      // console.log('audioBuffer', audioBuffer.length)
+      //
+      // // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+      // operableAudioBuffer = Object.setPrototypeOf(audioBuffer, OperableAudioBuffer.prototype);
+      // node = new AudioPlayerNode(audioCtx, 2);
+      //
+      // //Sending audio to the processor and connecting the node to the output destination.
+      // node.setAudio(operableAudioBuffer.toArray());
+      // node.connect(audioCtx.destination);
+      // node.parameters.get("playing").value = 0;
+      // node.parameters.get("loop").value = 1;
+      //
+      // //Sending audio to the processor and connecting the node to the output destination.
+      // node.port.postMessage(operableAudioBuffer.toArray());
+      //
+      // node.connect(audioCtx.destination);
+      // node.parameters.get("playing").value = 0;
+      // node.parameters.get("loop").value = 1;
     })
 
     // const getTrackListByRow = (row) => {
@@ -550,12 +611,16 @@ export default {
 
 
     const renderHTMLTest = ref('')
+    const pedalBoard = ref(null)
     const play = async () => {
 
-      renderHTMLTest.value = "<div class='w-4 h-4 bg-green-300'>THIS IS HTML</div>"
+      // console.log('pluginDomElementd', pluginDomElement)
+      // renderHTMLTest.value = pluginDomElement
 
 
 
+      // console.log('pedalBoard', pedalBoard.value.innerHTML)
+      // pedalBoard.value = pluginDomElement
 
 
       if (showInitAudio.value) {
@@ -563,7 +628,9 @@ export default {
       }
 
       console.log('play A')
-      if (audioCtx.state === "suspended") audioCtx.resume();
+      if (store.audioCtx.state === "suspended") {
+        await store.audioCtx.resume();
+      }
 
       console.log('play B')
       isPlaying.value = node.parameters.get("playing").value;
@@ -839,6 +906,7 @@ export default {
     })
 
     return {
+      pedalBoard,
       renderHTMLTest,
 
 

@@ -806,6 +806,21 @@
     "@webassemblyjs/ast" "1.11.1"
     "@xtuc/long" "4.2.2"
 
+"@webaudiomodules/api@^2.0.0-alpha.6":
+  version "2.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@webaudiomodules/api/-/api-2.0.0-alpha.6.tgz#85333478ee8ac4782b25952325ced738a70da704"
+  integrity sha512-GFyp7fVgNd26aFlmk7svGWtwrS1PqrwWajR+JDnbF3aSka9TteZbIcKA6lQ1D7gMc+n8h+te69h+zG5DWwYKIw==
+
+"@webaudiomodules/sdk-parammgr@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@webaudiomodules/sdk-parammgr/-/sdk-parammgr-0.0.11.tgz#2eb57cfa8b591e1d9a97a699685959ea06e6e434"
+  integrity sha512-uC3GtQ8Xk7aHCN4ZymhgPKMHDFThc4kyXhXZHKIlYv4Xm0ylVh68pqBuXu3ENS5cblFm3VXzkrezNFGSEKGOhw==
+
+"@webaudiomodules/sdk@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@webaudiomodules/sdk/-/sdk-0.0.11.tgz#3daca4832611580fb2c50980e1e44076bf851a20"
+  integrity sha512-AJkxPWHUQLriXSEMnrSZ3iB8/kItbiN4B7gbm4I543z/xI+Ic+N/oj+tX1YKuQ2sgeQyr2fSt2+t2Keq1V+WCA==
+
 "@webpack-cli/configtest@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@webpack-cli/configtest/-/configtest-1.1.1.tgz#9f53b1b7946a6efc2a749095a4f450e2932e8356"

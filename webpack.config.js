@@ -1,6 +1,7 @@
 const path = require('path')
 const {VueLoaderPlugin} = require('vue-loader')
 const BundleTracker = require('webpack-bundle-tracker');
+const webpack = require('webpack');
 
 module.exports = (env = {}) => {
     return {
@@ -24,6 +25,7 @@ module.exports = (env = {}) => {
                         appendTsSuffixTo: [/\.vue$/],
                     }
                 },
+
                 {
                     test: /\.css$/,
                     use: [
@@ -31,7 +33,8 @@ module.exports = (env = {}) => {
                         'css-loader',
                     ]
                 },
-            ]
+            ],
+            noParse: [require.resolve('typescript/lib/typescript.js')],
         },
         resolve: {
             extensions: ['.ts', '.js', '.vue', '.json'],
@@ -45,7 +48,14 @@ module.exports = (env = {}) => {
                 filename: './webpack-stats.json',
                 publicPath: '/static/dist/'
 
-            })
+            }),
+            // new webpack.ContextReplacementPlugin(
+            //     /\/*\//,
+            //     (data) => {
+            //         delete data.dependencies[0].critical;
+            //         return data;
+            //     },
+            // ),
         ],
         devServer: {
             headers: {

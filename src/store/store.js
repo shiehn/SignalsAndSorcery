@@ -1,7 +1,7 @@
 import {reactive} from "vue";
 import FXColorGenerator from "../generators/fx-color-generator";
 
-let debugMode = true
+export let audioCtx = undefined
 let isMobile = false
 let token = undefined
 const fxColorGenerator = new FXColorGenerator()
