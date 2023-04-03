@@ -556,6 +556,9 @@ export default {
         return
       }
 
+      //FORCE BAR TO 0
+      emit('updateProgressBar', 0)
+
       emit('stopAllAudio')
       emit('disableAnimateSelector')
     }
@@ -590,6 +593,7 @@ export default {
       if (startedAt) {
         return store.context.currentTime - startedAt;
       }
+
       return 0;
     };
 
