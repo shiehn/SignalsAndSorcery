@@ -31,8 +31,7 @@
 
       <div id="pedalboard" ref="pedalBoard"></div>
 
-      <div v-html="renderHTMLTest" >
-      </div>
+
 
 
       <button v-if="isPlaying === 0" @click="play()"><img :src="imageAssets.playBtn"
@@ -51,6 +50,12 @@
       </button>
     </div>
   </div>
+
+
+<!--  <div v-html="renderHTMLTest" class="pedal draggable" style="box-sizing: border-box; transform: none;" id="pedal" data-x="13.31640625" data-y="-282.8828125">-->
+<!--  </div>-->
+
+
 
   <div v-if="showInitAudio" class="modal w-full flex justify-center">
     <div class="bg-white border-2 border-black rounded-lg p-4 shadow-lg"
@@ -182,7 +187,10 @@ export default {
     let node = undefined
 
 
+    let pluginInstance1 = undefined
     let pluginDomElement1 = ''
+
+    let pluginInstance2 = undefined
     let pluginDomElement2 = ''
 
     onMounted(async () => {
@@ -223,14 +231,26 @@ export default {
 
 
       // Creating the Instance of the WAM plugins.
-      let pluginInstance1 = await WAM1.createInstance(hostGroupId, store.audioCtx);
+      pluginInstance1 = await WAM1.createInstance(hostGroupId, store.audioCtx);
       pluginDomElement1 = await pluginInstance1.createGui();
-      let pluginInstance2 = await WAM2.createInstance(hostGroupId, store.audioCtx);
+      pluginInstance2 = await WAM2.createInstance(hostGroupId, store.audioCtx);
       //pluginDomElement2 = await pluginInstance2.createGui();
+
+
+      console.clear()
+
+
+      //
+      //console.log('pluginInstance1', pluginInstance1._audioNode._output)
+      //
+      // pluginInstance1._audioNode._output.descriptor.forEach((d)=> {console.log('DESCRIPT', d)})
+
+
+
 
       // Sending audio to the processor and connecting the node to the output destination.
       node.setAudio(operableAudioBuffer.toArray());
-      node.connect(pluginInstance1._audioNode).connect(pluginInstance2._audioNode).connect(store.audioCtx.destination);
+      node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
       //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
 
       //node.connect(store.audioCtx.destination);
@@ -614,8 +634,18 @@ export default {
     const pedalBoard = ref(null)
     const play = async () => {
 
-      // console.log('pluginDomElementd', pluginDomElement)
-      // renderHTMLTest.value = pluginDomElement
+
+
+     // console.clear()
+     //
+     //  const childNodes = Array.from(pluginDomElement1.shadowRoot.childNodes);
+
+
+      // console.log('childNodes[2].innerHTML', childNodes[2])
+      // console.log('childNodes[2].innerHTML', childNodes[2].innerHTML)
+
+
+      //renderHTMLTest.value = childNodes[2].innerHTML
 
 
 
@@ -701,15 +731,30 @@ export default {
       // new Analytics().trackPlay()
     }
 
+
+    let swwwitttchh = false
+
     const stopButton = () => {
       if (showInitAudio.value) {
         return
       }
 
+
+      swwwitttchh = !swwwitttchh
+
+      console.log('swwwitttchh', swwwitttchh)
+
+      pluginInstance1._audioNode._output.setStonePhaserStereoBypass(swwwitttchh)
+      pluginInstance1._audioNode._output.setStonePhaserStereoLFO(5)
+      pluginInstance1._audioNode._output.setStonePhaserStereoMix(100)
+
+
+
+
       //FORCE BAR TO 0
       // emit('updateProgressBar', 0)
       //
-      emit('stopAllAudio')
+      //emit('stopAllAudio')
       // emit('disableAnimateSelector')
     }
 
@@ -937,4 +982,234 @@ export default {
   z-index: 999;
   top: 20%;
 }
+
+
+/* SUNSTONE LFO PEDAL */
+ .pedal{
+   display: block;
+   background:null;
+   background-color: #7caeff;
+   width: 286.953125px;
+   height: 353.3046875px;
+   border-radius: 10px;
+   position: relative;
+   box-shadow: 4px 5px 6px rgba(0, 0, 0, 0.7), inset -2px -2px 5px 0px rgba(0, 0, 0, 0.2), inset 3px 1px 1px 4px rgba(255, 255, 255, 0.2), 1px 0px 1px 0px rgba(0, 0, 0, 0.9), 0 2px 1px 0 rgba(0, 0, 0, 0.9), 1px 1px 1px 0px rgba(0, 0, 0, 0.9);
+   /* bring your own prefixes */
+   /* transform: translate(-50%, -50%); */
+ }
+
+
+#background-image {
+//border: solid 2px black;
+  width: 286.953125px;
+  height: 353.3046875px;
+  opacity: 1;
+  border-radius: 10px;
+  /* display: none; */
+//visibility: hidden;
+}
+/* .img-bck img[src=""] {
+    display: none;
+} */
+/* #resize {
+    position: absolute;
+    cursor: nwse-resize;
+    width: 10px;
+    height: 10px;
+    left: 278.953125px;
+    top: 345.3046875px;
+    border: 1px solid black;
+} */
+.knob, .switch, .icon, .label, .slider {
+  position: absolute;
+  cursor: pointer;
+  text-align: center;
+}
+.container {
+  position: relative;
+  width: 286.953125px;
+  height: 353.3046875px;
+  /* font-family: Arial; */
+}
+
+.text-block {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: #7caeff;
+  color: white;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+/* .text-block :not(.tititi) {
+    opacity : 0;
+} */
+.draggable {
+  touch-action: none;
+  user-select: none;
+}
+#canvas {
+  width:100px;
+  height:300px;
+  border: 10px solid;
+}
+.rectangle {
+  border: 1px solid #FF0000;
+  position: absolute;
+}
+.selected {
+  border: 1px dashed black;
+  cursor: move;
+}
+.selected:hover {
+  border: 1px dashed black;
+  cursor: move;
+}
+.selected  webaudio-knob{
+  cursor: move;
+}
+.selected  webaudio-switch{
+  cursor: move;
+}
+.selected  span{
+  cursor: move;
+}
+.selected:hover  span{
+  cursor: move;
+}
+.selected  webaudio-slider{
+  cursor: move;
+}
+.selected:hover webaudio-knob{
+  cursor: move;
+}
+.selected:hover webaudio-switch{
+  cursor: move;
+}
+
+.selected:hover webaudio-slider{
+  cursor: move;
+}
+#switch1 {
+  bottom: 10px;
+  right: 0px;
+}
+
+#LFO {
+  left: 42px;
+  top: 32px;
+}
+#LFO div {
+  color: #fae900;
+  font-family: "Comic Sans MS";
+  font-size: 14px;
+
+}
+
+#Feedback {
+  left: 107px;
+  top: 33px;
+}
+#Feedback div {
+  color: #ffee00;
+  font-family: "Verdana";
+  font-size: 14px;
+
+}
+
+#Lo-cut {
+  left: 194px;
+  top: 33px;
+}
+#Lo-cut div {
+  color: #eeff00;
+  font-family: "Verdana";
+  font-size: 14px;
+
+}
+
+#Mix {
+  left: 117px;
+  top: 126px;
+}
+#Mix div {
+  color: #eeff00;
+  font-family: "Verdana";
+  font-size: 14px;
+
+}
+
+#Stereo_phase {
+  left: 42px;
+  top: 126px;
+}
+#Stereo_phase div {
+  color: #ddfa00;
+  font-family: "Verdana";
+  font-size: 14px;
+
+}
+
+#Bypass {
+  left: 94px;
+  top: 223px;
+}
+#Bypass div {
+  color: #000000;
+  font-family: "Verdana";
+  font-size: 14px;
+
+}
+
+#Color {
+  left: 178px;
+  top: 126px;
+}
+#Color div {
+  color: #fbff00;
+  font-family: "Verdana";
+  font-size: 14px;
+
+}
+
+#label_79 {
+  left: 62px;
+  top: 285px;
+  color: #ff2486;
+  font-family: "Comic Sans MS";
+  font-size: 28px;
+}
+
+
+.pedalLabelName {
+  color: #FFFFFF;
+  background: transparent;
+  text-shadow: 2px 2px 0 #4074b5, 2px -2px 0 #4074b5, -2px 2px 0 #4074b5, -2px -2px 0 #4074b5, 2px 0px 0 #4074b5, 0px 2px 0 #4074b5, -2px 0px 0 #4074b5, 0px -2px 0 #4074b5;                        }
+.pedalLabel{
+  position: absolute;
+  /* top: 225px; */
+  font-size: 16pxpx;
+  font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";/*Sansita;*//*{font}*/
+  text-align: center;
+  line-height: 30px;/*{pedalfontsize}*/
+  width: 150px;
+  color: #6B0000;/*{fontcolor}*/
+}
+.knob-label{
+  position: absolute;
+  font-size: 12px;/*{knobfontsize}*/
+  line-height: 12px;
+  width:64px;
+  max-width:64px;
+  overflow: hidden;
+  text-align: center;
+  font-family: Sansita;/*{font}*/
+  color: #6B0000;/*{fontcolor}*/
+}
+#knob1-label{
+  top: 84px;
+  left: 43px;
+}
+/* END SUNSTONE LFO PEDAL*/
+
 </style>
