@@ -85,13 +85,9 @@ import {BUILD_NUMBER} from "../constants/constants";
 import LoadingSpinner from "./LoadingSpinner";
 import Analytics from "../analytics/Analytics";
 import {useKeypress} from 'vue3-keypress';
-import Tuna from 'tunajs';
-import GridProcessor from "../processors/grid-processor";
 import OperableAudioBuffer from "../audioengine/operable-audio-buffer";
-import AudioPlayerNode from "../audioengine/audio-player-node";
 import {initializeWamHost} from "@webaudiomodules/sdk";
 import MyWam from "../audioengine/my-wam";
-import BigMuffPlugin from "../wam/BigMuff/index";
 
 // function cloneAudioBuffer(fromAudioBuffer) {
 //   const audioBuffer = new AudioBuffer({
@@ -168,11 +164,16 @@ export default {
 
 
 
+
+
+    const plugin1Url = "http://localhost:8000/static/wam/StonePhaserStereo/index.js";
+    const plugin2Url = "http://localhost:8000/static/wam/BigMuff/index.js";
     //NEW CODE
     // index.js
-    const audioUrl = "https://sas-assets-bpm-138.s3.us-west-2.amazonaws.com/aeb462c7-c953-43b0-8994-5b78248a5315.wav";
-    const plugin1Url = "https://mainline.i3s.unice.fr/wam2/packages/StonePhaserStereo/index.js";
-    const plugin2Url = "https://mainline.i3s.unice.fr/wam2/packages/BigMuff/index.js";
+    const audioUrl0_0 = "http://localhost:8000/static/deleteme/00.wav";
+    const audioUrl1_0 = "http://localhost:8000/static/deleteme/10.wav";
+
+
 
 // Initialize the Audio Context
     store.audioCtx = new AudioContext();
@@ -184,7 +185,11 @@ export default {
     let audioArrayBuffer = undefined
     let audioBuffer = undefined
     let operableAudioBuffer = undefined
-    let node = undefined
+
+    let nodeLayer0_0 = undefined
+    let nodeLayer0_1 = undefined
+    let nodeLayer1_0 = undefined
+    let nodeLayer1_1 = undefined
 
 
     let pluginInstance1 = undefined
@@ -200,7 +205,7 @@ export default {
 
 
 
-      await store.audioCtx.suspend();
+      //await store.audioCtx.suspend();
       /* Import from the Web Audio Modules 2.0 SDK to initialize Wam Host.
           It initializes a unique ID for the current AudioContext. */
       //const {default: initializeWamHost} = await import("../lib/sdk/initializeWamHost.js");
@@ -217,45 +222,69 @@ export default {
       //const {default: OperableAudioBuffer} = await import("../lib/utils/operable-audio-buffer.js");
 
 
-      // Create an instance of our Processor. We can get from the instance the audio node.
-      let wamInstance = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      /** @type {import("./audio-player-node.js").default} */
-      node = wamInstance.audioNode;
 
-      const response = await fetch(audioUrl);
-      const audioArrayBuffer = await response.arrayBuffer();
-      const audioBuffer = await store.audioCtx.decodeAudioData(audioArrayBuffer);
 
+      const response0_0 = await fetch(audioUrl0_0);
+      const audioArrayBuffer0_0 = await response0_0.arrayBuffer();
+      const audioBuffer0_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer0_0);
       // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer = Object.setPrototypeOf(audioBuffer, OperableAudioBuffer.prototype);
-
+      const operableAudioBuffer0_0 = Object.setPrototypeOf(audioBuffer0_0, OperableAudioBuffer.prototype);
+// -------------------------------------------------------------------------------------------------------------------------------------
+      const response1_0 = await fetch(audioUrl1_0);
+      const audioArrayBuffer1_0 = await response1_0.arrayBuffer();
+      const audioBuffer1_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer1_0);
+      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+      const operableAudioBuffer1_0 = Object.setPrototypeOf(audioBuffer1_0, OperableAudioBuffer.prototype);
+// -------------------------------------------------------------------------------------------------------------------------------------
 
       // Creating the Instance of the WAM plugins.
       pluginInstance1 = await WAM1.createInstance(hostGroupId, store.audioCtx);
       pluginDomElement1 = await pluginInstance1.createGui();
       pluginInstance2 = await WAM2.createInstance(hostGroupId, store.audioCtx);
-      //pluginDomElement2 = await pluginInstance2.createGui();
+      pluginDomElement2 = await pluginInstance2.createGui();
 
 
-      console.clear()
+
 
 
       //
       //console.log('pluginInstance1', pluginInstance1._audioNode._output)
       //
-      // pluginInstance1._audioNode._output.descriptor.forEach((d)=> {console.log('DESCRIPT', d)})
 
+      // Create an instance of our Processor. We can get from the instance the audio node.
+      let wamInstance0_0 = await MyWam.createInstance(hostGroupId, store.audioCtx);
+      let wamInstance1_0 = await MyWam.createInstance(hostGroupId, store.audioCtx);
 
+      console.clear()
+      console.log('IDENTICAL', wamInstance0_0 === wamInstance1_0)
 
+      /** @type {import("./audio-player-node.js").default} */
+      nodeLayer0_0 = wamInstance0_0.audioNode;
+      nodeLayer1_0 = wamInstance1_0.audioNode;
+
+      console.log('nodeLayer0_0', nodeLayer0_0)
+// -------------------------------------------------------------------------------------------------------------------------------------
+      // Sending audio to the processor and connecting the node to the output destination.
+      nodeLayer0_0.setAudio(operableAudioBuffer0_0.toArray());
+      //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
+      nodeLayer0_0.connect(store.audioCtx.destination);
+
+// -------------------------------------------------------------------------------------------------------------------------------------
 
       // Sending audio to the processor and connecting the node to the output destination.
-      node.setAudio(operableAudioBuffer.toArray());
-      node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
+      nodeLayer1_0.setAudio(operableAudioBuffer1_0.toArray());
       //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
+      nodeLayer1_0.connect(store.audioCtx.destination);
+
+
+// -------------------------------------------------------------------------------------------------------------------------------------
 
       //node.connect(store.audioCtx.destination);
-      node.parameters.get("playing").value = 0;
-      node.parameters.get("loop").value = 1;
+      nodeLayer0_0.parameters.get("playing").value = 0;
+      nodeLayer0_0.parameters.get("loop").value = 1;
+
+      nodeLayer0_1.parameters.get("playing").value = 0;
+      nodeLayer0_1.parameters.get("loop").value = 1;
 
 
       // //NEW CODE
@@ -657,20 +686,19 @@ export default {
         return
       }
 
-      console.log('play A')
       if (store.audioCtx.state === "suspended") {
         await store.audioCtx.resume();
       }
 
-      console.log('play B')
-      isPlaying.value = node.parameters.get("playing").value;
+      isPlaying.value = nodeLayer0_0.parameters.get("playing").value;
       if (isPlaying.value === 1) {
-        console.log('play 1')
-        node.parameters.get("playing").value = 0;
+        nodeLayer0_0.parameters.get("playing").value = 0;
+        nodeLayer1_0.parameters.get("playing").value = 0;
         //btnStart.textContent = "Start";
       } else {
-        console.log('play !1')
-        node.parameters.get("playing").value = 1;
+        nodeLayer0_0.parameters.get("playing").value = 1;
+        nodeLayer1_0.parameters.get("playing").value = 1;
+
         //btnStart.textContent = "Stop";
       }
 
@@ -732,7 +760,7 @@ export default {
     }
 
 
-    let swwwitttchh = false
+
 
     const stopButton = () => {
       if (showInitAudio.value) {
@@ -740,13 +768,6 @@ export default {
       }
 
 
-      swwwitttchh = !swwwitttchh
-
-      console.log('swwwitttchh', swwwitttchh)
-
-      pluginInstance1._audioNode._output.setStonePhaserStereoBypass(swwwitttchh)
-      pluginInstance1._audioNode._output.setStonePhaserStereoLFO(5)
-      pluginInstance1._audioNode._output.setStonePhaserStereoMix(100)
 
 
 
@@ -754,14 +775,15 @@ export default {
       //FORCE BAR TO 0
       // emit('updateProgressBar', 0)
       //
-      //emit('stopAllAudio')
+      emit('stopAllAudio')
       // emit('disableAnimateSelector')
     }
 
     const stop = async () => {
       if (isPlaying.value === 0) {
         console.log('play 1')
-        node.parameters.get("playing").value = 0;
+        nodeLayer0_0.parameters.get("playing").value = 0;
+        nodeLayer1_0.parameters.get("playing").value = 0;
         //btnStart.textContent = "Start";
       }
 
@@ -788,15 +810,13 @@ export default {
         return
       }
 
-      // if (isPlaying.value === 1) {
-      //   console.log('play 1')
-      //   node.parameters.get("playing").value = 0;
-      //   //btnStart.textContent = "Start";
-      // } else {
-      //   console.log('play !1')
-      //   node.parameters.get("playing").value = 1;
-      //   //btnStart.textContent = "Stop";
-      // }
+      if (nodeLayer0_0.parameters.get("playing").value === 0) {
+        nodeLayer0_0.parameters.get("playing").value = 1
+        nodeLayer1_0.parameters.get("playing").value = 1
+      } else {
+        nodeLayer0_0.parameters.get("playing").value = 0
+        nodeLayer1_0.parameters.get("playing").value = 0
+      }
 
       //
       // let currentTime = store.context ? store.context.currentTime : 0
@@ -863,8 +883,36 @@ export default {
       ]
     })
 
+    let swwwitttchh = true
     const onUndoClicked = () => {
-      emit('loadProjectBackupFromLocalStorage')
+
+      console.clear()
+
+      swwwitttchh = !swwwitttchh
+
+      console.log('pluginInstance1', pluginInstance1)
+      console.log('pluginInstance2', pluginInstance2)
+
+
+      //pluginInstance2._audioNode._output.descriptor.forEach((d)=> {console.log('DESCRIPT', d)})
+
+      pluginInstance1._audioNode._output.setStonePhaserStereoBypass(swwwitttchh)
+      pluginInstance1._audioNode._output.setStonePhaserStereoLFO(5)
+      pluginInstance1._audioNode._output.setStonePhaserStereoMix(100)
+
+      pluginInstance2._audioNode._output.setBigMuffBypass(swwwitttchh)
+      pluginInstance2._audioNode._output.setBigMuffDrive(100)
+
+
+
+      console.log('MUFF DRIVE', pluginInstance2._audioNode._output.getBigMuffDrive())
+
+
+      //pluginInstance2._audioNode._output.descriptor.forEach((d)=> {console.log('MUFF', d)})
+
+
+
+      //emit('loadProjectBackupFromLocalStorage')
     }
 
     watch(() => bus.value.get('displayRenderBtn'), (payload) => {
