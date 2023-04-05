@@ -26,7 +26,6 @@ export default class OperableAudioBuffer extends AudioBuffer {
 
         const emptyBuffer = audioCtx.createBuffer(2, bufferSizePerLoop*4, audioCtx.sampleRate);
 
-
         const supportSAB = typeof SharedArrayBuffer !== "undefined";
         const channelData = [];
         const {numberOfChannels, length} = this;
@@ -39,19 +38,19 @@ export default class OperableAudioBuffer extends AudioBuffer {
             } else {
                 channelData[i] = emptyBuffer.getChannelData(i);
 
-                if(col === 0) {
+                // if(col === 0) {
+                //     for(let j = 0; j < channelData[i].length; j++) {
+                //         if(j< bufferSizePerLoop) {
+                //             channelData[i][j] = this.getChannelData(i)[j]
+                //         }
+                //     }
+                // } else if(col === 1) {
                     for(let j = 0; j < channelData[i].length; j++) {
-                        if(j< bufferSizePerLoop) {
-                            channelData[i][j] = this.getChannelData(i)[j]
+                        if(j >= (bufferSizePerLoop*col) && j < (bufferSizePerLoop*(col+1))) {
+                            channelData[i][j] = this.getChannelData(i)[j - (bufferSizePerLoop*col)]
                         }
                     }
-                } else if(col === 1) {
-                    for(let j = 0; j < channelData[i].length; j++) {
-                        if(j >= bufferSizePerLoop) {
-                            channelData[i][j] = this.getChannelData(i)[j - bufferSizePerLoop]
-                        }
-                    }
-                }
+                // }
             }
         }
         return channelData;
