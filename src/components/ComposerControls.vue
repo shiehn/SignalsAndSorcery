@@ -165,10 +165,51 @@ export default {
     //COL 0
     const audioUrl0_0 = "http://localhost:8000/static/deleteme/00.wav";
     const audioUrl1_0 = "http://localhost:8000/static/deleteme/10.wav";
+    const audioUrl2_0 = "http://localhost:8000/static/deleteme/20.wav";
+    const audioUrl3_0 = "http://localhost:8000/static/deleteme/30.wav";
+    const audioUrl4_0 = "http://localhost:8000/static/deleteme/40.wav";
+    const audioUrl5_0 = "http://localhost:8000/static/deleteme/50.wav";
 
     //COL 1
     const audioUrl0_1 = "http://localhost:8000/static/deleteme/01.wav";
     const audioUrl1_1 = "http://localhost:8000/static/deleteme/11.wav";
+    const audioUrl2_1 = "http://localhost:8000/static/deleteme/21.wav";
+    const audioUrl3_1 = "http://localhost:8000/static/deleteme/31.wav";
+    const audioUrl4_1 = "http://localhost:8000/static/deleteme/41.wav";
+    const audioUrl5_1 = "http://localhost:8000/static/deleteme/51.wav";
+
+    //COL 2
+    const audioUrl0_2 = "http://localhost:8000/static/deleteme/02.wav";
+    const audioUrl1_2 = "http://localhost:8000/static/deleteme/12.wav";
+    const audioUrl2_2 = "http://localhost:8000/static/deleteme/22.wav";
+    const audioUrl3_2 = "http://localhost:8000/static/deleteme/32.wav";
+    const audioUrl4_2 = "http://localhost:8000/static/deleteme/42.wav";
+    const audioUrl5_2 = "http://localhost:8000/static/deleteme/52.wav";
+
+    //COL 3
+    const audioUrl0_3 = "http://localhost:8000/static/deleteme/03.wav";
+    const audioUrl1_3 = "http://localhost:8000/static/deleteme/13.wav";
+    const audioUrl2_3 = "http://localhost:8000/static/deleteme/23.wav";
+    const audioUrl3_3 = "http://localhost:8000/static/deleteme/33.wav";
+    const audioUrl4_3 = "http://localhost:8000/static/deleteme/43.wav";
+    const audioUrl5_3 = "http://localhost:8000/static/deleteme/53.wav";
+
+    //COL 4
+    const audioUrl0_4 = "http://localhost:8000/static/deleteme/04.wav";
+    const audioUrl1_4 = "http://localhost:8000/static/deleteme/14.wav";
+    const audioUrl2_4 = "http://localhost:8000/static/deleteme/24.wav";
+    const audioUrl3_4 = "http://localhost:8000/static/deleteme/34.wav";
+    const audioUrl4_4 = "http://localhost:8000/static/deleteme/44.wav";
+    const audioUrl5_4 = "http://localhost:8000/static/deleteme/54.wav";
+
+    //COL 5
+    const audioUrl0_5 = "http://localhost:8000/static/deleteme/05.wav";
+    const audioUrl1_5 = "http://localhost:8000/static/deleteme/15.wav";
+    const audioUrl2_5 = "http://localhost:8000/static/deleteme/25.wav";
+    const audioUrl3_5 = "http://localhost:8000/static/deleteme/35.wav";
+    const audioUrl4_5 = "http://localhost:8000/static/deleteme/45.wav";
+    const audioUrl5_5 = "http://localhost:8000/static/deleteme/55.wav";
+
 
 
 // Initialize the Audio Context
@@ -183,10 +224,50 @@ export default {
     //COL 0
     let nodeLayer0_0 = undefined
     let nodeLayer1_0 = undefined
+    let nodeLayer2_0 = undefined
+    let nodeLayer3_0 = undefined
+    let nodeLayer4_0 = undefined
+    let nodeLayer5_0 = undefined
 
     //COL 1
     let nodeLayer0_1 = undefined
     let nodeLayer1_1 = undefined
+    let nodeLayer2_1 = undefined
+    let nodeLayer3_1 = undefined
+    let nodeLayer4_1 = undefined
+    let nodeLayer5_1 = undefined
+
+    //COL 2
+    let nodeLayer0_2 = undefined
+    let nodeLayer1_2 = undefined
+    let nodeLayer2_2 = undefined
+    let nodeLayer3_2 = undefined
+    let nodeLayer4_2 = undefined
+    let nodeLayer5_2 = undefined
+
+    //COL 3
+    let nodeLayer0_3 = undefined
+    let nodeLayer1_3 = undefined
+    let nodeLayer2_3 = undefined
+    let nodeLayer3_3 = undefined
+    let nodeLayer4_3 = undefined
+    let nodeLayer5_3 = undefined
+
+    //COL 4
+    let nodeLayer0_4 = undefined
+    let nodeLayer1_4 = undefined
+    let nodeLayer2_4 = undefined
+    let nodeLayer3_4 = undefined
+    let nodeLayer4_4 = undefined
+    let nodeLayer5_4 = undefined
+
+    //COL 5
+    let nodeLayer0_5 = undefined
+    let nodeLayer1_5 = undefined
+    let nodeLayer2_5 = undefined
+    let nodeLayer3_5 = undefined
+    let nodeLayer4_5 = undefined
+    let nodeLayer5_5 = undefined
 
 
     let pluginInstance1 = undefined
@@ -226,6 +307,30 @@ export default {
       // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
       const operableAudioBuffer1_0 = Object.setPrototypeOf(audioBuffer1_0, OperableAudioBuffer.prototype);
       // -------------------------------------------------------------------------------------------------------------------------------------
+      const response2_0 = await fetch(audioUrl2_0);
+      const audioArrayBuffer2_0 = await response2_0.arrayBuffer();
+      const audioBuffer2_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer2_0);
+      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+      const operableAudioBuffer2_0 = Object.setPrototypeOf(audioBuffer2_0, OperableAudioBuffer.prototype);
+      // -------------------------------------------------------------------------------------------------------------------------------------
+      const response3_0 = await fetch(audioUrl3_0);
+      const audioArrayBuffer3_0 = await response3_0.arrayBuffer();
+      const audioBuffer3_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer3_0);
+      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+      const operableAudioBuffer3_0 = Object.setPrototypeOf(audioBuffer3_0, OperableAudioBuffer.prototype);
+      // -------------------------------------------------------------------------------------------------------------------------------------
+      const response4_0 = await fetch(audioUrl4_0);
+      const audioArrayBuffer4_0 = await response4_0.arrayBuffer();
+      const audioBuffer4_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer4_0);
+      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+      const operableAudioBuffer4_0 = Object.setPrototypeOf(audioBuffer4_0, OperableAudioBuffer.prototype);
+      // -------------------------------------------------------------------------------------------------------------------------------------
+      const response5_0 = await fetch(audioUrl5_0);
+      const audioArrayBuffer5_0 = await response5_0.arrayBuffer();
+      const audioBuffer5_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer5_0);
+      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+      const operableAudioBuffer5_0 = Object.setPrototypeOf(audioBuffer5_0, OperableAudioBuffer.prototype);
+      // -------------------------------------------------------------------------------------------------------------------------------------
 //COL 1
       const response0_1 = await fetch(audioUrl0_1);
       const audioArrayBuffer0_1 = await response0_1.arrayBuffer();
@@ -239,6 +344,31 @@ export default {
       // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
       const operableAudioBuffer1_1 = Object.setPrototypeOf(audioBuffer1_1, OperableAudioBuffer.prototype);
       // -------------------------------------------------------------------------------------------------------------------------------------
+      const response2_2 = await fetch(audioUrl2_2);
+      const audioArrayBuffer2_2 = await response2_2.arrayBuffer();
+      const audioBuffer2_2 = await store.audioCtx.decodeAudioData(audioArrayBuffer2_2);
+      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+      const operableAudioBuffer2_2 = Object.setPrototypeOf(audioBuffer2_2, OperableAudioBuffer.prototype);
+      // -------------------------------------------------------------------------------------------------------------------------------------
+      const response3_3 = await fetch(audioUrl3_3);
+      const audioArrayBuffer3_3 = await response3_3.arrayBuffer();
+      const audioBuffer3_3 = await store.audioCtx.decodeAudioData(audioArrayBuffer3_3);
+      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+      const operableAudioBuffer3_3 = Object.setPrototypeOf(audioBuffer3_3, OperableAudioBuffer.prototype);
+      // -------------------------------------------------------------------------------------------------------------------------------------
+      const response4_4 = await fetch(audioUrl4_4);
+      const audioArrayBuffer4_4 = await response4_4.arrayBuffer();
+      const audioBuffer4_4 = await store.audioCtx.decodeAudioData(audioArrayBuffer4_4);
+      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+      const operableAudioBuffer4_4 = Object.setPrototypeOf(audioBuffer4_4, OperableAudioBuffer.prototype);
+      // -------------------------------------------------------------------------------------------------------------------------------------
+      const response5_5 = await fetch(audioUrl5_5);
+      const audioArrayBuffer5_5 = await response5_5.arrayBuffer();
+      const audioBuffer5_5 = await store.audioCtx.decodeAudioData(audioArrayBuffer5_5);
+      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+      const operableAudioBuffer5_5 = Object.setPrototypeOf(audioBuffer5_5, OperableAudioBuffer.prototype);
+      // -------------------------------------------------------------------------------------------------------------------------------------
+
 
 
       // Creating the Instance of the WAM plugins.
@@ -261,6 +391,30 @@ export default {
       let wamInstance1_1 = await MyWam.createInstance(hostGroupId, store.audioCtx);
       nodeLayer0_1 = wamInstance0_1.audioNode;
       nodeLayer1_1 = wamInstance1_1.audioNode;
+
+      //COL 2
+      let wamInstance0_2 = await MyWam.createInstance(hostGroupId, store.audioCtx);
+      let wamInstance1_2 = await MyWam.createInstance(hostGroupId, store.audioCtx);
+      nodeLayer0_2 = wamInstance0_2.audioNode;
+      nodeLayer1_2 = wamInstance1_2.audioNode;
+
+      //COL 3
+      let wamInstance0_3 = await MyWam.createInstance(hostGroupId, store.audioCtx);
+      let wamInstance1_3 = await MyWam.createInstance(hostGroupId, store.audioCtx);
+      nodeLayer0_3 = wamInstance0_3.audioNode;
+      nodeLayer1_3 = wamInstance1_3.audioNode;
+
+      //COL 4
+      let wamInstance0_4 = await MyWam.createInstance(hostGroupId, store.audioCtx);
+      let wamInstance1_4 = await MyWam.createInstance(hostGroupId, store.audioCtx);
+      nodeLayer0_4 = wamInstance0_4.audioNode;
+      nodeLayer1_4 = wamInstance1_4.audioNode;
+
+      //COL 4
+      let wamInstance0_5 = await MyWam.createInstance(hostGroupId, store.audioCtx);
+      let wamInstance1_5 = await MyWam.createInstance(hostGroupId, store.audioCtx);
+      nodeLayer0_5 = wamInstance0_5.audioNode;
+      nodeLayer1_5 = wamInstance1_5.audioNode;
 
 
 //COL 0
