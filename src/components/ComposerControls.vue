@@ -162,55 +162,56 @@ export default {
     //NEW CODE
     // index.js
 
-    //COL 0
+    // //COL 0
     const audioUrl0_0 = "http://localhost:8000/static/deleteme/00.wav";
-    const audioUrl1_0 = "http://localhost:8000/static/deleteme/10.wav";
-    const audioUrl2_0 = "http://localhost:8000/static/deleteme/20.wav";
-    const audioUrl3_0 = "http://localhost:8000/static/deleteme/30.wav";
-    const audioUrl4_0 = "http://localhost:8000/static/deleteme/40.wav";
-    const audioUrl5_0 = "http://localhost:8000/static/deleteme/40.wav";
+    // const audioUrl1_0 = "http://localhost:8000/static/deleteme/10.wav";
+    // const audioUrl2_0 = "http://localhost:8000/static/deleteme/20.wav";
+    // const audioUrl3_0 = "http://localhost:8000/static/deleteme/30.wav";
+    // const audioUrl4_0 = "http://localhost:8000/static/deleteme/40.wav";
+    // const audioUrl5_0 = "http://localhost:8000/static/deleteme/40.wav";
+    //
+    // //COL 1
+    // const audioUrl0_1 = "http://localhost:8000/static/deleteme/01.wav";
+    // const audioUrl1_1 = "http://localhost:8000/static/deleteme/11.wav";
+    // const audioUrl2_1 = "http://localhost:8000/static/deleteme/21.wav";
+    // const audioUrl3_1 = "http://localhost:8000/static/deleteme/31.wav";
+    // const audioUrl4_1 = "http://localhost:8000/static/deleteme/41.wav";
+    // const audioUrl5_1 = "http://localhost:8000/static/deleteme/41.wav";
+    //
+    // //COL 2
+    // const audioUrl0_2 = "http://localhost:8000/static/deleteme/00.wav";
+    // const audioUrl1_2 = "http://localhost:8000/static/deleteme/10.wav";
+    // const audioUrl2_2 = "http://localhost:8000/static/deleteme/20.wav";
+    // const audioUrl3_2 = "http://localhost:8000/static/deleteme/30.wav";
+    // const audioUrl4_2 = "http://localhost:8000/static/deleteme/40.wav";
+    // const audioUrl5_2 = "http://localhost:8000/static/deleteme/50.wav";
+    //
+    // //COL 3
+    // const audioUrl0_3 = "http://localhost:8000/static/deleteme/01.wav";
+    // const audioUrl1_3 = "http://localhost:8000/static/deleteme/11.wav";
+    // const audioUrl2_3 = "http://localhost:8000/static/deleteme/21.wav";
+    // const audioUrl3_3 = "http://localhost:8000/static/deleteme/31.wav";
+    // const audioUrl4_3 = "http://localhost:8000/static/deleteme/41.wav";
+    // const audioUrl5_3 = "http://localhost:8000/static/deleteme/51.wav";
+    //
+    // //COL 4
+    // const audioUrl0_4 = "http://localhost:8000/static/deleteme/00.wav";
+    // const audioUrl1_4 = "http://localhost:8000/static/deleteme/10.wav";
+    // const audioUrl2_4 = "http://localhost:8000/static/deleteme/20.wav";
+    // const audioUrl3_4 = "http://localhost:8000/static/deleteme/30.wav";
+    // const audioUrl4_4 = "http://localhost:8000/static/deleteme/40.wav";
+    // const audioUrl5_4 = "http://localhost:8000/static/deleteme/50.wav";
+    //
+    // //COL 5
+    // const audioUrl0_5 = "http://localhost:8000/static/deleteme/01.wav";
+    // const audioUrl1_5 = "http://localhost:8000/static/deleteme/11.wav";
+    // const audioUrl2_5 = "http://localhost:8000/static/deleteme/21.wav";
+    // const audioUrl3_5 = "http://localhost:8000/static/deleteme/31.wav";
+    // const audioUrl4_5 = "http://localhost:8000/static/deleteme/41.wav";
+    // const audioUrl5_5 = "http://localhost:8000/static/deleteme/51.wav";
 
-    //COL 1
-    const audioUrl0_1 = "http://localhost:8000/static/deleteme/01.wav";
-    const audioUrl1_1 = "http://localhost:8000/static/deleteme/11.wav";
-    const audioUrl2_1 = "http://localhost:8000/static/deleteme/21.wav";
-    const audioUrl3_1 = "http://localhost:8000/static/deleteme/31.wav";
-    const audioUrl4_1 = "http://localhost:8000/static/deleteme/41.wav";
-    const audioUrl5_1 = "http://localhost:8000/static/deleteme/41.wav";
-
-    //COL 2
-    const audioUrl0_2 = "http://localhost:8000/static/deleteme/00.wav";
-    const audioUrl1_2 = "http://localhost:8000/static/deleteme/10.wav";
-    const audioUrl2_2 = "http://localhost:8000/static/deleteme/20.wav";
-    const audioUrl3_2 = "http://localhost:8000/static/deleteme/30.wav";
-    const audioUrl4_2 = "http://localhost:8000/static/deleteme/40.wav";
-    const audioUrl5_2 = "http://localhost:8000/static/deleteme/50.wav";
-
-    //COL 3
-    const audioUrl0_3 = "http://localhost:8000/static/deleteme/01.wav";
-    const audioUrl1_3 = "http://localhost:8000/static/deleteme/11.wav";
-    const audioUrl2_3 = "http://localhost:8000/static/deleteme/21.wav";
-    const audioUrl3_3 = "http://localhost:8000/static/deleteme/31.wav";
-    const audioUrl4_3 = "http://localhost:8000/static/deleteme/41.wav";
-    const audioUrl5_3 = "http://localhost:8000/static/deleteme/51.wav";
-
-    //COL 4
-    const audioUrl0_4 = "http://localhost:8000/static/deleteme/00.wav";
-    const audioUrl1_4 = "http://localhost:8000/static/deleteme/10.wav";
-    const audioUrl2_4 = "http://localhost:8000/static/deleteme/20.wav";
-    const audioUrl3_4 = "http://localhost:8000/static/deleteme/30.wav";
-    const audioUrl4_4 = "http://localhost:8000/static/deleteme/40.wav";
-    const audioUrl5_4 = "http://localhost:8000/static/deleteme/50.wav";
-
-    //COL 5
-    const audioUrl0_5 = "http://localhost:8000/static/deleteme/01.wav";
-    const audioUrl1_5 = "http://localhost:8000/static/deleteme/11.wav";
-    const audioUrl2_5 = "http://localhost:8000/static/deleteme/21.wav";
-    const audioUrl3_5 = "http://localhost:8000/static/deleteme/31.wav";
-    const audioUrl4_5 = "http://localhost:8000/static/deleteme/41.wav";
-    const audioUrl5_5 = "http://localhost:8000/static/deleteme/51.wav";
-
-
+//PROGRESS BARgetL
+    let progress = 0
 
 // Initialize the Audio Context
     store.audioCtx = new AudioContext();
@@ -221,53 +222,7 @@ export default {
     let audioBuffer = undefined
     let operableAudioBuffer = undefined
 
-    //COL 0
-    let nodeLayer0_0 = undefined
-    let nodeLayer1_0 = undefined
-    let nodeLayer2_0 = undefined
-    let nodeLayer3_0 = undefined
-    let nodeLayer4_0 = undefined
-    let nodeLayer5_0 = undefined
 
-    //COL 1
-    let nodeLayer0_1 = undefined
-    let nodeLayer1_1 = undefined
-    let nodeLayer2_1 = undefined
-    let nodeLayer3_1 = undefined
-    let nodeLayer4_1 = undefined
-    let nodeLayer5_1 = undefined
-
-    //COL 2
-    let nodeLayer0_2 = undefined
-    let nodeLayer1_2 = undefined
-    let nodeLayer2_2 = undefined
-    let nodeLayer3_2 = undefined
-    let nodeLayer4_2 = undefined
-    let nodeLayer5_2 = undefined
-
-    //COL 3
-    let nodeLayer0_3 = undefined
-    let nodeLayer1_3 = undefined
-    let nodeLayer2_3 = undefined
-    let nodeLayer3_3 = undefined
-    let nodeLayer4_3 = undefined
-    let nodeLayer5_3 = undefined
-
-    //COL 4
-    let nodeLayer0_4 = undefined
-    let nodeLayer1_4 = undefined
-    let nodeLayer2_4 = undefined
-    let nodeLayer3_4 = undefined
-    let nodeLayer4_4 = undefined
-    let nodeLayer5_4 = undefined
-
-    //COL 5
-    let nodeLayer0_5 = undefined
-    let nodeLayer1_5 = undefined
-    let nodeLayer2_5 = undefined
-    let nodeLayer3_5 = undefined
-    let nodeLayer4_5 = undefined
-    let nodeLayer5_5 = undefined
 
 
     let pluginInstance1 = undefined
@@ -277,14 +232,46 @@ export default {
     let pluginDomElement2 = ''
 
 
-    //PROGRESS BAR
-    let progress = 0
 
-    onMounted(async () => {
-      isMobile.value = store.isMobile ? true : false
-      showInitAudio.value = isMobile.value
+    const getLoopLengthFromBarsAndBPM = (barCount, bpm) => {
+      let msPerBeatAtBpm = 60000 / bpm;
+      let totalBeats = 4 * barCount;
+      return msPerBeatAtBpm * totalBeats / 1000
+    }
 
 
+    const generateEmptyBuffer = (actx, frameCount, sampleRate) => {
+      //THIS IS LIKELY SILENCE SO GENERATE AN EMPTY BUFFER
+      let emptyBuffer = actx.createBuffer(2, frameCount, sampleRate);
+      for (let channel = 0; channel < emptyBuffer.numberOfChannels; channel++) {
+        let nowBuffering = emptyBuffer.getChannelData(channel);
+        for (let i = 0; i < emptyBuffer.length; i++) {
+          nowBuffering[i] = 0;
+        }
+      }
+      return emptyBuffer;
+    }
+
+    let secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
+    const bufferSizePerLoop = secondsInLoop * store.audioCtx.sampleRate;
+
+    // const numOfRows = store.state.grid.length;
+    // let listOfTrimmedRowBuffers = new Array(numOfRows);
+
+
+    let nodeRows = [
+      new Array(4),
+      new Array(4),
+      new Array(4),
+      new Array(4),
+      new Array(4),
+      new Array(4),
+    ]
+
+
+    const bootStrapAudioGraph = async () => {
+
+      console.log('GLOBAL BPM AT BOOTSTRAP', store.state.getGlobalBpm())
       // /////////////////////////// LOADING SPINNER ///////////////////////////
       // /////////////////////////// LOADING SPINNER ///////////////////////////
       // /////////////////////////// LOADING SPINNER ///////////////////////////
@@ -300,242 +287,6 @@ export default {
       const {default: WAM1} = await import(/* webpackIgnore: true */ plugin1Url);
       const {default: WAM2} = await import(/* webpackIgnore: true */ plugin2Url);
 
-
-      //const {default: OperableAudioBuffer} = await import("../lib/utils/operable-audio-buffer.js");
-
-
-//COL 0
-      const response0_0 = await fetch(audioUrl0_0);
-      const audioArrayBuffer0_0 = await response0_0.arrayBuffer();
-      const audioBuffer0_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer0_0);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer0_0 = Object.setPrototypeOf(audioBuffer0_0, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response1_0 = await fetch(audioUrl1_0);
-      const audioArrayBuffer1_0 = await response1_0.arrayBuffer();
-      const audioBuffer1_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer1_0);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer1_0 = Object.setPrototypeOf(audioBuffer1_0, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response2_0 = await fetch(audioUrl2_0);
-      const audioArrayBuffer2_0 = await response2_0.arrayBuffer();
-      const audioBuffer2_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer2_0);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer2_0 = Object.setPrototypeOf(audioBuffer2_0, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response3_0 = await fetch(audioUrl3_0);
-      const audioArrayBuffer3_0 = await response3_0.arrayBuffer();
-      const audioBuffer3_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer3_0);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer3_0 = Object.setPrototypeOf(audioBuffer3_0, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response4_0 = await fetch(audioUrl4_0);
-      const audioArrayBuffer4_0 = await response4_0.arrayBuffer();
-      const audioBuffer4_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer4_0);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer4_0 = Object.setPrototypeOf(audioBuffer4_0, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response5_0 = await fetch(audioUrl5_0);
-      const audioArrayBuffer5_0 = await response5_0.arrayBuffer();
-      const audioBuffer5_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer5_0);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer5_0 = Object.setPrototypeOf(audioBuffer5_0, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-//COL 1
-      const response0_1 = await fetch(audioUrl0_1);
-      const audioArrayBuffer0_1 = await response0_1.arrayBuffer();
-      const audioBuffer0_1 = await store.audioCtx.decodeAudioData(audioArrayBuffer0_1);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer0_1 = Object.setPrototypeOf(audioBuffer0_1, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response1_1 = await fetch(audioUrl1_1);
-      const audioArrayBuffer1_1 = await response1_1.arrayBuffer();
-      const audioBuffer1_1 = await store.audioCtx.decodeAudioData(audioArrayBuffer1_1);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer1_1 = Object.setPrototypeOf(audioBuffer1_1, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response2_1 = await fetch(audioUrl2_1);
-      const audioArrayBuffer2_1 = await response2_1.arrayBuffer();
-      const audioBuffer2_1 = await store.audioCtx.decodeAudioData(audioArrayBuffer2_1);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer2_1 = Object.setPrototypeOf(audioBuffer2_1, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response3_1 = await fetch(audioUrl3_1);
-      const audioArrayBuffer3_1 = await response3_1.arrayBuffer();
-      const audioBuffer3_1 = await store.audioCtx.decodeAudioData(audioArrayBuffer3_1);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer3_1 = Object.setPrototypeOf(audioBuffer3_1, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response4_1 = await fetch(audioUrl4_1);
-      const audioArrayBuffer4_1 = await response4_1.arrayBuffer();
-      const audioBuffer4_1 = await store.audioCtx.decodeAudioData(audioArrayBuffer4_1);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer4_1 = Object.setPrototypeOf(audioBuffer4_1, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response5_1 = await fetch(audioUrl5_1);
-      const audioArrayBuffer5_1 = await response5_1.arrayBuffer();
-      const audioBuffer5_1 = await store.audioCtx.decodeAudioData(audioArrayBuffer5_1);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer5_1 = Object.setPrototypeOf(audioBuffer5_1, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-
-
-      //COL 2
-      const response0_2 = await fetch(audioUrl0_2);
-      const audioArrayBuffer0_2 = await response0_2.arrayBuffer();
-      const audioBuffer0_2 = await store.audioCtx.decodeAudioData(audioArrayBuffer0_2);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer0_2 = Object.setPrototypeOf(audioBuffer0_2, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response1_2 = await fetch(audioUrl1_2);
-      const audioArrayBuffer1_2 = await response1_2.arrayBuffer();
-      const audioBuffer1_2 = await store.audioCtx.decodeAudioData(audioArrayBuffer1_2);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer1_2 = Object.setPrototypeOf(audioBuffer1_2, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response2_2 = await fetch(audioUrl2_2);
-      const audioArrayBuffer2_2 = await response2_2.arrayBuffer();
-      const audioBuffer2_2 = await store.audioCtx.decodeAudioData(audioArrayBuffer2_2);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer2_2 = Object.setPrototypeOf(audioBuffer2_2, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response3_2 = await fetch(audioUrl3_2);
-      const audioArrayBuffer3_2 = await response3_2.arrayBuffer();
-      const audioBuffer3_2 = await store.audioCtx.decodeAudioData(audioArrayBuffer3_2);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer3_2 = Object.setPrototypeOf(audioBuffer3_2, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response4_2 = await fetch(audioUrl4_2);
-      const audioArrayBuffer4_2 = await response4_2.arrayBuffer();
-      const audioBuffer4_2 = await store.audioCtx.decodeAudioData(audioArrayBuffer4_2);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer4_2 = Object.setPrototypeOf(audioBuffer4_2, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response5_2 = await fetch(audioUrl5_2);
-      const audioArrayBuffer5_2 = await response5_2.arrayBuffer();
-      const audioBuffer5_2 = await store.audioCtx.decodeAudioData(audioArrayBuffer5_2);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer5_2 = Object.setPrototypeOf(audioBuffer5_2, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-
-
-      //COL 3
-      const response0_3 = await fetch(audioUrl0_3);
-      const audioArrayBuffer0_3 = await response0_3.arrayBuffer();
-      const audioBuffer0_3 = await store.audioCtx.decodeAudioData(audioArrayBuffer0_3);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer0_3 = Object.setPrototypeOf(audioBuffer0_3, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response1_3 = await fetch(audioUrl1_3);
-      const audioArrayBuffer1_3 = await response1_3.arrayBuffer();
-      const audioBuffer1_3 = await store.audioCtx.decodeAudioData(audioArrayBuffer1_3);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer1_3 = Object.setPrototypeOf(audioBuffer1_3, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response2_3 = await fetch(audioUrl2_3);
-      const audioArrayBuffer2_3 = await response2_3.arrayBuffer();
-      const audioBuffer2_3 = await store.audioCtx.decodeAudioData(audioArrayBuffer2_3);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer2_3 = Object.setPrototypeOf(audioBuffer2_3, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response3_3 = await fetch(audioUrl3_3);
-      const audioArrayBuffer3_3 = await response3_3.arrayBuffer();
-      const audioBuffer3_3 = await store.audioCtx.decodeAudioData(audioArrayBuffer3_3);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer3_3 = Object.setPrototypeOf(audioBuffer3_3, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response4_3 = await fetch(audioUrl4_3);
-      const audioArrayBuffer4_3 = await response4_3.arrayBuffer();
-      const audioBuffer4_3 = await store.audioCtx.decodeAudioData(audioArrayBuffer4_3);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer4_3 = Object.setPrototypeOf(audioBuffer4_3, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response5_3 = await fetch(audioUrl5_3);
-      const audioArrayBuffer5_3 = await response5_3.arrayBuffer();
-      const audioBuffer5_3 = await store.audioCtx.decodeAudioData(audioArrayBuffer5_3);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer5_3 = Object.setPrototypeOf(audioBuffer5_3, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-
-
-      //COL 4
-      const response0_4 = await fetch(audioUrl0_4);
-      const audioArrayBuffer0_4 = await response0_4.arrayBuffer();
-      const audioBuffer0_4 = await store.audioCtx.decodeAudioData(audioArrayBuffer0_4);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer0_4 = Object.setPrototypeOf(audioBuffer0_4, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response1_4 = await fetch(audioUrl1_4);
-      const audioArrayBuffer1_4 = await response1_4.arrayBuffer();
-      const audioBuffer1_4 = await store.audioCtx.decodeAudioData(audioArrayBuffer1_4);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer1_4 = Object.setPrototypeOf(audioBuffer1_4, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response2_4 = await fetch(audioUrl2_4);
-      const audioArrayBuffer2_4 = await response2_4.arrayBuffer();
-      const audioBuffer2_4 = await store.audioCtx.decodeAudioData(audioArrayBuffer2_4);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer2_4 = Object.setPrototypeOf(audioBuffer2_4, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response3_4 = await fetch(audioUrl3_4);
-      const audioArrayBuffer3_4 = await response3_4.arrayBuffer();
-      const audioBuffer3_4 = await store.audioCtx.decodeAudioData(audioArrayBuffer3_4);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer3_4 = Object.setPrototypeOf(audioBuffer3_4, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response4_4 = await fetch(audioUrl4_4);
-      const audioArrayBuffer4_4 = await response4_4.arrayBuffer();
-      const audioBuffer4_4 = await store.audioCtx.decodeAudioData(audioArrayBuffer4_4);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer4_4 = Object.setPrototypeOf(audioBuffer4_4, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response5_4 = await fetch(audioUrl5_4);
-      const audioArrayBuffer5_4 = await response5_4.arrayBuffer();
-      const audioBuffer5_4 = await store.audioCtx.decodeAudioData(audioArrayBuffer5_4);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer5_4 = Object.setPrototypeOf(audioBuffer5_4, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-
-
-      //COL 5
-      const response0_5 = await fetch(audioUrl0_5);
-      const audioArrayBuffer0_5 = await response0_5.arrayBuffer();
-      const audioBuffer0_5 = await store.audioCtx.decodeAudioData(audioArrayBuffer0_5);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer0_5 = Object.setPrototypeOf(audioBuffer0_5, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response1_5 = await fetch(audioUrl1_5);
-      const audioArrayBuffer1_5 = await response1_5.arrayBuffer();
-      const audioBuffer1_5 = await store.audioCtx.decodeAudioData(audioArrayBuffer1_5);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer1_5 = Object.setPrototypeOf(audioBuffer1_5, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response2_5 = await fetch(audioUrl2_5);
-      const audioArrayBuffer2_5 = await response2_5.arrayBuffer();
-      const audioBuffer2_5 = await store.audioCtx.decodeAudioData(audioArrayBuffer2_5);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer2_5 = Object.setPrototypeOf(audioBuffer2_5, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response3_5 = await fetch(audioUrl3_5);
-      const audioArrayBuffer3_5 = await response3_5.arrayBuffer();
-      const audioBuffer3_5 = await store.audioCtx.decodeAudioData(audioArrayBuffer3_5);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer3_5 = Object.setPrototypeOf(audioBuffer3_5, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response4_5 = await fetch(audioUrl4_5);
-      const audioArrayBuffer4_5 = await response4_5.arrayBuffer();
-      const audioBuffer4_5 = await store.audioCtx.decodeAudioData(audioArrayBuffer4_5);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer4_5 = Object.setPrototypeOf(audioBuffer4_5, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      const response5_5 = await fetch(audioUrl5_5);
-      const audioArrayBuffer5_5 = await response5_5.arrayBuffer();
-      const audioBuffer5_5 = await store.audioCtx.decodeAudioData(audioArrayBuffer5_5);
-      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      const operableAudioBuffer5_5 = Object.setPrototypeOf(audioBuffer5_5, OperableAudioBuffer.prototype);
-      // -------------------------------------------------------------------------------------------------------------------------------------
-
-
       // Creating the Instance of the WAM plugins.
       pluginInstance1 = await WAM1.createInstance(hostGroupId, store.audioCtx);
       pluginDomElement1 = await pluginInstance1.createGui();
@@ -543,287 +294,73 @@ export default {
       pluginDomElement2 = await pluginInstance2.createGui();
 
 
-//COL 0
-      // Create an instance of our Processor. We can get from the instance the audio node.
-      let wamInstance0_0 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance1_0 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance2_0 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance3_0 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance4_0 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance5_0 = await MyWam.createInstance(hostGroupId, store.audioCtx);
+      for(let row = 0; row< nodeRows.length; row++){
+        for(let col = 0; col < nodeRows[row].length; col++){
+          //Create an empty buffer to be used as a placeholder for the audio.
+          const emptyBuffer = generateEmptyBuffer(store.audioCtx, bufferSizePerLoop, store.audioCtx.sampleRate)
 
-      nodeLayer0_0 = wamInstance0_0.audioNode;
-      nodeLayer1_0 = wamInstance1_0.audioNode;
-      nodeLayer2_0 = wamInstance2_0.audioNode;
-      nodeLayer3_0 = wamInstance3_0.audioNode;
-      nodeLayer4_0 = wamInstance4_0.audioNode;
-      nodeLayer5_0 = wamInstance5_0.audioNode;
+          // Create Operable Buffer from empty buffer
+          let operableBuffer = Object.setPrototypeOf(emptyBuffer, OperableAudioBuffer.prototype);
+
+          // Create an instance of our Processor for each node
+          const wamInstance = await MyWam.createInstance(hostGroupId, store.audioCtx);
+          nodeRows[row][col] = wamInstance.audioNode;
 
 
-//COL 1
-      // Create an instance of our Processor. We can get from the instance the audio node.
-      let wamInstance0_1 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance1_1 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance2_1 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance3_1 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance4_1 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance5_1 = await MyWam.createInstance(hostGroupId, store.audioCtx);
 
-      nodeLayer0_1 = wamInstance0_1.audioNode;
-      nodeLayer1_1 = wamInstance1_1.audioNode;
-      nodeLayer2_1 = wamInstance2_1.audioNode;
-      nodeLayer3_1 = wamInstance3_1.audioNode;
-      nodeLayer4_1 = wamInstance4_1.audioNode;
-      nodeLayer5_1 = wamInstance5_1.audioNode;
+//JUST FOR TESTING
+
+          // const response0_0 = await fetch(audioUrl0_0);
+          // const audioArrayBuffer0_0 = await response0_0.arrayBuffer();
+          // const audioBuffer0_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer0_0);
+          // // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+          // operableBuffer = Object.setPrototypeOf(audioBuffer0_0, OperableAudioBuffer.prototype);
 
 
-      //COL 2
-      // Create an instance of our Processor. We can get from the instance the audio node.
-      let wamInstance0_2 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance1_2 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance2_2 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance3_2 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance4_2 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance5_2 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-
-      nodeLayer0_2 = wamInstance0_2.audioNode;
-      nodeLayer1_2 = wamInstance1_2.audioNode;
-      nodeLayer2_2 = wamInstance2_2.audioNode;
-      nodeLayer3_2 = wamInstance3_2.audioNode;
-      nodeLayer4_2 = wamInstance4_2.audioNode;
-      nodeLayer5_2 = wamInstance5_2.audioNode;
-
-
-      //COL 3
-      // Create an instance of our Processor. We can get from the instance the audio node.
-      let wamInstance0_3 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance1_3 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance2_3 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance3_3 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance4_3 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance5_3 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-
-      nodeLayer0_3 = wamInstance0_3.audioNode;
-      nodeLayer1_3 = wamInstance1_3.audioNode;
-      nodeLayer2_3 = wamInstance2_3.audioNode;
-      nodeLayer3_3 = wamInstance3_3.audioNode;
-      nodeLayer4_3 = wamInstance4_3.audioNode;
-      nodeLayer5_3 = wamInstance5_3.audioNode;
-
-      //COL 4
-      // Create an instance of our Processor. We can get from the instance the audio node.
-      let wamInstance0_4 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance1_4 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance2_4 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance3_4 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance4_4 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance5_4 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-
-      nodeLayer0_4 = wamInstance0_4.audioNode;
-      nodeLayer1_4 = wamInstance1_4.audioNode;
-      nodeLayer2_4 = wamInstance2_4.audioNode;
-      nodeLayer3_4 = wamInstance3_4.audioNode;
-      nodeLayer4_4 = wamInstance4_4.audioNode;
-      nodeLayer5_4 = wamInstance5_4.audioNode;
-
-
-      //COL 4
-      // Create an instance of our Processor. We can get from the instance the audio node.
-      let wamInstance0_5 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance1_5 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance2_5 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance3_5 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance4_5 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-      let wamInstance5_5 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-
-      nodeLayer0_5 = wamInstance0_5.audioNode;
-      nodeLayer1_5 = wamInstance1_5.audioNode;
-      nodeLayer2_5 = wamInstance2_5.audioNode;
-      nodeLayer3_5 = wamInstance3_5.audioNode;
-      nodeLayer4_5 = wamInstance4_5.audioNode;
-      nodeLayer5_5 = wamInstance5_5.audioNode;
+          //JUST FOR TESTING
 
 
 
 
-// -------------------------------------------------------------------------------------------------------------------------------------
-      // -------------------------------------------------------------------------------------------------------------------------------------
-
-      // -------------------------------------------------------------------------------------------------------------------------------------
-      // -------------------------------------------------------------------------------------------------------------------------------------
-
-      //COL 0
-      // Sending audio to the processor and connecting the node to the output destination.
-      //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer0_0.setAudio(operableAudioBuffer0_0.toArray(false, 0,0, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer1_0.setAudio(operableAudioBuffer1_0.toArray(false, 1,0, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer2_0.setAudio(operableAudioBuffer2_0.toArray(false, 2,0, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer3_0.setAudio(operableAudioBuffer3_0.toArray(false, 3,0, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer4_0.setAudio(operableAudioBuffer4_0.toArray(false, 4,0, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer5_0.setAudio(operableAudioBuffer5_0.toArray(false, 5,0, store.audioCtx, store.state.getGlobalBpm()));
-
-      nodeLayer0_0.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer1_0.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer2_0.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer3_0.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer4_0.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer5_0.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
 
 
-      //COL 1
-      // Sending audio to the processor and connecting the node to the output destination.
-      //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer0_1.setAudio(operableAudioBuffer0_1.toArray(false, 0,1, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer1_1.setAudio(operableAudioBuffer1_1.toArray(false, 1,1, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer2_1.setAudio(operableAudioBuffer2_1.toArray(false, 2,1, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer3_1.setAudio(operableAudioBuffer3_1.toArray(false, 3,1, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer4_1.setAudio(operableAudioBuffer4_1.toArray(false, 4,1, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer5_1.setAudio(operableAudioBuffer5_1.toArray(false, 5,1, store.audioCtx, store.state.getGlobalBpm()));
+          //SET THE AUDIO IN THE NODE
+          nodeRows[row][col].setAudio(operableBuffer.toArray(false, row,col, store.audioCtx, store.state.getGlobalBpm()));
 
-      nodeLayer0_1.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer1_1.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer2_1.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer3_1.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer4_1.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer5_1.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
+          //CONNECT THE NODE TO THE OUTPUT with any plugins
+          nodeRows[row][col].connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
 
-      //COL 2
-      // Sending audio to the processor and connecting the node to the output destination.
-      //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer0_2.setAudio(operableAudioBuffer0_2.toArray(false, 0,2, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer1_2.setAudio(operableAudioBuffer1_2.toArray(false, 1,2, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer2_2.setAudio(operableAudioBuffer2_2.toArray(false, 2,2, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer3_2.setAudio(operableAudioBuffer3_2.toArray(false, 3,2, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer4_2.setAudio(operableAudioBuffer4_2.toArray(false, 4,2, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer5_2.setAudio(operableAudioBuffer5_2.toArray(false, 5,2, store.audioCtx, store.state.getGlobalBpm()));
-
-      nodeLayer0_2.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer1_2.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer2_2.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer3_2.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer4_2.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer5_2.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-
-      //COL 3
-      // Sending audio to the processor and connecting the node to the output destination.
-      //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer0_3.setAudio(operableAudioBuffer0_3.toArray(false, 0,3, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer1_3.setAudio(operableAudioBuffer1_3.toArray(false, 1,3, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer2_3.setAudio(operableAudioBuffer2_3.toArray(false, 2,3, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer3_3.setAudio(operableAudioBuffer3_3.toArray(false, 3,3, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer4_3.setAudio(operableAudioBuffer4_3.toArray(false, 4,3, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer5_3.setAudio(operableAudioBuffer5_3.toArray(false, 5,3, store.audioCtx, store.state.getGlobalBpm()));
-
-      nodeLayer0_3.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer1_3.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer2_3.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer3_3.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer4_3.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer5_3.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
+          //SET THE PROCESS TO STOP by default
+          nodeRows[row][col].parameters.get("playing").value = 0;
+          nodeRows[row][col].parameters.get("loop").value = 0;
+        }
+      }
+    }
 
 
-      //COL 4
-      // Sending audio to the processor and connecting the node to the output destination.
-      //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer0_4.setAudio(operableAudioBuffer0_4.toArray(false, 0,4, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer1_4.setAudio(operableAudioBuffer1_4.toArray(false, 1,4, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer2_4.setAudio(operableAudioBuffer2_4.toArray(false, 2,4, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer3_4.setAudio(operableAudioBuffer3_4.toArray(false, 3,4, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer4_4.setAudio(operableAudioBuffer4_4.toArray(false, 4,4, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer5_4.setAudio(operableAudioBuffer5_4.toArray(false, 5,4, store.audioCtx, store.state.getGlobalBpm()));
-
-      nodeLayer0_4.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer1_4.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer2_4.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer3_4.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer4_4.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer5_4.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
+    onMounted(async () => {
+      isMobile.value = store.isMobile ? true : false
+      showInitAudio.value = isMobile.value
 
 
-      //COL 5
-      // Sending audio to the processor and connecting the node to the output destination.
-      //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer0_5.setAudio(operableAudioBuffer0_5.toArray(false, 0,5, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer1_5.setAudio(operableAudioBuffer1_5.toArray(false, 1,5, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer2_5.setAudio(operableAudioBuffer2_5.toArray(false, 2,5, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer3_5.setAudio(operableAudioBuffer3_5.toArray(false, 3,5, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer4_5.setAudio(operableAudioBuffer4_5.toArray(false, 4,5, store.audioCtx, store.state.getGlobalBpm()));
-      nodeLayer5_5.setAudio(operableAudioBuffer5_5.toArray(false, 5,5, store.audioCtx, store.state.getGlobalBpm()));
-
-      nodeLayer0_5.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer1_5.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer2_5.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer3_5.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer4_5.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer5_5.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
 
 
-      // -------------------------------------------------------------------------------------------------------------------------------------
 
-//COL 0-5
-      //node.connect(store.audioCtx.destination);
-      nodeLayer0_0.parameters.get("playing").value = 0;
-      nodeLayer1_0.parameters.get("playing").value = 0;
-      nodeLayer2_0.parameters.get("playing").value = 0;
-      nodeLayer3_0.parameters.get("playing").value = 0;
-      nodeLayer4_0.parameters.get("playing").value = 0;
-      nodeLayer5_0.parameters.get("playing").value = 0;
 
-      nodeLayer0_1.parameters.get("loop").value = 0;
-      nodeLayer1_1.parameters.get("loop").value = 0;
-      nodeLayer2_1.parameters.get("loop").value = 0;
-      nodeLayer3_1.parameters.get("loop").value = 0;
-      nodeLayer4_1.parameters.get("loop").value = 0;
-      nodeLayer5_1.parameters.get("loop").value = 0;
+
+      await bootStrapAudioGraph()
+
+
+
 
 
       //PLAYHEAD SHIT
-
-      nodeLayer0_0.port.onmessage = ev => {
+      nodeRows[0][0].port.onmessage = ev => {
         if (ev.data.playhead) {
           // console.log('playhead', ev.data.playhead)
           progress = ev.data.playhead
-
-          // store.state.playBack.loopStartPercent = getCurStartPos() * 25
-          // store.state.playBack.loopEndPercent = (getCurrentEndPos() + 1) * 25
-          if(progress < store.state.playBack.loopStartPercent){
-            setPlaybackPosition(store.state.playBack.loopStartPercent)
-          }
-
-          if(progress > store.state.playBack.loopEndPercent){
-            setPlaybackPosition(store.state.playBack.loopStartPercent)
-          }
         }
       }
-
-
-
-
-      // //NEW CODE
-      // await audioCtx.audioWorklet.addModule("/static/worklets/audio-player-processor.js");
-      // const response = await fetch(audioUrl);
-      // console.log('response.status', response.status)
-      // audioArrayBuffer = await response.arrayBuffer();
-      // audioBuffer = await audioCtx.decodeAudioData(audioArrayBuffer);
-      // console.log('audioBuffer', audioBuffer.length)
-      //
-      // // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-      // operableAudioBuffer = Object.setPrototypeOf(audioBuffer, OperableAudioBuffer.prototype);
-      // node = new AudioPlayerNode(audioCtx, 2);
-      //
-      // //Sending audio to the processor and connecting the node to the output destination.
-      // node.setAudio(operableAudioBuffer.toArray());
-      // node.connect(audioCtx.destination);
-      // node.parameters.get("playing").value = 0;
-      // node.parameters.get("loop").value = 1;
-      //
-      // //Sending audio to the processor and connecting the node to the output destination.
-      // node.port.postMessage(operableAudioBuffer.toArray());
-      //
-      // node.connect(audioCtx.destination);
-      // node.parameters.get("playing").value = 0;
-      // node.parameters.get("loop").value = 1;
-
 
       emit('hideLoadingSpinner')
     })
@@ -905,17 +442,7 @@ export default {
     //   return finalMix;
     // }
     //
-    // const generateEmptyBuffer = (actx, frameCount, sampleRate) => {
-    //   //THIS IS LIKELY SILENCE SO GENERATE AN EMPTY BUFFER
-    //   let emptyBuffer = actx.createBuffer(2, frameCount, sampleRate);
-    //   for (let channel = 0; channel < emptyBuffer.numberOfChannels; channel++) {
-    //     let nowBuffering = emptyBuffer.getChannelData(channel);
-    //     for (let i = 0; i < emptyBuffer.length; i++) {
-    //       nowBuffering[i] = 0;
-    //     }
-    //   }
-    //   return emptyBuffer;
-    // }
+
     //
     // const unlockingAudioContext = (audioCtx) => {
     //   if (!window.AudioContext || !window.webkitAudioContext) {
@@ -1203,93 +730,18 @@ export default {
         await store.audioCtx.resume();
       }
 
-      isPlaying.value = nodeLayer0_0.parameters.get("playing").value;
-      if (isPlaying.value === 1) {
-        //COL 0
-        nodeLayer0_0.parameters.get("playing").value = 0;
-        nodeLayer1_0.parameters.get("playing").value = 0;
-        nodeLayer2_0.parameters.get("playing").value = 0;
-        nodeLayer3_0.parameters.get("playing").value = 0;
-        nodeLayer4_0.parameters.get("playing").value = 0;
-        nodeLayer5_0.parameters.get("playing").value = 0;
-        //COL 1
-        nodeLayer0_1.parameters.get("playing").value = 0;
-        nodeLayer1_1.parameters.get("playing").value = 0;
-        nodeLayer2_1.parameters.get("playing").value = 0;
-        nodeLayer3_1.parameters.get("playing").value = 0;
-        nodeLayer4_1.parameters.get("playing").value = 0;
-        nodeLayer5_1.parameters.get("playing").value = 0;
-        //COL 2
-        nodeLayer0_2.parameters.get("playing").value = 0;
-        nodeLayer1_2.parameters.get("playing").value = 0;
-        nodeLayer2_2.parameters.get("playing").value = 0;
-        nodeLayer3_2.parameters.get("playing").value = 0;
-        nodeLayer4_2.parameters.get("playing").value = 0;
-        nodeLayer5_2.parameters.get("playing").value = 0;
-        //COL 3
-        nodeLayer0_3.parameters.get("playing").value = 0;
-        nodeLayer1_3.parameters.get("playing").value = 0;
-        nodeLayer2_3.parameters.get("playing").value = 0;
-        nodeLayer3_3.parameters.get("playing").value = 0;
-        nodeLayer4_3.parameters.get("playing").value = 0;
-        nodeLayer5_3.parameters.get("playing").value = 0;
-        //COL 4
-        nodeLayer0_4.parameters.get("playing").value = 0;
-        nodeLayer1_4.parameters.get("playing").value = 0;
-        nodeLayer2_4.parameters.get("playing").value = 0;
-        nodeLayer3_4.parameters.get("playing").value = 0;
-        nodeLayer4_4.parameters.get("playing").value = 0;
-        nodeLayer5_4.parameters.get("playing").value = 0;
-        //COL 5
-        nodeLayer0_5.parameters.get("playing").value = 0;
-        nodeLayer1_5.parameters.get("playing").value = 0;
-        nodeLayer2_5.parameters.get("playing").value = 0;
-        nodeLayer3_5.parameters.get("playing").value = 0;
-        nodeLayer4_5.parameters.get("playing").value = 0;
-        nodeLayer5_5.parameters.get("playing").value = 0;
-      } else {
-        //COL 0
-        nodeLayer0_0.parameters.get("playing").value = 1;
-        nodeLayer1_0.parameters.get("playing").value = 1;
-        nodeLayer2_0.parameters.get("playing").value = 1;
-        nodeLayer3_0.parameters.get("playing").value = 1;
-        nodeLayer4_0.parameters.get("playing").value = 1;
-        nodeLayer5_0.parameters.get("playing").value = 1;
-        //COL 1
-        nodeLayer0_1.parameters.get("playing").value = 1;
-        nodeLayer1_1.parameters.get("playing").value = 1;
-        nodeLayer2_1.parameters.get("playing").value = 1;
-        nodeLayer3_1.parameters.get("playing").value = 1;
-        nodeLayer4_1.parameters.get("playing").value = 1;
-        nodeLayer5_1.parameters.get("playing").value = 1;
-        //COL 2
-        nodeLayer0_2.parameters.get("playing").value = 1;
-        nodeLayer1_2.parameters.get("playing").value = 1;
-        nodeLayer2_2.parameters.get("playing").value = 1;
-        nodeLayer3_2.parameters.get("playing").value = 1;
-        nodeLayer4_2.parameters.get("playing").value = 1;
-        nodeLayer5_2.parameters.get("playing").value = 1;
-        //COL 3
-        nodeLayer0_3.parameters.get("playing").value = 1;
-        nodeLayer1_3.parameters.get("playing").value = 1;
-        nodeLayer2_3.parameters.get("playing").value = 1;
-        nodeLayer3_3.parameters.get("playing").value = 1;
-        nodeLayer4_3.parameters.get("playing").value = 1;
-        nodeLayer5_3.parameters.get("playing").value = 1;
-        //COL 4
-        nodeLayer0_4.parameters.get("playing").value = 1;
-        nodeLayer1_4.parameters.get("playing").value = 1;
-        nodeLayer2_4.parameters.get("playing").value = 1;
-        nodeLayer3_4.parameters.get("playing").value = 1;
-        nodeLayer4_4.parameters.get("playing").value = 1;
-        nodeLayer5_4.parameters.get("playing").value = 1;
-        //COL 5
-        nodeLayer0_5.parameters.get("playing").value = 1;
-        nodeLayer1_5.parameters.get("playing").value = 1;
-        nodeLayer2_5.parameters.get("playing").value = 1;
-        nodeLayer3_5.parameters.get("playing").value = 1;
-        nodeLayer4_5.parameters.get("playing").value = 1;
-        nodeLayer5_5.parameters.get("playing").value = 1;
+      isPlaying.value = nodeRows[0][0].parameters.get("playing").value;
+      if (isPlaying.value === 0) {
+        for(let row = 0; row< nodeRows.length; row++){
+          for(let col = 0; col < nodeRows[row].length; col++){
+            //SET THE PROCESS TO STOP by default
+            nodeRows[row][col].parameters.get("playing").value = 1;
+            nodeRows[row][col].parameters.get("loop").value = 0;
+          }
+        }
+
+        isPlaying.value = 1
+
         //btnStart.textContent = "Stop";
       }
 
@@ -1365,52 +817,16 @@ export default {
     }
 
     const stop = async () => {
-      if (isPlaying.value === 0) {
-        //COL 0
-        nodeLayer0_0.parameters.get("playing").value = 0;
-        nodeLayer1_0.parameters.get("playing").value = 0;
-        nodeLayer2_0.parameters.get("playing").value = 0;
-        nodeLayer3_0.parameters.get("playing").value = 0;
-        nodeLayer4_0.parameters.get("playing").value = 0;
-        nodeLayer5_0.parameters.get("playing").value = 0;
-        //COL 1
-        nodeLayer0_1.parameters.get("playing").value = 0;
-        nodeLayer1_1.parameters.get("playing").value = 0;
-        nodeLayer2_1.parameters.get("playing").value = 0;
-        nodeLayer3_1.parameters.get("playing").value = 0;
-        nodeLayer4_1.parameters.get("playing").value = 0;
-        nodeLayer5_1.parameters.get("playing").value = 0;
-        //COL 2
-        nodeLayer0_2.parameters.get("playing").value = 0;
-        nodeLayer1_2.parameters.get("playing").value = 0;
-        nodeLayer2_2.parameters.get("playing").value = 0;
-        nodeLayer3_2.parameters.get("playing").value = 0;
-        nodeLayer4_2.parameters.get("playing").value = 0;
-        nodeLayer5_2.parameters.get("playing").value = 0;
-        //COL 3
-        nodeLayer0_3.parameters.get("playing").value = 0;
-        nodeLayer1_3.parameters.get("playing").value = 0;
-        nodeLayer2_3.parameters.get("playing").value = 0;
-        nodeLayer3_3.parameters.get("playing").value = 0;
-        nodeLayer4_3.parameters.get("playing").value = 0;
-        nodeLayer5_3.parameters.get("playing").value = 0;
-        //COL 4
-        nodeLayer0_4.parameters.get("playing").value = 0;
-        nodeLayer1_4.parameters.get("playing").value = 0;
-        nodeLayer2_4.parameters.get("playing").value = 0;
-        nodeLayer3_4.parameters.get("playing").value = 0;
-        nodeLayer4_4.parameters.get("playing").value = 0;
-        nodeLayer5_4.parameters.get("playing").value = 0;
-        //COL 5
-        nodeLayer0_5.parameters.get("playing").value = 0;
-        nodeLayer1_5.parameters.get("playing").value = 0;
-        nodeLayer2_5.parameters.get("playing").value = 0;
-        nodeLayer3_5.parameters.get("playing").value = 0;
-        nodeLayer4_5.parameters.get("playing").value = 0;
-        nodeLayer5_5.parameters.get("playing").value = 0;
-        //btnStart.textContent = "Stop";
+      if (isPlaying.value === 1) {
+        for(let row = 0; row< nodeRows.length; row++){
+          for(let col = 0; col < nodeRows[row].length; col++){
+            //SET THE PROCESS TO STOP by default
+            nodeRows[row][col].parameters.get("playing").value = 0;
+            nodeRows[row][col].parameters.get("loop").value = 0;
+          }
+        }
 
-
+        isPlaying.value = 0
         //btnStart.textContent = "Start";
       }
 
@@ -1510,16 +926,10 @@ export default {
       ]
     })
 
-    const getLoopLengthFromBarsAndBPM = (barCount, bpm) => {
-      let msPerBeatAtBpm = 60000 / bpm;
-      let totalBeats = 4 * barCount;
-      return msPerBeatAtBpm * totalBeats / 1000
-    }
+
 
 
     const setPlaybackPosition = async (percentOfScrubBar) => {
-
-      console.log('percentOfScrubBar', percentOfScrubBar)
 
       const numOfBars = 4
       const secInLoop = getLoopLengthFromBarsAndBPM(numOfBars, store.state.getGlobalBpm())
@@ -1528,51 +938,23 @@ export default {
 
       const newPos = samplesInFourBars * (percentOfScrubBar*.01)
 
-      nodeLayer0_0.port.postMessage({'position': newPos});
-      nodeLayer1_0.port.postMessage({'position': newPos});
-      nodeLayer2_0.port.postMessage({'position': newPos});
-      nodeLayer3_0.port.postMessage({'position': newPos});
-      nodeLayer4_0.port.postMessage({'position': newPos});
-      nodeLayer5_0.port.postMessage({'position': newPos});
+      for(let row = 0; row< nodeRows.length; row++){
+        for(let col = 0; col < nodeRows[row].length; col++){
+          nodeRows[row][col].port.postMessage({'position': newPos});
+        }
+      }
 
-      nodeLayer0_1.port.postMessage({'position': newPos});
-      nodeLayer1_1.port.postMessage({'position': newPos});
-      nodeLayer2_1.port.postMessage({'position': newPos});
-      nodeLayer3_1.port.postMessage({'position': newPos});
-      nodeLayer4_1.port.postMessage({'position': newPos});
-      nodeLayer5_1.port.postMessage({'position': newPos});
-
-      nodeLayer0_2.port.postMessage({'position': newPos});
-      nodeLayer1_2.port.postMessage({'position': newPos});
-      nodeLayer2_2.port.postMessage({'position': newPos});
-      nodeLayer3_2.port.postMessage({'position': newPos});
-      nodeLayer4_2.port.postMessage({'position': newPos});
-      nodeLayer5_2.port.postMessage({'position': newPos});
-
-      nodeLayer0_3.port.postMessage({'position': newPos});
-      nodeLayer1_3.port.postMessage({'position': newPos});
-      nodeLayer2_3.port.postMessage({'position': newPos});
-      nodeLayer3_3.port.postMessage({'position': newPos});
-      nodeLayer4_3.port.postMessage({'position': newPos});
-      nodeLayer5_3.port.postMessage({'position': newPos});
-
-      nodeLayer0_4.port.postMessage({'position': newPos});
-      nodeLayer1_4.port.postMessage({'position': newPos});
-      nodeLayer2_4.port.postMessage({'position': newPos});
-      nodeLayer3_4.port.postMessage({'position': newPos});
-      nodeLayer4_4.port.postMessage({'position': newPos});
-      nodeLayer5_4.port.postMessage({'position': newPos});
-
-      nodeLayer0_5.port.postMessage({'position': newPos});
-      nodeLayer1_5.port.postMessage({'position': newPos});
-      nodeLayer2_5.port.postMessage({'position': newPos});
-      nodeLayer3_5.port.postMessage({'position': newPos});
-      nodeLayer4_5.port.postMessage({'position': newPos});
-      nodeLayer5_5.port.postMessage({'position': newPos});
     }
 
     let swwwitttchh = true
-    const onUndoClicked = () => {
+    const onUndoClicked = async () => {
+
+      const response3_0 = await fetch(audioUrl0_1);
+      const audioArrayBuffer3_0 = await response3_0.arrayBuffer();
+      const audioBuffer3_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer3_0);
+      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+      const operableAudioBuffer3_0 = Object.setPrototypeOf(audioBuffer3_0, OperableAudioBuffer.prototype);
+      nodeLayer0_0.setAudio(operableAudioBuffer3_0.toArray(false, 0,0, store.audioCtx, store.state.getGlobalBpm()));
       // console.log('nodeLayer0_0', nodeLayer0_0)
 
 
@@ -1685,13 +1067,29 @@ export default {
       // console.log('tick', progress)
 
       if (Number.isInteger(progress) && progress > 0) {
-        console.log('progress', progress)
         emit('updateProgressBar', progress)
       }
     }
 
     setInterval(progressUITick, 50)
     // THIS IS THE MAIN APPLICATION TICK - STOP
+
+
+    const updateLoopPositions = () => {
+      const loopStartPercent = store.state.playBack.loopStartPercent
+      const loopEndPercent = store.state.playBack.loopEndPercent
+
+      for(let row = 0; row< nodeRows.length; row++){
+        for(let col = 0; col < nodeRows[row].length; col++){
+          nodeRows[row][col].port.postMessage({'loopStart': loopStartPercent, 'loopEnd': loopEndPercent});
+        }
+      }
+
+    }
+
+    watch(() => bus.value.get('updateLoopPositions'), () => {
+      updateLoopPositions()
+    })
 
     watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
       if (!isMobile.value) {

@@ -56,8 +56,6 @@ export default {
         horizontalPercentage = 0
       }
 
-      console.log('horizontalPercentage', horizontalPercentage)
-
       emit('scrubTo', horizontalPercentage)
     }
 

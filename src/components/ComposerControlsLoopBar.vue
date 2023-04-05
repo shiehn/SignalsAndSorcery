@@ -372,6 +372,8 @@ export default {
 
       store.state.playBack.loopStartPercent = getCurStartPos() * 25
       store.state.playBack.loopEndPercent = (getCurrentEndPos() + 1) * 25
+
+      emit('updateLoopPositions')
     }
 
     onMounted(() => {

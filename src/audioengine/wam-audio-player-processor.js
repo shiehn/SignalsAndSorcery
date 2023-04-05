@@ -44,16 +44,17 @@ const getProcessor = (moduleId) => {
             /** @type {number} */
             this.playhead = 0;
             this.playheadCount = 0;
+            this.loopStartPercent = 0.0;
+            this.loopEndPercent = 1.0;
             /** @param {MessageEvent<{ audio?: Float32Array[]; position?: number }>} e */
             this.port.onmessage = (e) => {
                 if (e.data.audio) {
                     this.audio = e.data.audio;
                 } else if (typeof e.data.position === "number") {
-                    // this.playhead = e.data.position * sampleRate;
-
-                    //console.log('e.data.position', e.data.position)
-
                     this.playhead = e.data.position
+                } else if (typeof e.data.loopStart === "number" && typeof e.data.loopEnd === "number") {
+                    this.loopStartPercent = e.data.loopStart * 0.01;
+                    this.loopEndPercent = e.data.loopEnd * 0.01;
                 }
             };
         }
@@ -82,6 +83,12 @@ const getProcessor = (moduleId) => {
                     if (loop) this.playhead = 0; // Loop just enabled, reset playhead
                     else continue; // EOF without loop
                 }
+                if (this.playhead < this.loopStartPercent * audioLength) {
+                    this.playhead = this.loopStartPercent * audioLength;
+                }
+                if (this.playhead > this.loopEndPercent * audioLength) {
+                    this.playhead = this.loopStartPercent * audioLength;
+                }
                 const channelCount = Math.min(this.audio.length, output.length);
                 for (let channel = 0; channel < channelCount; channel++) {
                     output[channel][i] = this.audio[channel][this.playhead];
@@ -91,7 +98,6 @@ const getProcessor = (moduleId) => {
 
             this.playheadCount++;
             if (this.playheadCount >= PLAYHEAD_COUNT_MAX) {
-
                 const playHeadPercent =  Math.round(this.playhead / audioLength * 100);
                 this.port.postMessage({playhead: playHeadPercent});
                 this.playheadCount = 0;
