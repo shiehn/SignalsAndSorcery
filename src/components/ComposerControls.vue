@@ -775,7 +775,7 @@ export default {
 
       nodeLayer0_0.port.onmessage = ev => {
         if (ev.data.playhead) {
-          console.log('playhead', ev.data.playhead)
+          // console.log('playhead', ev.data.playhead)
           progress = ev.data.playhead
         }
       }
@@ -1494,25 +1494,77 @@ export default {
     let swwwitttchh = true
     const onUndoClicked = () => {
 
-      console.clear()
 
-      swwwitttchh = !swwwitttchh
-
-      console.log('pluginInstance1', pluginInstance1)
-      console.log('pluginInstance2', pluginInstance2)
+      console.log('nodeLayer0_0', nodeLayer0_0)
 
 
-      //pluginInstance2._audioNode._output.descriptor.forEach((d)=> {console.log('DESCRIPT', d)})
 
-      pluginInstance1._audioNode._output.setStonePhaserStereoBypass(swwwitttchh)
-      pluginInstance1._audioNode._output.setStonePhaserStereoLFO(5)
-      pluginInstance1._audioNode._output.setStonePhaserStereoMix(100)
+      //FOR TOMMORROW
+      //seconds in song * samplerate * newPosPercent
 
-      pluginInstance2._audioNode._output.setBigMuffBypass(swwwitttchh)
-      pluginInstance2._audioNode._output.setBigMuffDrive(100)
+      const newPos = 10.0
 
+      nodeLayer0_0.port.postMessage({'position': newPos});
+      nodeLayer1_0.port.postMessage({'position': newPos});
+      nodeLayer2_0.port.postMessage({'position': newPos});
+      nodeLayer3_0.port.postMessage({'position': newPos});
+      nodeLayer4_0.port.postMessage({'position': newPos});
+      nodeLayer5_0.port.postMessage({'position': newPos});
 
-      console.log('MUFF DRIVE', pluginInstance2._audioNode._output.getBigMuffDrive())
+      nodeLayer0_1.port.postMessage({'position': newPos});
+      nodeLayer1_1.port.postMessage({'position': newPos});
+      nodeLayer2_1.port.postMessage({'position': newPos});
+      nodeLayer3_1.port.postMessage({'position': newPos});
+      nodeLayer4_1.port.postMessage({'position': newPos});
+      nodeLayer5_1.port.postMessage({'position': newPos});
+
+      nodeLayer0_2.port.postMessage({'position': newPos});
+      nodeLayer1_2.port.postMessage({'position': newPos});
+      nodeLayer2_2.port.postMessage({'position': newPos});
+      nodeLayer3_2.port.postMessage({'position': newPos});
+      nodeLayer4_2.port.postMessage({'position': newPos});
+      nodeLayer5_2.port.postMessage({'position': newPos});
+
+      nodeLayer0_3.port.postMessage({'position': newPos});
+      nodeLayer1_3.port.postMessage({'position': newPos});
+      nodeLayer2_3.port.postMessage({'position': newPos});
+      nodeLayer3_3.port.postMessage({'position': newPos});
+      nodeLayer4_3.port.postMessage({'position': newPos});
+      nodeLayer5_3.port.postMessage({'position': newPos});
+
+      nodeLayer0_4.port.postMessage({'position': newPos});
+      nodeLayer1_4.port.postMessage({'position': newPos});
+      nodeLayer2_4.port.postMessage({'position': newPos});
+      nodeLayer3_4.port.postMessage({'position': newPos});
+      nodeLayer4_4.port.postMessage({'position': newPos});
+      nodeLayer5_4.port.postMessage({'position': newPos});
+
+      nodeLayer0_5.port.postMessage({'position': newPos});
+      nodeLayer1_5.port.postMessage({'position': newPos});
+      nodeLayer2_5.port.postMessage({'position': newPos});
+      nodeLayer3_5.port.postMessage({'position': newPos});
+      nodeLayer4_5.port.postMessage({'position': newPos});
+      nodeLayer5_5.port.postMessage({'position': newPos});
+
+      // console.clear()
+      //
+      // swwwitttchh = !swwwitttchh
+      //
+      // console.log('pluginInstance1', pluginInstance1)
+      // console.log('pluginInstance2', pluginInstance2)
+      //
+      //
+      // //pluginInstance2._audioNode._output.descriptor.forEach((d)=> {console.log('DESCRIPT', d)})
+      //
+      // pluginInstance1._audioNode._output.setStonePhaserStereoBypass(swwwitttchh)
+      // pluginInstance1._audioNode._output.setStonePhaserStereoLFO(5)
+      // pluginInstance1._audioNode._output.setStonePhaserStereoMix(100)
+      //
+      // pluginInstance2._audioNode._output.setBigMuffBypass(swwwitttchh)
+      // pluginInstance2._audioNode._output.setBigMuffDrive(100)
+      //
+      //
+      // console.log('MUFF DRIVE', pluginInstance2._audioNode._output.getBigMuffDrive())
 
 
       //pluginInstance2._audioNode._output.descriptor.forEach((d)=> {console.log('MUFF', d)})
@@ -1588,7 +1640,7 @@ export default {
       // markerPositionInLoop = startTime + positionInLoopSection
       //
 
-      console.log('tick', progress)
+      // console.log('tick', progress)
 
       if (Number.isInteger(progress) && progress > 0) {
         emit('updateProgressBar', progress)
