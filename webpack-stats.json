@@ -5,65 +5,12 @@
       "name": "main.js",
       "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.js",
       "publicPath": "/static/dist/main.js"
-    },
-    "main.556d167ba593a92217fd.hot-update.js": {
-      "name": "main.556d167ba593a92217fd.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.556d167ba593a92217fd.hot-update.js",
-      "publicPath": "/static/dist/main.556d167ba593a92217fd.hot-update.js"
-    },
-    "main.556d167ba593a92217fd.hot-update.json": {
-      "name": "main.556d167ba593a92217fd.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.556d167ba593a92217fd.hot-update.json",
-      "publicPath": "/static/dist/main.556d167ba593a92217fd.hot-update.json"
-    },
-    "main.21bc47e6a9f008056005.hot-update.js": {
-      "name": "main.21bc47e6a9f008056005.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.21bc47e6a9f008056005.hot-update.js",
-      "publicPath": "/static/dist/main.21bc47e6a9f008056005.hot-update.js"
-    },
-    "main.21bc47e6a9f008056005.hot-update.json": {
-      "name": "main.21bc47e6a9f008056005.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.21bc47e6a9f008056005.hot-update.json",
-      "publicPath": "/static/dist/main.21bc47e6a9f008056005.hot-update.json"
-    },
-    "main.7115ad7c6045f6c610a7.hot-update.js": {
-      "name": "main.7115ad7c6045f6c610a7.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.7115ad7c6045f6c610a7.hot-update.js",
-      "publicPath": "/static/dist/main.7115ad7c6045f6c610a7.hot-update.js"
-    },
-    "main.7115ad7c6045f6c610a7.hot-update.json": {
-      "name": "main.7115ad7c6045f6c610a7.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.7115ad7c6045f6c610a7.hot-update.json",
-      "publicPath": "/static/dist/main.7115ad7c6045f6c610a7.hot-update.json"
-    },
-    "main.65b487d144cc6103bf78.hot-update.js": {
-      "name": "main.65b487d144cc6103bf78.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.65b487d144cc6103bf78.hot-update.js",
-      "publicPath": "/static/dist/main.65b487d144cc6103bf78.hot-update.js"
-    },
-    "main.65b487d144cc6103bf78.hot-update.json": {
-      "name": "main.65b487d144cc6103bf78.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.65b487d144cc6103bf78.hot-update.json",
-      "publicPath": "/static/dist/main.65b487d144cc6103bf78.hot-update.json"
-    },
-    "main.b4cdeeb43182fd13bb66.hot-update.js": {
-      "name": "main.b4cdeeb43182fd13bb66.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.b4cdeeb43182fd13bb66.hot-update.js",
-      "publicPath": "/static/dist/main.b4cdeeb43182fd13bb66.hot-update.js"
-    },
-    "main.b4cdeeb43182fd13bb66.hot-update.json": {
-      "name": "main.b4cdeeb43182fd13bb66.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.b4cdeeb43182fd13bb66.hot-update.json",
-      "publicPath": "/static/dist/main.b4cdeeb43182fd13bb66.hot-update.json"
     }
   },
   "chunks": {
     "main": [
-      "main.js",
-      "main.b4cdeeb43182fd13bb66.hot-update.js"
+      "main.js"
     ]
   },
-  "publicPath": "/static/dist/",
-  "error": "ModuleParseError",
-  "message": "Module parse failed: Unexpected token (282:33)\nFile was processed with these loaders:\n * ./node_modules/vue-loader/dist/index.js\nYou may need an additional loader to handle the result of these loaders.\n|       const operableAudioBuffer2_1 = Object.setPrototypeOf(audioBuffer2_1, OperableAudioBuffer.prototype);\n|       // -------------------------------------------------------------------------------------------------------------------------------------\n>       const response3_1 = awa1it fetch(audioUrl3_1);\n|       const audioArrayBuffer3_1 = await response3_1.arrayBuffer();\n|       const audioBuffer3_1 = await store.audioCtx.decodeAudioData(audioArrayBuffer3_1);"
+  "publicPath": "/static/dist/"
 }

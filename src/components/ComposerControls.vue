@@ -157,7 +157,7 @@ export default {
     }
 
 
-    const plugin1Url = "http://localhost:8000/static/wam/StonePhaserStereo/index.js";
+    const plugin1Url = "http://localhost:8000/static/wam/stonephaser/index.js";
     const plugin2Url = "http://localhost:8000/static/wam/BigMuff/index.js";
     //NEW CODE
     // index.js
