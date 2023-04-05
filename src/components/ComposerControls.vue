@@ -276,6 +276,10 @@ export default {
     let pluginInstance2 = undefined
     let pluginDomElement2 = ''
 
+
+    //PROGRESS BAR
+    let progress = 0
+
     onMounted(async () => {
       isMobile.value = store.isMobile ? true : false
       showInitAudio.value = isMobile.value
@@ -768,9 +772,11 @@ export default {
 
 
       //PLAYHEAD SHIT
+
       nodeLayer0_0.port.onmessage = ev => {
         if (ev.data.playhead) {
-          //console.log('playhead', ev.data.playhead)
+          console.log('playhead', ev.data.playhead)
+          progress = ev.data.playhead
         }
       }
 
@@ -1565,29 +1571,31 @@ export default {
 
     // THIS IS THE MAIN APPLICATION TICK - START
     let progressUITick = async () => {
-      const displayDuration = getDuration()
-      const displayCurrentTime = getCurrentRelativeTime()
-      const startTime = getDuration() * (store.state.playBack.loopStartPercent * 0.01)
-      const endTime = getDuration() * (store.state.playBack.loopEndPercent * 0.01)
+      // console.log('P TICK')
+      // const displayDuration = getDuration()
+      // const displayCurrentTime = getCurrentRelativeTime()
+      // const startTime = getDuration() * (store.state.playBack.loopStartPercent * 0.01)
+      // const endTime = getDuration() * (store.state.playBack.loopEndPercent * 0.01)
+      //
+      // const loopDuration = endTime - startTime
+      //
+      // let positionInLoopSection = 0
+      // let markerPositionInLoop = 0
+      //
+      // let progress = 0
+      // positionInLoopSection = (displayCurrentTime - startTime) % loopDuration
+      //
+      // markerPositionInLoop = startTime + positionInLoopSection
+      //
 
-      const loopDuration = endTime - startTime
-
-      let positionInLoopSection = 0
-      let markerPositionInLoop = 0
-
-      let progress = 0
-      positionInLoopSection = (displayCurrentTime - startTime) % loopDuration
-
-      markerPositionInLoop = startTime + positionInLoopSection
-
-      progress = Math.round(markerPositionInLoop / displayDuration * 100)
+      console.log('tick', progress)
 
       if (Number.isInteger(progress) && progress > 0) {
         emit('updateProgressBar', progress)
       }
     }
 
-    setInterval(progressUITick, 50)
+    setInterval(progressUITick, 200)
     // THIS IS THE MAIN APPLICATION TICK - STOP
 
     watch(() => bus.value.get('updateProgressBar'), (progressInt) => {

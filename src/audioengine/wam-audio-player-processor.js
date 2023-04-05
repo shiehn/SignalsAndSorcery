@@ -10,7 +10,7 @@ const getProcessor = (moduleId) => {
     /** @type {AudioWorkletGlobalScope} */
     const audioWorkletGlobalScope = globalThis;
     const {registerProcessor} = audioWorkletGlobalScope;
-    const PLAYHEAD_COUNT_MAX = 8;
+    const PLAYHEAD_COUNT_MAX = 16;
     const ModuleScope = audioWorkletGlobalScope.webAudioModules.getModuleScope(moduleId);
 
     /**
@@ -87,7 +87,9 @@ const getProcessor = (moduleId) => {
 
             this.playheadCount++;
             if (this.playheadCount >= PLAYHEAD_COUNT_MAX) {
-                this.port.postMessage({playhead: this.playhead});
+
+                const playHeadPercent =  Math.round(this.playhead / audioLength * 100);
+                this.port.postMessage({playhead: playHeadPercent});
                 this.playheadCount = 0;
             }
 
