@@ -23,8 +23,6 @@
        style="background-color: rgba(255,255,255,0.9);">
 
 
-
-
     <div class="w-full mt-7"></div>
 
     <div class="w-full flex justify-center">
@@ -32,13 +30,11 @@
       <div id="pedalboard" ref="pedalBoard"></div>
 
 
-
-
       <button v-if="isPlaying === 0" @click="play()"><img :src="imageAssets.playBtn"
-                                                              class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
+                                                          class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
       </button>
       <button v-if="isPlaying === 1" @click="pause()"><img :src="imageAssets.pauseBtn"
-                                                              class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
+                                                           class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-orange-500"/>
       </button>
       <button @click="stopButton()"><img :src="imageAssets.stopBtn"
                                          class="h-6 w-6 ml-1 rounded-full hover:ring-4 hover:ring-red-500"/></button>
@@ -52,9 +48,8 @@
   </div>
 
 
-<!--  <div v-html="renderHTMLTest" class="pedal draggable" style="box-sizing: border-box; transform: none;" id="pedal" data-x="13.31640625" data-y="-282.8828125">-->
-<!--  </div>-->
-
+  <!--  <div v-html="renderHTMLTest" class="pedal draggable" style="box-sizing: border-box; transform: none;" id="pedal" data-x="13.31640625" data-y="-282.8828125">-->
+  <!--  </div>-->
 
 
   <div v-if="showInitAudio" class="modal w-full flex justify-center">
@@ -162,17 +157,18 @@ export default {
     }
 
 
-
-
-
-
     const plugin1Url = "http://localhost:8000/static/wam/StonePhaserStereo/index.js";
     const plugin2Url = "http://localhost:8000/static/wam/BigMuff/index.js";
     //NEW CODE
     // index.js
+
+    //COL 0
     const audioUrl0_0 = "http://localhost:8000/static/deleteme/00.wav";
     const audioUrl1_0 = "http://localhost:8000/static/deleteme/10.wav";
 
+    //COL 1
+    const audioUrl0_1 = "http://localhost:8000/static/deleteme/01.wav";
+    const audioUrl1_1 = "http://localhost:8000/static/deleteme/11.wav";
 
 
 // Initialize the Audio Context
@@ -180,15 +176,16 @@ export default {
     //const btnStart = document.getElementById("btn-start");
 
 
-
-
     let audioArrayBuffer = undefined
     let audioBuffer = undefined
     let operableAudioBuffer = undefined
 
+    //COL 0
     let nodeLayer0_0 = undefined
-    let nodeLayer0_1 = undefined
     let nodeLayer1_0 = undefined
+
+    //COL 1
+    let nodeLayer0_1 = undefined
     let nodeLayer1_1 = undefined
 
 
@@ -203,39 +200,46 @@ export default {
       showInitAudio.value = isMobile.value
 
 
-
-
       //await store.audioCtx.suspend();
       /* Import from the Web Audio Modules 2.0 SDK to initialize Wam Host.
           It initializes a unique ID for the current AudioContext. */
       //const {default: initializeWamHost} = await import("../lib/sdk/initializeWamHost.js");
       const [hostGroupId] = await initializeWamHost(store.audioCtx);
-
-
       // Import our custom WAM Processor and the plugins.
-
       const {default: WAM1} = await import(/* webpackIgnore: true */ plugin1Url);
       const {default: WAM2} = await import(/* webpackIgnore: true */ plugin2Url);
-
 
 
       //const {default: OperableAudioBuffer} = await import("../lib/utils/operable-audio-buffer.js");
 
 
-
-
+//COL 0
       const response0_0 = await fetch(audioUrl0_0);
       const audioArrayBuffer0_0 = await response0_0.arrayBuffer();
       const audioBuffer0_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer0_0);
       // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
       const operableAudioBuffer0_0 = Object.setPrototypeOf(audioBuffer0_0, OperableAudioBuffer.prototype);
-// -------------------------------------------------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------------------------------------------------
       const response1_0 = await fetch(audioUrl1_0);
       const audioArrayBuffer1_0 = await response1_0.arrayBuffer();
       const audioBuffer1_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer1_0);
       // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
       const operableAudioBuffer1_0 = Object.setPrototypeOf(audioBuffer1_0, OperableAudioBuffer.prototype);
-// -------------------------------------------------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------------------------------------------------
+//COL 1
+      const response0_1 = await fetch(audioUrl0_1);
+      const audioArrayBuffer0_1 = await response0_1.arrayBuffer();
+      const audioBuffer0_1 = await store.audioCtx.decodeAudioData(audioArrayBuffer0_1);
+      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+      const operableAudioBuffer0_1 = Object.setPrototypeOf(audioBuffer0_1, OperableAudioBuffer.prototype);
+      // -------------------------------------------------------------------------------------------------------------------------------------
+      const response1_1 = await fetch(audioUrl1_1);
+      const audioArrayBuffer1_1 = await response1_1.arrayBuffer();
+      const audioBuffer1_1 = await store.audioCtx.decodeAudioData(audioArrayBuffer1_1);
+      // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
+      const operableAudioBuffer1_1 = Object.setPrototypeOf(audioBuffer1_1, OperableAudioBuffer.prototype);
+      // -------------------------------------------------------------------------------------------------------------------------------------
+
 
       // Creating the Instance of the WAM plugins.
       pluginInstance1 = await WAM1.createInstance(hostGroupId, store.audioCtx);
@@ -244,47 +248,56 @@ export default {
       pluginDomElement2 = await pluginInstance2.createGui();
 
 
-
-
-
-      //
-      //console.log('pluginInstance1', pluginInstance1._audioNode._output)
-      //
-
+//COL 0
       // Create an instance of our Processor. We can get from the instance the audio node.
       let wamInstance0_0 = await MyWam.createInstance(hostGroupId, store.audioCtx);
       let wamInstance1_0 = await MyWam.createInstance(hostGroupId, store.audioCtx);
-
-      console.clear()
-      console.log('IDENTICAL', wamInstance0_0 === wamInstance1_0)
-
-      /** @type {import("./audio-player-node.js").default} */
       nodeLayer0_0 = wamInstance0_0.audioNode;
       nodeLayer1_0 = wamInstance1_0.audioNode;
 
-      console.log('nodeLayer0_0', nodeLayer0_0)
-// -------------------------------------------------------------------------------------------------------------------------------------
+
+//COL 1
+      let wamInstance0_1 = await MyWam.createInstance(hostGroupId, store.audioCtx);
+      let wamInstance1_1 = await MyWam.createInstance(hostGroupId, store.audioCtx);
+      nodeLayer0_1 = wamInstance0_1.audioNode;
+      nodeLayer1_1 = wamInstance1_1.audioNode;
+
+
+//COL 0
       // Sending audio to the processor and connecting the node to the output destination.
-      nodeLayer0_0.setAudio(operableAudioBuffer0_0.toArray());
       //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
+      nodeLayer0_0.setAudio(operableAudioBuffer0_0.toArray(false, 0, 0, store.audioCtx));
+      nodeLayer1_0.setAudio(operableAudioBuffer1_0.toArray(false, 1, 0, store.audioCtx));
       nodeLayer0_0.connect(store.audioCtx.destination);
-
-// -------------------------------------------------------------------------------------------------------------------------------------
-
-      // Sending audio to the processor and connecting the node to the output destination.
-      nodeLayer1_0.setAudio(operableAudioBuffer1_0.toArray());
-      //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
       nodeLayer1_0.connect(store.audioCtx.destination);
 
 
-// -------------------------------------------------------------------------------------------------------------------------------------
+//COL 1
+      // Sending audio to the processor and connecting the node to the output destination.
+      //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
+      console.log("COL==1")
+      nodeLayer0_1.setAudio(operableAudioBuffer0_1.toArray(false, 0, 1, store.audioCtx));
+      nodeLayer1_1.setAudio(operableAudioBuffer1_1.toArray(false, 1, 1, store.audioCtx));
+      nodeLayer0_1.connect(store.audioCtx.destination);
+      nodeLayer1_1.connect(store.audioCtx.destination);
 
+      // -------------------------------------------------------------------------------------------------------------------------------------
+
+//COL 0
       //node.connect(store.audioCtx.destination);
       nodeLayer0_0.parameters.get("playing").value = 0;
-      nodeLayer0_0.parameters.get("loop").value = 1;
+      nodeLayer0_0.parameters.get("loop").value = 0;
 
+      nodeLayer1_0.parameters.get("playing").value = 0;
+      nodeLayer1_0.parameters.get("loop").value = 0;
+
+//COL 1
+      //node.connect(store.audioCtx.destination);
       nodeLayer0_1.parameters.get("playing").value = 0;
-      nodeLayer0_1.parameters.get("loop").value = 1;
+      nodeLayer0_1.parameters.get("loop").value = 0;
+
+      nodeLayer1_1.parameters.get("playing").value = 0;
+      nodeLayer1_1.parameters.get("loop").value = 0;
 
 
       // //NEW CODE
@@ -664,10 +677,9 @@ export default {
     const play = async () => {
 
 
-
-     // console.clear()
-     //
-     //  const childNodes = Array.from(pluginDomElement1.shadowRoot.childNodes);
+      // console.clear()
+      //
+      //  const childNodes = Array.from(pluginDomElement1.shadowRoot.childNodes);
 
 
       // console.log('childNodes[2].innerHTML', childNodes[2])
@@ -675,7 +687,6 @@ export default {
 
 
       //renderHTMLTest.value = childNodes[2].innerHTML
-
 
 
       // console.log('pedalBoard', pedalBoard.value.innerHTML)
@@ -692,13 +703,19 @@ export default {
 
       isPlaying.value = nodeLayer0_0.parameters.get("playing").value;
       if (isPlaying.value === 1) {
+        //COL 0
         nodeLayer0_0.parameters.get("playing").value = 0;
         nodeLayer1_0.parameters.get("playing").value = 0;
-        //btnStart.textContent = "Start";
+        //COL 1
+        nodeLayer0_1.parameters.get("playing").value = 0;
+        nodeLayer1_1.parameters.get("playing").value = 0;
       } else {
+        //COL 0
         nodeLayer0_0.parameters.get("playing").value = 1;
         nodeLayer1_0.parameters.get("playing").value = 1;
-
+        //COL 1
+        nodeLayer0_1.parameters.get("playing").value = 1;
+        nodeLayer1_1.parameters.get("playing").value = 1;
         //btnStart.textContent = "Stop";
       }
 
@@ -760,16 +777,10 @@ export default {
     }
 
 
-
-
     const stopButton = () => {
       if (showInitAudio.value) {
         return
       }
-
-
-
-
 
 
       //FORCE BAR TO 0
@@ -781,9 +792,15 @@ export default {
 
     const stop = async () => {
       if (isPlaying.value === 0) {
-        console.log('play 1')
+        //COL 0
         nodeLayer0_0.parameters.get("playing").value = 0;
         nodeLayer1_0.parameters.get("playing").value = 0;
+
+        //COL 1
+        nodeLayer0_1.parameters.get("playing").value = 0;
+        nodeLayer1_1.parameters.get("playing").value = 0;
+
+
         //btnStart.textContent = "Start";
       }
 
@@ -904,12 +921,10 @@ export default {
       pluginInstance2._audioNode._output.setBigMuffDrive(100)
 
 
-
       console.log('MUFF DRIVE', pluginInstance2._audioNode._output.getBigMuffDrive())
 
 
       //pluginInstance2._audioNode._output.descriptor.forEach((d)=> {console.log('MUFF', d)})
-
 
 
       //emit('loadProjectBackupFromLocalStorage')
@@ -1003,7 +1018,6 @@ export default {
       renderHTMLTest,
 
 
-
       initAudio,
       initAudioSrc,
       initAudioTag,
@@ -1030,234 +1044,4 @@ export default {
   z-index: 999;
   top: 20%;
 }
-
-
-/* SUNSTONE LFO PEDAL */
- .pedal{
-   display: block;
-   background:null;
-   background-color: #7caeff;
-   width: 286.953125px;
-   height: 353.3046875px;
-   border-radius: 10px;
-   position: relative;
-   box-shadow: 4px 5px 6px rgba(0, 0, 0, 0.7), inset -2px -2px 5px 0px rgba(0, 0, 0, 0.2), inset 3px 1px 1px 4px rgba(255, 255, 255, 0.2), 1px 0px 1px 0px rgba(0, 0, 0, 0.9), 0 2px 1px 0 rgba(0, 0, 0, 0.9), 1px 1px 1px 0px rgba(0, 0, 0, 0.9);
-   /* bring your own prefixes */
-   /* transform: translate(-50%, -50%); */
- }
-
-
-#background-image {
-//border: solid 2px black;
-  width: 286.953125px;
-  height: 353.3046875px;
-  opacity: 1;
-  border-radius: 10px;
-  /* display: none; */
-//visibility: hidden;
-}
-/* .img-bck img[src=""] {
-    display: none;
-} */
-/* #resize {
-    position: absolute;
-    cursor: nwse-resize;
-    width: 10px;
-    height: 10px;
-    left: 278.953125px;
-    top: 345.3046875px;
-    border: 1px solid black;
-} */
-.knob, .switch, .icon, .label, .slider {
-  position: absolute;
-  cursor: pointer;
-  text-align: center;
-}
-.container {
-  position: relative;
-  width: 286.953125px;
-  height: 353.3046875px;
-  /* font-family: Arial; */
-}
-
-.text-block {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  background-color: #7caeff;
-  color: white;
-  padding-left: 20px;
-  padding-right: 20px;
-}
-/* .text-block :not(.tititi) {
-    opacity : 0;
-} */
-.draggable {
-  touch-action: none;
-  user-select: none;
-}
-#canvas {
-  width:100px;
-  height:300px;
-  border: 10px solid;
-}
-.rectangle {
-  border: 1px solid #FF0000;
-  position: absolute;
-}
-.selected {
-  border: 1px dashed black;
-  cursor: move;
-}
-.selected:hover {
-  border: 1px dashed black;
-  cursor: move;
-}
-.selected  webaudio-knob{
-  cursor: move;
-}
-.selected  webaudio-switch{
-  cursor: move;
-}
-.selected  span{
-  cursor: move;
-}
-.selected:hover  span{
-  cursor: move;
-}
-.selected  webaudio-slider{
-  cursor: move;
-}
-.selected:hover webaudio-knob{
-  cursor: move;
-}
-.selected:hover webaudio-switch{
-  cursor: move;
-}
-
-.selected:hover webaudio-slider{
-  cursor: move;
-}
-#switch1 {
-  bottom: 10px;
-  right: 0px;
-}
-
-#LFO {
-  left: 42px;
-  top: 32px;
-}
-#LFO div {
-  color: #fae900;
-  font-family: "Comic Sans MS";
-  font-size: 14px;
-
-}
-
-#Feedback {
-  left: 107px;
-  top: 33px;
-}
-#Feedback div {
-  color: #ffee00;
-  font-family: "Verdana";
-  font-size: 14px;
-
-}
-
-#Lo-cut {
-  left: 194px;
-  top: 33px;
-}
-#Lo-cut div {
-  color: #eeff00;
-  font-family: "Verdana";
-  font-size: 14px;
-
-}
-
-#Mix {
-  left: 117px;
-  top: 126px;
-}
-#Mix div {
-  color: #eeff00;
-  font-family: "Verdana";
-  font-size: 14px;
-
-}
-
-#Stereo_phase {
-  left: 42px;
-  top: 126px;
-}
-#Stereo_phase div {
-  color: #ddfa00;
-  font-family: "Verdana";
-  font-size: 14px;
-
-}
-
-#Bypass {
-  left: 94px;
-  top: 223px;
-}
-#Bypass div {
-  color: #000000;
-  font-family: "Verdana";
-  font-size: 14px;
-
-}
-
-#Color {
-  left: 178px;
-  top: 126px;
-}
-#Color div {
-  color: #fbff00;
-  font-family: "Verdana";
-  font-size: 14px;
-
-}
-
-#label_79 {
-  left: 62px;
-  top: 285px;
-  color: #ff2486;
-  font-family: "Comic Sans MS";
-  font-size: 28px;
-}
-
-
-.pedalLabelName {
-  color: #FFFFFF;
-  background: transparent;
-  text-shadow: 2px 2px 0 #4074b5, 2px -2px 0 #4074b5, -2px 2px 0 #4074b5, -2px -2px 0 #4074b5, 2px 0px 0 #4074b5, 0px 2px 0 #4074b5, -2px 0px 0 #4074b5, 0px -2px 0 #4074b5;                        }
-.pedalLabel{
-  position: absolute;
-  /* top: 225px; */
-  font-size: 16pxpx;
-  font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";/*Sansita;*//*{font}*/
-  text-align: center;
-  line-height: 30px;/*{pedalfontsize}*/
-  width: 150px;
-  color: #6B0000;/*{fontcolor}*/
-}
-.knob-label{
-  position: absolute;
-  font-size: 12px;/*{knobfontsize}*/
-  line-height: 12px;
-  width:64px;
-  max-width:64px;
-  overflow: hidden;
-  text-align: center;
-  font-family: Sansita;/*{font}*/
-  color: #6B0000;/*{fontcolor}*/
-}
-#knob1-label{
-  top: 84px;
-  left: 43px;
-}
-/* END SUNSTONE LFO PEDAL*/
-
 </style>
