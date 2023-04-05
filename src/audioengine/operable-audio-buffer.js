@@ -27,19 +27,13 @@ export default class OperableAudioBuffer extends AudioBuffer {
         const emptyBuffer = audioCtx.createBuffer(2, bufferSizePerLoop*4, audioCtx.sampleRate);
 
 
-        console.log('-----------------')
-        console.log('row', row)
-        console.log('col', col)
         const supportSAB = typeof SharedArrayBuffer !== "undefined";
         const channelData = [];
         const {numberOfChannels, length} = this;
-        console.log('BUFFER LENGTH', length)
-        console.log('emptyBuffer', emptyBuffer)
 
 
         for (let i = 0; i < numberOfChannels; i++) {
             if (shared && supportSAB) {
-
                 channelData[i] = new Float32Array(new SharedArrayBuffer(length * Float32Array.BYTES_PER_ELEMENT));
                 channelData[i].set(this.getChannelData(i));
             } else {
