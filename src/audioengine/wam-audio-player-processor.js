@@ -49,7 +49,9 @@ const getProcessor = (moduleId) => {
                 if (e.data.audio) {
                     this.audio = e.data.audio;
                 } else if (typeof e.data.position === "number") {
-                    this.playhead = e.data.position * sampleRate;
+                    // this.playhead = e.data.position * sampleRate;
+
+                    this.playhead = 940800
                 }
             };
         }

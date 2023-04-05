@@ -29,7 +29,6 @@
 
       <div id="pedalboard" ref="pedalBoard"></div>
 
-
       <button v-if="isPlaying === 0" @click="play()"><img :src="imageAssets.playBtn"
                                                           class="h-10 w-10 mr-1 rounded-full hover:ring-4 hover:ring-green-500"/>
       </button>
@@ -155,6 +154,7 @@ export default {
       randomizeBtn: store.state.staticUrl + 'icons/refresh-icon.png',
       downloadBtn: store.state.staticUrl + 'icons/download-icon.svg',
     }
+
 
 
     const plugin1Url = "http://localhost:8000/static/wam/stonephaser/index.js";
@@ -283,6 +283,12 @@ export default {
     onMounted(async () => {
       isMobile.value = store.isMobile ? true : false
       showInitAudio.value = isMobile.value
+
+
+      // /////////////////////////// LOADING SPINNER ///////////////////////////
+      // /////////////////////////// LOADING SPINNER ///////////////////////////
+      // /////////////////////////// LOADING SPINNER ///////////////////////////
+      emit('showLoadingSpinner')
 
 
       //await store.audioCtx.suspend();
@@ -649,12 +655,12 @@ export default {
       //COL 0
       // Sending audio to the processor and connecting the node to the output destination.
       //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer0_0.setAudio(operableAudioBuffer0_0.toArray(false, 0,0, store.audioCtx));
-      nodeLayer1_0.setAudio(operableAudioBuffer1_0.toArray(false, 1,0, store.audioCtx));
-      nodeLayer2_0.setAudio(operableAudioBuffer2_0.toArray(false, 2,0, store.audioCtx));
-      nodeLayer3_0.setAudio(operableAudioBuffer3_0.toArray(false, 3,0, store.audioCtx));
-      nodeLayer4_0.setAudio(operableAudioBuffer4_0.toArray(false, 4,0, store.audioCtx));
-      nodeLayer5_0.setAudio(operableAudioBuffer5_0.toArray(false, 5,0, store.audioCtx));
+      nodeLayer0_0.setAudio(operableAudioBuffer0_0.toArray(false, 0,0, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer1_0.setAudio(operableAudioBuffer1_0.toArray(false, 1,0, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer2_0.setAudio(operableAudioBuffer2_0.toArray(false, 2,0, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer3_0.setAudio(operableAudioBuffer3_0.toArray(false, 3,0, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer4_0.setAudio(operableAudioBuffer4_0.toArray(false, 4,0, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer5_0.setAudio(operableAudioBuffer5_0.toArray(false, 5,0, store.audioCtx, store.state.getGlobalBpm()));
 
       nodeLayer0_0.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
       nodeLayer1_0.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
@@ -667,12 +673,12 @@ export default {
       //COL 1
       // Sending audio to the processor and connecting the node to the output destination.
       //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer0_1.setAudio(operableAudioBuffer0_1.toArray(false, 0,1, store.audioCtx));
-      nodeLayer1_1.setAudio(operableAudioBuffer1_1.toArray(false, 1,1, store.audioCtx));
-      nodeLayer2_1.setAudio(operableAudioBuffer2_1.toArray(false, 2,1, store.audioCtx));
-      nodeLayer3_1.setAudio(operableAudioBuffer3_1.toArray(false, 3,1, store.audioCtx));
-      nodeLayer4_1.setAudio(operableAudioBuffer4_1.toArray(false, 4,1, store.audioCtx));
-      nodeLayer5_1.setAudio(operableAudioBuffer5_1.toArray(false, 5,1, store.audioCtx));
+      nodeLayer0_1.setAudio(operableAudioBuffer0_1.toArray(false, 0,1, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer1_1.setAudio(operableAudioBuffer1_1.toArray(false, 1,1, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer2_1.setAudio(operableAudioBuffer2_1.toArray(false, 2,1, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer3_1.setAudio(operableAudioBuffer3_1.toArray(false, 3,1, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer4_1.setAudio(operableAudioBuffer4_1.toArray(false, 4,1, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer5_1.setAudio(operableAudioBuffer5_1.toArray(false, 5,1, store.audioCtx, store.state.getGlobalBpm()));
 
       nodeLayer0_1.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
       nodeLayer1_1.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
@@ -684,12 +690,12 @@ export default {
       //COL 2
       // Sending audio to the processor and connecting the node to the output destination.
       //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer0_2.setAudio(operableAudioBuffer0_2.toArray(false, 0,2, store.audioCtx));
-      nodeLayer1_2.setAudio(operableAudioBuffer1_2.toArray(false, 1,2, store.audioCtx));
-      nodeLayer2_2.setAudio(operableAudioBuffer2_2.toArray(false, 2,2, store.audioCtx));
-      nodeLayer3_2.setAudio(operableAudioBuffer3_2.toArray(false, 3,2, store.audioCtx));
-      nodeLayer4_2.setAudio(operableAudioBuffer4_2.toArray(false, 4,2, store.audioCtx));
-      nodeLayer5_2.setAudio(operableAudioBuffer5_2.toArray(false, 5,2, store.audioCtx));
+      nodeLayer0_2.setAudio(operableAudioBuffer0_2.toArray(false, 0,2, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer1_2.setAudio(operableAudioBuffer1_2.toArray(false, 1,2, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer2_2.setAudio(operableAudioBuffer2_2.toArray(false, 2,2, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer3_2.setAudio(operableAudioBuffer3_2.toArray(false, 3,2, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer4_2.setAudio(operableAudioBuffer4_2.toArray(false, 4,2, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer5_2.setAudio(operableAudioBuffer5_2.toArray(false, 5,2, store.audioCtx, store.state.getGlobalBpm()));
 
       nodeLayer0_2.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
       nodeLayer1_2.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
@@ -701,12 +707,12 @@ export default {
       //COL 3
       // Sending audio to the processor and connecting the node to the output destination.
       //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer0_3.setAudio(operableAudioBuffer0_3.toArray(false, 0,3, store.audioCtx));
-      nodeLayer1_3.setAudio(operableAudioBuffer1_3.toArray(false, 1,3, store.audioCtx));
-      nodeLayer2_3.setAudio(operableAudioBuffer2_3.toArray(false, 2,3, store.audioCtx));
-      nodeLayer3_3.setAudio(operableAudioBuffer3_3.toArray(false, 3,3, store.audioCtx));
-      nodeLayer4_3.setAudio(operableAudioBuffer4_3.toArray(false, 4,3, store.audioCtx));
-      nodeLayer5_3.setAudio(operableAudioBuffer5_3.toArray(false, 5,3, store.audioCtx));
+      nodeLayer0_3.setAudio(operableAudioBuffer0_3.toArray(false, 0,3, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer1_3.setAudio(operableAudioBuffer1_3.toArray(false, 1,3, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer2_3.setAudio(operableAudioBuffer2_3.toArray(false, 2,3, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer3_3.setAudio(operableAudioBuffer3_3.toArray(false, 3,3, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer4_3.setAudio(operableAudioBuffer4_3.toArray(false, 4,3, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer5_3.setAudio(operableAudioBuffer5_3.toArray(false, 5,3, store.audioCtx, store.state.getGlobalBpm()));
 
       nodeLayer0_3.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
       nodeLayer1_3.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
@@ -719,12 +725,12 @@ export default {
       //COL 4
       // Sending audio to the processor and connecting the node to the output destination.
       //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer0_4.setAudio(operableAudioBuffer0_4.toArray(false, 0,4, store.audioCtx));
-      nodeLayer1_4.setAudio(operableAudioBuffer1_4.toArray(false, 1,4, store.audioCtx));
-      nodeLayer2_4.setAudio(operableAudioBuffer2_4.toArray(false, 2,4, store.audioCtx));
-      nodeLayer3_4.setAudio(operableAudioBuffer3_4.toArray(false, 3,4, store.audioCtx));
-      nodeLayer4_4.setAudio(operableAudioBuffer4_4.toArray(false, 4,4, store.audioCtx));
-      nodeLayer5_4.setAudio(operableAudioBuffer5_4.toArray(false, 5,4, store.audioCtx));
+      nodeLayer0_4.setAudio(operableAudioBuffer0_4.toArray(false, 0,4, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer1_4.setAudio(operableAudioBuffer1_4.toArray(false, 1,4, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer2_4.setAudio(operableAudioBuffer2_4.toArray(false, 2,4, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer3_4.setAudio(operableAudioBuffer3_4.toArray(false, 3,4, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer4_4.setAudio(operableAudioBuffer4_4.toArray(false, 4,4, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer5_4.setAudio(operableAudioBuffer5_4.toArray(false, 5,4, store.audioCtx, store.state.getGlobalBpm()));
 
       nodeLayer0_4.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
       nodeLayer1_4.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
@@ -737,12 +743,12 @@ export default {
       //COL 5
       // Sending audio to the processor and connecting the node to the output destination.
       //node.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-      nodeLayer0_5.setAudio(operableAudioBuffer0_5.toArray(false, 0,5, store.audioCtx));
-      nodeLayer1_5.setAudio(operableAudioBuffer1_5.toArray(false, 1,5, store.audioCtx));
-      nodeLayer2_5.setAudio(operableAudioBuffer2_5.toArray(false, 2,5, store.audioCtx));
-      nodeLayer3_5.setAudio(operableAudioBuffer3_5.toArray(false, 3,5, store.audioCtx));
-      nodeLayer4_5.setAudio(operableAudioBuffer4_5.toArray(false, 4,5, store.audioCtx));
-      nodeLayer5_5.setAudio(operableAudioBuffer5_5.toArray(false, 5,5, store.audioCtx));
+      nodeLayer0_5.setAudio(operableAudioBuffer0_5.toArray(false, 0,5, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer1_5.setAudio(operableAudioBuffer1_5.toArray(false, 1,5, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer2_5.setAudio(operableAudioBuffer2_5.toArray(false, 2,5, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer3_5.setAudio(operableAudioBuffer3_5.toArray(false, 3,5, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer4_5.setAudio(operableAudioBuffer4_5.toArray(false, 4,5, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer5_5.setAudio(operableAudioBuffer5_5.toArray(false, 5,5, store.audioCtx, store.state.getGlobalBpm()));
 
       nodeLayer0_5.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
       nodeLayer1_5.connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
@@ -807,6 +813,9 @@ export default {
       // node.connect(audioCtx.destination);
       // node.parameters.get("playing").value = 0;
       // node.parameters.get("loop").value = 1;
+
+
+      emit('hideLoadingSpinner')
     })
 
     // const getTrackListByRow = (row) => {
@@ -1491,18 +1500,21 @@ export default {
       ]
     })
 
-    let swwwitttchh = true
-    const onUndoClicked = () => {
+    const getLoopLengthFromBarsAndBPM = (barCount, bpm) => {
+      let msPerBeatAtBpm = 60000 / bpm;
+      let totalBeats = 4 * barCount;
+      return msPerBeatAtBpm * totalBeats / 1000
+    }
 
 
-      console.log('nodeLayer0_0', nodeLayer0_0)
+    const setPlaybackPosition = async (percentOfScrubBar) => {
+
+      const numOfBars = 4
+      const secInLoop = getLoopLengthFromBarsAndBPM(numOfBars, store.state.getGlobalBpm())
+      const samplesInFourBars = secInLoop * store.audioCtx.sampleRate * numOfBars
 
 
-
-      //FOR TOMMORROW
-      //seconds in song * samplerate * newPosPercent
-
-      const newPos = 10.0
+      const newPos = samplesInFourBars * (percentOfScrubBar*.01)
 
       nodeLayer0_0.port.postMessage({'position': newPos});
       nodeLayer1_0.port.postMessage({'position': newPos});
@@ -1545,6 +1557,20 @@ export default {
       nodeLayer3_5.port.postMessage({'position': newPos});
       nodeLayer4_5.port.postMessage({'position': newPos});
       nodeLayer5_5.port.postMessage({'position': newPos});
+    }
+
+    let swwwitttchh = true
+    const onUndoClicked = () => {
+      console.log('nodeLayer0_0', nodeLayer0_0)
+
+
+
+      setPlaybackPosition()
+
+      //FOR TOMMORROW
+      //seconds in song * samplerate * newPosPercent
+
+
 
       // console.clear()
       //

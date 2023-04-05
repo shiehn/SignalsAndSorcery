@@ -18,10 +18,10 @@ export default class OperableAudioBuffer extends AudioBuffer {
       return emptyBuffer;
     }
 
-    toArray(shared = false, row=0, col=0, audioCtx = undefined) {
+    toArray(shared = false, row=0, col=0, audioCtx = undefined, bpm = undefined) {
 
         //const secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
-        const secondsInLoop = this.getLoopLengthFromBarsAndBPM(4, 90);
+        const secondsInLoop = this.getLoopLengthFromBarsAndBPM(4, bpm);
         const bufferSizePerLoop = secondsInLoop * audioCtx.sampleRate;
 
         const emptyBuffer = audioCtx.createBuffer(2, bufferSizePerLoop*4, audioCtx.sampleRate);

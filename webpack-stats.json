@@ -6,121 +6,131 @@
       "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.js",
       "publicPath": "/static/dist/main.js"
     },
-    "main.d62e4aa0656878e56e43.hot-update.js": {
-      "name": "main.d62e4aa0656878e56e43.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.d62e4aa0656878e56e43.hot-update.js",
-      "publicPath": "/static/dist/main.d62e4aa0656878e56e43.hot-update.js"
+    "main.2944f4b0b4e876f2743e.hot-update.js": {
+      "name": "main.2944f4b0b4e876f2743e.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.2944f4b0b4e876f2743e.hot-update.js",
+      "publicPath": "/static/dist/main.2944f4b0b4e876f2743e.hot-update.js"
     },
-    "main.d62e4aa0656878e56e43.hot-update.json": {
-      "name": "main.d62e4aa0656878e56e43.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.d62e4aa0656878e56e43.hot-update.json",
-      "publicPath": "/static/dist/main.d62e4aa0656878e56e43.hot-update.json"
+    "main.2944f4b0b4e876f2743e.hot-update.json": {
+      "name": "main.2944f4b0b4e876f2743e.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.2944f4b0b4e876f2743e.hot-update.json",
+      "publicPath": "/static/dist/main.2944f4b0b4e876f2743e.hot-update.json"
     },
-    "main.f7587d4a24f6dbb566a1.hot-update.js": {
-      "name": "main.f7587d4a24f6dbb566a1.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.f7587d4a24f6dbb566a1.hot-update.js",
-      "publicPath": "/static/dist/main.f7587d4a24f6dbb566a1.hot-update.js"
+    "main.e98283b046e6e8515210.hot-update.js": {
+      "name": "main.e98283b046e6e8515210.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.e98283b046e6e8515210.hot-update.js",
+      "publicPath": "/static/dist/main.e98283b046e6e8515210.hot-update.js"
     },
-    "main.f7587d4a24f6dbb566a1.hot-update.json": {
-      "name": "main.f7587d4a24f6dbb566a1.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.f7587d4a24f6dbb566a1.hot-update.json",
-      "publicPath": "/static/dist/main.f7587d4a24f6dbb566a1.hot-update.json"
+    "main.e98283b046e6e8515210.hot-update.json": {
+      "name": "main.e98283b046e6e8515210.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.e98283b046e6e8515210.hot-update.json",
+      "publicPath": "/static/dist/main.e98283b046e6e8515210.hot-update.json"
     },
-    "main.74a802bbd04ef6ac68a4.hot-update.js": {
-      "name": "main.74a802bbd04ef6ac68a4.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.74a802bbd04ef6ac68a4.hot-update.js",
-      "publicPath": "/static/dist/main.74a802bbd04ef6ac68a4.hot-update.js"
+    "main.4d118a18dc95d3a06bcd.hot-update.js": {
+      "name": "main.4d118a18dc95d3a06bcd.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.4d118a18dc95d3a06bcd.hot-update.js",
+      "publicPath": "/static/dist/main.4d118a18dc95d3a06bcd.hot-update.js"
     },
-    "main.74a802bbd04ef6ac68a4.hot-update.json": {
-      "name": "main.74a802bbd04ef6ac68a4.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.74a802bbd04ef6ac68a4.hot-update.json",
-      "publicPath": "/static/dist/main.74a802bbd04ef6ac68a4.hot-update.json"
+    "main.4d118a18dc95d3a06bcd.hot-update.json": {
+      "name": "main.4d118a18dc95d3a06bcd.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.4d118a18dc95d3a06bcd.hot-update.json",
+      "publicPath": "/static/dist/main.4d118a18dc95d3a06bcd.hot-update.json"
     },
-    "main.04cf02ffc26ce4fe2c2e.hot-update.js": {
-      "name": "main.04cf02ffc26ce4fe2c2e.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.04cf02ffc26ce4fe2c2e.hot-update.js",
-      "publicPath": "/static/dist/main.04cf02ffc26ce4fe2c2e.hot-update.js"
+    "main.8d4ea03ba1fbdd48212e.hot-update.js": {
+      "name": "main.8d4ea03ba1fbdd48212e.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.8d4ea03ba1fbdd48212e.hot-update.js",
+      "publicPath": "/static/dist/main.8d4ea03ba1fbdd48212e.hot-update.js"
     },
-    "main.04cf02ffc26ce4fe2c2e.hot-update.json": {
-      "name": "main.04cf02ffc26ce4fe2c2e.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.04cf02ffc26ce4fe2c2e.hot-update.json",
-      "publicPath": "/static/dist/main.04cf02ffc26ce4fe2c2e.hot-update.json"
+    "main.8d4ea03ba1fbdd48212e.hot-update.json": {
+      "name": "main.8d4ea03ba1fbdd48212e.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.8d4ea03ba1fbdd48212e.hot-update.json",
+      "publicPath": "/static/dist/main.8d4ea03ba1fbdd48212e.hot-update.json"
     },
-    "main.60cf76b59c6e56205c83.hot-update.js": {
-      "name": "main.60cf76b59c6e56205c83.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.60cf76b59c6e56205c83.hot-update.js",
-      "publicPath": "/static/dist/main.60cf76b59c6e56205c83.hot-update.js"
+    "main.5f0717d79815b1184748.hot-update.js": {
+      "name": "main.5f0717d79815b1184748.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.5f0717d79815b1184748.hot-update.js",
+      "publicPath": "/static/dist/main.5f0717d79815b1184748.hot-update.js"
     },
-    "main.60cf76b59c6e56205c83.hot-update.json": {
-      "name": "main.60cf76b59c6e56205c83.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.60cf76b59c6e56205c83.hot-update.json",
-      "publicPath": "/static/dist/main.60cf76b59c6e56205c83.hot-update.json"
+    "main.5f0717d79815b1184748.hot-update.json": {
+      "name": "main.5f0717d79815b1184748.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.5f0717d79815b1184748.hot-update.json",
+      "publicPath": "/static/dist/main.5f0717d79815b1184748.hot-update.json"
     },
-    "main.0f00e2e36f2fc3f41b14.hot-update.js": {
-      "name": "main.0f00e2e36f2fc3f41b14.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.0f00e2e36f2fc3f41b14.hot-update.js",
-      "publicPath": "/static/dist/main.0f00e2e36f2fc3f41b14.hot-update.js"
+    "main.2f98844b0edd35bbde45.hot-update.js": {
+      "name": "main.2f98844b0edd35bbde45.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.2f98844b0edd35bbde45.hot-update.js",
+      "publicPath": "/static/dist/main.2f98844b0edd35bbde45.hot-update.js"
     },
-    "main.0f00e2e36f2fc3f41b14.hot-update.json": {
-      "name": "main.0f00e2e36f2fc3f41b14.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.0f00e2e36f2fc3f41b14.hot-update.json",
-      "publicPath": "/static/dist/main.0f00e2e36f2fc3f41b14.hot-update.json"
+    "main.2f98844b0edd35bbde45.hot-update.json": {
+      "name": "main.2f98844b0edd35bbde45.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.2f98844b0edd35bbde45.hot-update.json",
+      "publicPath": "/static/dist/main.2f98844b0edd35bbde45.hot-update.json"
     },
-    "main.31b03997f5c6038b32bf.hot-update.js": {
-      "name": "main.31b03997f5c6038b32bf.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.31b03997f5c6038b32bf.hot-update.js",
-      "publicPath": "/static/dist/main.31b03997f5c6038b32bf.hot-update.js"
+    "main.e01595ab5e8cd2b20f1e.hot-update.js": {
+      "name": "main.e01595ab5e8cd2b20f1e.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.e01595ab5e8cd2b20f1e.hot-update.js",
+      "publicPath": "/static/dist/main.e01595ab5e8cd2b20f1e.hot-update.js"
     },
-    "main.31b03997f5c6038b32bf.hot-update.json": {
-      "name": "main.31b03997f5c6038b32bf.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.31b03997f5c6038b32bf.hot-update.json",
-      "publicPath": "/static/dist/main.31b03997f5c6038b32bf.hot-update.json"
+    "main.e01595ab5e8cd2b20f1e.hot-update.json": {
+      "name": "main.e01595ab5e8cd2b20f1e.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.e01595ab5e8cd2b20f1e.hot-update.json",
+      "publicPath": "/static/dist/main.e01595ab5e8cd2b20f1e.hot-update.json"
     },
-    "main.5bf19c787019f95e0f81.hot-update.js": {
-      "name": "main.5bf19c787019f95e0f81.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.5bf19c787019f95e0f81.hot-update.js",
-      "publicPath": "/static/dist/main.5bf19c787019f95e0f81.hot-update.js"
+    "main.c42d51057ea588f6a885.hot-update.js": {
+      "name": "main.c42d51057ea588f6a885.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.c42d51057ea588f6a885.hot-update.js",
+      "publicPath": "/static/dist/main.c42d51057ea588f6a885.hot-update.js"
     },
-    "main.5bf19c787019f95e0f81.hot-update.json": {
-      "name": "main.5bf19c787019f95e0f81.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.5bf19c787019f95e0f81.hot-update.json",
-      "publicPath": "/static/dist/main.5bf19c787019f95e0f81.hot-update.json"
+    "main.c42d51057ea588f6a885.hot-update.json": {
+      "name": "main.c42d51057ea588f6a885.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.c42d51057ea588f6a885.hot-update.json",
+      "publicPath": "/static/dist/main.c42d51057ea588f6a885.hot-update.json"
     },
-    "main.7988e9a54867be3c9d75.hot-update.js": {
-      "name": "main.7988e9a54867be3c9d75.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.7988e9a54867be3c9d75.hot-update.js",
-      "publicPath": "/static/dist/main.7988e9a54867be3c9d75.hot-update.js"
+    "main.5aac7a775180c46fa76c.hot-update.js": {
+      "name": "main.5aac7a775180c46fa76c.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.5aac7a775180c46fa76c.hot-update.js",
+      "publicPath": "/static/dist/main.5aac7a775180c46fa76c.hot-update.js"
     },
-    "main.7988e9a54867be3c9d75.hot-update.json": {
-      "name": "main.7988e9a54867be3c9d75.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.7988e9a54867be3c9d75.hot-update.json",
-      "publicPath": "/static/dist/main.7988e9a54867be3c9d75.hot-update.json"
+    "main.5aac7a775180c46fa76c.hot-update.json": {
+      "name": "main.5aac7a775180c46fa76c.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.5aac7a775180c46fa76c.hot-update.json",
+      "publicPath": "/static/dist/main.5aac7a775180c46fa76c.hot-update.json"
     },
-    "main.a84416ec84b1154e003c.hot-update.js": {
-      "name": "main.a84416ec84b1154e003c.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.a84416ec84b1154e003c.hot-update.js",
-      "publicPath": "/static/dist/main.a84416ec84b1154e003c.hot-update.js"
+    "main.a0a19409ebae3b2a2ed2.hot-update.js": {
+      "name": "main.a0a19409ebae3b2a2ed2.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.a0a19409ebae3b2a2ed2.hot-update.js",
+      "publicPath": "/static/dist/main.a0a19409ebae3b2a2ed2.hot-update.js"
     },
-    "main.a84416ec84b1154e003c.hot-update.json": {
-      "name": "main.a84416ec84b1154e003c.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.a84416ec84b1154e003c.hot-update.json",
-      "publicPath": "/static/dist/main.a84416ec84b1154e003c.hot-update.json"
+    "main.a0a19409ebae3b2a2ed2.hot-update.json": {
+      "name": "main.a0a19409ebae3b2a2ed2.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.a0a19409ebae3b2a2ed2.hot-update.json",
+      "publicPath": "/static/dist/main.a0a19409ebae3b2a2ed2.hot-update.json"
     },
-    "main.f821cf71a471905ff241.hot-update.js": {
-      "name": "main.f821cf71a471905ff241.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.f821cf71a471905ff241.hot-update.js",
-      "publicPath": "/static/dist/main.f821cf71a471905ff241.hot-update.js"
+    "main.354702a145e776ef6821.hot-update.js": {
+      "name": "main.354702a145e776ef6821.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.354702a145e776ef6821.hot-update.js",
+      "publicPath": "/static/dist/main.354702a145e776ef6821.hot-update.js"
     },
-    "main.f821cf71a471905ff241.hot-update.json": {
-      "name": "main.f821cf71a471905ff241.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.f821cf71a471905ff241.hot-update.json",
-      "publicPath": "/static/dist/main.f821cf71a471905ff241.hot-update.json"
+    "main.354702a145e776ef6821.hot-update.json": {
+      "name": "main.354702a145e776ef6821.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.354702a145e776ef6821.hot-update.json",
+      "publicPath": "/static/dist/main.354702a145e776ef6821.hot-update.json"
+    },
+    "main.5e6095ec51c07680d13d.hot-update.js": {
+      "name": "main.5e6095ec51c07680d13d.hot-update.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.5e6095ec51c07680d13d.hot-update.js",
+      "publicPath": "/static/dist/main.5e6095ec51c07680d13d.hot-update.js"
+    },
+    "main.5e6095ec51c07680d13d.hot-update.json": {
+      "name": "main.5e6095ec51c07680d13d.hot-update.json",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.5e6095ec51c07680d13d.hot-update.json",
+      "publicPath": "/static/dist/main.5e6095ec51c07680d13d.hot-update.json"
     }
   },
   "chunks": {
     "main": [
       "main.js",
-      "main.f821cf71a471905ff241.hot-update.js"
+      "main.5e6095ec51c07680d13d.hot-update.js"
     ]
   },
   "publicPath": "/static/dist/"
