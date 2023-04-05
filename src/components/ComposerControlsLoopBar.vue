@@ -387,7 +387,7 @@ export default {
 
     const clickedLoopBar = (event) => {
       event.preventDefault()
-      emit('stopAllAudio', 'loopBar')
+      //emit('stopAllAudio', 'loopBar')
     }
 
     const convertRemToPixels = (rem) => {

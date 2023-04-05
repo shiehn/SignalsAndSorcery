@@ -783,6 +783,16 @@ export default {
         if (ev.data.playhead) {
           // console.log('playhead', ev.data.playhead)
           progress = ev.data.playhead
+
+          // store.state.playBack.loopStartPercent = getCurStartPos() * 25
+          // store.state.playBack.loopEndPercent = (getCurrentEndPos() + 1) * 25
+          if(progress < store.state.playBack.loopStartPercent){
+            setPlaybackPosition(store.state.playBack.loopStartPercent)
+          }
+
+          if(progress > store.state.playBack.loopEndPercent){
+            setPlaybackPosition(store.state.playBack.loopStartPercent)
+          }
         }
       }
 
@@ -1509,6 +1519,8 @@ export default {
 
     const setPlaybackPosition = async (percentOfScrubBar) => {
 
+      console.log('percentOfScrubBar', percentOfScrubBar)
+
       const numOfBars = 4
       const secInLoop = getLoopLengthFromBarsAndBPM(numOfBars, store.state.getGlobalBpm())
       const samplesInFourBars = secInLoop * store.audioCtx.sampleRate * numOfBars
@@ -1561,11 +1573,11 @@ export default {
 
     let swwwitttchh = true
     const onUndoClicked = () => {
-      console.log('nodeLayer0_0', nodeLayer0_0)
+      // console.log('nodeLayer0_0', nodeLayer0_0)
 
 
 
-      setPlaybackPosition()
+      // setPlaybackPosition()
 
       //FOR TOMMORROW
       //seconds in song * samplerate * newPosPercent
@@ -1636,15 +1648,19 @@ export default {
         return
       }
 
-      if (isPlaying.value && buffer && scrubToPercent && scrubToPercent > 0 && scrubToPercent <= 100) {
-        await pause()
-        await play(scrubToPercent)
-      } else {
-        // it is currently not playing, so start now
-        await play() //this allows the user to scrub to a position and then first play but is buggy causing multiple playbacks
-        await pause()
-        await play(scrubToPercent)
-      }
+
+
+      setPlaybackPosition(scrubToPercent)
+
+      // if (isPlaying.value && buffer && scrubToPercent && scrubToPercent > 0 && scrubToPercent <= 100) {
+      //   await pause()
+      //   await play(scrubToPercent)
+      // } else {
+      //   // it is currently not playing, so start now
+      //   await play() //this allows the user to scrub to a position and then first play but is buggy causing multiple playbacks
+      //   await pause()
+      //   await play(scrubToPercent)
+      // }
     })
 
     // THIS IS THE MAIN APPLICATION TICK - START
@@ -1669,11 +1685,12 @@ export default {
       // console.log('tick', progress)
 
       if (Number.isInteger(progress) && progress > 0) {
+        console.log('progress', progress)
         emit('updateProgressBar', progress)
       }
     }
 
-    setInterval(progressUITick, 200)
+    setInterval(progressUITick, 50)
     // THIS IS THE MAIN APPLICATION TICK - STOP
 
     watch(() => bus.value.get('updateProgressBar'), (progressInt) => {
