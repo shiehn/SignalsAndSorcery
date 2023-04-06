@@ -552,24 +552,6 @@ export default {
     const renderHTMLTest = ref('')
     const pedalBoard = ref(null)
     const play = async () => {
-
-
-      // console.clear()
-      //
-      //  const childNodes = Array.from(pluginDomElement1.shadowRoot.childNodes);
-
-
-      // console.log('childNodes[2].innerHTML', childNodes[2])
-      // console.log('childNodes[2].innerHTML', childNodes[2].innerHTML)
-
-
-      //renderHTMLTest.value = childNodes[2].innerHTML
-
-
-      // console.log('pedalBoard', pedalBoard.value.innerHTML)
-      // pedalBoard.value = pluginDomElement
-
-
       if (showInitAudio.value) {
         return
       }
@@ -578,6 +560,10 @@ export default {
         await store.audioCtx.resume();
       }
 
+      if(audioGraph.getNodes()[0][0].parameters.get("playing").value === 1){
+        //ITS ALREADY PLAYING
+        return
+      }
 
       for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
         for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
@@ -664,6 +650,11 @@ export default {
     }
 
     const stop = async () => {
+      if(audioGraph.getNodes()[0][0].parameters.get("playing").value === 0){
+        //ITS ALREADY STOPPED
+        return
+      }
+
       for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
         for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
           //SET THE PROCESS TO STOP by default
@@ -699,13 +690,21 @@ export default {
         return
       }
 
-      if (nodeLayer0_0.parameters.get("playing").value === 0) {
-        nodeLayer0_0.parameters.get("playing").value = 1
-        nodeLayer1_0.parameters.get("playing").value = 1
-      } else {
-        nodeLayer0_0.parameters.get("playing").value = 0
-        nodeLayer1_0.parameters.get("playing").value = 0
+      if(audioGraph.getNodes()[0][0].parameters.get("playing").value === 0){
+        //ITS ALREADY STOPPED
+        return
       }
+
+      for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
+        for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
+          //SET THE PROCESS TO STOP by default
+          audioGraph.getNodes()[row][col].parameters.get("playing").value = 0;
+          audioGraph.getNodes()[row][col].parameters.get("loop").value = 0;
+        }
+      }
+
+      isPlaying.value = 0
+        //btnStart.textContent = "Start";
 
       //
       // let currentTime = store.context ? store.context.currentTime : 0

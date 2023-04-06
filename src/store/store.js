@@ -20,6 +20,17 @@ const state = reactive({
         new Array(4),
         new Array(4),
     ],
+    initNodeRows: function () {
+        this.nodeRows = undefined
+        this.nodeRows = [
+            new Array(4),
+            new Array(4),
+            new Array(4),
+            new Array(4),
+            new Array(4),
+            new Array(4),
+        ]
+    },
     getNodeRows: function () {
         return this.nodeRows
     },

@@ -182,6 +182,9 @@ export default {
       await createEmptyProject() //THIS IS A HACK TO CLEAR THE GRID BEFORE LOAD
 
       emit('showLoadingSpinner')
+
+      const bpmBeforeGenComp = JSON.stringify(store.state.globalBpm)
+
       const project = await new ComposerAPI().generateComposition(bpm, key)
 
 
@@ -198,9 +201,19 @@ export default {
       store.state.grid = retrievedRestoredData.grid;
       store.state.updateGlobalChords()
 
-
       const audioGraph = new AudioGraph(store)
-      await audioGraph.populateNodesWithBuffers()
+      //
+      const bpmAfterGenComp = JSON.stringify(store.state.globalBpm)
+      if(bpmBeforeGenComp === bpmAfterGenComp) {
+        console.log('bpm did not change, populating nodes with buffers')
+        await audioGraph.populateNodesWithBuffers()
+      }else {
+        console.log('bpm changed, reinitializing audio graph')
+        await audioGraph.init()
+        emit('setupAudioGraphListeners')
+        await audioGraph.populateNodesWithBuffers()
+      }
+
       emit('hideLoadingSpinner')
 
       //emit('renderMix')

@@ -18,17 +18,25 @@ export default class OperableAudioBuffer extends AudioBuffer {
       return emptyBuffer;
     }
 
-    toArray(shared = false, row=0, col=0, audioCtx = undefined, bpm = undefined) {
+    toArray(shared = false, row=0, col=0, audioCtx = undefined, emptyBuffer = undefined, bpm = undefined) {
+
+        console.log('SwapArray: ', row, col, bpm)
 
         //const secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
         const secondsInLoop = this.getLoopLengthFromBarsAndBPM(4, bpm);
         const bufferSizePerLoop = secondsInLoop * audioCtx.sampleRate;
 
-        const emptyBuffer = audioCtx.createBuffer(2, bufferSizePerLoop*4, audioCtx.sampleRate);
+        //const emptyBuffer = audioCtx.createBuffer(2, bufferSizePerLoop*4, audioCtx.sampleRate);
 
         const supportSAB = typeof SharedArrayBuffer !== "undefined";
         const channelData = [];
         const {numberOfChannels, length} = this;
+
+
+
+
+
+        let alreadyReported = false;
 
 
         for (let i = 0; i < numberOfChannels; i++) {
@@ -47,7 +55,19 @@ export default class OperableAudioBuffer extends AudioBuffer {
                 // } else if(col === 1) {
                     for(let j = 0; j < channelData[i].length; j++) {
                         if(j >= (bufferSizePerLoop*col) && j < (bufferSizePerLoop*(col+1))) {
-                            channelData[i][j] = this.getChannelData(i)[j - (bufferSizePerLoop*col)]
+                            if(this.getChannelData(i)[j - (bufferSizePerLoop*col)]){
+                                channelData[i][j] = this.getChannelData(i)[j - (bufferSizePerLoop*col)]
+                            }
+
+                            // else {
+                            //     if(!this.alreadyReported){
+                            //         console.log('---------------------------------')
+                            //         console.error('AUDIO MISSING SAMPLES: ', this.getChannelData(i))
+                            //         console.error('BUFFER FOR AUDIO', channelData[i])
+                            //         console.log('---------------------------------')
+                            //         this.alreadyReported = true
+                            //     }
+                            // }
                         }
                     }
                 // }

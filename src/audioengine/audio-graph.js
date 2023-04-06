@@ -47,6 +47,8 @@ export default class AudioGraph {
 
     init = async () => {
 
+        this.store.state.initNodeRows()
+
         let secondsInLoop = this.getLoopLengthFromBarsAndBPM(4, this.store.state.getGlobalBpm());
         const bufferSizePerLoop = secondsInLoop * this.store.audioCtx.sampleRate;
 
@@ -55,9 +57,7 @@ export default class AudioGraph {
         // /////////////////////////// LOADING SPINNER ///////////////////////////
         // /////////////////////////// LOADING SPINNER ///////////////////////////
 
-
-
-        //await store.audioCtx.suspend();
+        await this.store.audioCtx.suspend();
         /* Import from the Web Audio Modules 2.0 SDK to initialize Wam Host.
             It initializes a unique ID for the current AudioContext. */
         //const {default: initializeWamHost} = await import("../lib/sdk/initializeWamHost.js");
@@ -72,14 +72,15 @@ export default class AudioGraph {
         // this.pluginInstance2 = await WAM2.createInstance(hostGroupId, this.store.audioCtx);
         // this.pluginDomElement2 = await this.pluginInstance2.createGui();
 
+        const emptyBufferX4 = this.generateEmptyBuffer(this.store.audioCtx, bufferSizePerLoop*4, this.store.audioCtx.sampleRate)
 
         for(let row = 0; row< this.getNodes().length; row++){
             for(let col = 0; col < this.getNodes()[row].length; col++){
                 //Create an empty buffer to be used as a placeholder for the audio.
-                const emptyBuffer = this.generateEmptyBuffer(this.store.audioCtx, bufferSizePerLoop, this.store.audioCtx.sampleRate)
+
 
                 // Create Operable Buffer from empty buffer
-                let operableBuffer = Object.setPrototypeOf(emptyBuffer, OperableAudioBuffer.prototype);
+                let operableBuffer = Object.setPrototypeOf(emptyBufferX4, OperableAudioBuffer.prototype);
 
                 // Create an instance of our Processor for each node
                 const wamInstance = await MyWam.createInstance(hostGroupId, this.store.audioCtx);
@@ -104,7 +105,7 @@ export default class AudioGraph {
 
 
                 //SET THE AUDIO IN THE NODE
-                this.getNodes()[row][col].setAudio(operableBuffer.toArray(false, row,col, this.store.audioCtx, this.store.state.getGlobalBpm()));
+                this.getNodes()[row][col].setAudio(operableBuffer.toArray(false, row,col, this.store.audioCtx, emptyBufferX4, this.store.state.getGlobalBpm()));
 
                 //CONNECT THE NODE TO THE OUTPUT with any plugins
                 this.getNodes()[row][col].connect(this.store.audioCtx.destination);
@@ -114,10 +115,15 @@ export default class AudioGraph {
                 this.getNodes()[row][col].parameters.get("loop").value = 0;
             }
         }
+
+
+
+
+
+        await this.store.audioCtx.resume();
     }
 
     getBufferInRow = async (trackSourceUrls, emptyBuffer, audioCtx) => {
-        console.log('trackSourceUrls', trackSourceUrls)
         let downloadTasks = []
         let buffer_list = new Array();
         for (let x = 0; x < trackSourceUrls.length; x++) {
@@ -148,6 +154,9 @@ export default class AudioGraph {
             }
         }
         await Promise.all(downloadTasks)
+
+        console.log('trackSourceUrls', trackSourceUrls)
+        console.log('BUFFER ROW DOWNLOADED', buffer_list)
         return buffer_list;
     }
 
@@ -165,12 +174,16 @@ export default class AudioGraph {
             return
         }
 
+        await this.store.audioCtx.suspend();
         this.isPopulatingBuffers = true
 
         try {
             let secondsInLoop = this.getLoopLengthFromBarsAndBPM(4, this.store.state.getGlobalBpm());
             const bufferSizePerLoop = secondsInLoop * this.store.audioCtx.sampleRate;
             const emptyBuffer = this.generateEmptyBuffer(this.store.audioCtx, bufferSizePerLoop, this.store.audioCtx.sampleRate)
+
+
+            const downloadedBuffers = [[],[],[],[],[],[]]
 
             for (let row = 0; row < this.getNodes().length; row++) {
                 //CHECK IF THE ROW IS ALREADY CACHED
@@ -184,19 +197,39 @@ export default class AudioGraph {
                 //DOWNLOAD AND GET BUFFER FOR EACH LOOP IN ROW
                 let buffer_list_row = await this.getBufferInRow(tracksInRow, emptyBuffer, this.store.audioCtx);
 
-                for (let b = 0; b < buffer_list_row.length; b++) {
-                    await this.swapBuffers(row, b, buffer_list_row[b])
+                downloadedBuffers[row] = buffer_list_row
+
+                // for (let b = 0; b < buffer_list_row.length; b++) {
+                //     await this.swapBuffers(row, b, buffer_list_row[b])
+                // }
+            }
+
+
+            console.log('downloadedBuffers', downloadedBuffers)
+
+            const emptyBufferX4 = this.generateEmptyBuffer(this.store.audioCtx, bufferSizePerLoop*4, this.store.audioCtx.sampleRate)
+
+            for (let row = 0; row < downloadedBuffers.length; row++) {
+                for (let col = 0; col < downloadedBuffers[row].length; col++) {
+                    //THIS IS SYNCRONOUS!!!!
+                    await this.swapBuffers(row, col, downloadedBuffers[row][col], emptyBufferX4)
                 }
             }
+
+
+
+
         }catch (e) {
             console.error(e)
         } finally {
             this.isPopulatingBuffers = false
+            await this.store.audioCtx.resume();
         }
+
     }
 
-    swapBuffers = async (row, col, buffer) => {
-        const operableAudioBuffer = Object.setPrototypeOf(buffer, OperableAudioBuffer.prototype);
-        this.getNodes()[row][col].setAudio(operableAudioBuffer.toArray(false, row,col, this.store.audioCtx, this.store.state.getGlobalBpm()));
+    swapBuffers = async (row, col, audioBuffer, emptyBuffer) => {
+        const operableAudioBuffer = Object.setPrototypeOf(audioBuffer, OperableAudioBuffer.prototype);
+        this.getNodes()[row][col].setAudio(operableAudioBuffer.toArray(false, row,col, this.store.audioCtx, emptyBuffer, this.store.state.getGlobalBpm()));
     }
 }
