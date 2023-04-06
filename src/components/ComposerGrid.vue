@@ -41,7 +41,7 @@
       <div v-for="gridRowItem in gridRow.value" class="w-1/4 h-16 pr-2 flex">
         <div class="w-1/12 h-full flex flex-col rounded-l-lg bg-gray-500 overflow-hidden border-r border-black">
           <asset-f-x-tab v-for="fx in gridRowItem.fxs" :sfx_id="fx.id"></asset-f-x-tab>
-<!--          <div v-for="fx in gridRowItem.fxs" class="h-full w-full bg-pink-200 overflow-hidden border-b border-black" @click="fxClick(fx.id)"></div>-->
+          <!--          <div v-for="fx in gridRowItem.fxs" class="h-full w-full bg-pink-200 overflow-hidden border-b border-black" @click="fxClick(fx.id)"></div>-->
         </div>
         <div
             class="w-11/12 h-full overflow-hidden relative rounded-r-lg shadow-lg hover:bg-gray-500"
@@ -178,7 +178,7 @@ export default {
       emit('renderMixIfNeeded')
     }
 
-    const removeGridItem = (row, col) => {
+    const removeGridItem = async (row, col) => {
 
       const gridItem = store.state.grid[row].value[col]
 
@@ -190,6 +190,9 @@ export default {
 
       store.state.updateGlobalBpm()
       store.state.updateGlobalKey()
+
+      const audioGraph = new AudioGraph(store)
+      await audioGraph.populateNodeWithEmptyBuffer(row, col)
 
       emit('updateAssetSelection', {
         row: row,
@@ -287,7 +290,11 @@ export default {
       store.state.grid[row].value[col].refreshing = false
       store.state.grid[row].value[col].stem = res
 
-      emit('renderMixIfNeeded')
+
+      const audioGraph = new AudioGraph(store)
+      await audioGraph.populateNodeWithBuffer(row, col)
+
+      //emit('renderMixIfNeeded')
     }
 
     const columnAdd = (sectionId) => {
@@ -317,7 +324,6 @@ export default {
 
       emit('launchModal', modalOpenPayload)
     }
-
 
 
     const arpeggioToggled = (arpId) => {
@@ -422,7 +428,6 @@ export default {
 
 
         //ENTRY POINT
-
 
 
         //INIT GRID

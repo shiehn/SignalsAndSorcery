@@ -209,7 +209,7 @@ export default {
         await audioGraph.populateNodesWithBuffers()
       }else {
         console.log('bpm changed, reinitializing audio graph')
-        await audioGraph.init()
+        await audioGraph.setEmptyBuffersToMatchBPM()
         emit('setupAudioGraphListeners')
         await audioGraph.populateNodesWithBuffers()
       }

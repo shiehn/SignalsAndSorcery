@@ -10,6 +10,7 @@ const state = reactive({
     projectId: undefined,
     projectVersionId: undefined,
     projectName: 'Untitled Project',
+    hostGroupId: undefined,
     authorName: '',
     globalBpm: undefined,
     nodeRows: [
@@ -20,6 +21,12 @@ const state = reactive({
         new Array(4),
         new Array(4),
     ],
+    getHostGroupId: function () {
+        return this.hostGroupId
+    },
+    setHostGroupId: function (hostGroupId) {
+        this.hostGroupId = hostGroupId
+    },
     initNodeRows: function () {
         this.nodeRows = undefined
         this.nodeRows = [

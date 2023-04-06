@@ -26,6 +26,6 @@ export default class LeaderBoardAAPI {
             console.log('Error', "Unable to get USERS COMPOSITIONS : " + e)
         }
 
-        return
+
     }
 }
