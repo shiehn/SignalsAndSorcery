@@ -1,6 +1,7 @@
 import {initializeWamHost} from "@webaudiomodules/sdk";
 import OperableAudioBuffer from "./operable-audio-buffer";
 import MyWam from "./my-wam";
+import axios from "axios";
 
 export default class AudioGraph {
 
@@ -10,6 +11,8 @@ export default class AudioGraph {
 
     constructor(store) {
 
+        this.isPopulatingBuffers = false
+
         this.store = store
 
         this.pluginInstance1 = undefined
@@ -17,16 +20,10 @@ export default class AudioGraph {
 
         this.pluginInstance2 = undefined
         this.pluginDomElement2 = ''
+    }
 
-
-        this.nodeRows = [
-            new Array(4),
-            new Array(4),
-            new Array(4),
-            new Array(4),
-            new Array(4),
-            new Array(4),
-        ]
+    getNodes = () => {
+        return this.store.state.getNodeRows()
     }
 
     getLoopLengthFromBarsAndBPM = (barCount, bpm) => {
@@ -48,13 +45,7 @@ export default class AudioGraph {
         return emptyBuffer;
     }
 
-    getNodes = () => {
-        return this.nodeRows
-    }
-
     init = async () => {
-
-
 
         let secondsInLoop = this.getLoopLengthFromBarsAndBPM(4, this.store.state.getGlobalBpm());
         const bufferSizePerLoop = secondsInLoop * this.store.audioCtx.sampleRate;
@@ -76,14 +67,14 @@ export default class AudioGraph {
         const {default: WAM2} = await import(/* webpackIgnore: true */ this.plugin2Url);
 
         // Creating the Instance of the WAM plugins.
-        this.pluginInstance1 = await WAM1.createInstance(hostGroupId, this.store.audioCtx);
-        this.pluginDomElement1 = await this.pluginInstance1.createGui();
-        this.pluginInstance2 = await WAM2.createInstance(hostGroupId, this.store.audioCtx);
-        this.pluginDomElement2 = await this.pluginInstance2.createGui();
+        // this.pluginInstance1 = await WAM1.createInstance(hostGroupId, this.store.audioCtx);
+        // this.pluginDomElement1 = await this.pluginInstance1.createGui();
+        // this.pluginInstance2 = await WAM2.createInstance(hostGroupId, this.store.audioCtx);
+        // this.pluginDomElement2 = await this.pluginInstance2.createGui();
 
 
-        for(let row = 0; row< this.nodeRows.length; row++){
-            for(let col = 0; col < this.nodeRows[row].length; col++){
+        for(let row = 0; row< this.getNodes().length; row++){
+            for(let col = 0; col < this.getNodes()[row].length; col++){
                 //Create an empty buffer to be used as a placeholder for the audio.
                 const emptyBuffer = this.generateEmptyBuffer(this.store.audioCtx, bufferSizePerLoop, this.store.audioCtx.sampleRate)
 
@@ -92,7 +83,7 @@ export default class AudioGraph {
 
                 // Create an instance of our Processor for each node
                 const wamInstance = await MyWam.createInstance(hostGroupId, this.store.audioCtx);
-                this.nodeRows[row][col] = wamInstance.audioNode;
+                this.getNodes()[row][col] = wamInstance.audioNode;
 
 
 
@@ -113,15 +104,99 @@ export default class AudioGraph {
 
 
                 //SET THE AUDIO IN THE NODE
-                this.nodeRows[row][col].setAudio(operableBuffer.toArray(false, row,col, this.store.audioCtx, this.store.state.getGlobalBpm()));
+                this.getNodes()[row][col].setAudio(operableBuffer.toArray(false, row,col, this.store.audioCtx, this.store.state.getGlobalBpm()));
 
                 //CONNECT THE NODE TO THE OUTPUT with any plugins
-                this.nodeRows[row][col].connect(this.pluginInstance1._audioNode).connect(this.store.audioCtx.destination);
+                this.getNodes()[row][col].connect(this.store.audioCtx.destination);
 
                 //SET THE PROCESS TO STOP by default
-                this.nodeRows[row][col].parameters.get("playing").value = 0;
-                this.nodeRows[row][col].parameters.get("loop").value = 0;
+                this.getNodes()[row][col].parameters.get("playing").value = 0;
+                this.getNodes()[row][col].parameters.get("loop").value = 0;
             }
         }
+    }
+
+    getBufferInRow = async (trackSourceUrls, emptyBuffer, audioCtx) => {
+        console.log('trackSourceUrls', trackSourceUrls)
+        let downloadTasks = []
+        let buffer_list = new Array();
+        for (let x = 0; x < trackSourceUrls.length; x++) {
+            if (trackSourceUrls[x]) {
+                downloadTasks.push(new Promise(function (resolve) {
+                    axios.get(trackSourceUrls[x] + "?x-request=js" /*s3 hack to prevent request from 2 origins */, {
+                        responseType: 'arraybuffer'
+                    }).then(function (response) {
+                        let audioData = response.data;
+                        if (audioData) {
+                            audioCtx.decodeAudioData(audioData, function (buffer) {
+                                    buffer_list[x] = buffer;
+                                    resolve()
+                                },
+                                function (e) {
+                                    console.log(e.err);
+                                });
+                        } else {
+                            console.error("problem!!");
+                        }
+                    })
+                        .catch(function (error) {
+                            console.error("problem!! downloading " + error);
+                        })
+                }))
+            } else {
+                buffer_list[x] = emptyBuffer;
+            }
+        }
+        await Promise.all(downloadTasks)
+        return buffer_list;
+    }
+
+    getTrackListByRow = (row) => {
+        const tracks = this.store.state.grid[row].value.map((t) => {
+            if (t.stem && t.stem.source) {
+                return t.stem.source
+            }
+        })
+        return tracks
+    }
+
+    populateNodesWithBuffers = async () => {
+        if(this.isPopulatingBuffers){
+            return
+        }
+
+        this.isPopulatingBuffers = true
+
+        try {
+            let secondsInLoop = this.getLoopLengthFromBarsAndBPM(4, this.store.state.getGlobalBpm());
+            const bufferSizePerLoop = secondsInLoop * this.store.audioCtx.sampleRate;
+            const emptyBuffer = this.generateEmptyBuffer(this.store.audioCtx, bufferSizePerLoop, this.store.audioCtx.sampleRate)
+
+            for (let row = 0; row < this.getNodes().length; row++) {
+                //CHECK IF THE ROW IS ALREADY CACHED
+                // if (!this.store.state.hasRowStateChanged(n) && BUFFER_ROW_CACHE[n]) {
+                //     listOfTrimmedRowBuffers[n] = BUFFER_ROW_CACHE[n]
+                //     continue
+                // }
+                //GET THE LOOP SOURCE FOR ONE ROW
+                let tracksInRow = this.getTrackListByRow(row)
+                //console.log('tracksInRow-'+row, tracksInRow)
+                //DOWNLOAD AND GET BUFFER FOR EACH LOOP IN ROW
+                let buffer_list_row = await this.getBufferInRow(tracksInRow, emptyBuffer, this.store.audioCtx);
+
+                for (let b = 0; b < buffer_list_row.length; b++) {
+                    await this.swapBuffers(row, b, buffer_list_row[b])
+                }
+            }
+        }catch (e) {
+            console.error(e)
+        } finally {
+            this.isPopulatingBuffers = false
+        }
+    }
+
+    swapBuffers = async (row, col, buffer) => {
+        const operableAudioBuffer = Object.setPrototypeOf(buffer, OperableAudioBuffer.prototype);
+        this.getNodes()[row][col].setAudio(operableAudioBuffer.toArray(false, row,col, this.store.audioCtx, this.store.state.getGlobalBpm()));
     }
 }

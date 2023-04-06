@@ -86,7 +86,7 @@ const getProcessor = (moduleId) => {
                 if (this.playhead < this.loopStartPercent * audioLength) {
                     this.playhead = this.loopStartPercent * audioLength;
                 }
-                if (this.playhead > this.loopEndPercent * audioLength) {
+                if (this.playhead >= this.loopEndPercent * audioLength -128) {
                     this.playhead = this.loopStartPercent * audioLength;
                 }
                 const channelCount = Math.min(this.audio.length, output.length);

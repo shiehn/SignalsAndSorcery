@@ -162,51 +162,7 @@ export default {
 
     // //COL 0
     const audioUrl0_0 = "http://localhost:8000/static/deleteme/00.wav";
-    // const audioUrl1_0 = "http://localhost:8000/static/deleteme/10.wav";
-    // const audioUrl2_0 = "http://localhost:8000/static/deleteme/20.wav";
-    // const audioUrl3_0 = "http://localhost:8000/static/deleteme/30.wav";
-    // const audioUrl4_0 = "http://localhost:8000/static/deleteme/40.wav";
-    // const audioUrl5_0 = "http://localhost:8000/static/deleteme/40.wav";
-    //
-    // //COL 1
-    // const audioUrl0_1 = "http://localhost:8000/static/deleteme/01.wav";
-    // const audioUrl1_1 = "http://localhost:8000/static/deleteme/11.wav";
-    // const audioUrl2_1 = "http://localhost:8000/static/deleteme/21.wav";
-    // const audioUrl3_1 = "http://localhost:8000/static/deleteme/31.wav";
-    // const audioUrl4_1 = "http://localhost:8000/static/deleteme/41.wav";
-    // const audioUrl5_1 = "http://localhost:8000/static/deleteme/41.wav";
-    //
-    // //COL 2
-    // const audioUrl0_2 = "http://localhost:8000/static/deleteme/00.wav";
-    // const audioUrl1_2 = "http://localhost:8000/static/deleteme/10.wav";
-    // const audioUrl2_2 = "http://localhost:8000/static/deleteme/20.wav";
-    // const audioUrl3_2 = "http://localhost:8000/static/deleteme/30.wav";
-    // const audioUrl4_2 = "http://localhost:8000/static/deleteme/40.wav";
-    // const audioUrl5_2 = "http://localhost:8000/static/deleteme/50.wav";
-    //
-    // //COL 3
-    // const audioUrl0_3 = "http://localhost:8000/static/deleteme/01.wav";
-    // const audioUrl1_3 = "http://localhost:8000/static/deleteme/11.wav";
-    // const audioUrl2_3 = "http://localhost:8000/static/deleteme/21.wav";
-    // const audioUrl3_3 = "http://localhost:8000/static/deleteme/31.wav";
-    // const audioUrl4_3 = "http://localhost:8000/static/deleteme/41.wav";
-    // const audioUrl5_3 = "http://localhost:8000/static/deleteme/51.wav";
-    //
-    // //COL 4
-    // const audioUrl0_4 = "http://localhost:8000/static/deleteme/00.wav";
-    // const audioUrl1_4 = "http://localhost:8000/static/deleteme/10.wav";
-    // const audioUrl2_4 = "http://localhost:8000/static/deleteme/20.wav";
-    // const audioUrl3_4 = "http://localhost:8000/static/deleteme/30.wav";
-    // const audioUrl4_4 = "http://localhost:8000/static/deleteme/40.wav";
-    // const audioUrl5_4 = "http://localhost:8000/static/deleteme/50.wav";
-    //
-    // //COL 5
-    // const audioUrl0_5 = "http://localhost:8000/static/deleteme/01.wav";
-    // const audioUrl1_5 = "http://localhost:8000/static/deleteme/11.wav";
-    // const audioUrl2_5 = "http://localhost:8000/static/deleteme/21.wav";
-    // const audioUrl3_5 = "http://localhost:8000/static/deleteme/31.wav";
-    // const audioUrl4_5 = "http://localhost:8000/static/deleteme/41.wav";
-    // const audioUrl5_5 = "http://localhost:8000/static/deleteme/51.wav";
+
 
 //PROGRESS BARgetL
     let progress = 0
@@ -248,18 +204,13 @@ export default {
 
 
 
-      emit('showLoadingSpinner')
-      await audioGraph.init()
+
+      //await audioGraph.init()
+
 
       //PLAYHEAD SHIT
-      audioGraph.getNodes()[0][0].port.onmessage = ev => {
-        if (ev.data.playhead) {
-          // console.log('playhead', ev.data.playhead)
-          progress = ev.data.playhead
-        }
-      }
 
-      emit('hideLoadingSpinner')
+
     })
 
     // const getTrackListByRow = (row) => {
@@ -627,21 +578,19 @@ export default {
         await store.audioCtx.resume();
       }
 
-      isPlaying.value = audioGraph.getNodes()[0][0].parameters.get("playing").value;
-      if (isPlaying.value === 0) {
 
-        for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
-          for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
-            //SET THE PROCESS TO STOP by default
-            audioGraph.getNodes()[row][col].parameters.get("playing").value = 1;
-            audioGraph.getNodes()[row][col].parameters.get("loop").value = 0;
-          }
+      for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
+        for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
+          //SET THE PROCESS TO STOP by default
+          audioGraph.getNodes()[row][col].parameters.get("playing").value = 1;
+          audioGraph.getNodes()[row][col].parameters.get("loop").value = 0;
         }
+      }
 
-        isPlaying.value = 1
+      isPlaying.value = 1
 
         //btnStart.textContent = "Stop";
-      }
+
 
       // if (showInitAudio.value) {
       //   return
@@ -715,18 +664,17 @@ export default {
     }
 
     const stop = async () => {
-      if (isPlaying.value === 1) {
-        for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
-          for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
-            //SET THE PROCESS TO STOP by default
-            audioGraph.getNodes()[row][col].parameters.get("playing").value = 0;
-            audioGraph.getNodes()[row][col].parameters.get("loop").value = 0;
-          }
+      for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
+        for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
+          //SET THE PROCESS TO STOP by default
+          audioGraph.getNodes()[row][col].parameters.get("playing").value = 0;
+          audioGraph.getNodes()[row][col].parameters.get("loop").value = 0;
         }
-
-        isPlaying.value = 0
-        //btnStart.textContent = "Start";
       }
+
+      isPlaying.value = 0
+        //btnStart.textContent = "Start";
+
 
       // else {
       //   console.log('play !1')
@@ -905,22 +853,42 @@ export default {
       }
     })
 
-    watch(() => bus.value.get('renderMix'), async () => {
-      // if (!isRendering.value) {
-      //   await renderMix()
-      // }
+    watch(() => bus.value.get('setupAudioGraphListeners'), async () => {
+      audioGraph.getNodes()[0][0].port.onmessage = ev => {
+        if (ev.data.playhead) {
+          // console.log('playhead', ev.data.playhead)
+          progress = ev.data.playhead
+        }
+      }
     })
 
-    watch(() => bus.value.get('renderMixIfNeeded'), async () => {
 
-      // setTimeout(async function () {
-      //   if (store.state.hasClipStateChanged()) {
-      //     if (!isRendering.value) {
-      //       await renderMix()
-      //     }
-      //   }
-      // }, 1000);
-    })
+    // watch(() => bus.value.get('populateTheAudioGraph'), async () => {
+    //
+    // })
+
+//     watch(() => bus.value.get('renderMix'), async () => {
+// //RENDER MIX IS CALLED WHEN A RANDOM PROJECT IS CREATED
+//       setTimeout(async function () {
+//         console.log('POPULATE GRAPH')
+//         await audioGraph.populateNodesWithBuffers()
+//       }, 1000);
+//       // if (!isRendering.value) {
+//       //   await renderMix()
+//       // }
+//     })
+
+    // watch(() => bus.value.get('renderMixIfNeeded'), async () => {
+    //
+    //   setTimeout(async function () {
+    //     if (store.state.hasClipStateChanged()) {
+    //       //if (!isRendering.value) {
+    //         //alert('renderMix')
+    //         //await audioGraph.populateNodesWithBuffers()
+    //       //}
+    //     }
+    //   }, 1000);
+    // })
 
     watch(() => bus.value.get('scrubTo'), async (scrubToPercent) => {
       if (store.state.clipCount() < 1) {

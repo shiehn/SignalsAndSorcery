@@ -40,7 +40,6 @@ export default class MyWamNode extends WamNode {
      * @param {Float32Array[]} audio Audio Buffer to be transferred to the processor in the audio to process.
      */
     setAudio(audio) {
-        console.log('------------------SET AUDIO------------------');
         this.port.postMessage({audio});
     }
 }

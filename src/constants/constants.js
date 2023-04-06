@@ -13,4 +13,4 @@ export const BASE_API_URL = 'http://localhost:8000/api/'
 
 // export const BASE_API_URL = 'https://signalsandsorcery.ai/api/'
 
-export const BUILD_NUMBER = '0.10.4'
+export const BUILD_NUMBER = '0.10.5'

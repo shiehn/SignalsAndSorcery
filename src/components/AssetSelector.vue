@@ -96,6 +96,7 @@ import Analytics from "../analytics/Analytics";
 import GridGenerator from "../generators/grid-generator";
 import LoadingSpinner from "./LoadingSpinner.vue";
 import LockProcessor from "../processors/lock-processor";
+import AudioGraph from "../audioengine/audio-graph";
 
 export default {
   name: "AssetSelector",
@@ -165,7 +166,7 @@ export default {
       store.state.globalKey = undefined
       store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
 
-      emit('renderMix')
+      //emit('renderMix')
       emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
       emit('disableAnimateSelector')
       emit('resetCompatibility')
@@ -182,7 +183,7 @@ export default {
 
       emit('showLoadingSpinner')
       const project = await new ComposerAPI().generateComposition(bpm, key)
-      emit('hideLoadingSpinner')
+
 
       emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
 
@@ -197,7 +198,12 @@ export default {
       store.state.grid = retrievedRestoredData.grid;
       store.state.updateGlobalChords()
 
-      emit('renderMix')
+
+      const audioGraph = new AudioGraph(store)
+      await audioGraph.populateNodesWithBuffers()
+      emit('hideLoadingSpinner')
+
+      //emit('renderMix')
       emit('closeProjectsBoard')
       emit('saveProjectToLocalStorage')
       emit('resetCompatibility')

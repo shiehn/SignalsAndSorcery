@@ -12,6 +12,17 @@ const state = reactive({
     projectName: 'Untitled Project',
     authorName: '',
     globalBpm: undefined,
+    nodeRows: [
+        new Array(4),
+        new Array(4),
+        new Array(4),
+        new Array(4),
+        new Array(4),
+        new Array(4),
+    ],
+    getNodeRows: function () {
+        return this.nodeRows
+    },
     getGlobalBpm: function () {
         if (this.globalBpm) {
             return this.globalBpm

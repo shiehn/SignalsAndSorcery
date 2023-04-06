@@ -118,6 +118,7 @@ import {v4} from "uuid";
 import store from "../store/store";
 import ComposerAPI from "../dal/ComposerAPI";
 import AssetFXTab from "./AssetFXTab.vue";
+import AudioGraph from "../audioengine/audio-graph";
 
 export default {
   name: 'ComposerGrid',
@@ -415,23 +416,41 @@ export default {
       }
     }
 
-    onMounted(() => {
-      nextTick(() => {
+    onMounted(async () => {
+      nextTick(async () => {
         isMobile.value = store.isMobile ? true : false
 
+
+        //ENTRY POINT
+
+
+
+        //INIT GRID
+        emit('showLoadingSpinner')
         store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
+        emit('hideLoadingSpinner')
+
+        //INIT AUDIO GRAPH
+        emit('showLoadingSpinner')
+        const audioGraph = new AudioGraph(store)
+        await audioGraph.init()
+        emit('hideLoadingSpinner')
 
         //add a 2nd section by default
         // if (!isMobile.value) {
         //   new GridProcessor(store.state.grid).addSection('part_2', 6)
         // }
+        emit('setupAudioGraphListeners')
 
-        if (localStorage.getItem("sas-save")) {
-          emit('loadProjectFromLocalStorage')
-        } else {
-          //GENERATE RANDOM
-          emit('generateRandomProject')
-        }
+        //ENTRY POINT
+        // if (localStorage.getItem("sas-save")) {
+        //   emit('loadProjectFromLocalStorage')
+        // } else {
+        //   //GENERATE RANDOM
+        //   emit('generateRandomProject')
+        // }
+
+        emit('hideLoadingSpinner')
       })
 
       nextTick(() => {
