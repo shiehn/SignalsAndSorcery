@@ -82,6 +82,7 @@ import {useKeypress} from 'vue3-keypress';
 import OperableAudioBuffer from "../audioengine/operable-audio-buffer";
 import {initializeWamHost} from "@webaudiomodules/sdk";
 import MyWam from "../audioengine/my-wam";
+import AudioGraph from "../audioengine/audio-graph";
 
 // function cloneAudioBuffer(fromAudioBuffer) {
 //   const audioBuffer = new AudioBuffer({
@@ -157,10 +158,7 @@ export default {
 
 
 
-    const plugin1Url = "http://localhost:8000/static/wam/stonephaser/index.js";
-    const plugin2Url = "http://localhost:8000/static/wam/BigMuff/index.js";
-    //NEW CODE
-    // index.js
+
 
     // //COL 0
     const audioUrl0_0 = "http://localhost:8000/static/deleteme/00.wav";
@@ -225,117 +223,20 @@ export default {
 
 
 
-    let pluginInstance1 = undefined
-    let pluginDomElement1 = ''
-
-    let pluginInstance2 = undefined
-    let pluginDomElement2 = ''
 
 
 
-    const getLoopLengthFromBarsAndBPM = (barCount, bpm) => {
-      let msPerBeatAtBpm = 60000 / bpm;
-      let totalBeats = 4 * barCount;
-      return msPerBeatAtBpm * totalBeats / 1000
-    }
 
 
-    const generateEmptyBuffer = (actx, frameCount, sampleRate) => {
-      //THIS IS LIKELY SILENCE SO GENERATE AN EMPTY BUFFER
-      let emptyBuffer = actx.createBuffer(2, frameCount, sampleRate);
-      for (let channel = 0; channel < emptyBuffer.numberOfChannels; channel++) {
-        let nowBuffering = emptyBuffer.getChannelData(channel);
-        for (let i = 0; i < emptyBuffer.length; i++) {
-          nowBuffering[i] = 0;
-        }
-      }
-      return emptyBuffer;
-    }
-
-    let secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
-    const bufferSizePerLoop = secondsInLoop * store.audioCtx.sampleRate;
 
     // const numOfRows = store.state.grid.length;
     // let listOfTrimmedRowBuffers = new Array(numOfRows);
 
 
-    let nodeRows = [
-      new Array(4),
-      new Array(4),
-      new Array(4),
-      new Array(4),
-      new Array(4),
-      new Array(4),
-    ]
-
-
-    const bootStrapAudioGraph = async () => {
-
-      console.log('GLOBAL BPM AT BOOTSTRAP', store.state.getGlobalBpm())
-      // /////////////////////////// LOADING SPINNER ///////////////////////////
-      // /////////////////////////// LOADING SPINNER ///////////////////////////
-      // /////////////////////////// LOADING SPINNER ///////////////////////////
-      emit('showLoadingSpinner')
-
-
-      //await store.audioCtx.suspend();
-      /* Import from the Web Audio Modules 2.0 SDK to initialize Wam Host.
-          It initializes a unique ID for the current AudioContext. */
-      //const {default: initializeWamHost} = await import("../lib/sdk/initializeWamHost.js");
-      const [hostGroupId] = await initializeWamHost(store.audioCtx);
-      // Import our custom WAM Processor and the plugins.
-      const {default: WAM1} = await import(/* webpackIgnore: true */ plugin1Url);
-      const {default: WAM2} = await import(/* webpackIgnore: true */ plugin2Url);
-
-      // Creating the Instance of the WAM plugins.
-      pluginInstance1 = await WAM1.createInstance(hostGroupId, store.audioCtx);
-      pluginDomElement1 = await pluginInstance1.createGui();
-      pluginInstance2 = await WAM2.createInstance(hostGroupId, store.audioCtx);
-      pluginDomElement2 = await pluginInstance2.createGui();
-
-
-      for(let row = 0; row< nodeRows.length; row++){
-        for(let col = 0; col < nodeRows[row].length; col++){
-          //Create an empty buffer to be used as a placeholder for the audio.
-          const emptyBuffer = generateEmptyBuffer(store.audioCtx, bufferSizePerLoop, store.audioCtx.sampleRate)
-
-          // Create Operable Buffer from empty buffer
-          let operableBuffer = Object.setPrototypeOf(emptyBuffer, OperableAudioBuffer.prototype);
-
-          // Create an instance of our Processor for each node
-          const wamInstance = await MyWam.createInstance(hostGroupId, store.audioCtx);
-          nodeRows[row][col] = wamInstance.audioNode;
 
 
 
-//JUST FOR TESTING
-
-          // const response0_0 = await fetch(audioUrl0_0);
-          // const audioArrayBuffer0_0 = await response0_0.arrayBuffer();
-          // const audioBuffer0_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer0_0);
-          // // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
-          // operableBuffer = Object.setPrototypeOf(audioBuffer0_0, OperableAudioBuffer.prototype);
-
-
-          //JUST FOR TESTING
-
-
-
-
-
-
-          //SET THE AUDIO IN THE NODE
-          nodeRows[row][col].setAudio(operableBuffer.toArray(false, row,col, store.audioCtx, store.state.getGlobalBpm()));
-
-          //CONNECT THE NODE TO THE OUTPUT with any plugins
-          nodeRows[row][col].connect(pluginInstance1._audioNode).connect(store.audioCtx.destination);
-
-          //SET THE PROCESS TO STOP by default
-          nodeRows[row][col].parameters.get("playing").value = 0;
-          nodeRows[row][col].parameters.get("loop").value = 0;
-        }
-      }
-    }
+    const audioGraph = new AudioGraph(store)
 
 
     onMounted(async () => {
@@ -347,15 +248,11 @@ export default {
 
 
 
-
-      await bootStrapAudioGraph()
-
-
-
-
+      emit('showLoadingSpinner')
+      await audioGraph.init()
 
       //PLAYHEAD SHIT
-      nodeRows[0][0].port.onmessage = ev => {
+      audioGraph.getNodes()[0][0].port.onmessage = ev => {
         if (ev.data.playhead) {
           // console.log('playhead', ev.data.playhead)
           progress = ev.data.playhead
@@ -730,13 +627,14 @@ export default {
         await store.audioCtx.resume();
       }
 
-      isPlaying.value = nodeRows[0][0].parameters.get("playing").value;
+      isPlaying.value = audioGraph.getNodes()[0][0].parameters.get("playing").value;
       if (isPlaying.value === 0) {
-        for(let row = 0; row< nodeRows.length; row++){
-          for(let col = 0; col < nodeRows[row].length; col++){
+
+        for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
+          for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
             //SET THE PROCESS TO STOP by default
-            nodeRows[row][col].parameters.get("playing").value = 1;
-            nodeRows[row][col].parameters.get("loop").value = 0;
+            audioGraph.getNodes()[row][col].parameters.get("playing").value = 1;
+            audioGraph.getNodes()[row][col].parameters.get("loop").value = 0;
           }
         }
 
@@ -818,11 +716,11 @@ export default {
 
     const stop = async () => {
       if (isPlaying.value === 1) {
-        for(let row = 0; row< nodeRows.length; row++){
-          for(let col = 0; col < nodeRows[row].length; col++){
+        for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
+          for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
             //SET THE PROCESS TO STOP by default
-            nodeRows[row][col].parameters.get("playing").value = 0;
-            nodeRows[row][col].parameters.get("loop").value = 0;
+            audioGraph.getNodes()[row][col].parameters.get("playing").value = 0;
+            audioGraph.getNodes()[row][col].parameters.get("loop").value = 0;
           }
         }
 
@@ -932,15 +830,15 @@ export default {
     const setPlaybackPosition = async (percentOfScrubBar) => {
 
       const numOfBars = 4
-      const secInLoop = getLoopLengthFromBarsAndBPM(numOfBars, store.state.getGlobalBpm())
+      const secInLoop = audioGraph.getLoopLengthFromBarsAndBPM(numOfBars, store.state.getGlobalBpm())
       const samplesInFourBars = secInLoop * store.audioCtx.sampleRate * numOfBars
 
 
       const newPos = samplesInFourBars * (percentOfScrubBar*.01)
 
-      for(let row = 0; row< nodeRows.length; row++){
-        for(let col = 0; col < nodeRows[row].length; col++){
-          nodeRows[row][col].port.postMessage({'position': newPos});
+      for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
+        for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
+          audioGraph.getNodes()[row][col].port.postMessage({'position': newPos});
         }
       }
 
@@ -1079,9 +977,9 @@ export default {
       const loopStartPercent = store.state.playBack.loopStartPercent
       const loopEndPercent = store.state.playBack.loopEndPercent
 
-      for(let row = 0; row< nodeRows.length; row++){
-        for(let col = 0; col < nodeRows[row].length; col++){
-          nodeRows[row][col].port.postMessage({'loopStart': loopStartPercent, 'loopEnd': loopEndPercent});
+      for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
+        for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
+          audioGraph.getNodes()[row][col].port.postMessage({'loopStart': loopStartPercent, 'loopEnd': loopEndPercent});
         }
       }
 
