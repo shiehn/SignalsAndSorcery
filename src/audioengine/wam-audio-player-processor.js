@@ -49,7 +49,11 @@ const getProcessor = (moduleId) => {
             /** @param {MessageEvent<{ audio?: Float32Array[]; position?: number }>} e */
             this.port.onmessage = (e) => {
                 if (e.data.audio) {
+                    // console.log('----------------------------------')
+                    // console.log('PREV AUDIO LENGTH: ', this.audio ? this.audio[0].length : 'NONE');
                     this.audio = e.data.audio;
+                    // console.log('NEW AUDIO LENGTH: ', this.audio ? this.audio[0].length : 'NONE');
+                    // console.log('----------------------------------')
                 } else if (typeof e.data.position === "number") {
                     this.playhead = e.data.position
                 } else if (typeof e.data.loopStart === "number" && typeof e.data.loopEnd === "number") {
@@ -110,7 +114,7 @@ const getProcessor = (moduleId) => {
     try {
         registerProcessor(moduleId, MyWamProcessor);
     } catch (error) {
-        console.warn(error);
+        //console.warn(error);
     }
     return MyWamProcessor
 }

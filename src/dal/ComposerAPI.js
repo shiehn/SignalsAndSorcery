@@ -16,6 +16,7 @@ export default class ComposerAPI {
             }
 
             let axiosConfig = {
+                timeout: 60000,
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     // 'Authorization': 'Token ' + token,
@@ -64,6 +65,7 @@ export default class ComposerAPI {
             const url = BASE_API_URL + 'compositions/user' + '?page=' + page
 
             let axiosConfig = {
+                timeout: 30000,
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     'Authorization': 'Token ' + token,
@@ -89,6 +91,7 @@ export default class ComposerAPI {
             const url = `${BASE_API_URL}compositions/asset/row/alternative/?chords=${encodeURIComponent(chords)}&bpm=${encodeURIComponent(bpm)}&key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`
 
             let axiosConfig = {
+                timeout: 30000,
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     'Authorization': 'Token ' + token,
@@ -115,6 +118,7 @@ export default class ComposerAPI {
             const url = `${BASE_API_URL}compositions/asset/alternative/?chords=${encodeURIComponent(chords)}&bpm=${encodeURIComponent(bpm)}&key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}&prev=${encodeURIComponent(prevStemId)}`
 
             let axiosConfig = {
+                timeout: 30000,
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     'Authorization': 'Token ' + token,
@@ -141,6 +145,7 @@ export default class ComposerAPI {
             const url = `${BASE_API_URL}assets/exclude?id=${encodeURIComponent(assetId)}&name=${encodeURIComponent(assetName)}`
 
             let axiosConfig = {
+                timeout: 30000,
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     'Authorization': 'Token ' + token,
@@ -170,6 +175,7 @@ export default class ComposerAPI {
             const url = `${BASE_API_URL}assets/evaluate/${encodeURIComponent(assetId)}/${encodeURIComponent(binaryBool)}/`
 
             let axiosConfig = {
+                timeout: 30000,
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     'Authorization': 'Token ' + token,
@@ -196,6 +202,7 @@ export default class ComposerAPI {
             const url = BASE_API_URL + 'composition/' + id + '/'
 
             let axiosConfig = {
+                timeout: 30000,
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     'Authorization': 'Token ' + token,
@@ -223,6 +230,7 @@ export default class ComposerAPI {
             const url = BASE_API_URL + `composition/delete/${id}/`
 
             let axiosConfig = {
+                timeout: 30000,
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     'Authorization': 'Token ' + token,
@@ -249,6 +257,7 @@ export default class ComposerAPI {
             const url = BASE_API_URL + 'export/composition/' + id
 
             let axiosConfig = {
+                timeout: 60000,
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     'Authorization': 'Token ' + token,
@@ -275,6 +284,7 @@ export default class ComposerAPI {
             const url = BASE_API_URL + 'composition/'
 
             let axiosConfig = {
+                timeout: 60000,
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     'Authorization': 'Token ' + token,

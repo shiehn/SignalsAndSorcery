@@ -1,9 +1,9 @@
 <template>
   <div v-if="!isMobile" class="flex w-full justify-between py-4">
-    <code-editor></code-editor>
-    <code-worklet-editor></code-worklet-editor>
-<!--    <leader-board></leader-board>-->
-<!--    <project-board></project-board>-->
+<!--    <code-editor></code-editor>-->
+<!--    <code-worklet-editor></code-worklet-editor>-->
+    <leader-board></leader-board>
+    <project-board></project-board>
   </div>
 </template>
 

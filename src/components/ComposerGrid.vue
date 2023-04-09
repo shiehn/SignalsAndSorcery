@@ -435,25 +435,31 @@ export default {
         store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
         emit('hideLoadingSpinner')
 
-        //INIT AUDIO GRAPH
-        emit('showLoadingSpinner')
+
         const audioGraph = new AudioGraph(store)
-        await audioGraph.init()
-        emit('hideLoadingSpinner')
+        if(!isMobile.value){
+          //INIT AUDIO GRAPH
+          emit('showLoadingSpinner')
+          await audioGraph.init()
+          emit('hideLoadingSpinner')
+
+        }
+
+        emit('setupAudioGraphListeners')
 
         //add a 2nd section by default
         // if (!isMobile.value) {
         //   new GridProcessor(store.state.grid).addSection('part_2', 6)
         // }
-        emit('setupAudioGraphListeners')
+
 
         //ENTRY POINT
-        // if (localStorage.getItem("sas-save")) {
-        //   emit('loadProjectFromLocalStorage')
-        // } else {
-        //   //GENERATE RANDOM
-        //   emit('generateRandomProject')
-        // }
+        if (localStorage.getItem("sas-save")) {
+          emit('loadProjectFromLocalStorage')
+        } else {
+          //GENERATE RANDOM
+          emit('generateRandomProject')
+        }
 
         emit('hideLoadingSpinner')
       })

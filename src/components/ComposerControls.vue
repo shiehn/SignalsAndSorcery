@@ -157,9 +157,6 @@ export default {
     }
 
 
-
-
-
     // //COL 0
     const audioUrl0_0 = "http://localhost:8000/static/deleteme/00.wav";
 
@@ -169,6 +166,8 @@ export default {
 
 // Initialize the Audio Context
     store.audioCtx = new AudioContext();
+
+
     //const btnStart = document.getElementById("btn-start");
 
 
@@ -177,32 +176,16 @@ export default {
     let operableAudioBuffer = undefined
 
 
-
-
-
-
-
-
-
-
     // const numOfRows = store.state.grid.length;
     // let listOfTrimmedRowBuffers = new Array(numOfRows);
 
 
-
-
-
-    const audioGraph = new AudioGraph(store)
+    let audioGraph = new AudioGraph(store)
 
 
     onMounted(async () => {
       isMobile.value = store.isMobile ? true : false
       showInitAudio.value = isMobile.value
-
-
-
-
-
 
 
       //await audioGraph.init()
@@ -540,14 +523,14 @@ export default {
       emit('showLoadingSpinner')
       initAudioTag.value.load()
       initAudioTag.value.play()
-      setTimeout(() => {
+      setTimeout(async () => {
         initAudioTag.value.pause()
         showInitAudio.value = false
         emit('hideLoadingSpinner')
+        await audioGraph.init()
         // playBtnEnabled = true
       }, 2000);
     }
-
 
     const renderHTMLTest = ref('')
     const pedalBoard = ref(null)
@@ -560,13 +543,13 @@ export default {
         await store.audioCtx.resume();
       }
 
-      if(audioGraph.getNodes()[0][0].parameters.get("playing").value === 1){
+      if (audioGraph.getNodes()[0][0].parameters.get("playing").value === 1) {
         //ITS ALREADY PLAYING
         return
       }
 
-      for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
-        for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
+      for (let row = 0; row < audioGraph.getNodes().length; row++) {
+        for (let col = 0; col < audioGraph.getNodes()[row].length; col++) {
           //SET THE PROCESS TO STOP by default
           audioGraph.getNodes()[row][col].parameters.get("playing").value = 1;
           audioGraph.getNodes()[row][col].parameters.get("loop").value = 0;
@@ -575,7 +558,7 @@ export default {
 
       isPlaying.value = 1
 
-        //btnStart.textContent = "Stop";
+      //btnStart.textContent = "Stop";
 
 
       // if (showInitAudio.value) {
@@ -650,13 +633,13 @@ export default {
     }
 
     const stop = async () => {
-      if(audioGraph.getNodes()[0][0].parameters.get("playing").value === 0){
+      if (audioGraph.getNodes()[0][0].parameters.get("playing").value === 0) {
         //ITS ALREADY STOPPED
         return
       }
 
-      for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
-        for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
+      for (let row = 0; row < audioGraph.getNodes().length; row++) {
+        for (let col = 0; col < audioGraph.getNodes()[row].length; col++) {
           //SET THE PROCESS TO STOP by default
           audioGraph.getNodes()[row][col].parameters.get("playing").value = 0;
           audioGraph.getNodes()[row][col].parameters.get("loop").value = 0;
@@ -664,7 +647,7 @@ export default {
       }
 
       isPlaying.value = 0
-        //btnStart.textContent = "Start";
+      //btnStart.textContent = "Start";
 
 
       // else {
@@ -690,13 +673,13 @@ export default {
         return
       }
 
-      if(audioGraph.getNodes()[0][0].parameters.get("playing").value === 0){
+      if (audioGraph.getNodes()[0][0].parameters.get("playing").value === 0) {
         //ITS ALREADY STOPPED
         return
       }
 
-      for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
-        for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
+      for (let row = 0; row < audioGraph.getNodes().length; row++) {
+        for (let col = 0; col < audioGraph.getNodes()[row].length; col++) {
           //SET THE PROCESS TO STOP by default
           audioGraph.getNodes()[row][col].parameters.get("playing").value = 0;
           audioGraph.getNodes()[row][col].parameters.get("loop").value = 0;
@@ -704,7 +687,7 @@ export default {
       }
 
       isPlaying.value = 0
-        //btnStart.textContent = "Start";
+      //btnStart.textContent = "Start";
 
       //
       // let currentTime = store.context ? store.context.currentTime : 0
@@ -772,8 +755,6 @@ export default {
     })
 
 
-
-
     const setPlaybackPosition = async (percentOfScrubBar) => {
 
       const numOfBars = 4
@@ -781,10 +762,10 @@ export default {
       const samplesInFourBars = secInLoop * store.audioCtx.sampleRate * numOfBars
 
 
-      const newPos = samplesInFourBars * (percentOfScrubBar*.01)
+      const newPos = samplesInFourBars * (percentOfScrubBar * .01)
 
-      for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
-        for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
+      for (let row = 0; row < audioGraph.getNodes()[0].length; row++) {
+        for (let col = 0; col < audioGraph.getNodes()[row].length; col++) {
           audioGraph.getNodes()[row][col].port.postMessage({'position': newPos});
         }
       }
@@ -799,16 +780,14 @@ export default {
       const audioBuffer3_0 = await store.audioCtx.decodeAudioData(audioArrayBuffer3_0);
       // Transforming the audio buffer into a custom audio buffer to add logic inside. (Needed to manipulate the audio, for example, editing...)
       const operableAudioBuffer3_0 = Object.setPrototypeOf(audioBuffer3_0, OperableAudioBuffer.prototype);
-      nodeLayer0_0.setAudio(operableAudioBuffer3_0.toArray(false, 0,0, store.audioCtx, store.state.getGlobalBpm()));
+      nodeLayer0_0.setAudio(operableAudioBuffer3_0.toArray(false, 0, 0, store.audioCtx, store.state.getGlobalBpm()));
       // console.log('nodeLayer0_0', nodeLayer0_0)
-
 
 
       // setPlaybackPosition()
 
       //FOR TOMMORROW
       //seconds in song * samplerate * newPosPercent
-
 
 
       // console.clear()
@@ -853,10 +832,15 @@ export default {
     })
 
     watch(() => bus.value.get('setupAudioGraphListeners'), async () => {
-      audioGraph.getNodes()[0][0].port.onmessage = ev => {
-        if (ev.data.playhead) {
-          // console.log('playhead', ev.data.playhead)
-          progress = ev.data.playhead
+
+      audioGraph = new AudioGraph(store)
+
+      if (audioGraph.getNodes() && audioGraph.getNodes()[0] && audioGraph.getNodes()[0][0] && audioGraph.getNodes()[0][0].port) {
+        audioGraph.getNodes()[0][0].port.onmessage = ev => {
+          if (ev.data.playhead) {
+            // console.log('playhead', ev.data.playhead)
+            progress = ev.data.playhead
+          }
         }
       }
     })
@@ -877,24 +861,17 @@ export default {
 //       // }
 //     })
 
-    // watch(() => bus.value.get('renderMixIfNeeded'), async () => {
-    //
-    //   setTimeout(async function () {
-    //     if (store.state.hasClipStateChanged()) {
-    //       //if (!isRendering.value) {
-    //         //alert('renderMix')
-    //         //await audioGraph.populateNodesWithBuffers()
-    //       //}
-    //     }
-    //   }, 1000);
-    // })
+    watch(() => bus.value.get('renderMixIfNeeded'), async () => {
+      //console.log('renderMixIfNeeded')
+      const audioGraph = new AudioGraph(store)
+      await audioGraph.populateNodesWithBuffers()
+    })
 
     watch(() => bus.value.get('scrubTo'), async (scrubToPercent) => {
       if (store.state.clipCount() < 1) {
         toast.warning('Add clips to the arranger!');
         return
       }
-
 
 
       setPlaybackPosition(scrubToPercent)
@@ -912,6 +889,13 @@ export default {
 
     // THIS IS THE MAIN APPLICATION TICK - START
     let progressUITick = async () => {
+
+      //KEEP PLAY/STOP/PAUSE IN SYNC
+      if (audioGraph.getNodes() && audioGraph.getNodes()[0] && audioGraph.getNodes()[0][0] && audioGraph.getNodes()[0][0].parameters.get("playing")) {
+        isPlaying.value = audioGraph.getNodes()[0][0].parameters.get("playing").value
+      }
+
+
       // console.log('P TICK')
       // const displayDuration = getDuration()
       // const displayCurrentTime = getCurrentRelativeTime()
@@ -944,8 +928,8 @@ export default {
       const loopStartPercent = store.state.playBack.loopStartPercent
       const loopEndPercent = store.state.playBack.loopEndPercent
 
-      for(let row = 0; row< audioGraph.getNodes()[0].length; row++){
-        for(let col = 0; col < audioGraph.getNodes()[row].length; col++){
+      for (let row = 0; row < audioGraph.getNodes().length; row++) {
+        for (let col = 0; col < audioGraph.getNodes()[row].length; col++) {
           audioGraph.getNodes()[row][col].port.postMessage({'loopStart': loopStartPercent, 'loopEnd': loopEndPercent});
         }
       }
@@ -980,6 +964,8 @@ export default {
       isPlaying,
       isRendering,
       onUndoClicked,
+      progressBar,
+      progressBarStart,
       play,
       pause,
       stopButton,

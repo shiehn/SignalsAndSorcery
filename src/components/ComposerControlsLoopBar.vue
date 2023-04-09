@@ -358,8 +358,6 @@ export default {
             setActiveBetweenStartEndMakers()
           } else {
             //SHIFT END LEFT
-            console.log('shift end left')
-            console.log('clear active left of end')
             setEndMarker(loopNumber)
             clearActiveRightOf(loopNumber)
           }

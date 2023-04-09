@@ -1,5 +1,6 @@
 <template>
   <div v-if="isMobile" class="flex flex-col w-full justify-between ">
+    <div class="w-full h-18 bg-orange-600 p-4 text-white">WARNING: Signals & Sorcery is a desktop webapp targeting the Chrome Browser.</div>
     <admin-panel></admin-panel>
     <asset-selector></asset-selector>
   </div>

@@ -75,6 +75,7 @@ import ModalOpenPayload from "./ModalOpenPayload";
 import useEventsBus from "../events/eventBus";
 import LoadingSpinner from "./LoadingSpinner";
 import Analytics from "../analytics/Analytics";
+import AudioGraph from "../audioengine/audio-graph";
 
 export default {
   name: "ProjectBoard",
@@ -144,11 +145,15 @@ export default {
       store.state.grid = retrievedRestoredData.grid
       store.state.updateGlobalChords()
 
-      emit('renderMix')
-      emit('closeProjectsBoard')
-      emit('saveProjectToLocalStorage')
-      emit('resetCompatibility')
-      emit('updateLocks')
+
+      const audioGraph = new AudioGraph(store)
+      await audioGraph.populateNodesWithBuffers()
+
+      //emit('renderMixIfNeeded')
+      // emit('closeProjectsBoard')
+      // emit('saveProjectToLocalStorage')
+      // emit('resetCompatibility')
+      // emit('updateLocks')
 
       new Analytics().trackLoad()
     }

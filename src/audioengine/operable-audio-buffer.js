@@ -34,13 +34,11 @@ export default class OperableAudioBuffer extends AudioBuffer {
         return channelData;
     }
 
-    toArrayExtended(shared = false, row=0, col=0, audioCtx = undefined, emptyBuffer = undefined, bpm = undefined) {
-
-        console.log('SwapArray: ', row, col, bpm)
+    toArrayExtended(shared = false, row=0, col=0, audioCtx = undefined, loopBuffer = undefined, bpm = undefined) {
 
         //const secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
         const secondsInLoop = this.getLoopLengthFromBarsAndBPM(4, bpm);
-        const bufferSizePerLoop = secondsInLoop * audioCtx.sampleRate;
+        const bufferSizePerLoop = Math.round(secondsInLoop * audioCtx.sampleRate);
 
         //const emptyBuffer = audioCtx.createBuffer(2, bufferSizePerLoop*4, audioCtx.sampleRate);
 
@@ -48,19 +46,13 @@ export default class OperableAudioBuffer extends AudioBuffer {
         const channelData = [];
         const {numberOfChannels, length} = this;
 
-
-
-
-
-        let alreadyReported = false;
-
-
         for (let i = 0; i < numberOfChannels; i++) {
             if (shared && supportSAB) {
                 channelData[i] = new Float32Array(new SharedArrayBuffer(length * Float32Array.BYTES_PER_ELEMENT));
                 channelData[i].set(this.getChannelData(i));
             } else {
-                channelData[i] = emptyBuffer.getChannelData(i);
+
+                channelData[i] = this.getChannelData(i);
 
                 // if(col === 0) {
                 //     for(let j = 0; j < channelData[i].length; j++) {
@@ -70,20 +62,11 @@ export default class OperableAudioBuffer extends AudioBuffer {
                 //     }
                 // } else if(col === 1) {
                     for(let j = 0; j < channelData[i].length; j++) {
-                        if(j >= (bufferSizePerLoop*col) && j < (bufferSizePerLoop*(col+1))) {
-                            if(this.getChannelData(i)[j - (bufferSizePerLoop*col)]){
-                                channelData[i][j] = this.getChannelData(i)[j - (bufferSizePerLoop*col)]
+                        if(j >= Math.round(bufferSizePerLoop*col) && j < Math.round(bufferSizePerLoop*(col+1))) {
+                            const sampleIdx = Math.abs(Math.round(j - (bufferSizePerLoop*col)))
+                            if(loopBuffer.getChannelData(i)[sampleIdx]){
+                                channelData[i][j] = loopBuffer.getChannelData(i)[sampleIdx]
                             }
-
-                            // else {
-                            //     if(!this.alreadyReported){
-                            //         console.log('---------------------------------')
-                            //         console.error('AUDIO MISSING SAMPLES: ', this.getChannelData(i))
-                            //         console.error('BUFFER FOR AUDIO', channelData[i])
-                            //         console.log('---------------------------------')
-                            //         this.alreadyReported = true
-                            //     }
-                            // }
                         }
                     }
                 // }

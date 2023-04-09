@@ -240,13 +240,11 @@ export default defineComponent({
     }
 
     const onSelectChange = async (e) => {
-      console.log('onSelectChange', e.target.id)
       if (e.target.id === 'filterFX') {
         await loadSFXOptions()
 
         //IF THERE ARE OPTIONS IN THE SELECT, THEN SELECT THE FIRST ONE
         if(sfxOptions.value && sfxOptions.value.length > 0){
-          console.log('THERE ARE OPTIONS', sfxOptions.value[0].value)
           selectedFX.value = sfxOptions.value[0].value
           const sfxApi = new SFXApi()
           const response = await sfxApi.getSFXById(store.token, sfxOptions.value[0].value)
@@ -269,7 +267,6 @@ export default defineComponent({
       // }
 
       if(e.target.id === 'loadFX'){
-        console.log('sfxOptions', 'WTC')
         const sfxApi = new SFXApi()
         const response = await sfxApi.getSFXById(store.token, selectedFX.value)
         currentSFX.value.name = response[0].name

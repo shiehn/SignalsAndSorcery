@@ -203,20 +203,21 @@ export default {
 
       const audioGraph = new AudioGraph(store)
       //
-      const bpmAfterGenComp = JSON.stringify(store.state.globalBpm)
-      if(bpmBeforeGenComp === bpmAfterGenComp) {
-        console.log('bpm did not change, populating nodes with buffers')
-        await audioGraph.populateNodesWithBuffers()
-      }else {
-        console.log('bpm changed, reinitializing audio graph')
-        await audioGraph.setEmptyBuffersToMatchBPM()
-        emit('setupAudioGraphListeners')
-        await audioGraph.populateNodesWithBuffers()
-      }
+      //const bpmAfterGenComp = JSON.stringify(store.state.globalBpm)
+      // if(bpmBeforeGenComp === bpmAfterGenComp) {
+      //   console.log('bpm did not change, populating nodes with buffers')
+      await audioGraph.populateNodesWithBuffers()
+      // }else {
+      //   console.log('bpm changed, reinitializing audio graph')
+      //   await audioGraph.destroyAndRecreateGraph()
+      //
+      //   await audioGraph.populateNodesWithBuffers()
+      //   emit('setupAudioGraphListeners')
+      // }
 
       emit('hideLoadingSpinner')
 
-      //emit('renderMix')
+      //emit('renderMixIfNeeded')
       emit('closeProjectsBoard')
       emit('saveProjectToLocalStorage')
       emit('resetCompatibility')
