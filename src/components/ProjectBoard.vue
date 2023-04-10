@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <div v-if="!isMobile" class="w-full border-2 ml-4 border-white rounded-lg p-2"
+  <div v-if="!isMobile" class="border-2 ml-4 border-white rounded-lg p-2"
        :class="{ 'w-full': isMobile, 'w-1/3': !isMobile }">
     <div class="flex justify-between">
       <h4 class="text-white m-4">Your Projects</h4>
@@ -89,7 +89,6 @@ export default {
     const isMobile = ref(store.isMobile ? true : false)
     const isLoggedIn = ref(undefined)
     const savedProjects = ref([])
-    const showLoadingSpinner = ref(false)
 
     let currentPage = 0
     const imageAssets = {

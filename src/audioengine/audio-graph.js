@@ -8,18 +8,11 @@ import store from "../store/store";
 export default class AudioGraph {
 
 
-
     constructor(store) {
 
         this.isPopulatingBuffers = false
 
         this.store = store
-
-        this.pluginInstance1 = undefined
-        this.pluginDomElement1 = ''
-
-        this.pluginInstance2 = undefined
-        this.pluginDomElement2 = ''
 
 
         this.plugin1Url = this.store.state.staticUrl + "wam/stonephaser/index.js";
@@ -75,6 +68,10 @@ export default class AudioGraph {
 
     }
 
+    getPluginInstance1 = () => {
+        return this.pluginDomElement1
+    }
+
     init = async () => {
 
         this.store.state.initNodeRows()
@@ -94,13 +91,8 @@ export default class AudioGraph {
         const [hostGroupId] = await initializeWamHost(this.store.audioCtx);
 
         this.store.state.setHostGroupId(hostGroupId);
-        // Import our custom WAM Processor and the plugins.
-        // const {default: WAM1} = await import(/* webpackIgnore: true */ this.plugin1Url);
-        // const {default: WAM2} = await import(/* webpackIgnore: true */ this.plugin2Url);
 
-        // Creating the Instance of the WAM plugins.
-        // this.pluginInstance1 = await WAM1.createInstance(this.store.state.getHostGroupId(), this.store.audioCtx);
-        // this.pluginDomElement1 = await this.pluginInstance1.createGui();
+
         // this.pluginInstance2 = await WAM2.createInstance(this.store.state.getHostGroupId(), this.store.audioCtx);
         // this.pluginDomElement2 = await this.pluginInstance2.createGui();
 
@@ -133,12 +125,137 @@ export default class AudioGraph {
                 //SET THE AUDIO IN THE NODE
                 this.getNodes()[row][col].setAudio(operableBuffer.toArray(false));
 
+
+                /* ---------------- ADDING PLUGINS ---------------- */
+
+                // Import our custom WAM Processor and the plugins.
+                const {default: WAM1} = await import(/* webpackIgnore: true */ this.plugin1Url);
+                // Creating the Instance of the WAM plugins.
+                const pluginInstance1 = await WAM1.createInstance(this.store.state.getHostGroupId(), this.store.audioCtx);
+                //this.pluginDomElement1 = await this.pluginInstance1.createGui();
+                console.log('PLUGIN_1_INFO', await pluginInstance1._audioNode.getParameterInfo())
+                console.log('PLUGIN_1_getParameterValues', await pluginInstance1._audioNode.getParameterValues())
+
+
+                //await pluginInstance1._audioNode.setParameterValues({'/untitled/Bypass': 1})
+
+
+                // Import our custom WAM Processor and the plugins.
+                const {default: WAM2} = await import(/* webpackIgnore: true */ this.plugin2Url);
+                // Creating the Instance of the WAM plugins.
+                const pluginInstance2 = await WAM2.createInstance(this.store.state.getHostGroupId(), this.store.audioCtx);
+                //this.pluginDomElement2
+                console.log('PLUGIN_2_INFO', await pluginInstance2._audioNode.getParameterInfo())
+                console.log('PLUGIN_2_getParameterValues', await pluginInstance2._audioNode.getParameterValues())
+                await pluginInstance2.initialize();
+                let p2gui    = await pluginInstance2.createGui();
+
+                /* ------------------------------------------------- */
+            //     /BigMuff/bypass
+            // :
+            //     {id: '/BigMuff/bypass', value: 0, normalized: undefined}
+
+
+
+
+                // await this.pluginInstance2._audioNode.setParameterValues({
+                //     "gain": 0.5
+                // })
+
+
+                //await pluginInstance2._audioNode.setParamValue('Input', 1)
+
+
+
+
+                this.getNodes()[row][col].connect(pluginInstance2._audioNode).connect(this.store.audioCtx.destination);
+
+                await pluginInstance2._audioNode._output.setBigMuffDrive(100)//-3 to 100
+                await pluginInstance2._audioNode._output.setBigMuffTone(1)//0 to 1
+                await pluginInstance2._audioNode._output.setBigMuffBypass(0)//0 to 1
+                await pluginInstance2._audioNode._output.setBigMuffOutput(50)//50 to 100
+                await pluginInstance2._audioNode._output.setBigMuffInput(12)//-24 to 12
+
+                /*
+                {
+    "/BigMuff/Output": {
+        "id": "/BigMuff/Output",
+        "label": "/BigMuff/Output",
+        "type": "float",
+        "defaultValue": 100,
+        "minValue": 50,
+        "maxValue": 100,
+        "discreteStep": 0,
+        "exponent": 0,
+        "choices": [],
+        "units": ""
+    },
+    "/BigMuff/Input": {
+        "id": "/BigMuff/Input",
+        "label": "/BigMuff/Input",
+        "type": "float",
+        "defaultValue": 0,
+        "minValue": -24,
+        "maxValue": 12,
+        "discreteStep": 0,
+        "exponent": 0,
+        "choices": [],
+        "units": ""
+    },
+    "/BigMuff/Drive": {
+        "id": "/BigMuff/Drive",
+        "label": "/BigMuff/Drive",
+        "type": "float",
+        "defaultValue": 1,
+        "minValue": -3,
+        "maxValue": 100,
+        "discreteStep": 0,
+        "exponent": 0,
+        "choices": [],
+        "units": ""
+    },
+    "/BigMuff/bypass": {
+        "id": "/BigMuff/bypass",
+        "label": "/BigMuff/bypass",
+        "type": "float",
+        "defaultValue": 0,
+        "minValue": -3.4028234663852886e+38,
+        "maxValue": 3.4028234663852886e+38,
+        "discreteStep": 0,
+        "exponent": 0,
+        "choices": [],
+        "units": ""
+    },
+    "/BigMuff/Tone": {
+        "id": "/BigMuff/Tone",
+        "label": "/BigMuff/Tone",
+        "type": "float",
+        "defaultValue": 0.5,
+        "minValue": 0,
+        "maxValue": 1,
+        "discreteStep": 0,
+        "exponent": 0,
+        "choices": [],
+        "units": ""
+    }
+}
+                 */
                 //CONNECT THE NODE TO THE OUTPUT with any plugins
-                this.getNodes()[row][col].connect(this.store.audioCtx.destination);
+                //this.getNodes()[row][col].connect(this.store.audioCtx.destination);
 
                 //SET THE PROCESS TO STOP by default
                 this.getNodes()[row][col].parameters.get("playing").value = 0;
                 this.getNodes()[row][col].parameters.get("loop").value = 0;
+
+
+
+
+                // (
+                //     {name:'BigMuff/bypass', {value: 1, normalized: undefined}}
+                // )
+                console.log('PLUGIN_2_getParameterINFO_@222222', await pluginInstance2._audioNode.getParameterInfo())
+                console.log('PLUGIN_2_getParameterValues_@222222', await pluginInstance2._audioNode.getParameterValues())
+                // console.log('PLUGIN_2_getParameterValues_@222222', pluginInstance2._audioNode)
             }
         }
 
@@ -213,7 +330,7 @@ export default class AudioGraph {
     }
 
     getTrackListByRow = (row) => {
-        if(!this.store.state.grid[row]){
+        if (!this.store.state.grid[row]) {
             return new Array(4).fill(undefined)
         }
 
@@ -259,9 +376,7 @@ export default class AudioGraph {
                 //Create an empty buffer to be used as a placeholder for the audio.
 
 
-
                 const emptyBufferX4 = this.generateEmptyBuffer(this.store.audioCtx, bufferSizePerLoop * 4, this.store.audioCtx.sampleRate)
-
 
 
                 // Create Operable Buffer from empty buffer
@@ -326,7 +441,6 @@ export default class AudioGraph {
                 let buffer_list_row = await this.getBufferInRow(tracksInRow, this.store.audioCtx);
 
                 downloadedBuffers[row] = buffer_list_row
-
 
 
             }
@@ -419,7 +533,7 @@ export default class AudioGraph {
     }
 
     swapBuffers = async (row, col, loopBuffer, emptyBigBuffer) => {
-        if(!this.getNodes()[row][col]){
+        if (!this.getNodes()[row][col]) {
             return
         }
 

@@ -19,6 +19,7 @@ export default {
     const fxColorId = ref(store.fxColorGenerator.getFxColor(sfx_id.value))
     const fxClick = () => {
       emit('focusSFX', sfx_id.value)
+      emit('focusSFX', sfx_id.value)
     }
     return {
       fxColorId,

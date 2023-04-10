@@ -188,9 +188,6 @@ export default {
       showInitAudio.value = isMobile.value
 
 
-      //await audioGraph.init()
-
-
       //PLAYHEAD SHIT
 
 
@@ -804,7 +801,8 @@ export default {
       // pluginInstance1._audioNode._output.setStonePhaserStereoLFO(5)
       // pluginInstance1._audioNode._output.setStonePhaserStereoMix(100)
       //
-      // pluginInstance2._audioNode._output.setBigMuffBypass(swwwitttchh)
+      // pluginInstance2._audioNode._output.setBigMuff
+      // Bypass(swwwitttchh)
       // pluginInstance2._audioNode._output.setBigMuffDrive(100)
       //
       //

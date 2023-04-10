@@ -33,13 +33,17 @@
     </div>
   </div>
 
+
+
+
+
   <div v-if="!isMobile" ref="gridContainer" class="rounded-lg w-11/12 border-t-2 border-white pt-2"
        :style="playHeadCSS">
 
     <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
          class="flex flex-none justify-between mb-2">
       <div v-for="gridRowItem in gridRow.value" class="w-1/4 h-16 pr-2 flex">
-        <div class="w-1/12 h-full flex flex-col rounded-l-lg bg-gray-500 overflow-hidden border-r border-black">
+        <div class="w-1/12 h-full flex flex-col rounded-l-lg bg-gray-500 overflow-hidden border-r border-black" @click="focusNodeChain(gridRowItem)">
           <asset-f-x-tab v-for="fx in gridRowItem.fxs" :sfx_id="fx.id"></asset-f-x-tab>
           <!--          <div v-for="fx in gridRowItem.fxs" class="h-full w-full bg-pink-200 overflow-hidden border-b border-black" @click="fxClick(fx.id)"></div>-->
         </div>
@@ -211,7 +215,6 @@ export default {
 
       const res = await new ComposerAPI().excludeAsset(store.token, assetId, assetName)
 
-      alert(res)
     }
 
 
@@ -442,7 +445,6 @@ export default {
           emit('showLoadingSpinner')
           await audioGraph.init()
           emit('hideLoadingSpinner')
-
         }
 
         emit('setupAudioGraphListeners')
@@ -500,6 +502,12 @@ export default {
       emit('launchModal', modalOpenPayload)
     }
 
+    let focusNodeChain = (gridRowItem) => {
+
+      const nodePosition = gridRowItem.row + '_' + gridRowItem.col
+      emit('focusSFX', nodePosition)
+    }
+
     watch(store.state.grid, () => {
       emit('gridDrawCompleted', {
         'gridContainerRowWidth': gridContainerRows.value[0].clientWidth,
@@ -547,12 +555,15 @@ export default {
       playHeadCSS['background-position'] = progressBar.value + 'px center'
     })
 
+
+
+
     return {
       arpeggioToggled,
       columnAdd,
       columnRemove,
       editSection,
-      isMobile,
+      focusNodeChain,
       getGridRows,
       getGridByRow,
       gridContainer,
@@ -560,6 +571,7 @@ export default {
       gridContainerRows,
       handleGridItemClick,
       imageUrls,
+      isMobile,
       mouseOverGridItem,
       mouseLeaveGridItem,
       onDrop,
