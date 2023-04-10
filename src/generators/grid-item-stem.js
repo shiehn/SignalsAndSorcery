@@ -19,6 +19,7 @@ export default class GridItemStem {
         this.showPreviewIcon = showPreviewIcon
         this.previewPlayIconPath = previewPlayIconPath
         this.previewStopIconPath = previewStopIconPath
+        this.FXNodeState = []
     }
 
     updateInstanceId(){
