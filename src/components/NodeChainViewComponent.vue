@@ -24,6 +24,9 @@ export default {
       plusIcon: store.state.staticUrl + "icons/plus.png" + "?x-request=html", 
     }
 
+    let currentRow = -1;
+    let currentCol = -1;
+
     /*
         constructor(staticUrl) {
         this.sfxNodeTypes = new SFXNodeTypes(staticUrl)
@@ -37,8 +40,8 @@ export default {
 
     const addNodeClicked = async () => {
       const node = await nodeFactory.createNode('BigMuff', store.state.getHostGroupId(), store.audioCtx)
-      //
-      alert('NODE CREATED: ' + node)
+
+      store.nodeRows[currentRow][currentCol].pushFxNode(node, store.audioCtx)
     }
 
     watch(() => bus.value.get('focusSFX'), async (sfxId) => {
@@ -46,7 +49,10 @@ export default {
         return
       }
 
-      const {row, col} = sfxId[0].split('_')[0];
+      const {currentRow, currentCol} = sfxId[0].split('_')[0];
+
+
+
 
       // const audioGraph = new AudioGraph(store)
       //

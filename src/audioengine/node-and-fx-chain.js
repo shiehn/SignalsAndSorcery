@@ -12,4 +12,15 @@ export default class NodeAndFxChain {
     getBaseNode() {
         return this._node;
     }
+
+    pushFxNode(node, audioCtx) {
+
+        console.log('PUSH CONTEXT', audioCtx)
+        this._fxChain.push(node);
+        //audioCtx.suspend()
+        this._node.disconnect();
+        this._node.connect(this._fxChain[0]).connect(audioCtx.destination);
+
+        // audioCtx.resume()
+    }
 }
