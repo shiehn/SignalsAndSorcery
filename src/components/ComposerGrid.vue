@@ -499,9 +499,7 @@ export default {
     }
 
     let focusNodeChain = (gridRowItem) => {
-
-      const nodePosition = gridRowItem.row + '_' + gridRowItem.col
-      emit('focusSFX', nodePosition)
+      emit('focusSFX', gridRowItem.row, gridRowItem.col)
     }
 
     watch(store.state.grid, () => {

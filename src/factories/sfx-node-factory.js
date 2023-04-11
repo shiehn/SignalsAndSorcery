@@ -23,11 +23,7 @@ export default class SFXNodeFactory {
         // console.log('PLUGIN_1_getParameterValues', await pluginInstance1._audioNode.getParameterValues())
 
         // this.getNodes()[row][col].connect(pluginInstance2._audioNode).connect(this.store.audioCtx.destination);
-        await pluginInstance._audioNode._output.setBigMuffDrive(100)//-3 to 100
-        await pluginInstance._audioNode._output.setBigMuffTone(1)//0 to 1
-        await pluginInstance._audioNode._output.setBigMuffBypass(0)//0 to 1
-        await pluginInstance._audioNode._output.setBigMuffOutput(50)//50 to 100
-        await pluginInstance._audioNode._output.setBigMuffInput(12)//-24 to 12
+
 
         return pluginInstance
     }

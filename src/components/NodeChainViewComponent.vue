@@ -41,25 +41,48 @@ export default {
     const addNodeClicked = async () => {
       const node = await nodeFactory.createNode('BigMuff', store.state.getHostGroupId(), store.audioCtx)
 
+      alert(currentRow + ' ' + currentCol)
+      console.log('store.nodeRows', store.nodeRows)
+
       store.nodeRows[currentRow][currentCol].pushFxNode(node, store.audioCtx)
+
+      console.log('getFxChain()[0]', store.nodeRows[currentRow][currentCol].getFxChain()[0])
+
+
+
+      await store.nodeRows[currentRow][currentCol].getFxChain()[0]._audioNode._output.setBigMuffDrive(100)//-3 to 100
+      await store.nodeRows[currentRow][currentCol].getFxChain()[0]._audioNode._output.setBigMuffTone(1)//0 to 1
+      await store.nodeRows[currentRow][currentCol].getFxChain()[0]._audioNode._output.setBigMuffBypass(0)//0 to 1
+      await store.nodeRows[currentRow][currentCol].getFxChain()[0]._audioNode._output.setBigMuffOutput(50)//50 to 100
+      await store.nodeRows[currentRow][currentCol].getFxChain()[0]._audioNode._output.setBigMuffInput(12)//-24 to 12
+
+      // await pluginInstance._audioNode._output.setBigMuffDrive(100)//-3 to 100
+      // await pluginInstance._audioNode._output.setBigMuffTone(1)//0 to 1
+      // await pluginInstance._audioNode._output.setBigMuffBypass(0)//0 to 1
+      // await pluginInstance._audioNode._output.setBigMuffOutput(50)//50 to 100
+      // await pluginInstance._audioNode._output.setBigMuffInput(12)//-24 to 12
     }
 
     watch(() => bus.value.get('focusSFX'), async (sfxId) => {
-      if(!sfxId[0] || !sfxId[0].includes("_")){
-        return
-      }
 
-      const {currentRow, currentCol} = sfxId[0].split('_')[0];
+      currentRow = sfxId[0];
+      currentCol = sfxId[1];
 
-
-
-
-      // const audioGraph = new AudioGraph(store)
+      // if(!sfxId[0] || !sfxId[0].includes("_")){
+      //   return
+      // }
       //
-      // console.log(audioGraph.getNodes()[row][col])
-
-      console.log('this.store.state.getNodeRows()', store.state.getNodeRows())
-
+      // const {row, col} = sfxId[0].split('_');
+      // currentRow = row;
+      // currentCol = col;
+      //
+      //
+      //
+      //
+      // // const audioGraph = new AudioGraph(store)
+      // //
+      // // console.log(audioGraph.getNodes()[row][col])
+      //
       nodeId.value = sfxId[0]
     })
 

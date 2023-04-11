@@ -13,14 +13,19 @@ export default class NodeAndFxChain {
         return this._node;
     }
 
-    pushFxNode(node, audioCtx) {
-
+    async pushFxNode(node, audioCtx) {
+        audioCtx.suspend()
         console.log('PUSH CONTEXT', audioCtx)
         this._fxChain.push(node);
-        //audioCtx.suspend()
-        this._node.disconnect();
-        this._node.connect(this._fxChain[0]).connect(audioCtx.destination);
 
-        // audioCtx.resume()
+        await this._node.disconnect(audioCtx.destination);
+        await this._node.connect(this._fxChain[0]._audioNode)
+        await this._fxChain[0]._audioNode.connect(audioCtx.destination);
+
+        audioCtx.resume()
+    }
+
+    getFxChain() {
+        return this._fxChain;
     }
 }
