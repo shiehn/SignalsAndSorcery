@@ -5,11 +5,11 @@ export default class NodeAndFxChain {
         this._fxChain = [];
     }
 
-    setRootNode(node) {
+    setBaseNode(node) {
         this._node = node;
     }
 
-    getRootNode() {
+    getBaseNode() {
         return this._node;
     }
 }

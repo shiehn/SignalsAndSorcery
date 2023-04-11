@@ -7,6 +7,15 @@ let isMobile = false
 let token = undefined
 const fxColorGenerator = new FXColorGenerator()
 
+const nodeRows = [
+    new Array(4),
+    new Array(4),
+    new Array(4),
+    new Array(4),
+    new Array(4),
+    new Array(4),
+]
+
 const state = reactive({
     projectId: undefined,
     projectVersionId: undefined,
@@ -14,30 +23,12 @@ const state = reactive({
     hostGroupId: undefined,
     authorName: '',
     globalBpm: undefined,
-    nodeRows: [
-        new Array(4).fill(new NodeAndFxChain()),
-        new Array(4).fill(new NodeAndFxChain()),
-        new Array(4).fill(new NodeAndFxChain()),
-        new Array(4).fill(new NodeAndFxChain()),
-        new Array(4).fill(new NodeAndFxChain()),
-        new Array(4).fill(new NodeAndFxChain()),
-    ],
+
     getHostGroupId: function () {
         return this.hostGroupId
     },
     setHostGroupId: function (hostGroupId) {
         this.hostGroupId = hostGroupId
-    },
-    initNodeRows: function () {
-        this.nodeRows = undefined
-        this.nodeRows = [
-            new Array(4).fill(new NodeAndFxChain()),
-            new Array(4).fill(new NodeAndFxChain()),
-            new Array(4).fill(new NodeAndFxChain()),
-            new Array(4).fill(new NodeAndFxChain()),
-            new Array(4).fill(new NodeAndFxChain()),
-            new Array(4).fill(new NodeAndFxChain()),
-        ]
     },
     getNodeRows: function () {
         return this.nodeRows
@@ -253,5 +244,5 @@ const state = reactive({
 })
 
 export default {
-    isMobile, state, token, fxColorGenerator
+    isMobile, state, token, fxColorGenerator, nodeRows
 }
