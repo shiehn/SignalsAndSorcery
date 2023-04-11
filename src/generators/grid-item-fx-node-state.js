@@ -1,7 +1,7 @@
 
 
 
-export default class GridItemFXNodeState {
+export default class GridItemFxNodeState {
 
     constructor() {
         this.fxNodeId = null

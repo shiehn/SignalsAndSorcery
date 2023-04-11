@@ -540,7 +540,7 @@ export default {
         await store.audioCtx.resume();
       }
 
-      if (audioGraph.getNodes()[0][0].parameters.get("playing").value === 1) {
+      if (audioGraph.getNodes()[0][0].getRootNode().parameters.get("playing").value === 1) {
         //ITS ALREADY PLAYING
         return
       }
@@ -548,8 +548,8 @@ export default {
       for (let row = 0; row < audioGraph.getNodes().length; row++) {
         for (let col = 0; col < audioGraph.getNodes()[row].length; col++) {
           //SET THE PROCESS TO STOP by default
-          audioGraph.getNodes()[row][col].parameters.get("playing").value = 1;
-          audioGraph.getNodes()[row][col].parameters.get("loop").value = 0;
+          audioGraph.getNodes()[row][col].getRootNode().parameters.get("playing").value = 1;
+          audioGraph.getNodes()[row][col].getRootNode().parameters.get("loop").value = 0;
         }
       }
 
@@ -630,7 +630,7 @@ export default {
     }
 
     const stop = async () => {
-      if (audioGraph.getNodes()[0][0].parameters.get("playing").value === 0) {
+      if (audioGraph.getNodes()[0][0].getRootNode().parameters.get("playing").value === 0) {
         //ITS ALREADY STOPPED
         return
       }
@@ -638,8 +638,8 @@ export default {
       for (let row = 0; row < audioGraph.getNodes().length; row++) {
         for (let col = 0; col < audioGraph.getNodes()[row].length; col++) {
           //SET THE PROCESS TO STOP by default
-          audioGraph.getNodes()[row][col].parameters.get("playing").value = 0;
-          audioGraph.getNodes()[row][col].parameters.get("loop").value = 0;
+          audioGraph.getNodes()[row][col].getRootNode().parameters.get("playing").value = 0;
+          audioGraph.getNodes()[row][col].getRootNode().parameters.get("loop").value = 0;
         }
       }
 
@@ -670,7 +670,7 @@ export default {
         return
       }
 
-      if (audioGraph.getNodes()[0][0].parameters.get("playing").value === 0) {
+      if (audioGraph.getNodes()[0][0].getRootNode().parameters.get("playing").value === 0) {
         //ITS ALREADY STOPPED
         return
       }
@@ -678,8 +678,8 @@ export default {
       for (let row = 0; row < audioGraph.getNodes().length; row++) {
         for (let col = 0; col < audioGraph.getNodes()[row].length; col++) {
           //SET THE PROCESS TO STOP by default
-          audioGraph.getNodes()[row][col].parameters.get("playing").value = 0;
-          audioGraph.getNodes()[row][col].parameters.get("loop").value = 0;
+          audioGraph.getNodes()[row][col].getRootNode().parameters.get("playing").value = 0;
+          audioGraph.getNodes()[row][col].getRootNode().parameters.get("loop").value = 0;
         }
       }
 
@@ -833,8 +833,8 @@ export default {
 
       audioGraph = new AudioGraph(store)
 
-      if (audioGraph.getNodes() && audioGraph.getNodes()[0] && audioGraph.getNodes()[0][0] && audioGraph.getNodes()[0][0].port) {
-        audioGraph.getNodes()[0][0].port.onmessage = ev => {
+      if (audioGraph.getNodes() && audioGraph.getNodes()[0] && audioGraph.getNodes()[0][0] && audioGraph.getNodes()[0][0].getRootNode().port) {
+        audioGraph.getNodes()[0][0].getRootNode().port.onmessage = ev => {
           if (ev.data.playhead) {
             // console.log('playhead', ev.data.playhead)
             progress = ev.data.playhead
@@ -889,8 +889,11 @@ export default {
     let progressUITick = async () => {
 
       //KEEP PLAY/STOP/PAUSE IN SYNC
-      if (audioGraph.getNodes() && audioGraph.getNodes()[0] && audioGraph.getNodes()[0][0] && audioGraph.getNodes()[0][0].parameters.get("playing")) {
-        isPlaying.value = audioGraph.getNodes()[0][0].parameters.get("playing").value
+      if (audioGraph.getNodes() && audioGraph.getNodes()[0]
+          && audioGraph.getNodes()[0][0] && audioGraph.getNodes()[0][0]
+          && audioGraph.getNodes()[0][0].getRootNode()
+              && audioGraph.getNodes()[0][0].getRootNode().parameters.get("playing")) {
+        isPlaying.value = audioGraph.getNodes()[0][0].getRootNode().parameters.get("playing").value
       }
 
 
@@ -928,7 +931,7 @@ export default {
 
       for (let row = 0; row < audioGraph.getNodes().length; row++) {
         for (let col = 0; col < audioGraph.getNodes()[row].length; col++) {
-          audioGraph.getNodes()[row][col].port.postMessage({'loopStart': loopStartPercent, 'loopEnd': loopEndPercent});
+          audioGraph.getNodes()[row][col].getRootNode().port.postMessage({'loopStart': loopStartPercent, 'loopEnd': loopEndPercent});
         }
       }
 

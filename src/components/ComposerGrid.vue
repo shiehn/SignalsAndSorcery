@@ -33,10 +33,6 @@
     </div>
   </div>
 
-
-
-
-
   <div v-if="!isMobile" ref="gridContainer" class="rounded-lg w-11/12 border-t-2 border-white pt-2"
        :style="playHeadCSS">
 

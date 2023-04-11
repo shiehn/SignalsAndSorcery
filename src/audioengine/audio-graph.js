@@ -15,8 +15,7 @@ export default class AudioGraph {
         this.store = store
 
 
-        this.plugin1Url = this.store.state.staticUrl + "wam/stonephaser/index.js";
-        this.plugin2Url = this.store.state.staticUrl + "wam/BigMuff/index.js";
+
     }
 
     getNodes = () => {
@@ -40,36 +39,6 @@ export default class AudioGraph {
             }
         }
         return emptyBuffer;
-    }
-
-
-    destroyAndRecreateGraph = () => {
-        console.log('DESTROY!!!!!!')
-        console.log('DESTROY!!!!!!')
-        console.log('DESTROY!!!!!!')
-        console.log('DESTROY!!!!!!')
-        console.log('DESTROY!!!!!!')
-        console.log('DESTROY!!!!!!')
-        console.log('DESTROY!!!!!!')
-        console.log('DESTROY!!!!!!')
-        console.log('DESTROY!!!!!!')
-        for (let row = 0; row < this.getNodes().length; row++) {
-            for (let col = 0; col < this.getNodes()[row].length; col++) {
-                this.getNodes()[row][col].disconnect();
-                this.getNodes()[row][col] = undefined;
-            }
-        }
-
-        this.store.audioCtx.close();
-        this.store.audioCtx = new AudioContext()
-
-
-        this.init()
-
-    }
-
-    getPluginInstance1 = () => {
-        return this.pluginDomElement1
     }
 
     init = async () => {
@@ -107,7 +76,7 @@ export default class AudioGraph {
 
                 // Create an instance of our Processor for each node
                 const wamInstance = await MyWam.createInstance(this.store.state.getHostGroupId(), this.store.audioCtx);
-                this.getNodes()[row][col] = wamInstance.audioNode;
+                this.getNodes()[row][col].setRootNode(wamInstance.audioNode);
 
 
 //JUST FOR TESTING
@@ -123,32 +92,12 @@ export default class AudioGraph {
 
 
                 //SET THE AUDIO IN THE NODE
-                this.getNodes()[row][col].setAudio(operableBuffer.toArray(false));
+                this.getNodes()[row][col].getRootNode().setAudio(operableBuffer.toArray(false));
 
 
                 /* ---------------- ADDING PLUGINS ---------------- */
 
-                // Import our custom WAM Processor and the plugins.
-                const {default: WAM1} = await import(/* webpackIgnore: true */ this.plugin1Url);
-                // Creating the Instance of the WAM plugins.
-                const pluginInstance1 = await WAM1.createInstance(this.store.state.getHostGroupId(), this.store.audioCtx);
-                //this.pluginDomElement1 = await this.pluginInstance1.createGui();
-                console.log('PLUGIN_1_INFO', await pluginInstance1._audioNode.getParameterInfo())
-                console.log('PLUGIN_1_getParameterValues', await pluginInstance1._audioNode.getParameterValues())
 
-
-                //await pluginInstance1._audioNode.setParameterValues({'/untitled/Bypass': 1})
-
-
-                // Import our custom WAM Processor and the plugins.
-                const {default: WAM2} = await import(/* webpackIgnore: true */ this.plugin2Url);
-                // Creating the Instance of the WAM plugins.
-                const pluginInstance2 = await WAM2.createInstance(this.store.state.getHostGroupId(), this.store.audioCtx);
-                //this.pluginDomElement2
-                console.log('PLUGIN_2_INFO', await pluginInstance2._audioNode.getParameterInfo())
-                console.log('PLUGIN_2_getParameterValues', await pluginInstance2._audioNode.getParameterValues())
-                await pluginInstance2.initialize();
-                let p2gui    = await pluginInstance2.createGui();
 
                 /* ------------------------------------------------- */
             //     /BigMuff/bypass
@@ -168,13 +117,7 @@ export default class AudioGraph {
 
 
 
-                this.getNodes()[row][col].connect(pluginInstance2._audioNode).connect(this.store.audioCtx.destination);
 
-                await pluginInstance2._audioNode._output.setBigMuffDrive(100)//-3 to 100
-                await pluginInstance2._audioNode._output.setBigMuffTone(1)//0 to 1
-                await pluginInstance2._audioNode._output.setBigMuffBypass(0)//0 to 1
-                await pluginInstance2._audioNode._output.setBigMuffOutput(50)//50 to 100
-                await pluginInstance2._audioNode._output.setBigMuffInput(12)//-24 to 12
 
                 /*
                 {
@@ -241,11 +184,11 @@ export default class AudioGraph {
 }
                  */
                 //CONNECT THE NODE TO THE OUTPUT with any plugins
-                //this.getNodes()[row][col].connect(this.store.audioCtx.destination);
+                this.getNodes()[row][col].getRootNode().connect(this.store.audioCtx.destination);
 
                 //SET THE PROCESS TO STOP by default
-                this.getNodes()[row][col].parameters.get("playing").value = 0;
-                this.getNodes()[row][col].parameters.get("loop").value = 0;
+                this.getNodes()[row][col].getRootNode().parameters.get("playing").value = 0;
+                this.getNodes()[row][col].getRootNode().parameters.get("loop").value = 0;
 
 
 
@@ -253,8 +196,8 @@ export default class AudioGraph {
                 // (
                 //     {name:'BigMuff/bypass', {value: 1, normalized: undefined}}
                 // )
-                console.log('PLUGIN_2_getParameterINFO_@222222', await pluginInstance2._audioNode.getParameterInfo())
-                console.log('PLUGIN_2_getParameterValues_@222222', await pluginInstance2._audioNode.getParameterValues())
+                // console.log('PLUGIN_2_getParameterINFO_@222222', await pluginInstance2._audioNode.getParameterInfo())
+                // console.log('PLUGIN_2_getParameterValues_@222222', await pluginInstance2._audioNode.getParameterValues())
                 // console.log('PLUGIN_2_getParameterValues_@222222', pluginInstance2._audioNode)
             }
         }
@@ -538,7 +481,7 @@ export default class AudioGraph {
         }
 
         const operableAudioBuffer = Object.setPrototypeOf(emptyBigBuffer, OperableAudioBuffer.prototype);
-        this.getNodes()[row][col].setAudio(operableAudioBuffer.toArrayExtended(false, row, col, this.store.audioCtx, loopBuffer, this.store.state.getGlobalBpm()));
+        this.getNodes()[row][col].getRootNode().setAudio(operableAudioBuffer.toArrayExtended(false, row, col, this.store.audioCtx, loopBuffer, this.store.state.getGlobalBpm()));
         //this.getNodes()[row][col].connect(this.store.audioCtx.destination);
     }
 
