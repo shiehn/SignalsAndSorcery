@@ -3,44 +3,13 @@
   "assets": {
     "main.js": {
       "name": "main.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.js",
+      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/frontend/dist/main.js",
       "publicPath": "/static/dist/main.js"
-    },
-    "main.e4a0347e0de3039de601.hot-update.js": {
-      "name": "main.e4a0347e0de3039de601.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.e4a0347e0de3039de601.hot-update.js",
-      "publicPath": "/static/dist/main.e4a0347e0de3039de601.hot-update.js"
-    },
-    "main.e4a0347e0de3039de601.hot-update.json": {
-      "name": "main.e4a0347e0de3039de601.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.e4a0347e0de3039de601.hot-update.json",
-      "publicPath": "/static/dist/main.e4a0347e0de3039de601.hot-update.json"
-    },
-    "main.0045e75125304ed85ace.hot-update.js": {
-      "name": "main.0045e75125304ed85ace.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.0045e75125304ed85ace.hot-update.js",
-      "publicPath": "/static/dist/main.0045e75125304ed85ace.hot-update.js"
-    },
-    "main.0045e75125304ed85ace.hot-update.json": {
-      "name": "main.0045e75125304ed85ace.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.0045e75125304ed85ace.hot-update.json",
-      "publicPath": "/static/dist/main.0045e75125304ed85ace.hot-update.json"
-    },
-    "main.9de6ea304b7da9121486.hot-update.js": {
-      "name": "main.9de6ea304b7da9121486.hot-update.js",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.9de6ea304b7da9121486.hot-update.js",
-      "publicPath": "/static/dist/main.9de6ea304b7da9121486.hot-update.js"
-    },
-    "main.9de6ea304b7da9121486.hot-update.json": {
-      "name": "main.9de6ea304b7da9121486.hot-update.json",
-      "path": "/Users/stevehiehn/SignalsAndSorceryWeb/static/dist/main.9de6ea304b7da9121486.hot-update.json",
-      "publicPath": "/static/dist/main.9de6ea304b7da9121486.hot-update.json"
     }
   },
   "chunks": {
     "main": [
-      "main.js",
-      "main.9de6ea304b7da9121486.hot-update.js"
+      "main.js"
     ]
   },
   "publicPath": "/static/dist/"
