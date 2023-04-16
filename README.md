@@ -25,3 +25,9 @@ SignalsAndSorcery is an open source WebAudioApi powered audio loops composer.  T
 #### VIEW IN BROWSER:
 
 ```http://localhost:8080/```
+
+# <u>SignalsAndSorcery Server Pipeline</u>
+
+The server pipeline is not part of this repo but the client pulls from the pipeline server. This info-graph provides a high level overview.  The pipeline generates samples and permutations through a variety of techniques. 
+
+![sas-pipeline-design](https://sas-plugin-releases.s3.us-west-2.amazonaws.com/sas-pipeline-design.png)
