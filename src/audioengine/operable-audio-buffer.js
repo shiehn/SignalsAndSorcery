@@ -6,7 +6,7 @@ export default class OperableAudioBuffer extends AudioBuffer {
       return msPerBeatAtBpm * totalBeats / 1000
     }
 
-    generateEmptyBuffer = (audioCtx, frameCount, sampleRate) => {
+    generateEmptyBuffer = async (audioCtx, frameCount, sampleRate) => {
       //THIS IS LIKELY SILENCE SO GENERATE AN EMPTY BUFFER
       let emptyBuffer = actx.createBuffer(2, frameCount, sampleRate);
       for (let channel = 0; channel < emptyBuffer.numberOfChannels; channel++) {
@@ -34,7 +34,7 @@ export default class OperableAudioBuffer extends AudioBuffer {
         return channelData;
     }
 
-    toArrayExtended(shared = false, row=0, col=0, audioCtx = undefined, loopBuffer = undefined, bpm = undefined) {
+    async toArrayExtended(shared = false, row=0, col=0, audioCtx = undefined, loopBuffer = undefined, bpm = undefined) {
 
         //const secondsInLoop = getLoopLengthFromBarsAndBPM(4, store.state.getGlobalBpm());
         const secondsInLoop = this.getLoopLengthFromBarsAndBPM(4, bpm);
