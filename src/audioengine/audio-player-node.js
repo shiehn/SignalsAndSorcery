@@ -11,7 +11,7 @@ export default class AudioPlayerNode extends AudioWorkletNode {
         });
     }
 
-    setAudio(audio) {
+    async setAudio(audio) {
         this.port.postMessage({audio});
     }
 }

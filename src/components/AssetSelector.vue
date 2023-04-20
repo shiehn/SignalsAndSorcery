@@ -150,7 +150,7 @@ export default {
 
     const createEmptyProject = async () => {
       const numOfGridRows = 6
-      let numOfGridCols = 4
+      let numOfGridCols = 1
       let numOfSections = 1
 
       if (isMobile.value) {
@@ -202,18 +202,8 @@ export default {
       store.state.updateGlobalChords()
 
       const audioGraph = new AudioGraph(store)
-      //
-      //const bpmAfterGenComp = JSON.stringify(store.state.globalBpm)
-      // if(bpmBeforeGenComp === bpmAfterGenComp) {
-      //   console.log('bpm did not change, populating nodes with buffers')
+
       await audioGraph.populateNodesWithBuffers()
-      // }else {
-      //   console.log('bpm changed, reinitializing audio graph')
-      //   await audioGraph.destroyAndRecreateGraph()
-      //
-      //   await audioGraph.populateNodesWithBuffers()
-      //   emit('setupAudioGraphListeners')
-      // }
 
       emit('hideLoadingSpinner')
 
@@ -221,6 +211,7 @@ export default {
       emit('closeProjectsBoard')
       emit('saveProjectToLocalStorage')
       emit('resetCompatibility')
+      emit('updateLoopPositions')
 
       new Analytics().trackCreateRandom()
     }
@@ -312,6 +303,10 @@ export default {
 
     watch(() => bus.value.get('newProjectDialog'), () => {
       newProjectDialog()
+    })
+
+    watch(() => bus.value.get('createEmptyProject'), () => {
+      createEmptyProject()
     })
 
     watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {

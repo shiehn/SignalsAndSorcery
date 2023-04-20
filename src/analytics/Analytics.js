@@ -3,38 +3,56 @@ export default class Analytics {
     }
 
     trackPlay() {
-        gtag('event', 'play', {'type': 'main'});
+        if(typeof gtag  != 'undefined'){
+            gtag('event', 'play', {'type': 'main'});
+        }
     }
 
     trackPlayAsset() {
-        gtag('event', 'play', {'type': 'asset'});
+        if(typeof gtag  != 'undefined'){
+            gtag('event', 'play', {'type': 'asset'});
+        }
     }
 
     trackCreateRandom() {
-        gtag('event', 'generate', {'type': 'random'});
+        if(typeof gtag  != 'undefined'){
+            gtag('event', 'generate', {'type': 'random'});
+        }
     }
 
     trackCreateEmpty() {
-        gtag('event', 'generate', {'type': 'empty'});
+        if(typeof gtag  != 'undefined'){
+            gtag('event', 'generate', {'type': 'empty'});
+        }
     }
 
     trackSave() {
-        gtag('event', 'save', {'type': 'save'});
+        if(typeof gtag  != 'undefined'){
+            gtag('event', 'save', {'type': 'save'});
+        }
     }
 
     trackExportPackage() {
-        gtag('event', 'export', {'type': 'package'});
+        if(typeof gtag  != 'undefined'){
+            gtag('event', 'export', {'type': 'package'});
+        }
     }
 
     trackExportMP3() {
-        gtag('event', 'export', {'type': 'mp3'});
+        if(typeof gtag  != 'undefined'){
+            gtag('event', 'export', {'type': 'mp3'});
+        }
     }
 
     trackDownloadSingleWAV(wavFileName) {
-        gtag('event', 'download', {'type': 'wav', 'file': wavFileName});
+        if(typeof gtag  != 'undefined'){
+            gtag('event', 'download', {'type': 'wav', 'file': wavFileName});
+        }
     }
 
     trackLoad() {
-        gtag('event', 'load', {'type': 'project'});
+        if(typeof gtag  != 'undefined'){
+            gtag('event', 'load', {'type': 'project'});
+        }
     }
 }

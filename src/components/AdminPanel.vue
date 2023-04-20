@@ -32,8 +32,9 @@
 
     <div class="flex flex-col 1/6 justify-evenly">
 
-        <button @click="saveProject()"
-                class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+<!--        <button @click="saveProject()"-->
+      <button @click="debugGrid()"
+              class="w-8 h-8 border-2 border-pink-400 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
           <img
               :src="imageAssets.saveBtn" class="h-5"/>
         </button>
@@ -169,6 +170,7 @@ export default {
 
     const debugGrid = () => {
       console.log('GRID', store.state.grid)
+      console.log('nodes', store.nodeRows)
     }
 
     const newProjectDialog = () => {

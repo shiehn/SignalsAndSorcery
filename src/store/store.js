@@ -8,12 +8,12 @@ let token = undefined
 const fxColorGenerator = new FXColorGenerator()
 
 const nodeRows = [
-    new Array(4),
-    new Array(4),
-    new Array(4),
-    new Array(4),
-    new Array(4),
-    new Array(4),
+    new Array(1),
+    new Array(1),
+    new Array(1),
+    new Array(1),
+    new Array(1),
+    new Array(1),
 ]
 
 const state = reactive({
