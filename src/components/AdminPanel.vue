@@ -32,9 +32,8 @@
 
     <div class="flex flex-col 1/6 justify-evenly">
 
-<!--        <button @click="saveProject()"-->
-      <button @click="debugGrid()"
-              class="w-8 h-8 border-2 border-pink-400 p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
+        <button @click="saveProject()"
+                class="w-8 h-8 border-2 border-black p-1 rounded-md hover:bg-white hover:shadow-lg hover:border-green-500">
           <img
               :src="imageAssets.saveBtn" class="h-5"/>
         </button>
@@ -62,6 +61,7 @@ import ProjectBoard from "./ProjectBoard";
 import GridGenerator from "../generators/grid-generator";
 import ModalOpenPayload from "./ModalOpenPayload";
 import Analytics from "../analytics/Analytics";
+import store from "../store/store";
 
 export default {
   name: "AdminPanel",
@@ -170,7 +170,6 @@ export default {
 
     const debugGrid = () => {
       console.log('GRID', store.state.grid)
-      console.log('nodes', store.nodeRows)
     }
 
     const newProjectDialog = () => {
@@ -199,6 +198,7 @@ export default {
       store.state.globalBpm = retrievedRestoredData.globalBpm;
       store.state.globalKey = retrievedRestoredData.globalKey;
       store.state.grid = retrievedRestoredData.grid;
+
       store.state.updateGlobalChords()
 
       emit('renderMixIfNeeded')

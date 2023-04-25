@@ -39,7 +39,7 @@
     <div v-for="(gridRow, i) in getGridRows()" :key="i" :ref="(el) => (gridContainerRows[i] = el)"
          class="flex flex-none justify-between mb-2">
       <div v-for="gridRowItem in gridRow.value" class="w-1/4 h-16 pr-2 flex">
-        <div class="w-1/12 h-full flex flex-col rounded-l-lg inner-border overflow-hidden border-r border-black" @click="focusNodeChain(gridRowItem)">
+        <div class="w-1/12 h-full flex flex-col rounded-l-lg inner-border overflow-hidden border-r border-black">
           <asset-f-x-tab v-for="fx in gridRowItem.fxs" :sfx_id="fx.id"></asset-f-x-tab>
           <!--          <div v-for="fx in gridRowItem.fxs" class="h-full w-full bg-pink-200 overflow-hidden border-b border-black" @click="fxClick(fx.id)"></div>-->
         </div>
@@ -140,7 +140,7 @@ export default {
     const isMobile = ref(store.isMobile ? true : false)
 
     const numOfGridRows = 6
-    const numOfGridCols = 1
+    const numOfGridCols = 4
     const numOfSections = 1
 
     store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
@@ -194,13 +194,12 @@ export default {
       const audioGraph = new AudioGraph(store)
       await audioGraph.populateNodeWithEmptyBuffer(row, col)
 
-      emit('updateAssetSelection', {
-        row: row,
-        col: col,
-      })
-      emit('renderMixIfNeeded')
-      emit('disableAnimateSelector')
-      emit('updateLoopPositions')
+      // emit('updateAssetSelection', {
+      //   row: row,
+      //   col: col,
+      // })
+      // emit('renderMixIfNeeded')
+      // emit('disableAnimateSelector')
     }
 
     const excludeGridItem = async (row, col) => {
@@ -212,6 +211,7 @@ export default {
 
       const res = await new ComposerAPI().excludeAsset(store.token, assetId, assetName)
 
+      alert(res)
     }
 
 
@@ -283,19 +283,26 @@ export default {
 
       const prevStemId = store.state.grid[row].value[col].stem ? store.state.grid[row].value[col].stem.id : undefined
 
-      removeGridItem(row, col)
+      //removeGridItem(row, col)
+      store.state.grid[row].value[col].stem = undefined
 
       store.state.grid[row].value[col].refreshing = true
       const res = await new ComposerAPI().getAssetAlternative(token, bpm, key, chords, type, prevStemId)
-      store.state.grid[row].value[col].refreshing = false
-      store.state.grid[row].value[col].stem = res
 
+      store.state.grid[row].value[col].refreshing = false
+
+      if(res) {
+        res['previewPlayIconPath'] = store.state.staticUrl + 'icons/play-button.png' + "?x-request=html"
+        res['refreshIconPath'] = store.state.staticUrl + 'icons/refresh-icon.png' + "?x-request=html"
+        res['deleteIconPath'] = store.state.staticUrl + 'icons/remove.png' + "?x-request=html"
+        res['downloadIconPath'] = store.state.staticUrl + 'icons/download-icon.svg' + "?x-request=html"
+        res['lockIconPath'] = store.state.staticUrl + 'icons/lock.png' + "?x-request=html"
+        res['unlockIconPath'] = store.state.staticUrl + 'icons/unlock.png' + "?x-request=html"
+        store.state.grid[row].value[col].stem = res
+      }
 
       const audioGraph = new AudioGraph(store)
       await audioGraph.populateNodeWithBuffer(row, col)
-      emit('updateLoopPositions')
-
-      //emit('renderMixIfNeeded')
     }
 
     const columnAdd = (sectionId) => {
@@ -443,6 +450,7 @@ export default {
           emit('showLoadingSpinner')
           await audioGraph.init()
           emit('hideLoadingSpinner')
+
         }
 
         emit('setupAudioGraphListeners')
@@ -454,15 +462,12 @@ export default {
 
 
         //ENTRY POINT
-        //ENTRY POINT
-        //ENTRY POINT
-        // if (localStorage.getItem("sas-save")) {
-        //   emit('loadProjectFromLocalStorage')
-        // } else {
-        //   //GENERATE RANDOM
-        //   emit('generateRandomProject')
-        // }
-        emit('createEmptyProject')
+        if (localStorage.getItem("sas-save")) {
+          emit('loadProjectFromLocalStorage')
+        } else {
+          //GENERATE RANDOM
+          emit('generateRandomProject')
+        }
 
         emit('hideLoadingSpinner')
       })
@@ -501,10 +506,6 @@ export default {
       )
 
       emit('launchModal', modalOpenPayload)
-    }
-
-    let focusNodeChain = (gridRowItem) => {
-      emit('focusSFX', gridRowItem.row, gridRowItem.col)
     }
 
     watch(store.state.grid, () => {
@@ -554,15 +555,12 @@ export default {
       playHeadCSS['background-position'] = progressBar.value + 'px center'
     })
 
-
-
-
     return {
       arpeggioToggled,
       columnAdd,
       columnRemove,
       editSection,
-      focusNodeChain,
+      isMobile,
       getGridRows,
       getGridByRow,
       gridContainer,
@@ -570,7 +568,6 @@ export default {
       gridContainerRows,
       handleGridItemClick,
       imageUrls,
-      isMobile,
       mouseOverGridItem,
       mouseLeaveGridItem,
       onDrop,

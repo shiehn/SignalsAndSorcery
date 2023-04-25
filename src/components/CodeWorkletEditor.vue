@@ -296,9 +296,9 @@ export default defineComponent({
       emit('launchModal', modalPayload)
     }
 
-    // watch(() => bus.value.get('focusSFX'), async (sfxId) => {
-    //   await focusSFX(sfxId[0])
-    // })
+    watch(() => bus.value.get('focusSFX'), async (sfxId) => {
+      await focusSFX(sfxId[0])
+    })
 
     const focusSFX = async (sfxId) => {
 

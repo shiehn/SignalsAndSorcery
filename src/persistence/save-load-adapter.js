@@ -44,7 +44,6 @@ export default class SaveAndLoadAdapter {
 
         let newGrid = new GridGenerator().initGrid(rows, cols)
 
-
         for (let row = 0; row < saveFormat.grid.length; row++) {
             for (let col = 0; col < newGrid[row].value.length; col++) {
                 if(saveFormat.grid[row][col] && saveFormat.grid[row][col].stem) {

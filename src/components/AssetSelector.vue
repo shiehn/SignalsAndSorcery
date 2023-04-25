@@ -150,7 +150,7 @@ export default {
 
     const createEmptyProject = async () => {
       const numOfGridRows = 6
-      let numOfGridCols = 1
+      let numOfGridCols = 4
       let numOfSections = 1
 
       if (isMobile.value) {
@@ -166,7 +166,11 @@ export default {
       store.state.globalKey = undefined
       store.state.grid = new GridGenerator().initGrid(numOfGridRows, numOfGridCols, numOfSections)
 
+      const audioGraph = new AudioGraph(store)
+      await audioGraph.populateNodesWithBuffers()
+
       //emit('renderMix')
+      emit('')
       emit('resetInnerGridContainer') //in the event that the grid is smaller than the previous project
       emit('disableAnimateSelector')
       emit('resetCompatibility')
@@ -202,7 +206,6 @@ export default {
       store.state.updateGlobalChords()
 
       const audioGraph = new AudioGraph(store)
-
       await audioGraph.populateNodesWithBuffers()
 
       emit('hideLoadingSpinner')
@@ -211,7 +214,6 @@ export default {
       emit('closeProjectsBoard')
       emit('saveProjectToLocalStorage')
       emit('resetCompatibility')
-      emit('updateLoopPositions')
 
       new Analytics().trackCreateRandom()
     }
@@ -303,10 +305,6 @@ export default {
 
     watch(() => bus.value.get('newProjectDialog'), () => {
       newProjectDialog()
-    })
-
-    watch(() => bus.value.get('createEmptyProject'), () => {
-      createEmptyProject()
     })
 
     watch(() => bus.value.get('modalResponse'), (modalResponsePayload) => {

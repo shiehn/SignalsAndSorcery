@@ -1,20 +1,11 @@
 import {reactive} from "vue";
 import FXColorGenerator from "../generators/fx-color-generator";
-import NodeAndFxChain from "../audioengine/node-and-fx-chain";
 
 export let audioCtx = undefined
 let isMobile = false
 let token = undefined
 const fxColorGenerator = new FXColorGenerator()
-
-const nodeRows = [
-    new Array(1),
-    new Array(1),
-    new Array(1),
-    new Array(1),
-    new Array(1),
-    new Array(1),
-]
+const BUFFER_CACHE = {}
 
 const state = reactive({
     projectId: undefined,
@@ -23,12 +14,30 @@ const state = reactive({
     hostGroupId: undefined,
     authorName: '',
     globalBpm: undefined,
-
+    nodeRows: [
+        new Array(4),
+        new Array(4),
+        new Array(4),
+        new Array(4),
+        new Array(4),
+        new Array(4),
+    ],
     getHostGroupId: function () {
         return this.hostGroupId
     },
     setHostGroupId: function (hostGroupId) {
         this.hostGroupId = hostGroupId
+    },
+    initNodeRows: function () {
+        this.nodeRows = undefined
+        this.nodeRows = [
+            new Array(4),
+            new Array(4),
+            new Array(4),
+            new Array(4),
+            new Array(4),
+            new Array(4),
+        ]
     },
     getNodeRows: function () {
         return this.nodeRows
@@ -244,5 +253,5 @@ const state = reactive({
 })
 
 export default {
-    isMobile, state, token, fxColorGenerator, nodeRows
+    isMobile, state, token, fxColorGenerator, BUFFER_CACHE
 }

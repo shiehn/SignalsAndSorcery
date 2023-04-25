@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <div v-if="!isMobile" class="border-2 ml-4 border-white rounded-lg p-2"
+  <div v-if="!isMobile" class="w-full border-2 border-white rounded-lg p-2"
        :class="{ 'w-full': isMobile, 'w-1/3': !isMobile }">
     <div class="flex justify-between">
       <h4 class="text-white m-4">Your Projects</h4>
@@ -89,6 +89,7 @@ export default {
     const isMobile = ref(store.isMobile ? true : false)
     const isLoggedIn = ref(undefined)
     const savedProjects = ref([])
+    const showLoadingSpinner = ref(false)
 
     let currentPage = 0
     const imageAssets = {
@@ -142,6 +143,20 @@ export default {
       store.state.globalBpm = retrievedRestoredData.globalBpm
       store.state.globalKey = retrievedRestoredData.globalKey
       store.state.grid = retrievedRestoredData.grid
+
+      for (let row = 0; row < store.state.grid.length; row++) {
+        for (let col = 0; col < store.state.grid[row].value.length; col++) {
+          if(store.state.grid[row].value[col].stem){
+            store.state.grid[row].value[col].stem['previewPlayIconPath'] = store.state.staticUrl + 'icons/play-button.png' + "?x-request=html"
+            store.state.grid[row].value[col].stem['refreshIconPath'] = store.state.staticUrl + 'icons/refresh-icon.png' + "?x-request=html"
+            store.state.grid[row].value[col].stem['deleteIconPath'] = store.state.staticUrl + 'icons/remove.png' + "?x-request=html"
+            store.state.grid[row].value[col].stem['downloadIconPath'] = store.state.staticUrl + 'icons/download-icon.svg' + "?x-request=html"
+            store.state.grid[row].value[col].stem['lockIconPath'] = store.state.staticUrl + 'icons/lock.png' + "?x-request=html"
+            store.state.grid[row].value[col].stem['unlockIconPath'] = store.state.staticUrl + 'icons/unlock.png' + "?x-request=html"
+          }
+        }
+      }
+
       store.state.updateGlobalChords()
 
 

@@ -73,7 +73,6 @@
                @click.stop="onEvaluateGenAsset(false)"
                class="h-6 w-6 ml-2 bg-white p-0.5 border-red-500 border-2 border-2 rounded-full aspect-square">
 
-
           <img v-if="locked && !excludeMode && !evaluateGenAssetMode" :src="stem.lockIconPath"
                @click.stop="lockUnlock"
                class="h-6 w-6 ml-2 bg-white p-0.5 border-red-500 border-2 hover:border-2 hover:border-yellow-600 rounded-full aspect-square">
@@ -156,7 +155,7 @@ export default {
     let currentTime = 0
     let duration = 0
 
-    const locked  = ref(props.locked)
+    const locked = ref(props.locked)
 
     const lockUnlock = () => {
       locked.value = !locked.value
@@ -234,7 +233,6 @@ export default {
     }
 
 
-
     const downloadGridItem = (stem) => {
       //const gridItem = store.state.grid[row].value[col]
       new Analytics().trackDownloadSingleWAV(stem.source)
@@ -277,7 +275,6 @@ export default {
         col: props.col,
       })
     }
-
 
 
     const onPlayOrTransferClip = (stemInput) => {

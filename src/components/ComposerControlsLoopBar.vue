@@ -1,6 +1,5 @@
 <template>
-  <div v-if="!isMobile" ref="loopBar" id="loopBar"
-       class="grid grid-cols-8 justify-between w-full h-6 rounded overflow-hidden opacity-75 hover:cursor-pointer"
+  <div v-if="!isMobile" ref="loopBar" id="loopBar" class="grid grid-cols-8 justify-between w-full h-6 rounded overflow-hidden opacity-75 hover:cursor-pointer"
        v-bind:style="{backgroundSize: bgGridWidth + 'px ' + bgGridHeight + 'px' }"
        :class="{ 'h-24': isMobile, 'h-6': !isMobile }"
        @click="clickedLoopBar($event)">
@@ -9,48 +8,48 @@
     <div class="w-1/8 h-6 grid justify-items-start"
          :class="{ 'bg-gradient-to-r from-black': loopOneStart }"
          @click="onLoopBarClicked(0, true)">
-      <img v-show="loopOneStart" :src="imageAssets.loopStartMarker" class="w-6 h-6"/>
+          <img v-show="loopOneStart" :src="imageAssets.loopStartMarker" class="w-6 h-6" />
     </div>
     <div class="w-1/8 h-6 grid justify-items-end"
          :class="{ 'bg-gradient-to-l from-black': loopOneEnd }"
          @click="onLoopBarClicked(0, false)">
-      <img v-show="loopOneEnd" :src="imageAssets.loopEndMarker" class="w-6 h-6"/>
+      <img v-show="loopOneEnd" :src="imageAssets.loopEndMarker" class="w-6 h-6" />
     </div>
 
     <!-- TWO TWO TWO -->
     <div class="w-1/8 h-6 grid justify-items-start"
          :class="{ 'bg-gradient-to-r from-black': loopTwoStart, 'border-l-2 border-black': loopOneEnd }"
          @click="onLoopBarClicked(1, true)">
-      <img v-show="loopTwoStart" :src="imageAssets.loopStartMarker" class="w-6 h-6"/>
+      <img v-show="loopTwoStart" :src="imageAssets.loopStartMarker" class="w-6 h-6" />
     </div>
     <div class="w-1/8 h-6 grid justify-items-end"
          :class="{ 'bg-gradient-to-l from-black': loopTwoEnd }"
          @click="onLoopBarClicked(1, false)">
-      <img v-show="loopTwoEnd" :src="imageAssets.loopEndMarker" class="w-6 h-6"/>
+      <img v-show="loopTwoEnd" :src="imageAssets.loopEndMarker" class="w-6 h-6" />
     </div>
 
     <!-- THREE THREE THREE -->
     <div class="w-1/8 h-6 grid justify-items-start"
          :class="{ 'bg-gradient-to-r from-black': loopThreeStart, 'border-l-2 border-black': loopTwoEnd }"
          @click="onLoopBarClicked(2, true)">
-      <img v-show="loopThreeStart" :src="imageAssets.loopStartMarker" class="w-6 h-6"/>
+      <img v-show="loopThreeStart" :src="imageAssets.loopStartMarker" class="w-6 h-6" />
     </div>
     <div class="w-1/8 h-6 grid justify-items-end"
          :class="{ 'bg-gradient-to-l from-black': loopThreeEnd }"
          @click="onLoopBarClicked(2, false)">
-      <img v-show="loopThreeEnd" :src="imageAssets.loopEndMarker" class="w-6 h-6"/>
+      <img v-show="loopThreeEnd" :src="imageAssets.loopEndMarker" class="w-6 h-6" />
     </div>
 
     <!-- FOUR FOUR FOUR -->
     <div class="w-1/8 h-6 grid justify-items-start"
          :class="{ 'bg-gradient-to-r from-black': loopFourStart, 'border-l-2 border-black': loopThreeEnd}"
          @click="onLoopBarClicked(3, true)">
-      <img v-show="loopFourStart" :src="imageAssets.loopStartMarker" class="w-6 h-6"/>
+      <img v-show="loopFourStart" :src="imageAssets.loopStartMarker" class="w-6 h-6" />
     </div>
     <div class="w-1/8 h-6 grid justify-items-end"
-         :class="{ 'bg-gradient-to-l from-black': loopFourEnd }"
-         @click="onLoopBarClicked(3, false)">
-      <img v-show="loopFourEnd" :src="imageAssets.loopFarEndMarker" class="w-6 h-6"/>
+               :class="{ 'bg-gradient-to-l from-black': loopFourEnd }"
+               @click="onLoopBarClicked(3, false)">
+      <img v-show="loopFourEnd" :src="imageAssets.loopFarEndMarker" class="w-6 h-6" />
     </div>
 
 
@@ -95,6 +94,68 @@ export default {
     const loopFourStart = ref(false)
     const loopFourEnd = ref(false)
 
+
+
+    // const getLeftActive = (bars) => {
+    //   for (let i = 0; i < bars.length; i++) {
+    //     if (bars[i].value) {
+    //       return i
+    //     }
+    //   }
+    //
+    //   return -1
+    // }
+    //
+    // const getRightActive = (bars) => {
+    //   for (let i = bars.length - 1; i >= 0; i--) {
+    //     if (bars[i].value) {
+    //       return i
+    //     }
+    //   }
+    //
+    //   return -1
+    // }
+
+    // const fillLoopBarGaps = (left, right) => {
+    //   let bars = [loopOneActive, loopTwoActive, loopThreeActive, loopFourActive]
+    //
+    //   for (let i = left; i < right + 1; i++) {
+    //     bars[i].value = true
+    //   }
+    // }
+
+    // const setMarkers = (left, right) => {
+    //   switch (left) {
+    //     case 0:
+    //       loopOneStart.value = true
+    //       break
+    //     case 1:
+    //       loopTwoStart.value = true
+    //       break
+    //     case 2:
+    //       loopThreeStart.value = true
+    //       break
+    //     case 3:
+    //       loopFourStart.value = true
+    //       break
+    //   }
+    //
+    //   switch (right) {
+    //     case 0:
+    //       loopOneEnd.value = true
+    //       break
+    //     case 1:
+    //       loopTwoEnd.value = true
+    //       break
+    //     case 2:
+    //       loopThreeEnd.value = true
+    //       break
+    //     case 3:
+    //       loopFourEnd.value = true
+    //       break
+    //   }
+    // }
+
     const clearMarkers = () => {
       loopOneStart.value = false
       loopOneEnd.value = false
@@ -117,43 +178,55 @@ export default {
     }
 
     const setDefaultLoopsAndMakers = () => {
+      loopOneActive.value = true
+      loopTwoActive.value = true
+      loopThreeActive.value = true
+      loopFourActive.value = true
+
       clearMarkers()
 
       loopOneStart.value = true
-
-      switch (store.state.grid[0].value.length) {
-        case 1:
-          loopOneActive.value = true
-          //end marker
-          loopOneEnd.value = true
-          break;
-        case 2:
-          loopOneActive.value = true
-          loopTwoActive.value = true
-          //end marker
-          loopTwoEnd.value = true
-          break;
-        case 3:
-          loopOneActive.value = true
-          loopTwoActive.value = true
-          loopThreeActive.value = true
-          //end marker
-          loopThreeEnd.value = true
-          break;
-        default:
-          loopOneActive.value = true
-          loopTwoActive.value = true
-          loopThreeActive.value = true
-          loopFourActive.value = true
-          //end marker
-          loopFourEnd.value = true
-          break;
-      }
-
-      store.state.playBack.loopStartPercent = getCurStartPos() * 25
-      store.state.playBack.loopEndPercent = (getCurrentEndPos() + 1) * 25
+      loopFourEnd.value = true
     }
 
+    // const handleLoopBars = () => {
+    //   let bars = [loopOneActive, loopTwoActive, loopThreeActive, loopFourActive]
+    //
+    //   const leftActive = getLeftActive(bars)
+    //   const rightActive = getRightActive(bars)
+    //
+    //   if (leftActive != -1 && rightActive != -1) {
+    //     fillLoopBarGaps(leftActive, rightActive)
+    //
+    //     store.state.playBack.loopStartPercent = leftActive * 25
+    //     store.state.playBack.loopEndPercent = (rightActive + 1) * 25
+    //
+    //     //SET MARKERS
+    //     clearMarkers()
+    //     setMarkers(leftActive, rightActive)
+    //   } else {
+    //     store.state.playBack.loopStartPercent = 0
+    //     store.state.playBack.loopEndPercent = 100
+    //   }
+    // }
+
+    // const getNumberOfLoopedBars = () => {
+    //   let bars = [loopOneActive, loopTwoActive, loopThreeActive, loopFourActive]
+    //   let count = 0
+    //
+    //   for (let i = 0; i < bars.length; i++) {
+    //     if (bars[i].value) {
+    //       count++
+    //     }
+    //   }
+    //
+    //   return count
+    // }
+
+    // const isCurrentBarLooped = (barNumber) => {
+    //   let bars = [loopOneActive, loopTwoActive, loopThreeActive, loopFourActive]
+    //   return bars[barNumber].value
+    // }
 
     const getCurStartPos = () => {
       let bars = [loopOneStart, loopTwoStart, loopThreeStart, loopFourStart]
@@ -180,7 +253,7 @@ export default {
       let startMarkers = [loopOneStart, loopTwoStart, loopThreeStart, loopFourStart]
       let endMarkers = [loopOneEnd, loopTwoEnd, loopThreeEnd, loopFourEnd]
       for (let i = 0; i < bars.length; i++) {
-        if (i < index) {
+        if(i<index){
           bars[i].value = false
           startMarkers[i].value = false
           endMarkers[i].value = false
@@ -193,7 +266,7 @@ export default {
       let startMarkers = [loopOneStart, loopTwoStart, loopThreeStart, loopFourStart]
       let endMarkers = [loopOneEnd, loopTwoEnd, loopThreeEnd, loopFourEnd]
       for (let i = 0; i < bars.length; i++) {
-        if (i > index) {
+        if(i>index){
           bars[i].value = false
           startMarkers[i].value = false
           endMarkers[i].value = false
@@ -204,7 +277,7 @@ export default {
     const setStartMarker = (index) => {
       let startMarkers = [loopOneStart, loopTwoStart, loopThreeStart, loopFourStart]
       for (let i = 0; i < startMarkers.length; i++) {
-        if (i === index) {
+        if(i===index){
           startMarkers[i].value = true
         } else {
           startMarkers[i].value = false
@@ -215,7 +288,7 @@ export default {
     const setEndMarker = (index) => {
       let endMarkers = [loopOneEnd, loopTwoEnd, loopThreeEnd, loopFourEnd]
       for (let i = 0; i < endMarkers.length; i++) {
-        if (i === index) {
+        if(i===index){
           endMarkers[i].value = true
         } else {
           endMarkers[i].value = false
@@ -230,16 +303,16 @@ export default {
       let start = -1
       let end = -1
       for (let i = 0; i < bars.length; i++) {
-        if (startMarkers[i].value) {
+        if(startMarkers[i].value){
           start = i
         }
-        if (endMarkers[i].value) {
+        if(endMarkers[i].value){
           end = i
         }
       }
-      if (start !== -1 && end !== -1) {
+      if(start !== -1 && end !== -1){
         for (let i = 0; i < bars.length; i++) {
-          if (i >= start && i <= end) {
+          if(i>=start && i<=end){
             bars[i].value = true
           } else {
             bars[i].value = false
@@ -252,13 +325,13 @@ export default {
       const prevStartPos = getCurStartPos()
       const prevEndPos = getCurrentEndPos()
 
-      if (isStartMarker) {
+      if (isStartMarker){
         //START MAKER CODE
         //right or left of prev start
 
         if (loopNumber > prevStartPos) {
           //SHIFT START RIGHT
-          if (loopNumber > prevEndPos) {
+          if(loopNumber > prevEndPos){
             //clear everything, set start and end
             setStartMarker(loopNumber)
             setEndMarker(loopNumber)
@@ -274,11 +347,11 @@ export default {
           setActiveBetweenStartEndMakers()
         }
 
-      } else {
+      }else{
         //END MAKER CODE
-        if (loopNumber < prevEndPos) {
+        if(loopNumber < prevEndPos){
           //SHIFT END LEFT
-          if (loopNumber < prevStartPos) {
+          if (loopNumber < prevStartPos){
             //CLEAR EVERYTHING AND SET START AND END
             setStartMarker(loopNumber)
             setEndMarker(loopNumber)
@@ -322,9 +395,7 @@ export default {
     }
 
     const getRelativeWidthOfCol = () => {
-      // return Math.round(loopBar.value.getBoundingClientRect().width / store.state.grid[0].value.length)
-      //alert(loopBar.value.getBoundingClientRect().width)
-      return Math.round(loopBar.value.getBoundingClientRect().width)
+      return Math.round(loopBar.value.getBoundingClientRect().width / store.state.grid[0].value.length)
     }
 
     const getGridLabels = () => {
@@ -341,7 +412,7 @@ export default {
       setDefaultLoopsAndMakers()
 
       store.state.playBack.loopStartPercent = 0
-      store.state.playBack.loopEndPercent = store.state.grid[0].value.length * 25
+      store.state.playBack.loopEndPercent = 100
     })
 
     watch(() => bus.value.get('gridDrawCompleted'), (gridDrawCompletedParams) => {
@@ -351,9 +422,7 @@ export default {
 
       const w16 = 4 /* assuming each grid item is tailwind w-16 ==  4rem */
       const m1 = 0.25 /* assuming each grid item has tailwind mr-1 ==  0.25rem */
-      //let calculatedGridWidthRem = store.state.grid[0].value.length * (w16 + m1)
-      const maxCol = 4
-      let calculatedGridWidthRem = maxCol * (w16 + m1)
+      let calculatedGridWidthRem = store.state.grid[0].value.length * (w16 + m1)
 
       if (convertRemToPixels(calculatedGridWidthRem) < gridDrawCompletedParams[0].gridContainerRowWidth) {
         loopBar.value.style.width = gridDrawCompletedParams[0].gridContainerRowWidth + 'px'
@@ -366,7 +435,7 @@ export default {
       // endLoop.value.style.marginLeft = getXPosOfCurrentColEnd(loopMarketEndXPercentCache) - endLoop.value.getBoundingClientRect().width + 'px'
 
       //SET THE GRID RULER COLUMN WIDTH
-      bgGridWidth.value = getRelativeWidthOfCol() / maxCol
+      bgGridWidth.value = getRelativeWidthOfCol()
       // bgGridLabels.value = getGridLabels()
     })
 
@@ -376,6 +445,42 @@ export default {
       // startLoop.value.style.marginLeft = '0px'
       // endLoop.value.style.marginLeft = loopBar.value.getBoundingClientRect().width - endLoop.value.getBoundingClientRect().width + 'px'
     })
+
+    // const finishStartLoopDrag = ($event) => {
+    //   const mousePosRelativeToBar = $event.clientX - loopBar.value.getBoundingClientRect().x
+    //   const scrollBarWidth = loopBar.value.getBoundingClientRect().width
+    //   const endLoopXRelativeToBar = endLoop.value.getBoundingClientRect().x - endLoop.value.getBoundingClientRect().width - loopBar.value.getBoundingClientRect().x
+    //   if (mousePosRelativeToBar > 0 && mousePosRelativeToBar < scrollBarWidth && mousePosRelativeToBar < endLoopXRelativeToBar) {
+    //     const mouseXPosPercentage = Math.round(mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100)
+    //     const marginLeft = getXPosOfCurrentColStart(mouseXPosPercentage)
+    //     startLoop.value.style.marginLeft = marginLeft + 'px'
+    //
+    //     const loopStartPos = marginLeft / loopBar.value.clientWidth * 100
+    //     store.state.playBack.loopStartPercent = loopStartPos
+    //
+    //     //cache da shit
+    //     loopMarketStartXPercentCache = loopStartPos
+    //   }
+    //
+    //   emit('stopAllAudio', 'loopBar')
+    // }
+
+    // const finishEndLoopDrag = ($event) => {
+    //   const mousePosRelativeToBar = $event.clientX - loopBar.value.getBoundingClientRect().x
+    //   const scrollBarWidth = loopBar.value.getBoundingClientRect().width
+    //   const startLoopXRelativeToBar = startLoop.value.getBoundingClientRect().x - loopBar.value.getBoundingClientRect().x
+    //   if (mousePosRelativeToBar > 0 && mousePosRelativeToBar < scrollBarWidth && mousePosRelativeToBar > startLoopXRelativeToBar + startLoop.value.getBoundingClientRect().width + endLoop.value.getBoundingClientRect().width) {
+    //     const mouseXPosPercentage = Math.round(mousePosRelativeToBar / loopBar.value.getBoundingClientRect().width * 100)
+    //     const marginLeft = getXPosOfCurrentColEnd(mouseXPosPercentage) - endLoop.value.getBoundingClientRect().width
+    //     endLoop.value.style.marginLeft = marginLeft + 'px'
+    //     store.state.playBack.loopEndPercent = getXPosOfCurrentColEnd(mouseXPosPercentage) / loopBar.value.clientWidth * 100
+    //
+    //     //cache da shit
+    //     loopMarketEndXPercentCache = Math.round(marginLeft / loopBar.value.clientWidth * 100)
+    //   }
+    //
+    //   emit('stopAllAudio', 'loopBar')
+    // }
 
     return {
       // bgGridLabels,
