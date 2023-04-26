@@ -338,6 +338,23 @@ export default {
           store.state.globalKey = modalResponsePayload[0].getRelayData()
         }
       }
+
+      if (modalResponsePayload[0] && modalResponsePayload[0].getInstanceId() === 'downloadAssetDialogModalId') {
+        if(modalResponsePayload[0].getResponse()) {
+          const assetSourceUrl = modalResponsePayload[0].getRelayData()
+          if (assetSourceUrl) {
+            new Analytics().trackDownloadSingleWAV(assetSourceUrl)
+            window.location.href = assetSourceUrl
+          }
+        }
+      }
+
+
+
+
+
+
+
     })
 
     watch(() => bus.value.get('generateRandomProject'), () => {

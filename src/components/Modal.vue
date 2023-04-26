@@ -72,7 +72,12 @@ export default {
       }
 
       if(confirmBtnTextTwo.value){
-        relayData = confirmBtnText.value
+        if(confirmBtnText.value === 'Audio' || confirmBtnText.value === 'Midi') {
+          response = confirmBtnText.value
+          relayData = relayData[confirmBtnText.value.toLowerCase()]
+        }else{
+          relayData = confirmBtnText.value
+        }
       }
 
       const modalResponsePayload = new ModalResponsePayload(id.value, response, relayData)
@@ -87,7 +92,12 @@ export default {
       }
 
       if(confirmBtnTextTwo.value){
-        relayData = confirmBtnTextTwo.value
+        if(confirmBtnTextTwo.value === 'Audio' || confirmBtnTextTwo.value === 'Midi') {
+          response = confirmBtnTextTwo.value
+          relayData = relayData[confirmBtnTextTwo.value.toLowerCase()]
+        }else{
+          relayData = confirmBtnTextTwo.value
+        }
       }
 
       const modalResponsePayload = new ModalResponsePayload(id.value, response, relayData)

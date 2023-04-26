@@ -306,4 +306,28 @@ export default class ComposerAPI {
 
         return false
     }
+
+    async getMidiResource(resource) {
+
+        try {
+            const url = BASE_API_URL + 'midi' + '?resource=' + resource
+
+            let axiosConfig = {
+                timeout: 30000,
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                }
+            };
+
+            let res = await axios.get(url, axiosConfig)
+
+            if (res['data']) {
+                return res['data']['midi']
+            }
+        } catch (e) {
+            console.log('Error', "Retrieving Midi : " + e)
+        }
+
+        return undefined
+    }
 }

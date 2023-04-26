@@ -126,6 +126,8 @@ import Analytics from "../analytics/Analytics";
 import ComposerControlsLoopBar from "./ComposerControlsLoopBar.vue";
 import LockProcessor from "../processors/lock-processor";
 import ComposerAPI from "../dal/ComposerAPI";
+import axios from "axios";
+import ModalOpenPayload from "./ModalOpenPayload";
 
 export default {
   name: "Asset",
@@ -233,10 +235,38 @@ export default {
     }
 
 
-    const downloadGridItem = (stem) => {
-      //const gridItem = store.state.grid[row].value[col]
-      new Analytics().trackDownloadSingleWAV(stem.source)
-      window.location.href = stem.source
+    const downloadGridItem = async (stem) => {
+
+      const source = new URL(stem.source).pathname.split("/").pop()
+
+      let midiResource = await new ComposerAPI().getMidiResource(source)
+
+      if(midiResource){
+        const midiPath = stem.source.replace(source, midiResource)
+
+        const audioAndMidiSource = {
+          'audio': stem.source,
+          'midi': midiPath,
+        }
+
+        const downloadAssetDialogModalId = 'downloadAssetDialogModalId'
+        const modalPayload = new ModalOpenPayload(
+            downloadAssetDialogModalId,
+            'Audio Or MIDI',
+            'Would you like to download the audio or Midi file?',
+            'Audio',
+            'Midi',
+            'Cancel',
+            false,
+            audioAndMidiSource,
+        )
+
+        emit('launchModal', modalPayload)
+      } else {
+        //ONLY AUDIO, just start the audio download
+        new Analytics().trackDownloadSingleWAV(stem.source)
+        window.location.href = stem.source
+      }
     }
 
     const onPlayClip = (stem) => {
